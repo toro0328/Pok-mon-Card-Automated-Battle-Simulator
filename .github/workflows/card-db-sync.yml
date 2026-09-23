@@ -1,4 +1,4 @@
-name: Card DB discovery
+name: Card DB sync
 
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  discover:
+  sync:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,14 +18,16 @@ jobs:
           python-version: "3.12"
       - name: Discover official card IDs
         run: python scripts/sync-official-cards.py
-      - name: Commit changed manifest
+      - name: Import newly discovered Standard cards
+        run: python scripts/import-official-cards.py --limit 50
+      - name: Commit DB changes
         run: |
           if git diff --quiet; then
-            echo "No official card-list change."
+            echo "No card DB change."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/cards/official-id-manifest.json
-          git commit -m "Update official card ID manifest"
+          git add data/cards/
+          git commit -m "Sync official card database"
           git push
