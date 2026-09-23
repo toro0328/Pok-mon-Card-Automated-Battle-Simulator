@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "standardRegulations": ["H", "I", "J"],
+  "lastCheckedAt": null,
+  "lastSuccessfulSyncAt": null,
+  "knownOfficialCardIds": [],
+  "needsReview": []
+}
