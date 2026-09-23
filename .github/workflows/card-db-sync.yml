@@ -19,7 +19,19 @@ jobs:
       - name: Discover official card IDs
         run: python scripts/sync-official-cards.py
       - name: Import newly discovered Standard cards
-        run: python scripts/import-official-cards.py --limit 50
+        run: |
+          # Only try newly discovered Standard IDs. On the first migration,
+          # cap the batch so the official site is not hammered.
+          python - <<'PY'
+          import json, subprocess
+          p="data/cards/official-id-manifest.json"
+          d=json.load(open(p,encoding="utf-8"))
+          ids=d.get("newIds",[])[:20]
+          if ids:
+              subprocess.check_call(["python","scripts/import-official-cards.py","--limit","20","--ids",*map(str,ids)])
+          else:
+              print("No new Standard card IDs.")
+          PY
       - name: Commit DB changes
         run: |
           if git diff --quiet; then
@@ -30,4 +42,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/cards/
           git commit -m "Sync official card database"
+          git pull --rebase origin main
           git push
