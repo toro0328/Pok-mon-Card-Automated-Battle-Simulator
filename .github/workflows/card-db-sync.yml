@@ -1,0 +1,31 @@
+name: Card DB discovery
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 20 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Discover official card IDs
+        run: python scripts/sync-official-cards.py
+      - name: Commit changed manifest
+        run: |
+          if git diff --quiet; then
+            echo "No official card-list change."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/cards/official-id-manifest.json
+          git commit -m "Update official card ID manifest"
+          git push
