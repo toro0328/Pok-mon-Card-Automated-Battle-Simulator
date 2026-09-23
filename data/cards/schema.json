@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pokemon Card Simulator Card Database",
+  "type": "object",
+  "required": ["schemaVersion","updatedAt","cards"],
+  "properties": {
+    "schemaVersion": {"type":"integer"},
+    "updatedAt": {"type":["string","null"]},
+    "cards": {"type":"array","items":{"$ref":"#/$defs/card"}}
+  },
+  "$defs": {
+    "card": {
+      "type":"object",
+      "required":["officialCardId","name","cardType","source","raw","engine"],
+      "properties": {
+        "officialCardId":{"type":"integer"},
+        "name":{"type":"string"},
+        "regulation":{"type":["string","null"]},
+        "cardType":{"enum":["pokemon","trainer","energy"]},
+        "source":{"type":"object","required":["detailUrl"],"properties":{"detailUrl":{"type":"string"},"imageUrl":{"type":["string","null"]},"fetchedAt":{"type":["string","null"]}}},
+        "raw":{"type":"object","description":"Official text and printed values. Preserve before interpretation."},
+        "engine":{"type":"object","required":["status","effects"],"properties":{"status":{"enum":["unparsed","supported","needs_review","custom_handler"]},"effects":{"type":"array"},"handler":{"type":["string","null"]},"notes":{"type":"array","items":{"type":"string"}}}}
+      }
+    }
+  }
+}
