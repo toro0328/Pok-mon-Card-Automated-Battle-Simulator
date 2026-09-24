@@ -71,6 +71,11 @@ def main():
     if missing:
         raise ValueError(f"IDs missing from mirror: {sorted(missing)}")
     paths.sort(key=lambda pair: (-pair[0], str(pair[1])))
+    seen = {}
+    for cid, path in paths:
+        if cid in seen:
+            raise ValueError(f"duplicate mirror ID {cid}: {seen[cid]} and {path}")
+        seen[cid] = path
     now = datetime.now(timezone.utc).isoformat()
     added = []
     for cid, path in paths:

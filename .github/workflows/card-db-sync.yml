@@ -37,6 +37,9 @@ jobs:
           IMPORT_LIMIT: ${{ inputs.import_limit || '250' }}
         run: python scripts/import-reference-card-db.py --source-dir /tmp/PTCG-database/data_jp --limit "$IMPORT_LIMIT"
 
+      - name: Validate database
+        run: python scripts/validate-card-db.py
+
       - name: Commit DB changes
         run: |
           if git diff --quiet; then

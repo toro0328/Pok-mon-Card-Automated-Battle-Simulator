@@ -6,6 +6,8 @@ export function createCardRecord(input) {
     name: input.name,
     regulation: input.regulation ?? null,
     cardType: input.cardType,
+    trainerType: input.trainerType ?? null,
+    energyType: input.energyType ?? null,
     source: {
       detailUrl: input.detailUrl,
       imageUrl: input.imageUrl ?? null,
