@@ -7,6 +7,8 @@ on:
       - "scripts/compile-attacks.mjs"
       - "src/card-db/parse-effects.js"
       - "src/engine/AttackEngine.js"
+      - "src/engine/MatchEngine.js"
+      - "index.html"
       - "data/cards/cards.json"
       - ".github/workflows/attack-compile.yml"
   workflow_dispatch:
