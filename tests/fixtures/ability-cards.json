@@ -964,6 +964,279 @@
           "Reference data only; printed regulation and effects are unverified."
         ]
       }
+    },
+    {
+      "officialCardId": 45913,
+      "name": "キチキギスex",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45913",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6a/045913_P_KICHIKIGISUEX.jpg",
+        "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+        "fallbackDataset": "type-null/PTCG-database",
+        "fallbackPath": "data_jp/SV6a/45913.json"
+      },
+      "raw": {
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/45913",
+        "name": "キチキギスex",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6a/045913_P_KICHIKIGISUEX.jpg",
+        "card_type": "Pokémon",
+        "jp_id": 45913,
+        "tags": [
+          "ex"
+        ],
+        "set_name": "SV6a",
+        "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6a.gif",
+        "number": "038",
+        "set_total": "064",
+        "rarity": "rare_rr",
+        "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_rr.gif",
+        "author": [
+          "takuyoa"
+        ],
+        "stage": "たね",
+        "hp": 210,
+        "types": [
+          "Dark"
+        ],
+        "abilities": [
+          {
+            "name": "さかてにとる",
+            "effect": "前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Colorless",
+              "Colorless",
+              "Colorless"
+            ],
+            "name": "クルーエルアロー",
+            "damage": null,
+            "effect": "相手のポケモン1匹に、100ダメージ。［ベンチは弱点・抵抗力を計算しない。］"
+          }
+        ],
+        "rule_box": "ポケモンexがきぜつしたとき、相手はサイドを2枚とる。",
+        "weakness": {
+          "type": [
+            "Fighting"
+          ],
+          "value": "×2"
+        },
+        "resistance": {
+          "type": [],
+          "value": null
+        },
+        "retreat": 1,
+        "sources": [
+          {
+            "name": "強化拡張パック「ナイトワンダラー」",
+            "link": "https://www.pokemon-card.com/products/sv/sv6a.html"
+          }
+        ],
+        "types_en": [
+          "Darkness"
+        ],
+        "pokedex_number": 1016,
+        "print_key": "asia:SV6a-38",
+        "card_key": "1016|210|1|takuyoa|None|3"
+      },
+      "engine": {
+        "status": "unparsed",
+        "effects": [],
+        "handler": null,
+        "notes": [
+          "Reference data only; printed regulation and effects are unverified."
+        ]
+      }
+    },
+    {
+      "officialCardId": 46248,
+      "name": "ラティアスex",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46248",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV7a/046248_P_RATEIASUEX.jpg",
+        "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+        "fallbackDataset": "type-null/PTCG-database",
+        "fallbackPath": "data_jp/SV7a/46248.json"
+      },
+      "raw": {
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/46248",
+        "name": "ラティアスex",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV7a/046248_P_RATEIASUEX.jpg",
+        "card_type": "Pokémon",
+        "jp_id": 46248,
+        "tags": [
+          "ex"
+        ],
+        "set_name": "SV7a",
+        "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV7a.gif",
+        "number": "019",
+        "set_total": "064",
+        "rarity": "rare_rr",
+        "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_rr.gif",
+        "author": [
+          "takuyoa"
+        ],
+        "stage": "たね",
+        "hp": 210,
+        "types": [
+          "Psychic"
+        ],
+        "abilities": [
+          {
+            "name": "スカイライン",
+            "effect": "このポケモンがいるかぎり、自分のたねポケモン全員のにげるためのエネルギーは、すべてなくなる。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Psychic",
+              "Psychic",
+              "Colorless"
+            ],
+            "name": "むげんのやいば",
+            "damage": {
+              "amount": 200,
+              "suffix": ""
+            },
+            "effect": "次の自分の番、このポケモンはワザが使えない。"
+          }
+        ],
+        "rule_box": "ポケモンexがきぜつしたとき、相手はサイドを2枚とる。",
+        "weakness": {
+          "type": [
+            "Dark"
+          ],
+          "value": "×2"
+        },
+        "resistance": {
+          "type": [
+            "Fighting"
+          ],
+          "value": "－30"
+        },
+        "retreat": 2,
+        "sources": [
+          {
+            "name": "強化拡張パック「楽園ドラゴーナ」",
+            "link": "https://www.pokemon-card.com/products/sv/sv7a.html"
+          }
+        ],
+        "types_en": [
+          "Psychic"
+        ],
+        "pokedex_number": 380,
+        "print_key": "asia:SV7a-19",
+        "card_key": "380|210|2|takuyoa|200|3"
+      },
+      "engine": {
+        "status": "unparsed",
+        "effects": [],
+        "handler": null,
+        "notes": [
+          "Reference data only; printed regulation and effects are unverified."
+        ]
+      }
+    },
+    {
+      "officialCardId": 47432,
+      "name": "ロケット団のミュウツーex",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47432",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV10/047432_P_ROKETTODANNOMIXYUUTSUEX.jpg",
+        "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+        "fallbackDataset": "type-null/PTCG-database",
+        "fallbackPath": "data_jp/SV10/47432.json"
+      },
+      "raw": {
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/47432",
+        "name": "ロケット団のミュウツーex",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV10/047432_P_ROKETTODANNOMIXYUUTSUEX.jpg",
+        "card_type": "Pokémon",
+        "jp_id": 47432,
+        "set_name": "SV10",
+        "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV10.gif",
+        "number": "039",
+        "set_total": "098",
+        "rarity": "rare_rr",
+        "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_rr.gif",
+        "author": [
+          "aky CG Works"
+        ],
+        "stage": "たね",
+        "hp": 280,
+        "types": [
+          "Psychic"
+        ],
+        "abilities": [
+          {
+            "name": "パワーセーバー",
+            "effect": "自分の場の「ロケット団のポケモン」が4匹以上のときにしか、このポケモンはワザが使えない。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Psychic",
+              "Psychic",
+              "Colorless"
+            ],
+            "name": "イレイザーボール",
+            "damage": {
+              "amount": 160,
+              "suffix": "＋"
+            },
+            "effect": "のぞむなら、自分のベンチポケモンについているエネルギーを2枚までトラッシュし、その枚数×60ダメージ追加。"
+          }
+        ],
+        "weakness": {
+          "type": [
+            "Dark"
+          ],
+          "value": "×2"
+        },
+        "resistance": {
+          "type": [
+            "Fighting"
+          ],
+          "value": "－30"
+        },
+        "retreat": 3,
+        "sources": [
+          {
+            "name": "拡張パック「ロケット団の栄光」",
+            "link": "https://www.pokemon-card.com/ex/sv10/"
+          }
+        ],
+        "types_en": [
+          "Psychic"
+        ],
+        "pokedex_number": 150,
+        "print_key": "asia:SV10-39",
+        "card_key": "150|280|3|aky CG Works|160+|3"
+      },
+      "engine": {
+        "status": "unparsed",
+        "effects": [],
+        "handler": null,
+        "notes": [
+          "Reference data only; printed regulation and effects are unverified."
+        ]
+      }
     }
   ]
 }

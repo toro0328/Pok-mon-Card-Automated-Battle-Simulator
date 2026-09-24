@@ -63,6 +63,8 @@ export class AbilityEngine {
         });
       case "OPPONENT_FIELD_POKEMON":
         return this.field(opponent).some(instance => this.card(instance).raw.stage === condition.stage);
+      case "OWN_POKEMON_KNOCKED_OUT_PREVIOUS_OPPONENT_TURN":
+        return state.previousOpponentTurnKnockout?.[playerIndex] === true;
       default: throw new Error(`Unknown condition: ${condition.type}`);
     }
   }
@@ -96,7 +98,7 @@ export class AbilityEngine {
     const actions = [];
     for (const { instance, zone } of sources) {
       for (const entry of this.entries(instance)) {
-        if (entry.status !== "supported" || entry.trigger === "INCOMING_ATTACK_DAMAGE" ||
+        if (entry.status !== "supported" || !["FROM_HAND", "FROM_FIELD"].includes(entry.trigger) ||
             (entry.trigger === "FROM_HAND") !== (zone === "hand")) continue;
         if (entry.limit === "CARD_INSTANCE_PER_TURN" && used.instances.includes(instance.instanceId)) continue;
         if (entry.limit === "ABILITY_NAME_PER_TURN" && used.names.includes(entry.name)) continue;
@@ -167,5 +169,36 @@ export class AbilityEngine {
       .flatMap(e => e.operations)
       .reduce((total, op) => total + (op.type === "REDUCE_DAMAGE" ? op.amount : 0), 0);
     return Math.max(0, damage - reduction);
+  }
+
+  retreatCost(state, playerIndex, targetInstanceId) {
+    this.assertSandbox(state);
+    const owner = state.players[playerIndex];
+    if (!owner) throw new Error("Invalid player");
+    const target = this.field(owner).find(x => x.instanceId === targetInstanceId);
+    if (!target) throw new Error("Target is not in this player's field");
+    const printed = this.card(target).raw.retreat;
+    if (!Number.isInteger(printed) || printed < 0) throw new Error("Printed retreat cost is unknown");
+    if (this.card(target).raw.stage !== "たね") return printed;
+    const freeRetreat = this.field(owner).some(instance => this.entries(instance).some(entry =>
+      entry.status === "supported" && entry.trigger === "CONTINUOUS" &&
+      entry.operations.some(op => op.type === "SET_RETREAT_COST_ZERO" &&
+        op.scope === "OWN_FIELD" && op.stage === "たね")));
+    return freeRetreat ? 0 : printed;
+  }
+
+  abilityAllowsAttack(state, playerIndex, sourceInstanceId) {
+    this.assertSandbox(state);
+    const owner = state.players[playerIndex];
+    if (!owner?.active || owner.active.instanceId !== sourceInstanceId) return false;
+    return this.entries(owner.active).filter(entry => entry.status === "supported" &&
+      entry.trigger === "ATTACK_PERMISSION").every(entry =>
+      entry.operations.every(operation => {
+        if (operation.type !== "REQUIRE_OWN_FIELD_POKEMON_NAME_PREFIX") {
+          throw new Error(`Unsupported attack condition: ${operation.type}`);
+        }
+        return this.field(owner).filter(instance =>
+          this.card(instance).name.startsWith(operation.prefix)).length >= operation.count;
+      }));
   }
 }

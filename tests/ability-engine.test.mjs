@@ -81,3 +81,49 @@ test("passive reduction affects attack damage only; unknown field ability stops 
   assert.throws(() => engine.getLegalActions(state(player({ active: instance("unknown", 45233) }))),
     /Unsupported ability/);
 });
+
+test("Kichikigisu draws only after own KO in previous opponent turn and shares name limit", () => {
+  const own = player({ active: instance("first", 45913), bench: [instance("second", 45913)],
+    deck: Array.from({ length: 6 }, (_, i) => instance(`energy-${i}`, 50745)) });
+  const game = state(own);
+  assert.equal(engine.getLegalActions(game).length, 0);
+  game.previousOpponentTurnKnockout = [true, false];
+  const actions = engine.getLegalActions(game);
+  assert.deepEqual(actions.map(x => x.sourceInstanceId), ["first", "second"]);
+  const after = engine.applyAction(game, actions[0]);
+  assert.equal(after.players[0].hand.length, 3);
+  assert.equal(after.players[0].deck.length, 3);
+  assert.equal(engine.getLegalActions(after).some(x => x.sourceInstanceId === "second"), false);
+  assert.throws(() => engine.applyAction(after, actions[1]), /Illegal/);
+  const opponentTurn = state(own, player({ active: instance("foe", 45913),
+    deck: Array.from({ length: 3 }, (_, i) => instance(`foe-energy-${i}`, 50745)) }));
+  opponentTurn.turn = 1;
+  opponentTurn.previousOpponentTurnKnockout = [true, false];
+  assert.equal(engine.getLegalActions(opponentTurn).length, 0);
+});
+
+test("Latias makes only own Basic Pokemon retreat cost zero while present", () => {
+  const own = player({ active: instance("mega", 48466), bench: [instance("latias", 46248)] });
+  const game = state(own, player({ active: instance("enemy", 48466) }));
+  assert.equal(engine.retreatCost(game, 0, "mega"), 0);
+  assert.equal(engine.retreatCost(game, 1, "enemy"), 3);
+  assert.equal(engine.getLegalActions(game).length, 0);
+  game.players[0].bench = [];
+  assert.equal(engine.retreatCost(game, 0, "mega"), 3);
+  game.players[0].bench = [instance("latias", 46248)];
+  game.players[0].active = instance("evolved", 46008);
+  assert.equal(engine.retreatCost(game, 0, "evolved"), 3);
+});
+
+test("Rocket Mewtwo attack gate counts own Rocket Pokemon, including itself", () => {
+  const own = player({ active: instance("mewtwo", 47432),
+    bench: [instance("rocket-2", 47432), instance("rocket-3", 47432)] });
+  const game = state(own, player({ active: instance("enemy", 47432),
+    bench: [instance("enemy-2", 47432)] }));
+  assert.equal(engine.abilityAllowsAttack(game, 0, "mewtwo"), false);
+  assert.equal(engine.getLegalActions(game).length, 0);
+  game.players[0].bench.push(instance("rocket-4", 47432));
+  assert.equal(engine.abilityAllowsAttack(game, 0, "mewtwo"), true);
+  assert.equal(engine.abilityAllowsAttack(game, 1, "enemy"), false);
+  assert.equal(engine.abilityAllowsAttack(game, 0, "rocket-2"), false);
+});

@@ -29,6 +29,14 @@ export function parseAbility(name, text) {
       limit: "ABILITY_NAME_PER_TURN"
     };
   }
+  if ((match = text.match(/^前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を([1-9][0-9]*)枚引く。この番、すでに別の「([^」]+)」を使っていたなら、この特性は使えない。$/)) && match[2] === name) {
+    return {
+      status: "supported", trigger: "FROM_FIELD",
+      conditions: [{ type: "OWN_POKEMON_KNOCKED_OUT_PREVIOUS_OPPONENT_TURN" }],
+      costs: [], operations: [{ type: "DRAW", count: Number(match[1]) }],
+      limit: "ABILITY_NAME_PER_TURN"
+    };
+  }
   if ((match = text.match(/^自分の番に1回使える。自分の山札を([1-9][0-9]*)枚引く。$/))) {
     return {
       status: "supported", trigger: "FROM_FIELD", conditions: [], costs: [],
@@ -56,6 +64,21 @@ export function parseAbility(name, text) {
     return {
       status: "supported", trigger: "INCOMING_ATTACK_DAMAGE", conditions: [], costs: [],
       operations: [{ type: "REDUCE_DAMAGE", amount: Number(match[1]) }],
+      limit: null
+    };
+  }
+  if (text === "このポケモンがいるかぎり、自分のたねポケモン全員のにげるためのエネルギーは、すべてなくなる。") {
+    return {
+      status: "supported", trigger: "CONTINUOUS", conditions: [], costs: [],
+      operations: [{ type: "SET_RETREAT_COST_ZERO", scope: "OWN_FIELD", stage: "たね" }],
+      limit: null
+    };
+  }
+  if ((match = text.match(/^自分の場の「([^」]+)」が([1-9][0-9]*)匹以上のときにしか、このポケモンはワザが使えない。$/)) &&
+      match[1] === "ロケット団のポケモン") {
+    return {
+      status: "supported", trigger: "ATTACK_PERMISSION", conditions: [], costs: [],
+      operations: [{ type: "REQUIRE_OWN_FIELD_POKEMON_NAME_PREFIX", prefix: "ロケット団の", count: Number(match[2]) }],
       limit: null
     };
   }

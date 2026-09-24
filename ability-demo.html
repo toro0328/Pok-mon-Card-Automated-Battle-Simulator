@@ -31,6 +31,11 @@ button:disabled{background:#96a1ae}
 <option value="trade">Nのゾロアークex：手札を捨てて2枚引く</option>
 <option value="ogerpon">オーガポンex：基本草エネルギーをつけて1枚引く</option>
 <option value="defense">モジャンボ：ワザのダメージを減らす</option>
+<option value="kichikigisu">キチキギスex：前の相手の番に自分がきぜつ</option>
+<option value="kichikigisu-no-ko">キチキギスex：きぜつなし</option>
+<option value="latias">ラティアスex：自分のたねポケモンのにげるコスト</option>
+<option value="rocket-three">ロケット団のミュウツーex：場に3匹</option>
+<option value="rocket-four">ロケット団のミュウツーex：場に4匹</option>
 </select>
 <div class="panel" id="board"></div>
 <div class="panel"><h2>使用可能な特性</h2><div id="actions" class="row"></div></div>
@@ -53,7 +58,7 @@ const player = (active=null, hand=[], deck=[], bench=[]) => ({ active, hand, dec
 function scenario() {
   serial = 0;
   const energy = () => pile(50745, 5);
-  let self, foe;
+  let self, foe, previousOpponentTurnKnockout=[false,false];
   switch(selector.value) {
     case "talonflame":
       self=player(make(48466),[make(50400)],energy()); foe=player(); break;
@@ -63,11 +68,23 @@ function scenario() {
       self=player(make(47069),[make(50745),make(50745)],energy()); foe=player(); break;
     case "ogerpon":
       self=player(make(45707),[make(50745)],energy()); foe=player(); break;
-    default:
+    case "kichikigisu":
+    case "kichikigisu-no-ko":
+      self=player(make(45913),[],energy(),[make(45913)]); foe=player();
+      previousOpponentTurnKnockout=[selector.value==="kichikigisu",false]; break;
+    case "latias":
+      self=player(make(48466),[],[],[make(46248)]); foe=player(); break;
+    case "rocket-three":
+    case "rocket-four":
+      self=player(make(47432),[],[],pile(47432,selector.value==="rocket-four"?3:2));
+      foe=player(); break;
+    case "defense":
       self=player(make(45578),[],energy()); foe=player();
+      break;
+    default: throw Error("Unknown scenario");
   }
   return {ruleset:"supported_abilities_v1",stadium:null,turn:0,
-    players:[self,foe],usedAbilities:{instances:[],names:[]}};
+    players:[self,foe],previousOpponentTurnKnockout,usedAbilities:{instances:[],names:[]}};
 }
 function name(card) {return repo.get(card.cardId)?.name ?? "不明";}
 function cards(items) {
@@ -108,6 +125,16 @@ function render() {
     const button=document.createElement("button");button.textContent="ワザの100ダメージを計算";
     button.onclick=()=>{result.textContent="100ダメージ → "+engine.incomingAttackDamage(state,own.active.instanceId,100)+"ダメージ";};
     result.append(button);
+  } else if (selector.value==="latias") {
+    result.textContent="メガガルーラexのにげるためのエネルギー："+
+      engine.retreatCost(state,0,own.active.instanceId)+"個（印刷された数：3個）。";
+  } else if (selector.value.startsWith("rocket-")) {
+    result.textContent="ロケット団のポケモンが自分の場に"+(own.bench.length+1)+"匹。"+
+      "パワーセーバーのワザ使用条件："+
+      (engine.abilityAllowsAttack(state,0,own.active.instanceId)?"満たす":"満たさない")+"。";
+  } else if (selector.value.startsWith("kichikigisu")) {
+    result.textContent="前の相手の番に自分のポケモンがきぜつ："+
+      (state.previousOpponentTurnKnockout[0]?"あり":"なし")+"（試験用の盤面履歴）。";
   } else result.textContent="特性を選ぶと盤面に反映されます。";
 }
 selector.onchange=()=>{state=scenario();message.textContent="場面を切り替えました。";render();};

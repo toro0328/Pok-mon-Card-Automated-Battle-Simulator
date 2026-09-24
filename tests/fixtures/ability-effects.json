@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "sourceSha256": "6ec646f4b2c2b3134fcdb6d4bc84bb0174d2a33d1cc9acec5d4329b8f6b6e5bb",
+  "sourceSha256": "9f859887550d340a9cafb314ddc589af4de996f73edebe22904378c3edd08931",
   "sourceUpdatedAt": "2026-09-24T08:41:29.255624+00:00",
-  "cardCount": 11,
-  "abilityCount": 10,
+  "cardCount": 14,
+  "abilityCount": 13,
   "counts": {
-    "supported": 9,
+    "supported": 12,
     "needs_review": 1
   },
   "abilities": {
@@ -65,6 +65,28 @@
         "limit": "CARD_INSTANCE_PER_TURN"
       }
     ],
+    "45913": [
+      {
+        "index": 0,
+        "name": "さかてにとる",
+        "text": "前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。",
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [
+          {
+            "type": "OWN_POKEMON_KNOCKED_OUT_PREVIOUS_OPPONENT_TURN"
+          }
+        ],
+        "costs": [],
+        "operations": [
+          {
+            "type": "DRAW",
+            "count": 3
+          }
+        ],
+        "limit": "ABILITY_NAME_PER_TURN"
+      }
+    ],
     "46008": [
       {
         "index": 0,
@@ -85,6 +107,25 @@
           }
         ],
         "limit": "CARD_INSTANCE_PER_TURN"
+      }
+    ],
+    "46248": [
+      {
+        "index": 0,
+        "name": "スカイライン",
+        "text": "このポケモンがいるかぎり、自分のたねポケモン全員のにげるためのエネルギーは、すべてなくなる。",
+        "status": "supported",
+        "trigger": "CONTINUOUS",
+        "conditions": [],
+        "costs": [],
+        "operations": [
+          {
+            "type": "SET_RETREAT_COST_ZERO",
+            "scope": "OWN_FIELD",
+            "stage": "たね"
+          }
+        ],
+        "limit": null
       }
     ],
     "47069": [
@@ -126,6 +167,25 @@
           }
         ],
         "limit": "CARD_INSTANCE_PER_TURN"
+      }
+    ],
+    "47432": [
+      {
+        "index": 0,
+        "name": "パワーセーバー",
+        "text": "自分の場の「ロケット団のポケモン」が4匹以上のときにしか、このポケモンはワザが使えない。",
+        "status": "supported",
+        "trigger": "ATTACK_PERMISSION",
+        "conditions": [],
+        "costs": [],
+        "operations": [
+          {
+            "type": "REQUIRE_OWN_FIELD_POKEMON_NAME_PREFIX",
+            "prefix": "ロケット団の",
+            "count": 4
+          }
+        ],
+        "limit": null
       }
     ],
     "47847": [
