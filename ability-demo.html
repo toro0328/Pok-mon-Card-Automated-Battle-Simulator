@@ -138,6 +138,7 @@ function render() {
   const current=state.players[state.turn];
   const turn=document.createElement("p");turn.textContent="現在の番："+(state.turn===0?"自分":"相手");board.append(turn);
   zone(board,"相手のバトル場",other.active?[other.active]:[]);
+  zone(board,"相手のベンチ",other.bench);
   zone(board,"自分のバトル場",own.active?[own.active]:[]);
   zone(board,"自分のベンチ",own.bench);
   zone(board,"自分の手札",own.hand);
