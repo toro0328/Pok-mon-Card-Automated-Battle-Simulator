@@ -7,7 +7,7 @@ db = json.loads(Path("data/cards/cards.json").read_text(encoding="utf-8"))
 manifest = json.loads(Path("data/cards/official-id-manifest.json").read_text(encoding="utf-8"))
 allowed = set(manifest["ids"])
 seen = set()
-trainers = {"item", "supporter", "stadium", "tool"}
+trainers = {"item", "supporter", "stadium", "tool", "unspecified"}
 energies = {"basic", "special"}
 statuses = {"unparsed", "supported", "needs_review", "custom_handler"}
 for card in db["cards"]:

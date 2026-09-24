@@ -5,7 +5,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-TRAINERS = {"グッズ": "item", "サポート": "supporter", "スタジアム": "stadium", "ポケモンのどうぐ": "tool"}
+TRAINERS = {"グッズ": "item", "サポート": "supporter", "スタジアム": "stadium", "ポケモンのどうぐ": "tool", "トレーナー": "unspecified"}
 ENERGIES = {"基本エネルギー": "basic", "特殊エネルギー": "special"}
 
 def normalize(raw, path, now):
@@ -34,8 +34,11 @@ def normalize(raw, path, now):
                    "fetchedAt": now, "fallbackDataset": "type-null/PTCG-database",
                    "fallbackPath": "data_jp/" + str(path).split("data_jp/", 1)[-1]},
         "raw": raw,
-        "engine": {"status": "unparsed", "effects": [], "handler": None,
-                   "notes": ["Reference data only; printed regulation and effects are unverified."]},
+        "engine": {"status": "needs_review" if trainer_type == "unspecified" else "unparsed",
+                   "effects": [], "handler": None,
+                   "notes": ["Reference data only; printed regulation and effects are unverified."]
+                   + (["Unclassified trainer (e.g. a fossil); special play rules need review."]
+                      if trainer_type == "unspecified" else [])},
     }
 
 def main():
@@ -78,17 +81,24 @@ def main():
         seen[cid] = path
     now = datetime.now(timezone.utc).isoformat()
     added = []
+    errors = []
     for cid, path in paths:
         if len(added) >= args.limit:
             break
-        raw = json.loads(path.read_text(encoding="utf-8"))
-        added.append(normalize(raw, path, now))
-        print("added", cid, added[-1]["name"], added[-1]["cardType"])
+        try:
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            added.append(normalize(raw, path, now))
+        except (ValueError, KeyError, json.JSONDecodeError) as exc:
+            errors.append(f"{path}: {exc}")
+    if errors:
+        raise ValueError(f"{len(errors)} invalid mirror cards; first 20: " + "; ".join(errors[:20]))
     if added:
         db["cards"].extend(added)
         db["cards"].sort(key=lambda card: card["officialCardId"])
         db["updatedAt"] = now
         args.db.write_text(json.dumps(db, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    for card in added[:20]:
+        print("added", card["officialCardId"], card["name"], card["cardType"])
     print("added total:", len(added))
 
 if __name__ == "__main__":

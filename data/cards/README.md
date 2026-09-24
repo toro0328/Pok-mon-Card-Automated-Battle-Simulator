@@ -10,7 +10,8 @@ This directory is the simulator's canonical local card database.
   code, ID, search membership, or this reference dataset. Search results may
   include permitted reprints and cards not yet legal for a given event.
 - `cardType` is pokemon/trainer/energy; `trainerType` is
-  item/supporter/stadium/tool and `energyType` is basic/special.
+  item/supporter/stadium/tool (or `unspecified` for unusual printed
+  "トレーナー" cards requiring review) and `energyType` is basic/special.
 - Preserve official text in `raw` before converting it to engine effects.
 - Never silently guess an unknown effect. Mark it `needs_review`.
 - Card images/OCR are verification/fallback sources, not the primary parser.

@@ -1,6 +1,6 @@
 const VALID_TYPES = new Set(["pokemon", "trainer", "energy"]);
 const VALID_STATUS = new Set(["unparsed", "supported", "needs_review", "custom_handler"]);
-const TRAINER_TYPES = new Set(["item", "supporter", "stadium", "tool"]);
+const TRAINER_TYPES = new Set(["item", "supporter", "stadium", "tool", "unspecified"]);
 const ENERGY_TYPES = new Set(["basic", "special"]);
 
 export function validateCard(card) {

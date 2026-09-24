@@ -17,7 +17,7 @@
         "name":{"type":"string"},
         "regulation":{"type":["string","null"]},
         "cardType":{"enum":["pokemon","trainer","energy"]},
-        "trainerType":{"type":["string","null"],"enum":["item","supporter","stadium","tool",null]},
+        "trainerType":{"type":["string","null"],"enum":["item","supporter","stadium","tool","unspecified",null]},
         "energyType":{"type":["string","null"],"enum":["basic","special",null]},
         "source":{"type":"object","required":["detailUrl"],"properties":{"detailUrl":{"type":"string"},"imageUrl":{"type":["string","null"]},"fetchedAt":{"type":["string","null"]}}},
         "raw":{"type":"object","description":"Official text and printed values. Preserve before interpretation."},
