@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 1901,
-    "needs_review": 3261
+    "supported": 1917,
+    "needs_review": 3245
   },
   "attacks": {
     "45147": [
@@ -6302,8 +6302,13 @@
           "Colorless"
         ],
         "text": "自分のポケモン全員のHPを、それぞれ「30」回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_OWN_FIELD",
+            "amount": 30
+          }
+        ]
       }
     ],
     "45586": [
@@ -7767,8 +7772,13 @@
           "Colorless"
         ],
         "text": "自分のポケモン全員のHPを、それぞれ「30」回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_OWN_FIELD",
+            "amount": 30
+          }
+        ]
       }
     ],
     "45675": [
@@ -7924,8 +7934,13 @@
           "Colorless"
         ],
         "text": "自分のポケモン全員のHPを、それぞれ「30」回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_OWN_FIELD",
+            "amount": 30
+          }
+        ]
       }
     ],
     "45685": [
@@ -23854,8 +23869,13 @@
           "Colorless"
         ],
         "text": "自分のポケモン全員のHPを、それぞれ「30」回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_OWN_FIELD",
+            "amount": 30
+          }
+        ]
       }
     ],
     "46681": [
@@ -30189,8 +30209,13 @@
           "Fire"
         ],
         "text": "自分のポケモン全員のHPを、それぞれ「50」回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_OWN_FIELD",
+            "amount": 50
+          }
+        ]
       }
     ],
     "47316": [
@@ -31422,8 +31447,13 @@
           "Fire"
         ],
         "text": "自分のポケモン全員のHPを、それぞれ「50」回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_OWN_FIELD",
+            "amount": 50
+          }
+        ]
       }
     ],
     "47379": [
@@ -31587,8 +31617,13 @@
           "Fire"
         ],
         "text": "自分のポケモン全員のHPを、それぞれ「50」回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_OWN_FIELD",
+            "amount": 50
+          }
+        ]
       }
     ],
     "47388": [
@@ -31669,8 +31704,13 @@
           "Fire"
         ],
         "text": "自分のポケモン全員のHPを、それぞれ「50」回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_OWN_FIELD",
+            "amount": 50
+          }
+        ]
       }
     ],
     "47392": [
@@ -32380,8 +32420,13 @@
           "Water"
         ],
         "text": "自分のポケモン全員のHPを、それぞれ「10」回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_OWN_FIELD",
+            "amount": 10
+          }
+        ]
       },
       {
         "index": 1,
@@ -49528,8 +49573,13 @@
           "Fire"
         ],
         "text": "自分のポケモン全員のHPを、それぞれ「50」回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_OWN_FIELD",
+            "amount": 50
+          }
+        ]
       }
     ],
     "48544": [
@@ -54100,8 +54150,13 @@
           "Colorless"
         ],
         "text": "自分のポケモン全員のHPを、それぞれ「30」回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_OWN_FIELD",
+            "amount": 30
+          }
+        ]
       }
     ],
     "48796": [
@@ -68053,8 +68108,13 @@
           "Fire"
         ],
         "text": "自分のポケモン全員のHPを、それぞれ「50」回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_OWN_FIELD",
+            "amount": 50
+          }
+        ]
       }
     ],
     "49614": [
@@ -77921,8 +77981,14 @@
           "Colorless"
         ],
         "text": "自分のポケモン全員についているFireとElectricエネルギーの数×50ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_FIELD_FIRE_ELECTRIC_ENERGY_COUNT",
+            "perEnergy": 50
+          }
+        ]
       }
     ],
     "50397": [
@@ -79355,8 +79421,14 @@
           "Colorless"
         ],
         "text": "自分のポケモン全員についているFireとElectricエネルギーの数×50ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_FIELD_FIRE_ELECTRIC_ENERGY_COUNT",
+            "perEnergy": 50
+          }
+        ]
       }
     ],
     "50537": [
@@ -79475,8 +79547,14 @@
           "Colorless"
         ],
         "text": "自分のポケモン全員についているFireとElectricエネルギーの数×50ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_FIELD_FIRE_ELECTRIC_ENERGY_COUNT",
+            "perEnergy": 50
+          }
+        ]
       }
     ],
     "50554": [
@@ -79493,8 +79571,14 @@
           "Colorless"
         ],
         "text": "自分のポケモン全員についているFireとElectricエネルギーの数×50ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_FIELD_FIRE_ELECTRIC_ENERGY_COUNT",
+            "perEnergy": 50
+          }
+        ]
       }
     ],
     "50555": [
