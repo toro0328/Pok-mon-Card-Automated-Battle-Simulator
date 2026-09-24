@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 1889,
-    "needs_review": 3273
+    "supported": 1898,
+    "needs_review": 3264
   },
   "attacks": {
     "45147": [
@@ -8399,8 +8399,14 @@
           "Grass"
         ],
         "text": "おたがいのバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "45708": [
@@ -10619,8 +10625,14 @@
           "Grass"
         ],
         "text": "おたがいのバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "45857": [
@@ -10818,8 +10830,14 @@
           "Grass"
         ],
         "text": "おたがいのバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "45868": [
@@ -10920,8 +10938,14 @@
           "Grass"
         ],
         "text": "おたがいのバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "45876": [
@@ -23830,8 +23854,14 @@
           "Grass"
         ],
         "text": "おたがいのバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "46683": [
@@ -27736,8 +27766,14 @@
           "Grass"
         ],
         "text": "おたがいのバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "47123": [
@@ -28303,8 +28339,14 @@
           "Grass"
         ],
         "text": "おたがいのバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "47156": [
@@ -49392,8 +49434,14 @@
           "Grass"
         ],
         "text": "おたがいのバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "48540": [
@@ -54109,8 +54157,14 @@
           "Grass"
         ],
         "text": "おたがいのバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "48799": [
