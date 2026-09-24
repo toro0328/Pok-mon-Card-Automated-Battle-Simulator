@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 1917,
-    "needs_review": 3245
+    "supported": 2137,
+    "needs_review": 3025
   },
   "attacks": {
     "45147": [
@@ -675,8 +675,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45174": [
@@ -1398,8 +1402,14 @@
           "Colorless"
         ],
         "text": "のぞむなら、自分の山札から好きなカードを2枚まで選び、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "any"
+          }
+        ]
       }
     ],
     "45202": [
@@ -1731,8 +1741,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45225": [
@@ -1916,8 +1930,14 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "45233": [
@@ -1934,8 +1954,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45234": [
@@ -2076,8 +2100,13 @@
           "Electric"
         ],
         "text": "相手のポケモン1匹に、10ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 10
+          }
+        ]
       }
     ],
     "45241": [
@@ -3039,8 +3068,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45276": [
@@ -3072,8 +3105,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45277": [
@@ -4144,8 +4181,13 @@
           "Electric"
         ],
         "text": "相手のポケモン1匹に、20ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 20
+          }
+        ]
       }
     ],
     "45447": [
@@ -4276,8 +4318,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 20
+          }
+        ]
       }
     ],
     "45453": [
@@ -4294,8 +4342,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "45466": [
@@ -5754,8 +5806,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45557": [
@@ -5890,8 +5946,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45566": [
@@ -5956,8 +6016,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45571": [
@@ -6040,8 +6104,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 20
+          }
+        ]
       }
     ],
     "45575": [
@@ -6571,8 +6641,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45597": [
@@ -7300,8 +7374,14 @@
           "Colorless"
         ],
         "text": "自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 1,
+            "filter": "pokemon"
+          }
+        ]
       },
       {
         "index": 1,
@@ -7409,8 +7489,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45662": [
@@ -7700,8 +7784,14 @@
           "Colorless"
         ],
         "text": "自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 1,
+            "filter": "pokemon"
+          }
+        ]
       },
       {
         "index": 1,
@@ -7906,8 +7996,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45684": [
@@ -7988,8 +8082,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45689": [
@@ -8008,8 +8106,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45692": [
@@ -8717,8 +8819,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "45718": [
@@ -8892,8 +8998,12 @@
           "Water"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45726": [
@@ -8925,8 +9035,12 @@
           "Water"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45728": [
@@ -9193,8 +9307,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "45740": [
@@ -9220,8 +9340,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 50
+          }
+        ]
       }
     ],
     "45741": [
@@ -10124,8 +10250,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45776": [
@@ -10369,8 +10499,12 @@
           "Grass"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45844": [
@@ -10634,8 +10768,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45856": [
@@ -10708,8 +10846,12 @@
           "Water"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45859": [
@@ -11718,8 +11860,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45904": [
@@ -11900,8 +12046,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "45911": [
@@ -11962,8 +12112,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、100ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 100
+          }
+        ]
       }
     ],
     "45914": [
@@ -12706,8 +12861,13 @@
           "Dark"
         ],
         "text": "相手のポケモン1匹に、180ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 180
+          }
+        ]
       }
     ],
     "45958": [
@@ -12997,8 +13157,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "45971": [
@@ -13430,8 +13594,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "45991": [
@@ -14027,8 +14195,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46013": [
@@ -14176,8 +14348,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46021": [
@@ -14310,8 +14486,15 @@
           "Colorless"
         ],
         "text": "このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_BENCH_COUNT",
+            "perPokemon": 30,
+            "noFirstSecondTurn": true
+          }
+        ]
       },
       {
         "index": 1,
@@ -14326,8 +14509,12 @@
           "Electric"
         ],
         "text": "次の相手の番、このポケモンはたねポケモン（Colorlessポケモンをのぞく）からワザのダメージを受けない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_BASIC_NON_COLORLESS_DAMAGE_NEXT_OPPONENT_TURN"
+          }
+        ]
       }
     ],
     "46042": [
@@ -14983,8 +15170,13 @@
           "Electric"
         ],
         "text": "相手のポケモン1匹に、10ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 10
+          }
+        ]
       }
     ],
     "46151": [
@@ -15235,8 +15427,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46162": [
@@ -15300,8 +15496,13 @@
           "Dark"
         ],
         "text": "相手のポケモン1匹に、180ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 180
+          }
+        ]
       }
     ],
     "46165": [
@@ -15445,8 +15646,15 @@
           "Colorless"
         ],
         "text": "このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_BENCH_COUNT",
+            "perPokemon": 30,
+            "noFirstSecondTurn": true
+          }
+        ]
       },
       {
         "index": 1,
@@ -15461,8 +15669,12 @@
           "Electric"
         ],
         "text": "次の相手の番、このポケモンはたねポケモン（Colorlessポケモンをのぞく）からワザのダメージを受けない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_BASIC_NON_COLORLESS_DAMAGE_NEXT_OPPONENT_TURN"
+          }
+        ]
       }
     ],
     "46175": [
@@ -15545,8 +15757,15 @@
           "Colorless"
         ],
         "text": "このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_BENCH_COUNT",
+            "perPokemon": 30,
+            "noFirstSecondTurn": true
+          }
+        ]
       },
       {
         "index": 1,
@@ -15561,8 +15780,12 @@
           "Electric"
         ],
         "text": "次の相手の番、このポケモンはたねポケモン（Colorlessポケモンをのぞく）からワザのダメージを受けない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_BASIC_NON_COLORLESS_DAMAGE_NEXT_OPPONENT_TURN"
+          }
+        ]
       }
     ],
     "46181": [
@@ -15578,8 +15801,15 @@
           "Colorless"
         ],
         "text": "このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_BENCH_COUNT",
+            "perPokemon": 30,
+            "noFirstSecondTurn": true
+          }
+        ]
       },
       {
         "index": 1,
@@ -15594,8 +15824,12 @@
           "Electric"
         ],
         "text": "次の相手の番、このポケモンはたねポケモン（Colorlessポケモンをのぞく）からワザのダメージを受けない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_BASIC_NON_COLORLESS_DAMAGE_NEXT_OPPONENT_TURN"
+          }
+        ]
       }
     ],
     "46184": [
@@ -15848,8 +16082,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、50ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 50
+          }
+        ]
       }
     ],
     "46207": [
@@ -15987,8 +16226,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46212": [
@@ -16151,8 +16394,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 30
+          }
+        ]
       }
     ],
     "46233": [
@@ -16317,8 +16566,14 @@
           "Water"
         ],
         "text": "自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 1,
+            "filter": "pokemon"
+          }
+        ]
       },
       {
         "index": 1,
@@ -16506,8 +16761,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46249": [
@@ -16520,8 +16779,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、50ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -17396,8 +17660,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 30
+          }
+        ]
       }
     ],
     "46295": [
@@ -17505,8 +17775,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 30
+          }
+        ]
       }
     ],
     "46313": [
@@ -17583,8 +17859,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、50ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -17827,8 +18108,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46325": [
@@ -17956,8 +18241,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46334": [
@@ -18580,8 +18869,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46363": [
@@ -19470,8 +19763,12 @@
           "Fighting"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       },
       {
         "index": 1,
@@ -20065,8 +20362,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、30ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 30
+          }
+        ]
       }
     ],
     "46427": [
@@ -20297,8 +20599,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×90ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 90
+          }
+        ]
       }
     ],
     "46449": [
@@ -20512,8 +20820,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "46466": [
@@ -20612,8 +20924,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46471": [
@@ -20833,8 +21149,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46481": [
@@ -21896,8 +22216,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46529": [
@@ -22139,8 +22463,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46539": [
@@ -23049,8 +23377,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46633": [
@@ -23199,8 +23531,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、30ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 30
+          }
+        ]
       }
     ],
     "46642": [
@@ -23780,8 +24117,14 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "46677": [
@@ -23798,8 +24141,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46678": [
@@ -23931,8 +24278,12 @@
           "Electric"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46687": [
@@ -24015,8 +24366,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "46690": [
@@ -24067,8 +24422,12 @@
           "Electric"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46693": [
@@ -24296,8 +24655,12 @@
           "Water"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46706": [
@@ -24329,8 +24692,12 @@
           "Water"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46710": [
@@ -24412,8 +24779,12 @@
           "Electric"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46714": [
@@ -24513,8 +24884,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "46720": [
@@ -24540,8 +24917,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 50
+          }
+        ]
       }
     ],
     "46724": [
@@ -25132,8 +25515,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、100ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 100
+          }
+        ]
       }
     ],
     "46766": [
@@ -25256,8 +25644,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46775": [
@@ -25668,8 +26060,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46795": [
@@ -25688,8 +26084,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "46797": [
@@ -25705,8 +26105,15 @@
           "Colorless"
         ],
         "text": "このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_BENCH_COUNT",
+            "perPokemon": 30,
+            "noFirstSecondTurn": true
+          }
+        ]
       },
       {
         "index": 1,
@@ -25721,8 +26128,12 @@
           "Electric"
         ],
         "text": "次の相手の番、このポケモンはたねポケモン（Colorlessポケモンをのぞく）からワザのダメージを受けない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_BASIC_NON_COLORLESS_DAMAGE_NEXT_OPPONENT_TURN"
+          }
+        ]
       }
     ],
     "47009": [
@@ -26170,8 +26581,12 @@
           "Water"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47031": [
@@ -26325,8 +26740,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47039": [
@@ -26626,8 +27045,12 @@
           "Psychic"
         ],
         "text": "このポケモンと、ついているすべてのカードを、手札にもどす。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "RETURN_SELF_TO_HAND"
+          }
+        ]
       }
     ],
     "47052": [
@@ -26718,8 +27141,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "47056": [
@@ -27087,8 +27514,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47071": [
@@ -27118,8 +27549,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47072": [
@@ -27843,8 +28278,12 @@
           "Electric"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47124": [
@@ -27939,8 +28378,12 @@
           "Electric"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47127": [
@@ -27985,8 +28428,12 @@
           "Water"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47129": [
@@ -28050,8 +28497,12 @@
           "Electric"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47132": [
@@ -28308,8 +28759,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47147": [
@@ -28325,8 +28780,15 @@
           "Colorless"
         ],
         "text": "このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_BENCH_COUNT",
+            "perPokemon": 30,
+            "noFirstSecondTurn": true
+          }
+        ]
       },
       {
         "index": 1,
@@ -28341,8 +28803,12 @@
           "Electric"
         ],
         "text": "次の相手の番、このポケモンはたねポケモン（Colorlessポケモンをのぞく）からワザのダメージを受けない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_BASIC_NON_COLORLESS_DAMAGE_NEXT_OPPONENT_TURN"
+          }
+        ]
       }
     ],
     "47154": [
@@ -28359,8 +28825,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47155": [
@@ -28436,8 +28906,15 @@
           "Colorless"
         ],
         "text": "このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_BENCH_COUNT",
+            "perPokemon": 30,
+            "noFirstSecondTurn": true
+          }
+        ]
       },
       {
         "index": 1,
@@ -28452,8 +28929,12 @@
           "Electric"
         ],
         "text": "次の相手の番、このポケモンはたねポケモン（Colorlessポケモンをのぞく）からワザのダメージを受けない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_BASIC_NON_COLORLESS_DAMAGE_NEXT_OPPONENT_TURN"
+          }
+        ]
       }
     ],
     "47159": [
@@ -28606,8 +29087,12 @@
           "Psychic"
         ],
         "text": "このポケモンと、ついているすべてのカードを、手札にもどす。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "RETURN_SELF_TO_HAND"
+          }
+        ]
       }
     ],
     "47165": [
@@ -28731,8 +29216,12 @@
           "Psychic"
         ],
         "text": "このポケモンと、ついているすべてのカードを、手札にもどす。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "RETURN_SELF_TO_HAND"
+          }
+        ]
       }
     ],
     "47171": [
@@ -28763,8 +29252,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、100ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 100
+          }
+        ]
       }
     ],
     "47178": [
@@ -29114,8 +29608,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47235": [
@@ -29296,8 +29794,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47246": [
@@ -29411,8 +29913,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47251": [
@@ -29735,8 +30241,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47278": [
@@ -29808,8 +30318,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47296": [
@@ -30465,8 +30979,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47327": [
@@ -31790,8 +32308,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -32811,8 +33335,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 40
+          }
+        ]
       }
     ],
     "47438": [
@@ -33971,8 +34501,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 40
+          }
+        ]
       }
     ],
     "47509": [
@@ -35539,8 +36075,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "47581": [
@@ -36160,8 +36702,12 @@
           "Steel"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47608": [
@@ -36495,8 +37041,12 @@
           "Grass"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "47632": [
@@ -36527,8 +37077,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47633": [
@@ -38680,8 +39234,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、40ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 40
+          }
+        ]
       }
     ],
     "47750": [
@@ -38864,8 +39423,14 @@
           "Void"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 30
+          }
+        ]
       }
     ],
     "47757": [
@@ -39088,8 +39653,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47767": [
@@ -40449,8 +41018,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "47836": [
@@ -40747,8 +41322,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 50
+          }
+        ]
       }
     ],
     "47848": [
@@ -40926,8 +41507,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、100ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 100
+          }
+        ]
       }
     ],
     "47863": [
@@ -41972,8 +42558,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "47952": [
@@ -42526,8 +43118,12 @@
           "Steel"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "47976": [
@@ -43171,8 +43767,12 @@
           "Grass"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "48007": [
@@ -43203,8 +43803,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48008": [
@@ -45808,8 +46412,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48321": [
@@ -47201,8 +47809,14 @@
           "Colorless"
         ],
         "text": "自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 1,
+            "filter": "pokemon"
+          }
+        ]
       },
       {
         "index": 1,
@@ -48376,8 +48990,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 50
+          }
+        ]
       }
     ],
     "48473": [
@@ -48453,8 +49073,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 50
+          }
+        ]
       }
     ],
     "48478": [
@@ -48762,8 +49388,14 @@
           "Colorless"
         ],
         "text": "自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 1,
+            "filter": "pokemon"
+          }
+        ]
       },
       {
         "index": 1,
@@ -50421,8 +51053,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48580": [
@@ -50787,8 +51423,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48598": [
@@ -51633,8 +52273,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、100ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 100
+          }
+        ]
       }
     ],
     "48637": [
@@ -51988,8 +52633,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48652": [
@@ -52236,8 +52885,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48663": [
@@ -52334,8 +52987,15 @@
           "Colorless"
         ],
         "text": "このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_BENCH_COUNT",
+            "perPokemon": 30,
+            "noFirstSecondTurn": true
+          }
+        ]
       },
       {
         "index": 1,
@@ -52350,8 +53010,12 @@
           "Electric"
         ],
         "text": "次の相手の番、このポケモンはたねポケモン（Colorlessポケモンをのぞく）からワザのダメージを受けない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_BASIC_NON_COLORLESS_DAMAGE_NEXT_OPPONENT_TURN"
+          }
+        ]
       }
     ],
     "48717": [
@@ -52499,8 +53163,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48724": [
@@ -52994,8 +53662,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48745": [
@@ -53011,8 +53683,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -53515,8 +54193,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "48768": [
@@ -53598,8 +54280,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48771": [
@@ -53698,8 +54384,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 30
+          }
+        ]
       }
     ],
     "48776": [
@@ -54095,8 +54787,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48794": [
@@ -54501,8 +55197,12 @@
           "Electric"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48811": [
@@ -55372,8 +56072,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48845": [
@@ -55640,8 +56344,13 @@
           "Dark"
         ],
         "text": "相手のポケモン1匹に、180ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 180
+          }
+        ]
       }
     ],
     "48856": [
@@ -56180,8 +56889,12 @@
           "Electric"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48878": [
@@ -56312,8 +57025,12 @@
           "Water"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "48884": [
@@ -56437,8 +57154,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、50ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 50
+          }
+        ]
       }
     ],
     "48889": [
@@ -56531,8 +57253,12 @@
           "Water"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48893": [
@@ -56687,8 +57413,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48900": [
@@ -56980,8 +57710,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48911": [
@@ -57197,8 +57931,14 @@
           "Water"
         ],
         "text": "自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 1,
+            "filter": "pokemon"
+          }
+        ]
       },
       {
         "index": 1,
@@ -57484,8 +58224,12 @@
           "Water"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48931": [
@@ -57517,8 +58261,12 @@
           "Water"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48933": [
@@ -57949,8 +58697,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×100ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 100
+          }
+        ]
       }
     ],
     "48950": [
@@ -58076,8 +58830,12 @@
           "Electric"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48955": [
@@ -58971,8 +59729,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "48991": [
@@ -59491,8 +60253,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "49013": [
@@ -59846,8 +60612,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "49029": [
@@ -59860,8 +60630,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、50ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -60387,8 +61162,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "49052": [
@@ -60498,8 +61277,12 @@
           "Psychic"
         ],
         "text": "このポケモンと、ついているすべてのカードを、手札にもどす。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "RETURN_SELF_TO_HAND"
+          }
+        ]
       }
     ],
     "49057": [
@@ -60787,8 +61570,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 20
+          }
+        ]
       }
     ],
     "49068": [
@@ -62389,8 +63178,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "49131": [
@@ -63853,8 +64646,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、50ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -63988,8 +64786,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "49196": [
@@ -64017,8 +64819,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "49197": [
@@ -64078,8 +64884,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "49199": [
@@ -64257,8 +65067,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、100ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 100
+          }
+        ]
       }
     ],
     "49206": [
@@ -64618,8 +65433,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "49220": [
@@ -64649,8 +65468,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "49221": [
@@ -65180,8 +66003,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "49242": [
@@ -66115,8 +66942,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "49278": [
@@ -67089,8 +67920,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×80ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 80
+          }
+        ]
       }
     ],
     "49319": [
@@ -67636,8 +68473,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "49342": [
@@ -67759,8 +68600,15 @@
           "Colorless"
         ],
         "text": "このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_BENCH_COUNT",
+            "perPokemon": 30,
+            "noFirstSecondTurn": true
+          }
+        ]
       },
       {
         "index": 1,
@@ -67775,8 +68623,12 @@
           "Electric"
         ],
         "text": "次の相手の番、このポケモンはたねポケモン（Colorlessポケモンをのぞく）からワザのダメージを受けない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_BASIC_NON_COLORLESS_DAMAGE_NEXT_OPPONENT_TURN"
+          }
+        ]
       }
     ],
     "49587": [
@@ -67792,8 +68644,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "49588": [
@@ -68516,8 +69372,14 @@
           "Grass"
         ],
         "text": "自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 1,
+            "filter": "pokemon"
+          }
+        ]
       },
       {
         "index": 1,
@@ -69050,8 +69912,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "49667": [
@@ -69615,8 +70483,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "49691": [
@@ -69702,8 +70574,12 @@
           "Colorless"
         ],
         "text": "このポケモンと、ついているすべてのカードを、手札にもどす。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "RETURN_SELF_TO_HAND"
+          }
+        ]
       }
     ],
     "49695": [
@@ -70270,8 +71146,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "49971": [
@@ -70658,8 +71538,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "49997": [
@@ -70792,8 +71676,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、100ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 100
+          }
+        ]
       }
     ],
     "50005": [
@@ -71317,8 +72206,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×80ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 80
+          }
+        ]
       }
     ],
     "50029": [
@@ -71535,8 +72430,14 @@
           "Grass"
         ],
         "text": "自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 1,
+            "filter": "pokemon"
+          }
+        ]
       },
       {
         "index": 1,
@@ -71993,8 +72894,12 @@
           "Colorless"
         ],
         "text": "このポケモンと、ついているすべてのカードを、手札にもどす。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "RETURN_SELF_TO_HAND"
+          }
+        ]
       }
     ],
     "50078": [
@@ -72093,8 +72998,12 @@
           "Colorless"
         ],
         "text": "このポケモンと、ついているすべてのカードを、手札にもどす。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "RETURN_SELF_TO_HAND"
+          }
+        ]
       }
     ],
     "50084": [
@@ -72759,8 +73668,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "50111": [
@@ -72843,8 +73756,12 @@
           "Electric"
         ],
         "text": "このポケモンと、ついているすべてのカードを、手札にもどす。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "RETURN_SELF_TO_HAND"
+          }
+        ]
       }
     ],
     "50115": [
@@ -72872,8 +73789,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 20
+          }
+        ]
       }
     ],
     "50116": [
@@ -73347,8 +74270,12 @@
           "Dark"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "50139": [
@@ -73529,8 +74456,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "50147": [
@@ -73720,8 +74651,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 50
+          }
+        ]
       }
     ],
     "50173": [
@@ -74238,8 +75175,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "50201": [
@@ -74941,8 +75882,13 @@
           "Electric"
         ],
         "text": "相手のポケモン1匹に、50ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -75963,8 +76909,14 @@
           "Colorless"
         ],
         "text": "ウラが出るまでコインを投げ、オモテの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "COIN_UNTIL_TAILS",
+            "perHeads": 30
+          }
+        ]
       }
     ],
     "50302": [
@@ -76723,8 +77675,13 @@
           "Colorless"
         ],
         "text": "相手のポケモン1匹に、30ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 30
+          }
+        ]
       },
       {
         "index": 1,
@@ -76753,8 +77710,12 @@
           "Grass"
         ],
         "text": "このポケモンと、ついているすべてのカードを、手札にもどす。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "RETURN_SELF_TO_HAND"
+          }
+        ]
       },
       {
         "index": 1,
@@ -77048,8 +78009,12 @@
           "Fire"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "50355": [
@@ -77591,8 +78556,14 @@
           "Colorless"
         ],
         "text": "自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 1,
+            "filter": "pokemon"
+          }
+        ]
       },
       {
         "index": 1,
@@ -77640,8 +78611,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "50382": [
@@ -78055,8 +79030,14 @@
           "Colorless"
         ],
         "text": "のぞむなら、自分の山札から好きなカードを2枚まで選び、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "any"
+          }
+        ]
       }
     ],
     "50412": [
@@ -78336,8 +79317,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DISCARD_ENERGY"
+          }
+        ]
       }
     ],
     "50434": [
@@ -78908,8 +79893,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×80ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 80
+          }
+        ]
       }
     ],
     "50492": [
@@ -79444,8 +80435,14 @@
           "Colorless"
         ],
         "text": "のぞむなら、自分の山札から好きなカードを2枚まで選び、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "any"
+          }
+        ]
       }
     ],
     "50548": [
@@ -80048,8 +81045,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 40
+          }
+        ]
       }
     ],
     "50575": [
@@ -80972,8 +81975,14 @@
           "Colorless"
         ],
         "text": "自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 1,
+            "filter": "pokemon"
+          }
+        ]
       }
     ],
     "50636": [
@@ -81133,8 +82142,13 @@
           "Electric"
         ],
         "text": "相手のポケモン1匹に、20ダメージ。［ベンチは弱点・抵抗力を計算しない。］",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE_CHOSEN_OPPONENT",
+            "amount": 20
+          }
+        ]
       }
     ],
     "50645": [
@@ -81565,8 +82579,12 @@
           "Colorless"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "50664": [
@@ -81683,8 +82701,12 @@
           "Psychic"
         ],
         "text": "次の自分の番、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "PREVENT_SELF_ATTACK_NEXT_TURN"
+          }
+        ]
       }
     ],
     "50668": [
@@ -81700,8 +82722,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンについているエネルギーの数×40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDING_ATTACHED_ENERGY_COUNT",
+            "perEnergy": 40
+          }
+        ]
       }
     ],
     "50669": [
