@@ -53,6 +53,9 @@ jobs:
       - name: Compile ability effects
         run: node scripts/compile-abilities.mjs
 
+      - name: Compile attack effects
+        run: node scripts/compile-attacks.mjs
+
       - name: Commit DB changes
         run: |
           git add data/cards/

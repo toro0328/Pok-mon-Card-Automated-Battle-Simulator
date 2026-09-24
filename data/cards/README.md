@@ -27,3 +27,7 @@ The sync workflow refreshes the official ID manifest, then imports missing
 records from a local clone of type-null/PTCG-database using
 `scripts/import-reference-card-db.py`. Existing records are preserved.
 Raw reference records are retained for later verification and reparsing.
+
+Run `npm run compile:attacks` to inspect each printed attack separately.
+The generated `attack-effects.json` keeps original text and marks unknown
+patterns `needs_review`. See `docs/attack-engine.md` for the restricted sandbox.

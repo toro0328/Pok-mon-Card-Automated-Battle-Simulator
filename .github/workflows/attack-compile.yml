@@ -1,0 +1,44 @@
+name: Compile attack effects
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/compile-attacks.mjs"
+      - "src/card-db/parse-effects.js"
+      - "src/engine/AttackEngine.js"
+      - "data/cards/cards.json"
+      - ".github/workflows/attack-compile.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: card-db-sync
+  cancel-in-progress: false
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test attack and ability sandbox
+        run: npm test
+      - name: Compile every stored attack
+        run: npm run compile:attacks
+      - name: Commit catalog
+        run: |
+          git add data/cards/attack-effects.json
+          if git diff --cached --quiet; then
+            echo "Attack catalog unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Compile card attack effects"
+          git pull --rebase origin main
+          git push

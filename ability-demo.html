@@ -22,7 +22,7 @@ button:disabled{background:#96a1ae}
 <body>
 <header><h1>特性エンジン試験</h1><a href="./index.html">対戦画面に戻る</a></header>
 <main>
-<p class="notice">実カードの特性を一部だけ試せます。ワザ・きぜつ・サイドなどを含む通常対戦は、まだ実装中です。未対応の特性は使える行動として表示しません。</p>
+<p class="notice">実カードの一部の特性とワザを試せます。きぜつ後の処理・サイドなどを含む通常対戦は、まだ実装中です。未対応のワザや特性は選択できません。</p>
 <p id="message">カードDBを読み込み中…</p>
 <label for="scenario">試す場面</label>
 <select id="scenario">
@@ -36,18 +36,23 @@ button:disabled{background:#96a1ae}
 <option value="latias">ラティアスex：自分のたねポケモンのにげるコスト</option>
 <option value="rocket-three">ロケット団のミュウツーex：場に3匹</option>
 <option value="rocket-four">ロケット団のミュウツーex：場に4匹</option>
+<option value="budew">スボミー：10ダメージ＋次の相手の番のグッズ制限</option>
+<option value="heracross-draw">ヘラクロス：20ダメージ＋2枚ドロー</option>
+<option value="heracross-self">ヘラクロス：130ダメージ＋自身に30ダメージ</option>
 </select>
 <div class="panel" id="board"></div>
 <div class="panel"><h2>使用可能な特性</h2><div id="actions" class="row"></div></div>
+<div class="panel"><h2>使用可能なワザ</h2><div id="attacks" class="row"></div></div>
 <div class="panel" id="result"></div>
 </main>
 <script type="module">
 import { CardRepository } from "./src/card-db/CardRepository.js";
-import { AbilityEngine } from "./src/engine/AbilityEngine.js";
+import { AttackEngine } from "./src/engine/AttackEngine.js";
 
 const message = document.getElementById("message");
 const board = document.getElementById("board");
 const actions = document.getElementById("actions");
+const attacks = document.getElementById("attacks");
 const result = document.getElementById("result");
 const selector = document.getElementById("scenario");
 let repo, engine, state;
@@ -78,6 +83,14 @@ function scenario() {
     case "rocket-four":
       self=player(make(47432),[],[],pile(47432,selector.value==="rocket-four"?3:2));
       foe=player(); break;
+    case "budew":
+      self=player(make(49956)); foe=player(make(48466),[make(50742)]); break;
+    case "heracross-draw":
+      self=player(make(50339),[],energy());self.active.attached.push(make(50745));
+      foe=player(make(48466));break;
+    case "heracross-self":
+      self=player(make(50339));self.active.attached.push(...pile(50745,3));
+      foe=player(make(47069));break;
     case "defense":
       self=player(make(45578),[],energy()); foe=player();
       break;
@@ -93,7 +106,8 @@ function cards(items) {
   for (const item of items) {
     const element=document.createElement("span");
     element.className="card "+repo.get(item.cardId)?.cardType;
-    element.textContent=name(item)+(item.attached?.length ? "（エネルギー"+item.attached.length+"枚）" : "");
+    element.textContent=name(item)+(item.attached?.length ? "（エネルギー"+item.attached.length+"枚）" : "")+
+      (item.damage ? "［ダメージ"+item.damage+"］" : "");
     wrapper.append(element);
   }
   return wrapper;
@@ -102,24 +116,36 @@ function zone(parent, label, items) {
   const title=document.createElement("h2");title.textContent=label;parent.append(title,cards(items));
 }
 function render() {
-  board.replaceChildren();actions.replaceChildren();result.replaceChildren();
+  board.replaceChildren();actions.replaceChildren();attacks.replaceChildren();result.replaceChildren();
   const own=state.players[0],other=state.players[1];
+  const current=state.players[state.turn];
+  const turn=document.createElement("p");turn.textContent="現在の番："+(state.turn===0?"自分":"相手");board.append(turn);
   zone(board,"相手のバトル場",other.active?[other.active]:[]);
   zone(board,"自分のバトル場",own.active?[own.active]:[]);
   zone(board,"自分のベンチ",own.bench);
   zone(board,"自分の手札",own.hand);
+  zone(board,"相手の手札",other.hand);
   const counts=document.createElement("p");counts.textContent="山札 "+own.deck.length+"枚 / トラッシュ "+own.trash.length+"枚";
   board.append(counts);
   const available=engine.getLegalActions(state);
   if (!available.length) actions.textContent="この場面で使用可能な特性はありません。";
   for (const action of available) {
-    const source=[own.active,...own.bench,...own.hand].find(x=>x?.instanceId===action.sourceInstanceId);
+    const source=[current.active,...current.bench,...current.hand].find(x=>x?.instanceId===action.sourceInstanceId);
     const ability=engine.entries(source)[action.abilityIndex];
-    const selected=own.hand.find(x=>x.instanceId===action.choiceInstanceId);
+    const selected=current.hand.find(x=>x.instanceId===action.choiceInstanceId);
     const button=document.createElement("button");
     button.textContent=name(source)+"「"+ability.name+"」を使う"+(selected?"（"+name(selected)+"を選ぶ）":"");
     button.onclick=()=>{state=engine.applyAction(state,action);message.textContent="特性「"+ability.name+"」を処理しました。";render();};
     actions.append(button);
+  }
+  const legalAttacks=engine.getLegalAttacks(state);
+  if (!legalAttacks.length) attacks.textContent="この場面で使用可能なワザはありません。";
+  for (const action of legalAttacks) {
+    const attack=engine.attacks(current.active)[action.attackIndex];
+    const button=document.createElement("button");
+    button.textContent=name(current.active)+"「"+attack.name+"」を使う";
+    button.onclick=()=>{state=engine.applyAttack(state,action);message.textContent="ワザ「"+attack.name+"」を処理しました。";render();};
+    attacks.append(button);
   }
   if (selector.value==="defense") {
     const button=document.createElement("button");button.textContent="ワザの100ダメージを計算";
@@ -135,6 +161,13 @@ function render() {
   } else if (selector.value.startsWith("kichikigisu")) {
     result.textContent="前の相手の番に自分のポケモンがきぜつ："+
       (state.previousOpponentTurnKnockout[0]?"あり":"なし")+"（試験用の盤面履歴）。";
+  } else if (selector.value==="budew") {
+    result.textContent=state.turn===1?
+      "相手は手札のハイパーボールを使える："+(engine.canPlayItemFromHand(state,1,other.hand[0]?.instanceId)?"はい":"いいえ")+
+      "。この相手の番の終わりに制限が切れます。":
+      "スボミーのワザ後、次の相手の番は手札からグッズを使えません。";
+  } else if (state.pendingKnockout) {
+    result.textContent="きぜつが発生しました。続きの処理は未対応です。";
   } else result.textContent="特性を選ぶと盤面に反映されます。";
 }
 selector.onchange=()=>{state=scenario();message.textContent="場面を切り替えました。";render();};
@@ -142,7 +175,7 @@ try {
   const [loaded, response]=await Promise.all([CardRepository.load("./data/cards/cards.json"),
     fetch("./data/cards/ability-effects.json")]);
   if(!response.ok) throw Error("特性データを取得できません");
-  repo=loaded;engine=new AbilityEngine(repo,await response.json());
+  repo=loaded;engine=new AttackEngine(repo,await response.json());
   state=scenario();message.textContent="準備できました。";render();
 } catch(error) {message.textContent="読み込みに失敗しました: "+error.message;}
 </script>

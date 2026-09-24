@@ -2,7 +2,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test tests/ability-engine.test.mjs",
-    "compile:abilities": "node scripts/compile-abilities.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "compile:abilities": "node scripts/compile-abilities.mjs",
+    "compile:attacks": "node scripts/compile-attacks.mjs"
   }
 }

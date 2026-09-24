@@ -8,6 +8,10 @@ const PATTERNS = [
   {
     expression: /^このポケモンにも([1-9][0-9]*)ダメージ。$/,
     convert: match => [{ type: "DAMAGE", target: "ATTACKING_POKEMON", amount: Number(match[1]), source: "ATTACK_EFFECT" }]
+  },
+  {
+    expression: /^次の相手の番、相手は手札からグッズを出して使えない。$/,
+    convert: () => [{ type: "LOCK_ITEM_FROM_HAND", target: "OPPONENT", duration: "NEXT_OPPONENT_TURN" }]
   }
 ];
 
@@ -23,11 +27,19 @@ export function parseEffectText(text) {
 
 export function inspectAttacks(card) {
   if (card.cardType !== "pokemon" || !Array.isArray(card.raw?.attacks)) return [];
-  return card.raw.attacks.map(attack => ({
-    name: attack.name,
-    printedDamage: attack.damage,
-    cost: attack.cost,
-    text: attack.effect ?? "",
-    ...parseEffectText(attack.effect ?? "")
-  }));
+  return card.raw.attacks.map((attack, index) => {
+    const parsed = parseEffectText(attack.effect ?? "");
+    const cost = attack.cost;
+    const damage = attack.damage;
+    const validCost = Array.isArray(cost) && cost.every((type, i) =>
+      typeof type === "string" &&
+      (type === "Void" ? cost.length === 1 && i === 0 :
+        ["Colorless", "Grass", "Fire", "Water", "Electric", "Psychic", "Fighting", "Dark", "Metal", "Steel", "Dragon"].includes(type)));
+    const validDamage = Number.isInteger(damage?.amount) && damage.amount >= 0 && damage.suffix === "";
+    return {
+      index, name: attack.name, printedDamage: damage, cost, text: attack.effect ?? "",
+      status: parsed.recognized && validCost && validDamage ? "supported" : "needs_review",
+      effects: parsed.recognized && validCost && validDamage ? parsed.effects : []
+    };
+  });
 }
