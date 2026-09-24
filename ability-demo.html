@@ -22,7 +22,7 @@ button:disabled{background:#96a1ae}
 <body>
 <header><h1>特性エンジン試験</h1><a href="./index.html">対戦画面に戻る</a></header>
 <main>
-<p class="notice">実カードの一部の特性とワザを試せます。きぜつ後の処理・サイドなどを含む通常対戦は、まだ実装中です。未対応のワザや特性は選択できません。</p>
+<p class="notice">実カードの一部の特性とワザに加えて、単独のきぜつ・サイド取得・ベンチ交代を試せます。通常対戦全体や同時きぜつはまだ未対応です。</p>
 <p id="message">カードDBを読み込み中…</p>
 <label for="scenario">試す場面</label>
 <select id="scenario">
@@ -39,10 +39,14 @@ button:disabled{background:#96a1ae}
 <option value="budew">スボミー：10ダメージ＋次の相手の番のグッズ制限</option>
 <option value="heracross-draw">ヘラクロス：20ダメージ＋2枚ドロー</option>
 <option value="heracross-self">ヘラクロス：130ダメージ＋自身に30ダメージ</option>
+<option value="knockout">スボミーをきぜつ：サイドを取り、相手が交代</option>
+<option value="mega-knockout">メガガルーラexをきぜつ：サイド3枚で勝利</option>
+<option value="self-knockout">ヘラクロスが反動できぜつ：相手がサイド取得</option>
 </select>
 <div class="panel" id="board"></div>
 <div class="panel"><h2>使用可能な特性</h2><div id="actions" class="row"></div></div>
 <div class="panel"><h2>使用可能なワザ</h2><div id="attacks" class="row"></div></div>
+<div class="panel"><h2>きぜつ後の選択</h2><div id="knockouts" class="row"></div></div>
 <div class="panel" id="result"></div>
 </main>
 <script type="module">
@@ -53,13 +57,15 @@ const message = document.getElementById("message");
 const board = document.getElementById("board");
 const actions = document.getElementById("actions");
 const attacks = document.getElementById("attacks");
+const knockouts = document.getElementById("knockouts");
 const result = document.getElementById("result");
 const selector = document.getElementById("scenario");
 let repo, engine, state;
 let serial = 0;
 const make = cardId => ({ instanceId: "demo-" + (++serial), cardId, attached: [] });
 const pile = (id, n) => Array.from({length:n}, () => make(id));
-const player = (active=null, hand=[], deck=[], bench=[]) => ({ active, hand, deck, bench, trash: [] });
+const player = (active=null, hand=[], deck=[], bench=[]) =>
+  ({ active, hand, deck, bench, trash: [], prizes: pile(50745, 6) });
 function scenario() {
   serial = 0;
   const energy = () => pile(50745, 5);
@@ -91,6 +97,17 @@ function scenario() {
     case "heracross-self":
       self=player(make(50339));self.active.attached.push(...pile(50745,3));
       foe=player(make(47069));break;
+    case "knockout":
+      self=player(make(50339),[],energy());self.active.attached.push(make(50745));
+      foe=player(make(49956),[],energy(),[make(45913)]);foe.active.damage=10;break;
+    case "mega-knockout":
+      self=player(make(50339));self.active.attached.push(...pile(50745,3));
+      self.prizes=pile(50745,2);
+      foe=player(make(48466),[],[],[make(49956)]);foe.active.damage=180;break;
+    case "self-knockout":
+      self=player(make(50339),[],[],[make(45913)]);
+      self.active.attached.push(...pile(50745,3));self.active.damage=100;
+      foe=player(make(48466));break;
     case "defense":
       self=player(make(45578),[],energy()); foe=player();
       break;
@@ -116,7 +133,7 @@ function zone(parent, label, items) {
   const title=document.createElement("h2");title.textContent=label;parent.append(title,cards(items));
 }
 function render() {
-  board.replaceChildren();actions.replaceChildren();attacks.replaceChildren();result.replaceChildren();
+  board.replaceChildren();actions.replaceChildren();attacks.replaceChildren();knockouts.replaceChildren();result.replaceChildren();
   const own=state.players[0],other=state.players[1];
   const current=state.players[state.turn];
   const turn=document.createElement("p");turn.textContent="現在の番："+(state.turn===0?"自分":"相手");board.append(turn);
@@ -125,7 +142,9 @@ function render() {
   zone(board,"自分のベンチ",own.bench);
   zone(board,"自分の手札",own.hand);
   zone(board,"相手の手札",other.hand);
-  const counts=document.createElement("p");counts.textContent="山札 "+own.deck.length+"枚 / トラッシュ "+own.trash.length+"枚";
+  zone(board,"自分のトラッシュ",own.trash);
+  zone(board,"相手のトラッシュ",other.trash);
+  const counts=document.createElement("p");counts.textContent="自分：山札 "+own.deck.length+"枚・サイド "+own.prizes.length+"枚 / 相手：山札 "+other.deck.length+"枚・サイド "+other.prizes.length+"枚";
   board.append(counts);
   const available=engine.getLegalActions(state);
   if (!available.length) actions.textContent="この場面で使用可能な特性はありません。";
@@ -147,7 +166,27 @@ function render() {
     button.onclick=()=>{state=engine.applyAttack(state,action);message.textContent="ワザ「"+attack.name+"」を処理しました。";render();};
     attacks.append(button);
   }
-  if (selector.value==="defense") {
+  const knockoutActions=engine.getKnockoutActions(state);
+  if (!knockoutActions.length) knockouts.textContent="現在、選択はありません。";
+  for (const action of knockoutActions) {
+    const button=document.createElement("button");
+    if (action.type==="TAKE_PRIZE") {
+      button.textContent=(action.player===0?"自分":"相手")+"のサイド "+(action.prizeIndex+1)+" を取る";
+    } else {
+      const source=state.players[action.player].bench.find(x=>x.instanceId===action.sourceInstanceId);
+      button.textContent=(action.player===0?"自分":"相手")+"："+name(source)+"をバトル場に出す";
+    }
+    button.onclick=()=>{state=engine.applyKnockoutAction(state,action);message.textContent="きぜつ後の処理を進めました。";render();};
+    knockouts.append(button);
+  }
+  if (state.winner!=null) {
+    result.textContent="勝者："+(state.winner===0?"自分":"相手")+
+      (state.winReason==="PRIZES"?"（サイドをすべて取得）":"（相手の場にポケモンがいない）");
+  } else if (state.pendingKnockout?.reason) {
+    result.textContent="同時きぜつはこの試験環境で未対応のため、処理を停止しました。";
+  } else if (state.pendingKnockout) {
+    result.textContent=state.pendingKnockout.remaining>0?"サイドを選んでください。":"ベンチから次のバトルポケモンを選んでください。";
+  } else if (selector.value==="defense") {
     const button=document.createElement("button");button.textContent="ワザの100ダメージを計算";
     button.onclick=()=>{result.textContent="100ダメージ → "+engine.incomingAttackDamage(state,own.active.instanceId,100)+"ダメージ";};
     result.append(button);
@@ -166,9 +205,7 @@ function render() {
       "相手は手札のハイパーボールを使える："+(engine.canPlayItemFromHand(state,1,other.hand[0]?.instanceId)?"はい":"いいえ")+
       "。この相手の番の終わりに制限が切れます。":
       "スボミーのワザ後、次の相手の番は手札からグッズを使えません。";
-  } else if (state.pendingKnockout) {
-    result.textContent="きぜつが発生しました。続きの処理は未対応です。";
-  } else result.textContent="特性を選ぶと盤面に反映されます。";
+  } else result.textContent="ワザまたは特性を選ぶと盤面に反映されます。";
 }
 selector.onchange=()=>{state=scenario();message.textContent="場面を切り替えました。";render();};
 try {

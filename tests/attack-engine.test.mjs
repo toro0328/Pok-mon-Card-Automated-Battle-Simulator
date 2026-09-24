@@ -79,3 +79,119 @@ test("damage reduction and resistance do not drop below zero", () => {
     [card("a", 50745), card("b", 50745)]), player(card("tangrowth", 45578)));
   assert.equal(engine.calculateAttackDamage(reduced, engine.getLegalAttacks(reduced)[0]), 0);
 });
+
+const prizes = (prefix, count) => Array.from({ length: count }, (_, i) =>
+  card(`${prefix}-${i}`, 50745));
+
+test("knockout trashes the Pokémon and attached Energy; prize choice precedes promotion", () => {
+  const own = player(card("heracross", 50339, [card("grass", 50745)]), [], prizes("deck", 2));
+  own.prizes = prizes("own-prize", 3);
+  const foe = player(card("budew", 49956));
+  foe.active.damage = 10;
+  foe.bench = [card("kichikigisu", 45913)];
+  foe.prizes = prizes("foe-prize", 3);
+  foe.deck = prizes("foe-deck", 3);
+  const game = state(own, foe);
+  const after = engine.applyAttack(game, engine.getLegalAttacks(game)[0]);
+  assert.equal(after.players[1].active, null);
+  assert.deepEqual(after.players[1].trash.map(x => x.instanceId), ["budew"]);
+  assert.equal(after.turn, 0);
+  assert.deepEqual(engine.getKnockoutActions(after).map(x => x.type), ["TAKE_PRIZE", "TAKE_PRIZE", "TAKE_PRIZE"]);
+  assert.equal(engine.getLegalActions(after).length, 0);
+  assert.throws(() => engine.endTurn(after), /Resolve knockout/);
+  assert.throws(() => engine.applyKnockoutAction(after, { type: "PROMOTE_BENCH", player: 1,
+    sourceInstanceId: "kichikigisu" }), /Illegal/);
+  const taken = engine.applyKnockoutAction(after, { type: "TAKE_PRIZE", player: 0, prizeIndex: 1 });
+  assert.equal(taken.players[0].hand.at(-1).instanceId, "own-prize-1");
+  assert.equal(taken.players[0].prizes.length, 2);
+  const [promote] = engine.getKnockoutActions(taken);
+  assert.equal(promote.sourceInstanceId, "kichikigisu");
+  const resumed = engine.applyKnockoutAction(taken, promote);
+  assert.equal(resumed.turn, 1);
+  assert.equal(resumed.players[1].active.instanceId, "kichikigisu");
+  assert.deepEqual(resumed.previousOpponentTurnKnockout, [false, true]);
+  assert.equal(engine.getLegalActions(resumed).some(x => x.sourceInstanceId === "kichikigisu"), true);
+  assert.equal(game.players[1].active.instanceId, "budew");
+});
+
+test("ordinary ex takes two prizes; Mega ex takes three, stopping when prizes run out", () => {
+  const energy = () => prizes("grass", 3);
+  const attacker = () => player(card("heracross", 50339, energy()));
+  const ex = player(card("ex", 45913));
+  ex.active.damage = 80;
+  ex.bench = [card("reserve", 49956)];
+  ex.prizes = prizes("their", 6);
+  const own = attacker(); own.prizes = prizes("ours", 6);
+  const game = state(own, ex);
+  let after = engine.applyAttack(game, engine.getLegalAttacks(game).find(x => x.attackIndex === 1));
+  assert.equal(after.pendingKnockout.remaining, 2);
+  after = engine.applyKnockoutAction(after, engine.getKnockoutActions(after)[0]);
+  assert.equal(after.pendingKnockout.remaining, 1);
+  after = engine.applyKnockoutAction(after, engine.getKnockoutActions(after)[0]);
+  assert.equal(after.players[0].prizes.length, 4);
+  const mega = player(card("mega", 48466));
+  mega.active.damage = 180;
+  mega.bench = [card("reserve", 49956)];
+  mega.prizes = prizes("their", 6);
+  const megaOwn = attacker(); megaOwn.prizes = prizes("ours", 2);
+  const megaGame = state(megaOwn, mega);
+  let megaAfter = engine.applyAttack(megaGame,
+    engine.getLegalAttacks(megaGame).find(x => x.attackIndex === 1));
+  assert.equal(megaAfter.pendingKnockout.remaining, 2); // 3 printed, 2 left
+  megaAfter = engine.applyKnockoutAction(megaAfter, engine.getKnockoutActions(megaAfter)[0]);
+  megaAfter = engine.applyKnockoutAction(megaAfter, engine.getKnockoutActions(megaAfter)[0]);
+  assert.equal(megaAfter.winner, 0);
+  assert.equal(megaAfter.winReason, "PRIZES");
+  assert.equal(megaAfter.players[0].prizes.length, 0);
+  assert.equal(engine.getKnockoutActions(megaAfter).length, 0);
+});
+
+test("opponent with no Bench loses after prize selection", () => {
+  const own = player(card("heracross", 50339, [card("grass", 50745)]), [], prizes("deck", 2));
+  own.prizes = prizes("own", 3);
+  const foe = player(card("budew", 49956));
+  foe.active.damage = 10;
+  foe.prizes = prizes("their", 3);
+  const game = state(own, foe);
+  const after = engine.applyAttack(game, engine.getLegalAttacks(game)[0]);
+  const done = engine.applyKnockoutAction(after, engine.getKnockoutActions(after)[0]);
+  assert.equal(done.winner, 0);
+  assert.equal(done.winReason, "NO_POKEMON");
+  assert.equal(engine.getLegalAttacks(done).length, 0);
+});
+
+test("self knockout awards opponent a prize but does not trigger own previous opponent turn condition", () => {
+  const own = player(card("heracross", 50339, prizes("grass", 3)));
+  own.active.damage = 100;
+  own.bench = [card("kichikigisu", 45913)];
+  own.prizes = prizes("own", 3);
+  const foe = player(card("mega", 48466)); foe.prizes = prizes("their", 3);
+  const game = state(own, foe);
+  let after = engine.applyAttack(game, engine.getLegalAttacks(game).find(x => x.attackIndex === 1));
+  assert.equal(after.pendingKnockout.owner, 0);
+  assert.deepEqual(after.players[0].trash.map(x => x.instanceId),
+    ["heracross", "grass-0", "grass-1", "grass-2"]);
+  after = engine.applyKnockoutAction(after, engine.getKnockoutActions(after)[0]);
+  after = engine.applyKnockoutAction(after, engine.getKnockoutActions(after)[0]);
+  assert.equal(after.turn, 1);
+  assert.deepEqual(after.previousOpponentTurnKnockout, [false, false]);
+  assert.equal(after.players[0].active.instanceId, "kichikigisu");
+});
+
+test("simultaneous knockouts and missing special prize rules stop safely", () => {
+  const own = player(card("heracross", 50339, prizes("grass", 3)));
+  own.active.damage = 100; own.prizes = prizes("own", 3);
+  const foe = player(card("budew", 49956)); foe.prizes = prizes("their", 3);
+  const game = state(own, foe);
+  const after = engine.applyAttack(game, engine.getLegalAttacks(game).find(x => x.attackIndex === 1));
+  assert.equal(after.pendingKnockout.reason, "SIMULTANEOUS_KNOCKOUT_NEEDS_REVIEW");
+  assert.equal(engine.getKnockoutActions(after).length, 0);
+  const unknown = player(card("zoroark", 47069));
+  unknown.active.damage = 200; unknown.prizes = prizes("their", 3);
+  const safeAttacker = structuredClone(own);
+  safeAttacker.active.damage = 0;
+  const uncertain = state(safeAttacker, unknown);
+  assert.equal(engine.getLegalAttacks(uncertain).some(x => x.attackIndex === 1), false);
+  assert.throws(() => engine.prizeValue(unknown.active), /Unsupported prize rule/);
+  assert.equal(uncertain.players[1].active.damage, 200);
+});

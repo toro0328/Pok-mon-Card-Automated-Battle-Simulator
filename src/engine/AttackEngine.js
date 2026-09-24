@@ -2,12 +2,13 @@ import { AbilityEngine } from "./AbilityEngine.js";
 import { inspectAttacks } from "../card-db/parse-effects.js";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
-// ordinary numeric damage. A knockout pauses resolution for the match engine.
+// ordinary numeric damage. Ordinary single knockouts use explicit prize and
+// promotion choices; simultaneous knockouts await a separate rule handler.
 export class AttackEngine extends AbilityEngine {
   attacks(instance) { return inspectAttacks(this.card(instance)); }
 
   getLegalActions(state) {
-    return state.pendingKnockout ? [] : super.getLegalActions(state);
+    return state.pendingKnockout || state.winner != null ? [] : super.getLegalActions(state);
   }
 
   energyPaysCost(active, cost) {
@@ -33,17 +34,38 @@ export class AttackEngine extends AbilityEngine {
 
   getLegalAttacks(state) {
     this.assertSandbox(state);
-    if (state.pendingKnockout) return [];
+    if (state.pendingKnockout || state.winner != null) return [];
     const active = state.players[state.turn].active;
     const target = state.players[1 - state.turn].active;
     if (!active || !target || !this.abilityAllowsAttack(state, state.turn, active.instanceId)) return [];
     return this.attacks(active).filter(attack => attack.status === "supported" &&
       this.energyPaysCost(active, attack.cost) &&
       attack.effects.filter(x => x.type === "DRAW").reduce((sum, x) => sum + x.count, 0) <=
-        state.players[state.turn].deck.length).map(attack => ({
+        state.players[state.turn].deck.length && this.canCompleteAttack(state, attack)).map(attack => ({
       type: "ATTACK", player: state.turn, sourceInstanceId: active.instanceId,
       attackIndex: attack.index
     }));
+  }
+
+  canCompleteAttack(state, attack) {
+    const own = state.players[state.turn].active;
+    const foe = state.players[1 - state.turn].active;
+    let damage;
+    try {
+      damage = this.calculateAttackDamage(state, { player: state.turn, attackIndex: attack.index });
+    } catch { return false; }
+    const selfDamage = attack.effects.filter(x => x.type === "DAMAGE" &&
+      x.target === "ATTACKING_POKEMON").reduce((sum, x) => sum + x.amount, 0);
+    const knockedOut = [
+      (own.damage ?? 0) + selfDamage >= this.card(own).raw.hp ? state.turn : null,
+      (foe.damage ?? 0) + damage >= this.card(foe).raw.hp ? 1 - state.turn : null
+    ].filter(x => x !== null);
+    if (knockedOut.length !== 1) return true; // Simultaneous KO remains visibly unresolved.
+    try {
+      this.prizeValue(state.players[knockedOut[0]].active);
+      return state.players.every(p => Array.isArray(p.prizes)) &&
+        state.players[1 - knockedOut[0]].prizes.length > 0;
+    } catch { return false; }
   }
 
   calculateAttackDamage(state, action) {
@@ -71,7 +93,7 @@ export class AttackEngine extends AbilityEngine {
   // This gate does not execute item effects; item handling must also consult it.
   canPlayItemFromHand(state, playerIndex, itemInstanceId) {
     this.assertSandbox(state);
-    if (state.turn !== playerIndex || state.pendingKnockout) return false;
+    if (state.turn !== playerIndex || state.pendingKnockout || state.winner != null) return false;
     const item = state.players[playerIndex].hand.find(x => x.instanceId === itemInstanceId);
     return !!item && this.card(item).trainerType === "item" && !state.itemLocks?.[playerIndex];
   }
@@ -79,13 +101,86 @@ export class AttackEngine extends AbilityEngine {
   endTurn(state) {
     this.assertSandbox(state);
     if (state.pendingKnockout) throw new Error("Resolve knockout before continuing");
+    if (state.winner != null) throw new Error("Match has ended");
     const next = structuredClone(state);
     next.itemLocks ??= [false, false];
     next.itemLocks[next.turn] = false;
     next.turn = 1 - next.turn;
     next.usedAbilities = { instances: [], names: [] };
     next.previousOpponentTurnKnockout = [false, false];
+    next.previousOpponentTurnKnockout[next.turn] = next.knockoutThisTurn?.[next.turn] === true;
+    next.knockoutThisTurn = [false, false];
     return next;
+  }
+
+  prizeValue(instance) {
+    const { name, raw } = this.card(instance);
+    if (raw.rule_box === "メガシンカexがきぜつしたとき、相手はサイドを3枚とる。") return 3;
+    if (raw.rule_box === "ポケモンexがきぜつしたとき、相手はサイドを2枚とる。") return 2;
+    if (raw.rule_box || name.endsWith("ex") || raw.tags?.some(tag => tag === "ex" || tag === "メガシンカ")) {
+      throw new Error(`Unsupported prize rule for ${name}`);
+    }
+    return 1;
+  }
+
+  beginKnockout(state, victims) {
+    if (victims.length !== 1) {
+      state.pendingKnockout = { reason: "SIMULTANEOUS_KNOCKOUT_NEEDS_REVIEW", victims };
+      return state;
+    }
+    const owner = victims[0];
+    const recipient = 1 - owner;
+    const victim = state.players[owner].active;
+    const prizeValue = this.prizeValue(victim);
+    if (!state.players.every(p => Array.isArray(p.prizes)) || !state.players[recipient].prizes.length) {
+      throw new Error("Prize zones are required for knockout resolution");
+    }
+    const { attached = [], stack = [], ...face } = victim;
+    if (!Array.isArray(attached) || !Array.isArray(stack)) throw new Error("Unsupported knockout attachments");
+    state.players[owner].trash.push(...stack, face, ...attached);
+    state.players[owner].active = null;
+    state.knockoutThisTurn ??= [false, false];
+    state.knockoutThisTurn[owner] = true;
+    state.pendingKnockout = { owner, recipient,
+      remaining: Math.min(prizeValue, state.players[recipient].prizes.length) };
+    return state;
+  }
+
+  getKnockoutActions(state) {
+    this.assertSandbox(state);
+    const pending = state.pendingKnockout;
+    if (!pending || pending.reason || state.winner != null) return [];
+    if (pending.remaining > 0) return state.players[pending.recipient].prizes.map((_, prizeIndex) => ({
+      type: "TAKE_PRIZE", player: pending.recipient, prizeIndex
+    }));
+    return state.players[pending.owner].bench.map(instance => ({
+      type: "PROMOTE_BENCH", player: pending.owner, sourceInstanceId: instance.instanceId
+    }));
+  }
+
+  applyKnockoutAction(state, action) {
+    if (!this.getKnockoutActions(state).some(candidate => JSON.stringify(candidate) === JSON.stringify(action))) {
+      throw new Error("Illegal knockout action");
+    }
+    const next = structuredClone(state);
+    const pending = next.pendingKnockout;
+    if (action.type === "TAKE_PRIZE") {
+      const recipient = next.players[pending.recipient];
+      recipient.hand.push(...recipient.prizes.splice(action.prizeIndex, 1));
+      pending.remaining--;
+      if (pending.remaining > 0) return next;
+      if (!recipient.prizes.length || !next.players[pending.owner].bench.length) {
+        next.winner = pending.recipient;
+        next.winReason = recipient.prizes.length ? "NO_POKEMON" : "PRIZES";
+        next.pendingKnockout = null;
+      }
+      return next;
+    }
+    const owner = next.players[pending.owner];
+    const index = owner.bench.findIndex(x => x.instanceId === action.sourceInstanceId);
+    owner.active = owner.bench.splice(index, 1)[0];
+    next.pendingKnockout = null;
+    return this.endTurn(next);
   }
 
   applyAttack(state, action) {
@@ -107,11 +202,12 @@ export class AttackEngine extends AbilityEngine {
         next.itemLocks[1 - next.turn] = true;
       } else throw new Error(`Unsupported attack effect: ${effect.type}`);
     }
-    const knockedOut = [own.active, opponent.active].filter(x =>
-      x.damage >= this.card(x).raw.hp).map(x => x.instanceId);
+    const knockedOut = [0, 1].filter(i => {
+      const active = next.players[i].active;
+      return active.damage >= this.card(active).raw.hp;
+    });
     if (knockedOut.length) {
-      next.pendingKnockout = knockedOut;
-      return next;
+      return this.beginKnockout(next, knockedOut);
     }
     return this.endTurn(next);
   }
