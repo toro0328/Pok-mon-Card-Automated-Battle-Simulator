@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "abilityCount": 772,
   "counts": {
-    "supported": 48,
-    "needs_review": 724
+    "supported": 71,
+    "needs_review": 701
   },
   "abilities": {
     "45147": [
@@ -1186,11 +1186,21 @@
         "index": 0,
         "name": "さかてにとる",
         "text": "前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。",
-        "status": "needs_review",
-        "trigger": null,
-        "conditions": [],
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [
+          {
+            "type": "OWN_POKEMON_KNOCKED_OUT_PREVIOUS_OPPONENT_TURN"
+          }
+        ],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "DRAW",
+            "count": 3
+          }
+        ],
+        "limit": "ABILITY_NAME_PER_TURN"
       }
     ],
     "45914": [
@@ -1538,11 +1548,21 @@
         "index": 0,
         "name": "さかてにとる",
         "text": "前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。",
-        "status": "needs_review",
-        "trigger": null,
-        "conditions": [],
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [
+          {
+            "type": "OWN_POKEMON_KNOCKED_OUT_PREVIOUS_OPPONENT_TURN"
+          }
+        ],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "DRAW",
+            "count": 3
+          }
+        ],
+        "limit": "ABILITY_NAME_PER_TURN"
       }
     ],
     "46059": [
@@ -1574,11 +1594,21 @@
         "index": 0,
         "name": "さかてにとる",
         "text": "前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。",
-        "status": "needs_review",
-        "trigger": null,
-        "conditions": [],
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [
+          {
+            "type": "OWN_POKEMON_KNOCKED_OUT_PREVIOUS_OPPONENT_TURN"
+          }
+        ],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "DRAW",
+            "count": 3
+          }
+        ],
+        "limit": "ABILITY_NAME_PER_TURN"
       }
     ],
     "46067": [
@@ -1820,11 +1850,18 @@
         "index": 0,
         "name": "スカイライン",
         "text": "このポケモンがいるかぎり、自分のたねポケモン全員のにげるためのエネルギーは、すべてなくなる。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "SET_RETREAT_COST_ZERO",
+            "scope": "OWN_FIELD",
+            "stage": "たね"
+          }
+        ],
+        "limit": null
       }
     ],
     "46266": [
@@ -1898,11 +1935,18 @@
         "index": 0,
         "name": "スカイライン",
         "text": "このポケモンがいるかぎり、自分のたねポケモン全員のにげるためのエネルギーは、すべてなくなる。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "SET_RETREAT_COST_ZERO",
+            "scope": "OWN_FIELD",
+            "stage": "たね"
+          }
+        ],
+        "limit": null
       }
     ],
     "46326": [
@@ -1922,11 +1966,18 @@
         "index": 0,
         "name": "スカイライン",
         "text": "このポケモンがいるかぎり、自分のたねポケモン全員のにげるためのエネルギーは、すべてなくなる。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "SET_RETREAT_COST_ZERO",
+            "scope": "OWN_FIELD",
+            "stage": "たね"
+          }
+        ],
+        "limit": null
       }
     ],
     "46334": [
@@ -2746,11 +2797,21 @@
         "index": 0,
         "name": "さかてにとる",
         "text": "前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。",
-        "status": "needs_review",
-        "trigger": null,
-        "conditions": [],
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [
+          {
+            "type": "OWN_POKEMON_KNOCKED_OUT_PREVIOUS_OPPONENT_TURN"
+          }
+        ],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "DRAW",
+            "count": 3
+          }
+        ],
+        "limit": "ABILITY_NAME_PER_TURN"
       }
     ],
     "46766": [
@@ -3349,11 +3410,21 @@
         "index": 0,
         "name": "さかてにとる",
         "text": "前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。",
-        "status": "needs_review",
-        "trigger": null,
-        "conditions": [],
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [
+          {
+            "type": "OWN_POKEMON_KNOCKED_OUT_PREVIOUS_OPPONENT_TURN"
+          }
+        ],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "DRAW",
+            "count": 3
+          }
+        ],
+        "limit": "ABILITY_NAME_PER_TURN"
       }
     ],
     "47178": [
@@ -4012,11 +4083,18 @@
         "index": 0,
         "name": "パワーセーバー",
         "text": "自分の場の「ロケット団のポケモン」が4匹以上のときにしか、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "ATTACK_PERMISSION",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "REQUIRE_OWN_FIELD_POKEMON_NAME_PREFIX",
+            "prefix": "ロケット団の",
+            "count": 4
+          }
+        ],
+        "limit": null
       }
     ],
     "47437": [
@@ -4192,11 +4270,18 @@
         "index": 0,
         "name": "パワーセーバー",
         "text": "自分の場の「ロケット団のポケモン」が4匹以上のときにしか、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "ATTACK_PERMISSION",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "REQUIRE_OWN_FIELD_POKEMON_NAME_PREFIX",
+            "prefix": "ロケット団の",
+            "count": 4
+          }
+        ],
+        "limit": null
       }
     ],
     "47521": [
@@ -4216,11 +4301,18 @@
         "index": 0,
         "name": "パワーセーバー",
         "text": "自分の場の「ロケット団のポケモン」が4匹以上のときにしか、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "ATTACK_PERMISSION",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "REQUIRE_OWN_FIELD_POKEMON_NAME_PREFIX",
+            "prefix": "ロケット団の",
+            "count": 4
+          }
+        ],
+        "limit": null
       }
     ],
     "47531": [
@@ -4240,11 +4332,18 @@
         "index": 0,
         "name": "パワーセーバー",
         "text": "自分の場の「ロケット団のポケモン」が4匹以上のときにしか、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "ATTACK_PERMISSION",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "REQUIRE_OWN_FIELD_POKEMON_NAME_PREFIX",
+            "prefix": "ロケット団の",
+            "count": 4
+          }
+        ],
+        "limit": null
       }
     ],
     "47535": [
@@ -4808,11 +4907,21 @@
         "index": 0,
         "name": "さかてにとる",
         "text": "前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。",
-        "status": "needs_review",
-        "trigger": null,
-        "conditions": [],
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [
+          {
+            "type": "OWN_POKEMON_KNOCKED_OUT_PREVIOUS_OPPONENT_TURN"
+          }
+        ],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "DRAW",
+            "count": 3
+          }
+        ],
+        "limit": "ABILITY_NAME_PER_TURN"
       }
     ],
     "47863": [
@@ -5258,11 +5367,18 @@
         "index": 0,
         "name": "スカイライン",
         "text": "このポケモンがいるかぎり、自分のたねポケモン全員のにげるためのエネルギーは、すべてなくなる。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "SET_RETREAT_COST_ZERO",
+            "scope": "OWN_FIELD",
+            "stage": "たね"
+          }
+        ],
+        "limit": null
       }
     ],
     "48321": [
@@ -5282,11 +5398,18 @@
         "index": 0,
         "name": "パワーセーバー",
         "text": "自分の場の「ロケット団のポケモン」が4匹以上のときにしか、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "ATTACK_PERMISSION",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "REQUIRE_OWN_FIELD_POKEMON_NAME_PREFIX",
+            "prefix": "ロケット団の",
+            "count": 4
+          }
+        ],
+        "limit": null
       }
     ],
     "48347": [
@@ -6036,11 +6159,18 @@
         "index": 0,
         "name": "パワーセーバー",
         "text": "自分の場の「ロケット団のポケモン」が4匹以上のときにしか、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "ATTACK_PERMISSION",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "REQUIRE_OWN_FIELD_POKEMON_NAME_PREFIX",
+            "prefix": "ロケット団の",
+            "count": 4
+          }
+        ],
+        "limit": null
       }
     ],
     "48588": [
@@ -6084,11 +6214,18 @@
         "index": 0,
         "name": "スカイライン",
         "text": "このポケモンがいるかぎり、自分のたねポケモン全員のにげるためのエネルギーは、すべてなくなる。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "SET_RETREAT_COST_ZERO",
+            "scope": "OWN_FIELD",
+            "stage": "たね"
+          }
+        ],
+        "limit": null
       }
     ],
     "48603": [
@@ -6215,11 +6352,21 @@
         "index": 0,
         "name": "さかてにとる",
         "text": "前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。",
-        "status": "needs_review",
-        "trigger": null,
-        "conditions": [],
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [
+          {
+            "type": "OWN_POKEMON_KNOCKED_OUT_PREVIOUS_OPPONENT_TURN"
+          }
+        ],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "DRAW",
+            "count": 3
+          }
+        ],
+        "limit": "ABILITY_NAME_PER_TURN"
       }
     ],
     "48637": [
@@ -6997,11 +7144,18 @@
         "index": 0,
         "name": "パワーセーバー",
         "text": "自分の場の「ロケット団のポケモン」が4匹以上のときにしか、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "ATTACK_PERMISSION",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "REQUIRE_OWN_FIELD_POKEMON_NAME_PREFIX",
+            "prefix": "ロケット団の",
+            "count": 4
+          }
+        ],
+        "limit": null
       }
     ],
     "49009": [
@@ -7069,11 +7223,18 @@
         "index": 0,
         "name": "スカイライン",
         "text": "このポケモンがいるかぎり、自分のたねポケモン全員のにげるためのエネルギーは、すべてなくなる。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "SET_RETREAT_COST_ZERO",
+            "scope": "OWN_FIELD",
+            "stage": "たね"
+          }
+        ],
+        "limit": null
       }
     ],
     "49041": [
@@ -7434,11 +7595,21 @@
         "index": 0,
         "name": "さかてにとる",
         "text": "前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。",
-        "status": "needs_review",
-        "trigger": null,
-        "conditions": [],
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [
+          {
+            "type": "OWN_POKEMON_KNOCKED_OUT_PREVIOUS_OPPONENT_TURN"
+          }
+        ],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "DRAW",
+            "count": 3
+          }
+        ],
+        "limit": "ABILITY_NAME_PER_TURN"
       }
     ],
     "49206": [
@@ -8172,11 +8343,18 @@
         "index": 0,
         "name": "パワーセーバー",
         "text": "自分の場の「ロケット団のポケモン」が4匹以上のときにしか、このポケモンはワザが使えない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "ATTACK_PERMISSION",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "REQUIRE_OWN_FIELD_POKEMON_NAME_PREFIX",
+            "prefix": "ロケット団の",
+            "count": 4
+          }
+        ],
+        "limit": null
       }
     ],
     "49998": [
@@ -8273,11 +8451,21 @@
         "index": 0,
         "name": "さかてにとる",
         "text": "前の相手の番に、自分のポケモンがきぜつしていたなら、自分の番に1回使える。自分の山札を3枚引く。この番、すでに別の「さかてにとる」を使っていたなら、この特性は使えない。",
-        "status": "needs_review",
-        "trigger": null,
-        "conditions": [],
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [
+          {
+            "type": "OWN_POKEMON_KNOCKED_OUT_PREVIOUS_OPPONENT_TURN"
+          }
+        ],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "DRAW",
+            "count": 3
+          }
+        ],
+        "limit": "ABILITY_NAME_PER_TURN"
       }
     ],
     "50005": [
