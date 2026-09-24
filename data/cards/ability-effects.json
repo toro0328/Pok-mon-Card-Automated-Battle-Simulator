@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "abilityCount": 772,
   "counts": {
-    "supported": 71,
-    "needs_review": 701
+    "supported": 89,
+    "needs_review": 683
   },
   "abilities": {
     "45147": [
@@ -164,11 +164,18 @@
         "index": 0,
         "name": "スフィアシールド",
         "text": "このポケモンがいるかぎり、自分のベンチポケモン全員は、相手のポケモンからワザのダメージや効果を受けない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "PREVENT_BENCH_ATTACK",
+            "scope": "OWN_FIELD",
+            "rulelessOnly": false
+          }
+        ],
+        "limit": null
       }
     ],
     "45233": [
@@ -650,11 +657,24 @@
         "index": 0,
         "name": "ドンドンだいこ",
         "text": "自分のバトルポケモンが特性「おまつりおんど」を持つポケモンなら、自分の番に1回使える。自分の山札から好きなカードを1枚選び、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "trigger": null,
-        "conditions": [],
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [
+          {
+            "type": "OWN_ACTIVE_HAS_ABILITY",
+            "name": "おまつりおんど"
+          }
+        ],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "SEARCH_DECK",
+            "count": 1,
+            "destination": "HAND",
+            "shuffle": true
+          }
+        ],
+        "limit": "CARD_INSTANCE_PER_TURN"
       }
     ],
     "45703": [
@@ -662,11 +682,17 @@
         "index": 0,
         "name": "おまつりおんど",
         "text": "場に「お祭り会場」が出ているなら、このポケモンは、持っているワザを2回連続で使える。（1回目のワザで相手のバトルポケモンがきぜつしたなら、次のバトルポケモンが出たあと、2回目のワザを使う。）",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "ATTACK_TWICE_IF_STADIUM",
+            "stadiumName": "お祭り会場"
+          }
+        ],
+        "limit": null
       }
     ],
     "45707": [
@@ -712,11 +738,17 @@
         "index": 0,
         "name": "おまつりおんど",
         "text": "場に「お祭り会場」が出ているなら、このポケモンは、持っているワザを2回連続で使える。（1回目のワザで相手のバトルポケモンがきぜつしたなら、次のバトルポケモンが出たあと、2回目のワザを使う。）",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "ATTACK_TWICE_IF_STADIUM",
+            "stadiumName": "お祭り会場"
+          }
+        ],
+        "limit": null
       }
     ],
     "45721": [
@@ -784,11 +816,17 @@
         "index": 0,
         "name": "おまつりおんど",
         "text": "場に「お祭り会場」が出ているなら、このポケモンは、持っているワザを2回連続で使える。（1回目のワザで相手のバトルポケモンがきぜつしたなら、次のバトルポケモンが出たあと、2回目のワザを使う。）",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "ATTACK_TWICE_IF_STADIUM",
+            "stadiumName": "お祭り会場"
+          }
+        ],
+        "limit": null
       }
     ],
     "45746": [
@@ -916,11 +954,17 @@
         "index": 0,
         "name": "おまつりおんど",
         "text": "場に「お祭り会場」が出ているなら、このポケモンは、持っているワザを2回連続で使える。（1回目のワザで相手のバトルポケモンがきぜつしたなら、次のバトルポケモンが出たあと、2回目のワザを使う。）",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "ATTACK_TWICE_IF_STADIUM",
+            "stadiumName": "お祭り会場"
+          }
+        ],
+        "limit": null
       }
     ],
     "45846": [
@@ -2411,11 +2455,24 @@
         "index": 0,
         "name": "ドンドンだいこ",
         "text": "自分のバトルポケモンが特性「おまつりおんど」を持つポケモンなら、自分の番に1回使える。自分の山札から好きなカードを1枚選び、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "trigger": null,
-        "conditions": [],
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [
+          {
+            "type": "OWN_ACTIVE_HAS_ABILITY",
+            "name": "おまつりおんど"
+          }
+        ],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "SEARCH_DECK",
+            "count": 1,
+            "destination": "HAND",
+            "shuffle": true
+          }
+        ],
+        "limit": "CARD_INSTANCE_PER_TURN"
       }
     ],
     "46670": [
@@ -2423,11 +2480,17 @@
         "index": 0,
         "name": "おまつりおんど",
         "text": "場に「お祭り会場」が出ているなら、このポケモンは、持っているワザを2回連続で使える。（1回目のワザで相手のバトルポケモンがきぜつしたなら、次のバトルポケモンが出たあと、2回目のワザを使う。）",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "ATTACK_TWICE_IF_STADIUM",
+            "stadiumName": "お祭り会場"
+          }
+        ],
+        "limit": null
       }
     ],
     "46671": [
@@ -2459,11 +2522,18 @@
         "index": 0,
         "name": "スフィアシールド",
         "text": "このポケモンがいるかぎり、自分のベンチポケモン全員は、相手のポケモンからワザのダメージや効果を受けない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "PREVENT_BENCH_ATTACK",
+            "scope": "OWN_FIELD",
+            "rulelessOnly": false
+          }
+        ],
+        "limit": null
       }
     ],
     "46677": [
@@ -2521,11 +2591,17 @@
         "index": 0,
         "name": "おまつりおんど",
         "text": "場に「お祭り会場」が出ているなら、このポケモンは、持っているワザを2回連続で使える。（1回目のワザで相手のバトルポケモンがきぜつしたなら、次のバトルポケモンが出たあと、2回目のワザを使う。）",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "ATTACK_TWICE_IF_STADIUM",
+            "stadiumName": "お祭り会場"
+          }
+        ],
+        "limit": null
       }
     ],
     "46690": [
@@ -2533,11 +2609,17 @@
         "index": 0,
         "name": "おまつりおんど",
         "text": "場に「お祭り会場」が出ているなら、このポケモンは、持っているワザを2回連続で使える。（1回目のワザで相手のバトルポケモンがきぜつしたなら、次のバトルポケモンが出たあと、2回目のワザを使う。）",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "ATTACK_TWICE_IF_STADIUM",
+            "stadiumName": "お祭り会場"
+          }
+        ],
+        "limit": null
       }
     ],
     "46695": [
@@ -2665,11 +2747,17 @@
         "index": 0,
         "name": "おまつりおんど",
         "text": "場に「お祭り会場」が出ているなら、このポケモンは、持っているワザを2回連続で使える。（1回目のワザで相手のバトルポケモンがきぜつしたなら、次のバトルポケモンが出たあと、2回目のワザを使う。）",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "ATTACK_TWICE_IF_STADIUM",
+            "stadiumName": "お祭り会場"
+          }
+        ],
+        "limit": null
       }
     ],
     "46733": [
@@ -3741,11 +3829,18 @@
         "index": 0,
         "name": "はなのカーテン",
         "text": "このポケモンがいるかぎり、自分のベンチポケモン（「ルールを持つポケモン」をのぞく）全員は、相手のワザのダメージを受けない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "PREVENT_BENCH_ATTACK_DAMAGE",
+            "scope": "OWN_FIELD",
+            "rulelessOnly": true
+          }
+        ],
+        "limit": null
       }
     ],
     "47303": [
@@ -3897,11 +3992,18 @@
         "index": 0,
         "name": "はなのカーテン",
         "text": "このポケモンがいるかぎり、自分のベンチポケモン（「ルールを持つポケモン」をのぞく）全員は、相手のワザのダメージを受けない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "PREVENT_BENCH_ATTACK_DAMAGE",
+            "scope": "OWN_FIELD",
+            "rulelessOnly": true
+          }
+        ],
+        "limit": null
       }
     ],
     "47368": [
@@ -4895,11 +4997,18 @@
         "index": 0,
         "name": "はなのカーテン",
         "text": "このポケモンがいるかぎり、自分のベンチポケモン（「ルールを持つポケモン」をのぞく）全員は、相手のワザのダメージを受けない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "PREVENT_BENCH_ATTACK_DAMAGE",
+            "scope": "OWN_FIELD",
+            "rulelessOnly": true
+          }
+        ],
+        "limit": null
       }
     ],
     "47862": [
@@ -5386,11 +5495,18 @@
         "index": 0,
         "name": "はなのカーテン",
         "text": "このポケモンがいるかぎり、自分のベンチポケモン（「ルールを持つポケモン」をのぞく）全員は、相手のワザのダメージを受けない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "PREVENT_BENCH_ATTACK_DAMAGE",
+            "scope": "OWN_FIELD",
+            "rulelessOnly": true
+          }
+        ],
+        "limit": null
       }
     ],
     "48330": [
@@ -5905,11 +6021,18 @@
         "index": 0,
         "name": "はなのカーテン",
         "text": "このポケモンがいるかぎり、自分のベンチポケモン（「ルールを持つポケモン」をのぞく）全員は、相手のワザのダメージを受けない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "PREVENT_BENCH_ATTACK_DAMAGE",
+            "scope": "OWN_FIELD",
+            "rulelessOnly": true
+          }
+        ],
+        "limit": null
       }
     ],
     "48536": [
@@ -8861,11 +8984,18 @@
         "index": 0,
         "name": "はなのカーテン",
         "text": "このポケモンがいるかぎり、自分のベンチポケモン（「ルールを持つポケモン」をのぞく）全員は、相手のワザのダメージを受けない。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "CONTINUOUS",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "PREVENT_BENCH_ATTACK_DAMAGE",
+            "scope": "OWN_FIELD",
+            "rulelessOnly": true
+          }
+        ],
+        "limit": null
       }
     ],
     "50187": [
