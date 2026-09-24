@@ -12,6 +12,11 @@ const PATTERNS = [
   {
     expression: /^次の相手の番、相手は手札からグッズを出して使えない。$/,
     convert: () => [{ type: "LOCK_ITEM_FROM_HAND", target: "OPPONENT", duration: "NEXT_OPPONENT_TURN" }]
+  },
+  {
+    expression: /^おたがいのバトルポケモンについているエネルギーの数×([1-9][0-9]*)ダメージ追加。$/,
+    convert: match => [{ type: "MODIFY_DAMAGE", basis: "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT",
+      perEnergy: Number(match[1]) }]
   }
 ];
 
@@ -35,7 +40,9 @@ export function inspectAttacks(card) {
       typeof type === "string" &&
       (type === "Void" ? cost.length === 1 && i === 0 :
         ["Colorless", "Grass", "Fire", "Water", "Electric", "Psychic", "Fighting", "Dark", "Metal", "Steel", "Dragon"].includes(type)));
-    const validDamage = Number.isInteger(damage?.amount) && damage.amount >= 0 && damage.suffix === "";
+    const validDamage = Number.isInteger(damage?.amount) && damage.amount >= 0 &&
+      (damage.suffix === "" || (damage.suffix === "＋" && parsed.effects.length === 1 &&
+        parsed.effects[0].type === "MODIFY_DAMAGE"));
     return {
       index, name: attack.name, printedDamage: damage, cost, text: attack.effect ?? "",
       status: parsed.recognized && validCost && validDamage ? "supported" : "needs_review",

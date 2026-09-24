@@ -59,6 +59,23 @@ test("Heracross self damage is an attack effect and does not gain weakness", () 
   assert.equal(after.turn, 1);
 });
 
+test("Ogerpon three Grass Energy enables Manyō Shigure and counts both active Pokémon's Energy", () => {
+  const grass = index => card(`grass-${index}`, 50745);
+  const ogerpon = count => card("ogerpon", 45707, Array.from({ length: count }, (_, i) => grass(i)));
+  assert.equal(engine.attacks(ogerpon(3))[0].status, "supported");
+  assert.equal(engine.getLegalAttacks(state(player(ogerpon(2)), player(card("target", 50339)))).length, 0);
+  const game = state(player(ogerpon(3)), player(card("target", 48466, [grass(4), grass(5)])));
+  const [action] = engine.getLegalAttacks(game);
+  assert.equal(action.attackIndex, 0);
+  assert.equal(engine.calculateAttackDamage(game, action), 180); // 30 + (3 + 2) × 30
+  const after = engine.applyAttack(game, action);
+  assert.equal(after.players[1].active.damage, 180);
+  assert.equal(after.players[0].active.attached.length, 3);
+  assert.equal(engine.calculateAttackDamage(state(player(ogerpon(3)),
+    player(card("target", 47069))), engine.getLegalAttacks(state(player(ogerpon(3)),
+    player(card("target", 47069))))[0]), 240); // Grass weakness, 120 × 2
+});
+
 test("unknown attack text and variable printed damage remain unavailable", () => {
   const talonflame = engine.repository.get(50400);
   assert.equal(inspectAttacks(talonflame)[0].status, "needs_review");

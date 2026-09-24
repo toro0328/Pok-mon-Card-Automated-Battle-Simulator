@@ -46,7 +46,16 @@ function cardNode(instance){
   button.append(document.createTextNode(data.name));
   if(data.cardType==="pokemon"){
     button.append(element("small","",`HP ${data.raw.hp} / ダメージ ${instance.damage??0}`));
-    if(instance.attached?.length)button.append(element("small","",`エネルギー ${instance.attached.length}枚`));
+    if(instance.attached?.length){
+      const counts=new Map();
+      for(const energy of instance.attached){
+        const name=repository.get(energy.cardId).name;
+        const type=name.match(/^基本(.+)エネルギー$/)?.[1]??name;
+        counts.set(type,(counts.get(type)??0)+1);
+      }
+      button.append(element("small","",`エネ：${[...counts].map(([type,count])=>`${type}×${count}`).join(" ")}`));
+      button.title=`ついているエネルギー：${instance.attached.map(x=>repository.get(x.cardId).name).join("、")}`;
+    }
   }
   button.onclick=()=>{selected=selected===instance.instanceId?null:instance.instanceId;render();};
   return button;

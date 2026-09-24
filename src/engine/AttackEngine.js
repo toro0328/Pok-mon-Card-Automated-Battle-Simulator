@@ -78,6 +78,11 @@ export class AttackEngine extends AbilityEngine {
     const attacker = this.card(source).raw;
     const defender = this.card(target).raw;
     let damage = attack.printedDamage.amount;
+    for (const effect of attack.effects) {
+      if (effect.type === "MODIFY_DAMAGE" && effect.basis === "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT") {
+        damage += ((source.attached?.length ?? 0) + (target.attached?.length ?? 0)) * effect.perEnergy;
+      }
+    }
     if (defender.weakness?.type?.includes(attacker.types?.[0])) {
       if (defender.weakness.value !== "×2") throw new Error("Unsupported weakness");
       damage *= 2;
@@ -197,6 +202,8 @@ export class AttackEngine extends AbilityEngine {
         own.hand.push(...own.deck.splice(0, effect.count));
       } else if (effect.type === "DAMAGE" && effect.target === "ATTACKING_POKEMON") {
         own.active.damage = (own.active.damage ?? 0) + effect.amount;
+      } else if (effect.type === "MODIFY_DAMAGE" && effect.basis === "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT") {
+        // The bonus was already included in calculateAttackDamage.
       } else if (effect.type === "LOCK_ITEM_FROM_HAND" && effect.target === "OPPONENT") {
         next.itemLocks ??= [false, false];
         next.itemLocks[1 - next.turn] = true;
