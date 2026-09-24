@@ -21,6 +21,14 @@ const PATTERNS = [
   {
     expression: /^自分のベンチポケモンの数×([1-9][0-9]*)ダメージ。$/,
     convert: match => [{ type: "SET_DAMAGE", basis: "OWN_BENCH_COUNT", perPokemon: Number(match[1]) }]
+  },
+  {
+    expression: /^自分のポケモン全員についているFireとElectricエネルギーの数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{ type: "SET_DAMAGE", basis: "OWN_FIELD_FIRE_ELECTRIC_ENERGY_COUNT", perEnergy: Number(match[1]) }]
+  },
+  {
+    expression: /^自分のポケモン全員のHPを、それぞれ「([1-9][0-9]*)」回復する。$/,
+    convert: match => [{ type: "HEAL_OWN_FIELD", amount: Number(match[1]) }]
   }
 ];
 
@@ -48,7 +56,8 @@ export function inspectAttacks(card) {
       (damage.suffix === "" || (damage.suffix === "＋" && parsed.effects.length === 1 &&
         parsed.effects[0].type === "MODIFY_DAMAGE") ||
         (damage.suffix === "×" && parsed.effects.length === 1 &&
-        parsed.effects[0].type === "SET_DAMAGE" && parsed.effects[0].perPokemon === damage.amount));
+        parsed.effects[0].type === "SET_DAMAGE" &&
+        (parsed.effects[0].perPokemon === damage.amount || parsed.effects[0].perEnergy === damage.amount)));
     return {
       index, name: attack.name, printedDamage: damage, cost, text: attack.effect ?? "",
       status: parsed.recognized && validCost && validDamage ? "supported" : "needs_review",

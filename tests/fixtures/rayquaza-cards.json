@@ -1,0 +1,519 @@
+[
+  {
+    "officialCardId": 42714,
+    "name": "エネルギーつけかえ",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "item",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/42714",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SVAM/042714_T_ENERUGITSUKEKAE.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SVAM/42714.json"
+    },
+    "raw": {
+      "jp_id": 42714,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/42714",
+      "name": "エネルギーつけかえ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SVAM/042714_T_ENERUGITSUKEKAE.jpg",
+      "card_type": "グッズ",
+      "set_name": "SVAM",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SVAM.gif",
+      "number": "012",
+      "set_total": "023",
+      "effect": "自分の場のポケモンについている基本エネルギーを1個選び、自分の別のポケモンにつけ替える。",
+      "author": [
+        "Studio Bora Inc."
+      ],
+      "sources": [
+        {
+          "name": "スターターセットex ニャオハ＆ルカリオex",
+          "link": "https://www.pokemon-card.com/ex/sva/"
+        }
+      ],
+      "print_key": "asia:SVAM-12"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 46027,
+    "name": "テラパゴスex",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46027",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV7/046027_P_TERAPAGOSUEX.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV7/46027.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/46027",
+      "name": "テラパゴスex",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV7/046027_P_TERAPAGOSUEX.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 46027,
+      "tags": [
+        "Tera",
+        "ex"
+      ],
+      "set_name": "SV7",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV7.gif",
+      "number": "088",
+      "set_total": "102",
+      "rarity": "rare_rr",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_rr.gif",
+      "author": [
+        "5ban Graphics"
+      ],
+      "stage": "たね",
+      "hp": 230,
+      "types": [
+        "Colorless"
+      ],
+      "tera_effect": "このポケモンは、ベンチにいるかぎり、ワザのダメージを受けない。",
+      "attacks": [
+        {
+          "cost": [
+            "Colorless",
+            "Colorless"
+          ],
+          "name": "ユニオンビート",
+          "damage": {
+            "amount": 30,
+            "suffix": "×"
+          },
+          "effect": "このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×30ダメージ。"
+        },
+        {
+          "cost": [
+            "Grass",
+            "Water",
+            "Electric"
+          ],
+          "name": "クラウンオパール",
+          "damage": {
+            "amount": 180,
+            "suffix": ""
+          },
+          "effect": "次の相手の番、このポケモンはたねポケモン（Colorlessポケモンをのぞく）からワザのダメージを受けない。"
+        }
+      ],
+      "rule_box": "ポケモンexがきぜつしたとき、相手はサイドを2枚とる。",
+      "weakness": {
+        "type": [
+          "Fighting"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 2,
+      "sources": [
+        {
+          "name": "拡張パック「ステラミラクル」",
+          "link": "https://www.pokemon-card.com/ex/sv7/"
+        }
+      ],
+      "types_en": [
+        "Colorless"
+      ],
+      "pokedex_number": 1024,
+      "print_key": "asia:SV7-88",
+      "card_key": "1024|230|2|5ban Graphics|30x,180|2,3"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 47315,
+    "name": "ヒビキのホウオウex",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47315",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV9a/047315_P_HIBIKINOHOUOUEX.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV9a/47315.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/47315",
+      "name": "ヒビキのホウオウex",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV9a/047315_P_HIBIKINOHOUOUEX.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 47315,
+      "tags": [
+        "ex"
+      ],
+      "set_name": "SV9a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV9a.gif",
+      "number": "020",
+      "set_total": "063",
+      "rarity": "rare_rr",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_rr.gif",
+      "author": [
+        "aky CG Works"
+      ],
+      "stage": "たね",
+      "hp": 230,
+      "types": [
+        "Fire"
+      ],
+      "abilities": [
+        {
+          "name": "こんじきのほのお",
+          "effect": "自分の番に1回使える。自分の手札から「基本Fireエネルギー」を2枚まで選び、ベンチの「ヒビキのポケモン」1匹につける。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Fire",
+            "Fire",
+            "Fire",
+            "Fire"
+          ],
+          "name": "シャイニングフェザー",
+          "damage": {
+            "amount": 160,
+            "suffix": ""
+          },
+          "effect": "自分のポケモン全員のHPを、それぞれ「50」回復する。"
+        }
+      ],
+      "rule_box": "ポケモンexがきぜつしたとき、相手はサイドを2枚とる。",
+      "weakness": {
+        "type": [
+          "Water"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 2,
+      "sources": [
+        {
+          "name": "強化拡張パック「熱風のアリーナ」",
+          "link": "https://www.pokemon-card.com/products/sv/sv9a.html"
+        }
+      ],
+      "types_en": [
+        "Fire"
+      ],
+      "pokedex_number": 250,
+      "print_key": "asia:SV9a-20",
+      "card_key": "250|230|2|aky CG Works|160|4"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 49412,
+    "name": "アカマツ",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "supporter",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/49412",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/MC/049412_T_AKAMATSU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/MC/49412.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/49412",
+      "name": "アカマツ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/MC/049412_T_AKAMATSU.jpg",
+      "card_type": "サポート",
+      "jp_id": 49412,
+      "set_name": "MC",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/MC.gif",
+      "number": "696",
+      "set_total": "742",
+      "effect": "自分の山札から、それぞれちがうタイプの基本エネルギーを2枚まで選び、相手に見せて、どちらか1枚を手札に加え、残りのエネルギーを自分のポケモンにつける。そして山札を切る。",
+      "author": [
+        "GIDORA"
+      ],
+      "sources": [
+        {
+          "name": "スタートデッキ100 バトルコレクション",
+          "link": "https://www.pokemon-card.com/ex/mc/"
+        }
+      ],
+      "print_key": "asia:MC-696"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 49694,
+    "name": "ニャースex",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/49694",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M3/049694_P_NIXYASUEX.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M3/49694.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/49694",
+      "name": "ニャースex",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M3/049694_P_NIXYASUEX.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 49694,
+      "tags": [
+        "ex"
+      ],
+      "set_name": "M3",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M3.gif",
+      "number": "061",
+      "set_total": "080",
+      "rarity": "rare_rr",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_rr.gif",
+      "author": [
+        "5ban Graphics"
+      ],
+      "stage": "たね",
+      "hp": 170,
+      "types": [
+        "Colorless"
+      ],
+      "abilities": [
+        {
+          "name": "おくのてキャッチ",
+          "effect": "自分の番に、このカードを手札からベンチに出したとき、1回使える。自分の山札からサポートを1枚選び、相手に見せて、手札に加える。そして山札を切る。この番、名前に「おくのて」とつく特性を使っていたなら、この特性は使えない。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless",
+            "Colorless",
+            "Colorless"
+          ],
+          "name": "しっぽをまく",
+          "damage": {
+            "amount": 60,
+            "suffix": ""
+          },
+          "effect": "このポケモンと、ついているすべてのカードを、手札にもどす。"
+        }
+      ],
+      "rule_box": "ポケモンexがきぜつしたとき、相手はサイドを2枚とる。",
+      "weakness": {
+        "type": [
+          "Fighting"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "拡張パック「ムニキスゼロ」",
+          "link": "https://www.pokemon-card.com/ex/m3/"
+        }
+      ],
+      "types_en": [
+        "Colorless"
+      ],
+      "pokedex_number": 52,
+      "print_key": "asia:M3-61",
+      "card_key": "52|170|1|5ban Graphics|60|3"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50156,
+    "name": "スペシャルレッドカード",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "item",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50156",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M4/050156_T_SUPESHIXYARUREDDOKADO.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M4/50156.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50156",
+      "name": "スペシャルレッドカード",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M4/050156_T_SUPESHIXYARUREDDOKADO.jpg",
+      "card_type": "グッズ",
+      "jp_id": 50156,
+      "set_name": "M4",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M4.gif",
+      "number": "072",
+      "set_total": "083",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "このカードは、相手のサイドの残り枚数が3枚以下のときにしか使えない。\n相手は相手自身の手札をすべてウラにして切り、山札の下にもどす。その後、相手は山札を3枚引く。",
+      "author": [
+        "Studio Bora Inc."
+      ],
+      "sources": [
+        {
+          "name": "拡張パック「ニンジャスピナー」",
+          "link": "https://www.pokemon-card.com/ex/m4/"
+        }
+      ],
+      "print_key": "asia:M4-72"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50396,
+    "name": "メガレックウザex",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50396",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050396_P_MREKKUUZAIEKKUSU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M6/50396.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50396",
+      "name": "メガレックウザex",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050396_P_MREKKUUZAIEKKUSU.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 50396,
+      "tags": [
+        "ex",
+        "メガシンカ"
+      ],
+      "set_name": "M6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6.gif",
+      "number": "058",
+      "set_total": "076",
+      "rarity": "rare_rr",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_rr.gif",
+      "author": [
+        "takuyoa"
+      ],
+      "stage": "たね",
+      "hp": 280,
+      "types": [
+        "Colorless"
+      ],
+      "abilities": [
+        {
+          "name": "はしゃのほうこう",
+          "effect": "自分の番に、このカードを手札からベンチに出したとき、1回使える。自分の山札を上から4枚見て、その中から基本エネルギーを1枚選び、このポケモンにつける。残りのカードはウラにして切り、山札の下にもどす。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Fire",
+            "Electric",
+            "Colorless"
+          ],
+          "name": "ストームエメラルダ",
+          "damage": {
+            "amount": 50,
+            "suffix": "×"
+          },
+          "effect": "自分のポケモン全員についているFireとElectricエネルギーの数×50ダメージ。"
+        }
+      ],
+      "rule_box": "メガシンカexがきぜつしたとき、相手はサイドを3枚とる。",
+      "weakness": {
+        "type": [
+          "Electric"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [
+          "Fighting"
+        ],
+        "value": "－30"
+      },
+      "retreat": 2,
+      "sources": [
+        {
+          "name": "拡張パック「ストームエメラルダ」",
+          "link": "https://www.pokemon-card.com/ex/m6/"
+        }
+      ],
+      "types_en": [
+        "Colorless"
+      ],
+      "pokedex_number": 384,
+      "print_key": "asia:M6-58",
+      "card_key": "384|280|2|takuyoa|50x|3"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  }
+]

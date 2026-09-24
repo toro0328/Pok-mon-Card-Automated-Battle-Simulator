@@ -1,5 +1,5 @@
-import { AbilityEngine } from "./AbilityEngine.js?v=20260924-festival1";
-import { inspectAttacks } from "../card-db/parse-effects.js?v=20260924-festival1";
+import { AbilityEngine } from "./AbilityEngine.js?v=20260924-ray1";
+import { inspectAttacks } from "../card-db/parse-effects.js?v=20260924-ray1";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
 // ordinary numeric damage. Ordinary single knockouts use explicit prize and
@@ -92,6 +92,10 @@ export class AttackEngine extends AbilityEngine {
         damage += ((source.attached?.length ?? 0) + (target.attached?.length ?? 0)) * effect.perEnergy;
       } else if (effect.type === "SET_DAMAGE" && effect.basis === "OWN_BENCH_COUNT") {
         damage = state.players[action.player].bench.length * effect.perPokemon;
+      } else if (effect.type === "SET_DAMAGE" && effect.basis === "OWN_FIELD_FIRE_ELECTRIC_ENERGY_COUNT") {
+        damage = this.field(state.players[action.player]).flatMap(p=>p.attached??[])
+          .filter(energy=>["基本炎エネルギー","基本雷エネルギー"].includes(this.card(energy).name))
+          .length * effect.perEnergy;
       }
     }
     if (defender.weakness?.type?.includes(attacker.types?.[0])) {
@@ -217,14 +221,21 @@ export class AttackEngine extends AbilityEngine {
     const next = structuredClone(state);
     const own = next.players[next.turn], opponent = next.players[1 - next.turn];
     const attack = this.attacks(own.active)[action.attackIndex];
+    next.lastAttack={player:state.turn,attacker:this.card(own.active).name,
+      defender:this.card(opponent.active).name,attack:attack.name,damage,
+      before:opponent.active.damage??0,hp:this.effectiveHP(opponent.active),
+      selfDamage:attack.effects.filter(x=>x.type==="DAMAGE" && x.target==="ATTACKING_POKEMON")
+        .reduce((total,x)=>total+x.amount,0)};
     opponent.active.damage = (opponent.active.damage ?? 0) + damage;
     for (const effect of attack.effects) {
       if (effect.type === "DRAW" && effect.player === "SELF") {
         own.hand.push(...own.deck.splice(0, effect.count));
       } else if (effect.type === "DAMAGE" && effect.target === "ATTACKING_POKEMON") {
         own.active.damage = (own.active.damage ?? 0) + effect.amount;
+      } else if (effect.type === "HEAL_OWN_FIELD") {
+        for(const pokemon of this.field(own)) pokemon.damage=Math.max(0,(pokemon.damage??0)-effect.amount);
       } else if ((effect.type === "MODIFY_DAMAGE" && effect.basis === "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT") ||
-                 (effect.type === "SET_DAMAGE" && effect.basis === "OWN_BENCH_COUNT")) {
+                 (effect.type === "SET_DAMAGE" && ["OWN_BENCH_COUNT","OWN_FIELD_FIRE_ELECTRIC_ENERGY_COUNT"].includes(effect.basis))) {
         // The bonus was already included in calculateAttackDamage.
       } else if (effect.type === "LOCK_ITEM_FROM_HAND" && effect.target === "OPPONENT") {
         next.itemLocks ??= [false, false];

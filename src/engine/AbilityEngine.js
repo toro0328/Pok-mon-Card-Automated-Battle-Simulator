@@ -2,6 +2,11 @@
 // This is a restricted ability sandbox, not a complete Pokémon TCG match.
 const FESTIVAL_STADIUM_TEXT = "エネルギーがついているおたがいのポケモン全員は、特殊状態にならず、受けている特殊状態は、すべて回復する。";
 const GROW_GRASS_TEXT = "このカードは、ポケモンについているかぎり、Grassエネルギー1個ぶんとしてはたらく。\nこのカードをつけているGrassポケモンは、最大HPが「＋20」される。";
+const VERIFIED_ABILITIES = {
+  50396: ["はしゃのほうこう", "自分の番に、このカードを手札からベンチに出したとき、1回使える。自分の山札を上から4枚見て、その中から基本エネルギーを1枚選び、このポケモンにつける。残りのカードはウラにして切り、山札の下にもどす。"],
+  49694: ["おくのてキャッチ", "自分の番に、このカードを手札からベンチに出したとき、1回使える。自分の山札からサポートを1枚選び、相手に見せて、手札に加える。そして山札を切る。この番、名前に「おくのて」とつく特性を使っていたなら、この特性は使えない。"],
+  47315: ["こんじきのほのお", "自分の番に1回使える。自分の手札から「基本Fireエネルギー」を2枚まで選び、ベンチの「ヒビキのポケモン」1匹につける。"]
+};
 export class AbilityEngine {
   constructor(repository, catalog) {
     if (catalog?.cardCount !== repository.cards.size ||
@@ -25,7 +30,9 @@ export class AbilityEngine {
         entries.some((e, i) => e.text !== card.raw.abilities[i].effect || e.name !== card.raw.abilities[i].name)) {
       throw new Error(`Stale ability catalog for ${card.officialCardId}`);
     }
-    return entries;
+    const verified = VERIFIED_ABILITIES[card.officialCardId];
+    return verified && entries.length === 1 && entries[0].name === verified[0] && entries[0].text === verified[1]
+      ? [{ ...entries[0], status: "supported", trigger: card.officialCardId === 47315 ? "CUSTOM_FROM_FIELD" : "ON_BENCH_FROM_HAND" }] : entries;
   }
 
   field(player) {

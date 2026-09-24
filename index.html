@@ -22,6 +22,7 @@ main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border
 .card small{display:block;font-weight:500;font-size:.65rem}.hand{display:flex;gap:5px;overflow:auto;min-height:100px;padding:5px}.hand .card{flex:0 0 88px}
 .attached-summary{font-size:.82rem;text-align:center;color:#e5f3ff;padding:3px 0;line-height:1.45}
 .prizes{display:grid;grid-template-columns:repeat(2,1fr);gap:3px}.prize{background:#1d4b75;border:1px solid #7aa0c6;border-radius:5px;text-align:center;padding:5px;font-size:.72rem}
+.damage-report{background:#60311b;border:2px solid #ffb950;border-radius:12px;padding:11px;margin:8px 0;font-weight:800;line-height:1.5}.damage-report strong{font-size:1.45rem;color:#ffdf6e}.damage-report[hidden]{display:none}
 .summary{border-radius:11px;background:#16476d;padding:12px;text-align:center;line-height:1.6;font-weight:700}
 .controls{margin:8px 0}.controls h2{font-size:.9rem;margin:0 0 7px}.actions{display:flex;gap:7px;flex-wrap:wrap}.actions .action{font-size:.86rem;text-align:left}
 #message{min-height:1.5em;color:#ffdb7c;margin:8px 2px}
@@ -38,16 +39,16 @@ main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border
 <main>
 <p class="notice">自分は<a id="self-link" href="#">公式メガレックウザexデッキ</a>（60枚）、相手は<a id="opponent-link" href="#">公式のお祭り会場デッキ</a>（60枚）です。１台で両側を操作します。「おまつりおんど」「ドンドンだいこ」、お祭り会場、グロウ草エネルギーに対応しました。一部のトレーナーズに対応しました。未対応のカード効果はまだ使えません。<span id="ability-coverage"></span>手札のカードをタップすると可能な操作が表示されます。</p>
 <section class="panel controls"><h2>相手の操作</h2><div class="actions" id="opponent-actions"></div></section>
-<div id="opponent"></div><div class="summary" id="status">読み込み中…</div><p id="message" role="status"></p><div id="self"></div>
+<div id="opponent"></div><div class="summary" id="status">読み込み中…</div><div id="damage-report" class="damage-report" role="status" hidden></div><p id="message" role="status"></p><div id="self"></div>
 <section class="panel controls"><h2>自分の操作</h2><div class="actions" id="self-actions"></div></section>
 </main>
 <div id="card-menu" role="dialog" aria-label="選んだカードの操作" hidden></div>
 <script type="module">
 import { CardRepository } from "./src/card-db/CardRepository.js";
-import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260924-trainers1";
+import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260924-ray1";
 
 const ui={opponent:document.getElementById("opponent"),self:document.getElementById("self"),
-  status:document.getElementById("status"),message:document.getElementById("message"),
+  status:document.getElementById("status"),damageReport:document.getElementById("damage-report"),message:document.getElementById("message"),
   opponentActions:document.getElementById("opponent-actions"),selfActions:document.getElementById("self-actions"),
   menu:document.getElementById("card-menu"),seed:document.getElementById("seed")};
 let repository,engine,game,selected=null,opponentDeck,selfDeck;
@@ -145,7 +146,8 @@ function actionLabel(action){
   const source=[...player.hand,player.active,...player.bench].find(x=>x?.instanceId===action.sourceInstanceId);
   const target=[player.active,...player.bench].find(x=>x?.instanceId===action.targetInstanceId);
   const name=x=>x?repository.get(x.cardId).name:"";
-  const choice=[...player.hand,...player.deck,...player.trash,...player.bench,...game.players[1-action.player].bench].find(x=>x?.instanceId===action.choiceInstanceId);
+  const choice=[...player.hand,...player.deck,...player.trash,...player.bench,...game.players[1-action.player].bench,
+    ...[player.active,...player.bench].flatMap(x=>x?.attached??[])].find(x=>x?.instanceId===action.choiceInstanceId);
   switch(action.type){
     case "SET_ACTIVE":return `${whose}：${name(source)}をバトル場へ`;
     case "SET_BENCH":case "BENCH_BASIC":return `${whose}：${name(source)}をベンチへ`;
@@ -158,7 +160,14 @@ function actionLabel(action){
       return `${whose}：${name(source)}「${ability.name}」${choice?`（${name(choice)}を選ぶ）`:""}`;
     }
     case "ATTACK":return `${whose}：${name(source)}「${engine.attacks(source)[action.attackIndex].name}」`;
-    case "PLAY_TRAINER":return `${whose}：${name(source)}を使う${choice?`（${name(choice)}を選ぶ）`:""}`;
+    case "ABILITY_SELECT":return `${whose}：${name(choice)}を「${game.pendingAbility.name}」で選ぶ`;
+    case "ABILITY_SKIP":return `${whose}：「${game.pendingAbility.name}」の選択を終える`;
+    case "USE_HOOH":return `${whose}：${name(source)}「こんじきのほのお」→ ${name(target)}`;
+    case "AKAMATSU_PICK":return `${whose}：山札から${name(choice)}を選ぶ`;
+    case "AKAMATSU_HAND":return `${whose}：${name(choice)}を手札に加える`;
+    case "AKAMATSU_ATTACH":return `${whose}：${name(target)}に残りのエネルギーをつける`;
+    case "AKAMATSU_FINISH":return `${whose}：山札を切って終了`;
+    case "PLAY_TRAINER":return `${whose}：${name(source)}を使う${choice?`（${name(choice)}を選ぶ）`:""}${target?` → ${name(target)}`:""}`;
     case "TRAINER_DISCARD":return `${whose}：${name(choice)}をトラッシュ（残り${game.pendingTrainer.costLeft}枚）`;
     case "TRAINER_SELECT":return `${whose}：山札から${name(choice)}を選ぶ`;
     case "TRAINER_FINISH":return `${whose}：選択を終えて山札を切る`;
@@ -195,12 +204,23 @@ function render(){
   if(game.winner!=null)ui.status.textContent=`${game.winner===0?"自分":"相手"}の勝ち（${{PRIZES:"サイド取得",NO_POKEMON:"場のポケモンがいない",DECK_OUT:"山札切れ"}[game.winReason]??game.winReason}）`;
   else if(game.pendingKnockout?.reason)ui.status.textContent="同時きぜつ：この試験環境では処理を停止します";
   else if(game.pendingKnockout)ui.status.textContent="きぜつ処理：サイドを取り、次のバトルポケモンを選びます";
+  else if(game.pendingAbility)ui.status.textContent=`${game.turn===0?"自分":"相手"}：${game.pendingAbility.name}の効果を処理中`;
   else if(game.pendingTrainer)ui.status.textContent=`${game.turn===0?"自分":"相手"}：${game.pendingTrainer.name}の効果を処理中`;
   else if(game.phase==="setup")ui.status.textContent="対戦準備：両者のたねポケモンをバトル場に置き、準備完了を押してください";
   else ui.status.textContent=`${game.turnNo}番目：${game.turn===0?"自分（先攻）":"相手（後攻）"}の番${game.turnNo===1?"・先攻1ターン目はワザを使えません":""}${game.stadium?` ／ スタジアム：${repository.get(game.stadium.cardId).name}`:""}${game.pendingSecondAttack?" ／ おまつりおんど：２回目のワザを選んでください":""}`;
+  const hit=game.lastAttack;
+  ui.damageReport.hidden=!hit;
+  if(hit){
+    const remaining=Math.max(0,hit.hp-hit.before-hit.damage);
+    ui.damageReport.replaceChildren(
+      element("div","",`${hit.player===0?"自分":"相手"}の${hit.attacker}「${hit.attack}」 → ${hit.defender}`),
+      element("strong","",`${hit.damage} ダメージ${remaining===0?"・きぜつ！":""}`),
+      element("div","",`相手の残りHP：${remaining} / ${hit.hp}${hit.selfDamage?` ／ 自分にも${hit.selfDamage}ダメージ`:""}`)
+    );
+  }
   ui.opponentActions.replaceChildren();ui.selfActions.replaceChildren();ui.menu.replaceChildren();ui.menu.hidden=true;
   const legal=engine.getMatchActions(game);
-  const globalTypes=["READY_SETUP","END_TURN","TAKE_PRIZE","PROMOTE_BENCH","TRAINER_DISCARD","TRAINER_SELECT","TRAINER_FINISH"];
+  const globalTypes=["READY_SETUP","END_TURN","TAKE_PRIZE","PROMOTE_BENCH","TRAINER_DISCARD","TRAINER_SELECT","TRAINER_FINISH","ABILITY_SELECT","ABILITY_SKIP","AKAMATSU_PICK","AKAMATSU_HAND","AKAMATSU_ATTACH","AKAMATSU_FINISH"];
   for(let player=0;player<2;player++){
     const container=player===0?ui.selfActions:ui.opponentActions;
     const common=legal.filter(action=>action.player===player&&globalTypes.includes(action.type));
@@ -241,9 +261,9 @@ function newGame(){
 document.getElementById("restart").onclick=newGame;
 try{
   const [loaded,response,deckResponse,selfResponse]=await Promise.all([CardRepository.load("./data/cards/cards.json"),
-    fetch("./data/cards/ability-effects.json?v=20260924-trainers1"),
-    fetch("./data/decks/opponent-festival.json?v=20260924-trainers1"),
-    fetch("./data/decks/self-rayquaza.json?v=20260924-trainers1")]);
+    fetch("./data/cards/ability-effects.json?v=20260924-ray1"),
+    fetch("./data/decks/opponent-festival.json?v=20260924-ray1"),
+    fetch("./data/decks/self-rayquaza.json?v=20260924-ray1")]);
   if(!response.ok||!deckResponse.ok||!selfResponse.ok)throw Error("特性カタログまたは相手デッキを取得できません");
   repository=loaded;opponentDeck=await deckResponse.json();selfDeck=await selfResponse.json();
   if(selfDeck.cards.reduce((total,entry)=>total+entry.count,0)!==60||
