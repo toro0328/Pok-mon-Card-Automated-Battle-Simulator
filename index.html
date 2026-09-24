@@ -11,7 +11,7 @@ header b{font-size:1rem}header a{color:#b9e3ff}header button,.action{background:
 header input{width:94px;background:#f0f7ff;border:0;border-radius:7px;padding:8px;color:#132641}
 main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border:1px solid #6485a4;border-radius:10px;padding:10px;font-size:.88rem;margin:6px 0 12px}
 .panel{border:1px solid #395a79;border-radius:13px;background:#10263f;padding:10px;margin:10px 0}
-.opponent{transform:rotate(180deg)}.opponent .card,.opponent .meta,.opponent .zone-title,.opponent .prize{transform:rotate(180deg)}
+.opponent{transform:rotate(180deg)}.opponent .card,.opponent .meta,.opponent .zone-title,.opponent .prize,.opponent .attached-summary{transform:rotate(180deg)}
 .meta{font-weight:700;padding:4px;color:#c7e3fd}.field{display:grid;grid-template-columns:78px minmax(0,1fr) 78px;gap:7px;align-items:stretch}
 .zone{border:1px solid #355674;border-radius:9px;padding:5px;min-height:108px}.zone-title{font-size:.72rem;color:#a9c8e3;text-align:center}
 .active,.bench{display:flex;justify-content:center;align-items:center;gap:5px}.active{min-height:105px}.bench{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));margin-top:6px}
@@ -19,6 +19,7 @@ main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border
 .card{border:2px solid #e2f2ff;border-radius:8px;background:#d4effc;color:#16304b;width:min(100%,93px);min-height:88px;padding:4px;line-height:1.3;font-weight:750;font-size:.75rem;overflow-wrap:anywhere;cursor:pointer}
 .card.trainer{background:#ffd3dc}.card.energy{background:#ffecae}.card.chosen{border-color:#f5b83f;box-shadow:0 0 0 3px #f5b83f}
 .card small{display:block;font-weight:500;font-size:.65rem}.hand{display:flex;gap:5px;overflow:auto;min-height:100px;padding:5px}.hand .card{flex:0 0 88px}
+.attached-summary{font-size:.82rem;text-align:center;color:#e5f3ff;padding:3px 0;line-height:1.45}
 .prizes{display:grid;grid-template-columns:repeat(2,1fr);gap:3px}.prize{background:#1d4b75;border:1px solid #7aa0c6;border-radius:5px;text-align:center;padding:5px;font-size:.72rem}
 .summary{border-radius:11px;background:#16476d;padding:12px;text-align:center;line-height:1.6;font-weight:700}
 #message{min-height:1.5em;color:#ffdb7c}#actions{display:flex;gap:7px;flex-wrap:wrap}#actions .action{font-size:.86rem;text-align:left}h2{font-size:1rem;margin:2px 0 8px}
@@ -41,19 +42,22 @@ const ui={opponent:document.getElementById("opponent"),self:document.getElementB
   actions:document.getElementById("actions"),seed:document.getElementById("seed")};
 let repository,engine,game,selected=null;
 function element(tag,cls,value){const node=document.createElement(tag);if(cls)node.className=cls;if(value!==undefined)node.textContent=value;return node;}
+function energySummary(instance){
+  const counts=new Map();
+  for(const energy of instance.attached??[]){
+    const name=repository.get(energy.cardId).name;
+    const type=name.match(/^基本(.+)エネルギー$/)?.[1]??name;
+    counts.set(type,(counts.get(type)??0)+1);
+  }
+  return [...counts].map(([type,count])=>`${type}×${count}`).join(" ");
+}
 function cardNode(instance){
   const data=repository.get(instance.cardId),button=element("button","card "+data.cardType+(selected===instance.instanceId?" chosen":""));
   button.append(document.createTextNode(data.name));
   if(data.cardType==="pokemon"){
     button.append(element("small","",`HP ${data.raw.hp} / ダメージ ${instance.damage??0}`));
     if(instance.attached?.length){
-      const counts=new Map();
-      for(const energy of instance.attached){
-        const name=repository.get(energy.cardId).name;
-        const type=name.match(/^基本(.+)エネルギー$/)?.[1]??name;
-        counts.set(type,(counts.get(type)??0)+1);
-      }
-      button.append(element("small","",`エネ：${[...counts].map(([type,count])=>`${type}×${count}`).join(" ")}`));
+      button.append(element("small","",`エネ：${energySummary(instance)}`));
       button.title=`ついているエネルギー：${instance.attached.map(x=>repository.get(x.cardId).name).join("、")}`;
     }
   }
@@ -73,6 +77,7 @@ function playerView(index){
   p.prizes.forEach((_,i)=>prizes.append(element("span","prize",String(i+1))));sides.append(prizes);
   const middle=element("div","zone");middle.append(element("div","zone-title","バトル場"));
   const active=element("div","active");active.append(p.active?cardNode(p.active):element("span","zone-title","空き"));middle.append(active);
+  if(p.active?.attached?.length)middle.append(element("div","attached-summary",`ついているエネルギー：${energySummary(p.active)}`));
   middle.append(element("div","zone-title","ベンチ（最大5匹）"));
   const bench=element("div","bench");for(let i=0;i<5;i++){const slot=element("div","slot");if(p.bench[i])slot.append(cardNode(p.bench[i]));bench.append(slot);}middle.append(bench);
   const deck=element("div","zone");deck.append(element("div","zone-title","山札"),element("div","meta","🂠"),element("div","zone-title",`トラッシュ ${p.trash.length}枚`));
@@ -108,7 +113,13 @@ function render(){
   else if(game.pendingKnockout)ui.status.textContent="きぜつ処理：サイドを取り、次のバトルポケモンを選びます";
   else if(game.phase==="setup")ui.status.textContent="対戦準備：両者のたねポケモンをバトル場に置き、準備完了を押してください";
   else ui.status.textContent=`${game.turnNo}番目：${game.turn===0?"自分（先攻）":"相手（後攻）"}の番${game.turnNo===1?"・先攻1ターン目はワザを使えません":""}`;
-  ui.actions.replaceChildren();let actions=engine.getMatchActions(game);
+  ui.actions.replaceChildren();
+  if(selected){
+    const picked=game.players.flatMap(p=>[...p.hand,p.active,...p.bench]).find(x=>x?.instanceId===selected);
+    if(picked?.attached?.length)ui.actions.append(element("div","attached-summary",
+      `${repository.get(picked.cardId).name}：ついているエネルギー ${picked.attached.map(x=>repository.get(x.cardId).name).join("、")}`));
+  }
+  let actions=engine.getMatchActions(game);
   if(selected)actions=actions.filter(x=>x.sourceInstanceId===selected||x.targetInstanceId===selected||["READY_SETUP","END_TURN","TAKE_PRIZE","PROMOTE_BENCH","RETREAT"].includes(x.type));
   else actions=actions.filter(x=>!["SET_ACTIVE","SET_BENCH","BENCH_BASIC","ATTACH_ENERGY","EVOLVE","USE_ABILITY"].includes(x.type));
   if(!actions.length)ui.actions.append(element("span","",selected?"このカードで選べる操作はありません。":"手札や場のカードをタップして操作を選んでください。"));
