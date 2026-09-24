@@ -20,6 +20,27 @@ const state = (own, other, turnNo=1) => ({ruleset:"supported_abilities_v1",stadi
   knockoutThisTurn:[false,false],previousOpponentTurnKnockout:[false,false]});
 const sample = [...[49956,50339,45913,45707,48466,46248].flatMap(id=>Array(4).fill(id)),
   ...Array(36).fill(50745)];
+const opponentDeck = JSON.parse(fs.readFileSync("data/decks/opponent-festival.json", "utf8"));
+
+test("official festival deck retains its exact 60-card counts, including evolution and special Energy", () => {
+  const byId = new Map(opponentDeck.cards.map(x=>[x.officialCardId,x.count]));
+  assert.equal(opponentDeck.deckCode,"nnNNLn-xCvlKh-69gNPQ");
+  assert.equal(opponentDeck.cards.reduce((sum,x)=>sum+x.count,0),60);
+  assert.equal(byId.get(45703),4); // Dipplin
+  assert.equal(byId.get(45790),4); // Festival Grounds
+  assert.equal(byId.get(49711),3); // Grow Grass Energy
+  assert.equal(byId.get(42779),3); // printed Basic Grass Energy
+  assert.equal(new Set(opponentDeck.cards.map(x=>x.officialCardId)).size,opponentDeck.cards.length);
+});
+
+test("opening hand always includes a Basic with an executable ability state", () => {
+  const restrictive=[...Array(4).fill(45233),...Array(56).fill(50745)];
+  assert.throws(()=>engine.createMatch([sample,restrictive],9),/supported Basic/);
+  const usable=[49956,...Array(4).fill(45233),...Array(55).fill(50745)];
+  const game=engine.createMatch([sample,usable],9);
+  assert.ok(game.players[1].hand.some(x=>x.cardId===49956));
+  assert.ok(engine.getMatchActions(game).some(x=>x.player===1&&x.type==="SET_ACTIVE"));
+});
 
 test("seeded 60-card setup deals 7 and 6, requires both Basics, then draws the first turn", () => {
   const first = engine.createMatch([sample,sample],17);

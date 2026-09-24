@@ -38,8 +38,9 @@ export class MatchEngine extends AttackEngine {
       for (let mulligans = 0; mulligans < 100; mulligans++) {
         deck = shuffle([...all]);
         hand = deck.splice(0, 7);
-        if (hand.some(card => this.card(card).raw.stage === BASIC)) break;
-        if (mulligans === 99) throw new Error("Could not draw a Basic Pokémon");
+        if (hand.some(card => this.card(card).raw.stage === BASIC &&
+            this.entries(card).every(entry => entry.status === "supported"))) break;
+        if (mulligans === 99) throw new Error("Could not draw a supported Basic Pokémon");
       }
       const prizes = deck.splice(0, 6);
       return { active: null, bench: [], hand, deck, prizes, trash: [] };

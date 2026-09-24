@@ -10,6 +10,7 @@ header{position:sticky;top:0;z-index:5;background:#102741;border-bottom:1px soli
 header b{font-size:1rem}header a{color:#b9e3ff}header button,.action{background:#1765a8;color:white;border:1px solid #87add1;border-radius:9px;padding:9px;font-weight:700;cursor:pointer}
 header input{width:94px;background:#f0f7ff;border:0;border-radius:7px;padding:8px;color:#132641}
 main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border:1px solid #6485a4;border-radius:10px;padding:10px;font-size:.88rem;margin:6px 0 12px}
+.notice a{color:#b9e3ff}
 .panel{border:1px solid #395a79;border-radius:13px;background:#10263f;padding:10px;margin:10px 0}
 .opponent{transform:rotate(180deg)}.opponent .card,.opponent .meta,.opponent .zone-title,.opponent .prize,.opponent .attached-summary{transform:rotate(180deg)}
 .meta{font-weight:700;padding:4px;color:#c7e3fd}.field{display:grid;grid-template-columns:78px minmax(0,1fr) 78px;gap:7px;align-items:stretch}
@@ -29,7 +30,7 @@ main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border
 <body>
 <header><b>ポケカ対戦試験</b><a href="./ability-demo.html">特性・ワザの個別試験</a><label>シード <input id="seed" type="number" value="1" min="1" step="1"></label><button id="restart">新しい試合</button></header>
 <main>
-<p class="notice">実カードDBのサンプル60枚デッキを、１台で両側操作する対戦試験です。たねポケモン・基本草エネルギー・対応済みの特性とワザを使います。トレーナーズ、特殊状態、特殊エネルギー、同時きぜつなどはまだ未対応です。手札のカードをタップすると可能な操作が表示されます。</p>
+<p class="notice">自分はサンプル60枚、相手は<a id="opponent-link" href="#">公式のお祭り会場デッキ</a>（60枚）です。１台で両側を操作します。相手のカードは正確な枚数で入っていますが、おまつりおんど・ドンドンだいこなどの未対応の特性、トレーナーズ、特殊エネルギーはまだ使用できません。手札のカードをタップすると可能な操作が表示されます。</p>
 <div id="opponent"></div><div class="summary" id="status">読み込み中…</div><div id="self"></div>
 <section class="panel"><h2>使用可能な操作</h2><p id="message"></p><div id="actions"></div></section>
 </main>
@@ -40,7 +41,7 @@ const sampleDeck=[...[49956,50339,45913,45707,48466,46248].flatMap(id=>Array(4).
 const ui={opponent:document.getElementById("opponent"),self:document.getElementById("self"),
   status:document.getElementById("status"),message:document.getElementById("message"),
   actions:document.getElementById("actions"),seed:document.getElementById("seed")};
-let repository,engine,game,selected=null;
+let repository,engine,game,selected=null,opponentDeck;
 function element(tag,cls,value){const node=document.createElement(tag);if(cls)node.className=cls;if(value!==undefined)node.textContent=value;return node;}
 function energySummary(instance){
   const counts=new Map();
@@ -71,7 +72,7 @@ function zone(title,items){
 }
 function playerView(index){
   const p=game.players[index],panel=element("section","panel"+(index===1?" opponent":""));
-  panel.append(element("div","meta",`${index===0?"自分":"相手"}　山札 ${p.deck.length}　手札 ${p.hand.length}　サイド ${p.prizes.length}　トラッシュ ${p.trash.length}`));
+  panel.append(element("div","meta",`${index===0?"自分（サンプル）":"相手（お祭り会場）"}　山札 ${p.deck.length}　手札 ${p.hand.length}　サイド ${p.prizes.length}　トラッシュ ${p.trash.length}`));
   const field=element("div","field"),sides=element("div","zone");
   sides.append(element("div","zone-title","サイド"));const prizes=element("div","prizes");
   p.prizes.forEach((_,i)=>prizes.append(element("span","prize",String(i+1))));sides.append(prizes);
@@ -114,15 +115,25 @@ function render(){
   else if(game.phase==="setup")ui.status.textContent="対戦準備：両者のたねポケモンをバトル場に置き、準備完了を押してください";
   else ui.status.textContent=`${game.turnNo}番目：${game.turn===0?"自分（先攻）":"相手（後攻）"}の番${game.turnNo===1?"・先攻1ターン目はワザを使えません":""}`;
   ui.actions.replaceChildren();
+  let picked;
   if(selected){
-    const picked=game.players.flatMap(p=>[...p.hand,p.active,...p.bench]).find(x=>x?.instanceId===selected);
+    picked=game.players.flatMap(p=>[...p.hand,p.active,...p.bench]).find(x=>x?.instanceId===selected);
     if(picked?.attached?.length)ui.actions.append(element("div","attached-summary",
       `${repository.get(picked.cardId).name}：ついているエネルギー ${picked.attached.map(x=>repository.get(x.cardId).name).join("、")}`));
   }
   let actions=engine.getMatchActions(game);
   if(selected)actions=actions.filter(x=>x.sourceInstanceId===selected||x.targetInstanceId===selected||["READY_SETUP","END_TURN","TAKE_PRIZE","PROMOTE_BENCH","RETREAT"].includes(x.type));
   else actions=actions.filter(x=>!["SET_ACTIVE","SET_BENCH","BENCH_BASIC","ATTACH_ENERGY","EVOLVE","USE_ABILITY"].includes(x.type));
-  if(!actions.length)ui.actions.append(element("span","",selected?"このカードで選べる操作はありません。":"手札や場のカードをタップして操作を選んでください。"));
+  const chosenCard=picked&&repository.get(picked.cardId);
+  const unsupportedReason=chosenCard?.cardType==="pokemon"&&engine.entries(picked).some(entry=>entry.status!=="supported")
+    ?"このポケモンの特性が未対応のため、現在の対戦試験では場に出せません。"
+    :chosenCard?.cardType==="trainer"?"トレーナーズの使用はまだ未対応です。"
+    :chosenCard?.energyType==="special"?"特殊エネルギーの使用はまだ未対応です。":null;
+  if(unsupportedReason&&!actions.some(x=>x.sourceInstanceId===selected||x.targetInstanceId===selected))
+    ui.actions.append(element("span","",unsupportedReason));
+  if(!actions.length){
+    if(!unsupportedReason)ui.actions.append(element("span","",selected?"このカードで選べる操作はありません。":"手札や場のカードをタップして操作を選んでください。"));
+  }
   for(const action of actions){
     const label=actionLabel(action),button=element("button","action",label);
     button.onclick=()=>{try{game=engine.applyMatchAction(game,action);selected=null;ui.message.textContent=label+"を処理しました。";render();}
@@ -133,15 +144,20 @@ function render(){
 function newGame(){
   try{
     const seed=Number(ui.seed.value);if(!Number.isSafeInteger(seed)||seed<1)throw Error("シードは1以上の整数にしてください");
-    game=engine.createMatch([sampleDeck,sampleDeck],seed);selected=null;
-    ui.message.textContent="実カードのサンプルデッキで対戦を準備しました。";render();
+    game=engine.createMatch([sampleDeck,opponentDeck.cards.flatMap(entry=>Array(entry.count).fill(entry.officialCardId))],seed);selected=null;
+    ui.message.textContent="公式デッキコードの60枚を相手に設定しました。";render();
   }catch(error){ui.message.textContent=error.message;}
 }
 document.getElementById("restart").onclick=newGame;
 try{
-  const [loaded,response]=await Promise.all([CardRepository.load("./data/cards/cards.json"),fetch("./data/cards/ability-effects.json")]);
-  if(!response.ok)throw Error("特性カタログを取得できません");
-  repository=loaded;engine=new MatchEngine(repository,await response.json());newGame();
+  const [loaded,response,deckResponse]=await Promise.all([CardRepository.load("./data/cards/cards.json"),
+    fetch("./data/cards/ability-effects.json"),fetch("./data/decks/opponent-festival.json")]);
+  if(!response.ok||!deckResponse.ok)throw Error("特性カタログまたは相手デッキを取得できません");
+  repository=loaded;opponentDeck=await deckResponse.json();
+  if(opponentDeck.cards.reduce((total,entry)=>total+entry.count,0)!==60||
+      opponentDeck.cards.some(entry=>!repository.get(entry.officialCardId)))throw Error("相手デッキの枚数またはカードIDが不正です");
+  document.getElementById("opponent-link").href=opponentDeck.sourceUrl;
+  engine=new MatchEngine(repository,await response.json());newGame();
 }catch(error){ui.status.textContent="カードDBの読み込みに失敗しました";ui.message.textContent=error.message;}
 </script>
 </body>
