@@ -31,13 +31,13 @@ jobs:
         run: node scripts/compile-abilities.mjs
       - name: Commit catalog
         run: |
-          if git diff --quiet -- data/cards/ability-effects.json && test -f data/cards/ability-effects.json; then
+          git add data/cards/ability-effects.json
+          if git diff --cached --quiet; then
             echo "Ability catalog unchanged."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/cards/ability-effects.json
           git commit -m "Compile card ability effects"
           git pull --rebase origin main
           git push
