@@ -1,6 +1,13 @@
 name: Card DB sync
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/card-db-sync.yml"
+      - "scripts/import-reference-card-db.py"
+      - "scripts/sync-official-cards.py"
+      - "scripts/validate-card-db.py"
   workflow_dispatch:
     inputs:
       import_limit:
@@ -34,7 +41,7 @@ jobs:
 
       - name: Import missing cards from mirror
         env:
-          IMPORT_LIMIT: ${{ inputs.import_limit || '250' }}
+          IMPORT_LIMIT: ${{ github.event_name == 'push' && '6000' || inputs.import_limit || '250' }}
         run: python scripts/import-reference-card-db.py --source-dir /tmp/PTCG-database/data_jp --limit "$IMPORT_LIMIT"
 
       - name: Validate database
