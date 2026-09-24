@@ -2,6 +2,11 @@ name: Card DB sync
 
 on:
   workflow_dispatch:
+    inputs:
+      import_limit:
+        description: Maximum missing cards to import
+        required: false
+        default: "250"
   schedule:
     - cron: "17 20 * * *"
 
@@ -28,7 +33,9 @@ jobs:
         run: git clone --depth 1 https://github.com/type-null/PTCG-database.git /tmp/PTCG-database
 
       - name: Import missing cards from mirror
-        run: python scripts/import-reference-cards.py --source-dir /tmp/PTCG-database/data_jp --limit 20
+        env:
+          IMPORT_LIMIT: ${{ inputs.import_limit || '250' }}
+        run: python scripts/import-reference-card-db.py --source-dir /tmp/PTCG-database/data_jp --limit "$IMPORT_LIMIT"
 
       - name: Commit DB changes
         run: |

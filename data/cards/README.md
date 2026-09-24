@@ -3,8 +3,14 @@
 This directory is the simulator's canonical local card database.
 
 ## Policy
-- Primary source: official Japanese Pokemon Card Game card search.
+- Official Japanese Standard search (form value `XY`) provides the candidate ID list.
 - Current Standard scope: regulation marks H / I / J.
+- The search result does not identify each card's printed regulation mark.
+  `regulation: null` means unverified; never infer a printed mark from the set
+  code, ID, search membership, or this reference dataset. Search results may
+  include permitted reprints and cards not yet legal for a given event.
+- `cardType` is pokemon/trainer/energy; `trainerType` is
+  item/supporter/stadium/tool and `energyType` is basic/special.
 - Preserve official text in `raw` before converting it to engine effects.
 - Never silently guess an unknown effect. Mark it `needs_review`.
 - Card images/OCR are verification/fallback sources, not the primary parser.
@@ -16,4 +22,7 @@ This directory is the simulator's canonical local card database.
 - `needs_review`: parser is uncertain or a new rule pattern was found
 - `custom_handler`: requires card-specific code
 
-The importer/synchronizer will be added separately so new official cards can be detected and appended without rewriting existing verified records.
+The sync workflow refreshes the official ID manifest, then imports missing
+records from a local clone of type-null/PTCG-database using
+`scripts/import-reference-card-db.py`. Existing records are preserved.
+Raw reference records are retained for later verification and reparsing.
