@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 1898,
-    "needs_review": 3264
+    "supported": 1901,
+    "needs_review": 3261
   },
   "attacks": {
     "45147": [
@@ -8299,8 +8299,14 @@
           "Grass"
         ],
         "text": "自分のベンチポケモンの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_BENCH_COUNT",
+            "perPokemon": 20
+          }
+        ]
       }
     ],
     "45704": [
@@ -10395,8 +10401,14 @@
           "Grass"
         ],
         "text": "自分のベンチポケモンの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_BENCH_COUNT",
+            "perPokemon": 20
+          }
+        ]
       }
     ],
     "45846": [
@@ -23656,8 +23668,14 @@
           "Grass"
         ],
         "text": "自分のベンチポケモンの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_BENCH_COUNT",
+            "perPokemon": 20
+          }
+        ]
       }
     ],
     "46671": [
