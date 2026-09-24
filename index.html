@@ -23,7 +23,13 @@ main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border
 .attached-summary{font-size:.82rem;text-align:center;color:#e5f3ff;padding:3px 0;line-height:1.45}
 .prizes{display:grid;grid-template-columns:repeat(2,1fr);gap:3px}.prize{background:#1d4b75;border:1px solid #7aa0c6;border-radius:5px;text-align:center;padding:5px;font-size:.72rem}
 .summary{border-radius:11px;background:#16476d;padding:12px;text-align:center;line-height:1.6;font-weight:700}
-#message{min-height:1.5em;color:#ffdb7c}#actions{display:flex;gap:7px;flex-wrap:wrap}#actions .action{font-size:.86rem;text-align:left}h2{font-size:1rem;margin:2px 0 8px}
+.controls{margin:8px 0}.controls h2{font-size:.9rem;margin:0 0 7px}.actions{display:flex;gap:7px;flex-wrap:wrap}.actions .action{font-size:.86rem;text-align:left}
+#message{min-height:1.5em;color:#ffdb7c;margin:8px 2px}
+#card-menu{position:fixed;z-index:12;width:min(330px,calc(100vw - 16px));max-height:min(52vh,420px);overflow:auto;background:#183856;color:white;border:2px solid #8bc4ed;border-radius:12px;padding:10px;box-shadow:0 8px 28px #071727dd}
+#card-menu[hidden]{display:none}#card-menu .menu-head{display:flex;align-items:center;justify-content:space-between;gap:6px;font-weight:750;margin-bottom:8px}#card-menu .menu-head button{background:#324e68;color:white;border:1px solid #88a8c3;border-radius:6px;padding:3px 8px}
+#card-menu .actions{display:grid;grid-template-columns:1fr}#card-menu .action{width:100%}
+.drag-card{position:fixed;z-index:20;pointer-events:none;opacity:.87;transform:translate(-50%,-50%);padding:8px;background:#ffecae;color:#16304b;border:2px solid #eda719;border-radius:8px;font-weight:700}
+.hand .energy{touch-action:none}.card.drop-target{outline:3px solid #f4bc42;outline-offset:2px}
 @media(max-width:650px){.field{grid-template-columns:62px minmax(0,1fr) 62px;gap:4px}.card{font-size:.66rem;min-height:78px}.card small{font-size:.56rem}.slot{min-height:84px}.zone{padding:3px}.zone-title{font-size:.61rem}.meta{font-size:.79rem}.prize{font-size:.64rem;padding:3px}}
 </style>
 </head>
@@ -31,16 +37,19 @@ main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border
 <header><b>ポケカ対戦試験</b><a href="./ability-demo.html">特性・ワザの個別試験</a><label>シード <input id="seed" type="number" value="1" min="1" step="1"></label><button id="restart">新しい試合</button></header>
 <main>
 <p class="notice">自分はサンプル60枚、相手は<a id="opponent-link" href="#">公式のお祭り会場デッキ</a>（60枚）です。１台で両側を操作します。「おまつりおんど」「ドンドンだいこ」、お祭り会場、グロウ草エネルギーに対応しました。ほかのトレーナーズや未解析のワザはまだ使えません。<span id="ability-coverage"></span>手札のカードをタップすると可能な操作が表示されます。</p>
-<div id="opponent"></div><div class="summary" id="status">読み込み中…</div><div id="self"></div>
-<section class="panel"><h2>使用可能な操作</h2><p id="message"></p><div id="actions"></div></section>
+<section class="panel controls"><h2>相手の操作</h2><div class="actions" id="opponent-actions"></div></section>
+<div id="opponent"></div><div class="summary" id="status">読み込み中…</div><p id="message" role="status"></p><div id="self"></div>
+<section class="panel controls"><h2>自分の操作</h2><div class="actions" id="self-actions"></div></section>
 </main>
+<div id="card-menu" role="dialog" aria-label="選んだカードの操作" hidden></div>
 <script type="module">
 import { CardRepository } from "./src/card-db/CardRepository.js";
 import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260924-festival1";
 const sampleDeck=[...[49956,50339,45913,45707,48466,46248].flatMap(id=>Array(4).fill(id)),...Array(36).fill(50745)];
 const ui={opponent:document.getElementById("opponent"),self:document.getElementById("self"),
   status:document.getElementById("status"),message:document.getElementById("message"),
-  actions:document.getElementById("actions"),seed:document.getElementById("seed")};
+  opponentActions:document.getElementById("opponent-actions"),selfActions:document.getElementById("self-actions"),
+  menu:document.getElementById("card-menu"),seed:document.getElementById("seed")};
 let repository,engine,game,selected=null,opponentDeck;
 function element(tag,cls,value){const node=document.createElement(tag);if(cls)node.className=cls;if(value!==undefined)node.textContent=value;return node;}
 function energySummary(instance){
@@ -52,8 +61,54 @@ function energySummary(instance){
   }
   return [...counts].map(([type,count])=>`${type}×${count}`).join(" ");
 }
-function cardNode(instance){
+function startEnergyDrag(button,energy,owner){
+  button.addEventListener("pointerdown",down=>{
+    if(down.button!==0 || !game || game.phase!=="playing")return;
+    let moved=false,ghost=null,highlight=null;
+    const origin={x:down.clientX,y:down.clientY};
+    button.setPointerCapture(down.pointerId);
+    const targetAt=(x,y)=>document.elementFromPoint(x,y)?.closest('.card[data-zone="field"]');
+    const clear=()=>{ghost?.remove();highlight?.classList.remove("drop-target");ghost=null;highlight=null;};
+    const move=event=>{
+      if(event.pointerId!==down.pointerId)return;
+      if(!moved && Math.hypot(event.clientX-origin.x,event.clientY-origin.y)>12){
+        moved=true;ghost=element("div","drag-card",repository.get(energy.cardId).name);
+        document.body.append(ghost);ui.menu.hidden=true;
+      }
+      if(!moved)return;
+      ghost.style.left=`${event.clientX}px`;ghost.style.top=`${event.clientY}px`;
+      const target=targetAt(event.clientX,event.clientY);
+      if(highlight!==target){highlight?.classList.remove("drop-target");highlight=target;
+        if(target?.dataset.player===String(owner))target.classList.add("drop-target");}
+    };
+    const finish=event=>{
+      if(event.pointerId!==down.pointerId)return;
+      button.removeEventListener("pointermove",move);
+      button.removeEventListener("pointerup",finish);
+      button.removeEventListener("pointercancel",cancel);
+      const target=moved&&event.type==="pointerup"?targetAt(event.clientX,event.clientY):null;
+      const targetId=target?.dataset.player===String(owner)?target.dataset.instanceId:null;
+      clear();
+      if(!moved)return;
+      button.dataset.suppressClick="true";
+      setTimeout(()=>{delete button.dataset.suppressClick;},400);
+      if(!targetId)return;
+      const legal=engine.getMatchActions(game).find(action=>action.type==="ATTACH_ENERGY" &&
+        action.player===owner && action.sourceInstanceId===energy.instanceId && action.targetInstanceId===targetId);
+      if(legal)performAction(legal);
+      else ui.message.textContent="今はこのポケモンにエネルギーをつけられません。";
+    };
+    const cancel=event=>{if(event.pointerId!==down.pointerId)return;
+      button.removeEventListener("pointermove",move);button.removeEventListener("pointerup",finish);
+      button.removeEventListener("pointercancel",cancel);clear();};
+    button.addEventListener("pointermove",move);
+    button.addEventListener("pointerup",finish);
+    button.addEventListener("pointercancel",cancel);
+  });
+}
+function cardNode(instance,owner,zoneKind){
   const data=repository.get(instance.cardId),button=element("button","card "+data.cardType+(selected===instance.instanceId?" chosen":""));
+  button.dataset.instanceId=instance.instanceId;button.dataset.player=String(owner);button.dataset.zone=zoneKind;
   button.append(document.createTextNode(data.name));
   if(data.cardType==="pokemon"){
     button.append(element("small","",`HP ${engine.effectiveHP(instance)} / ダメージ ${instance.damage??0}`));
@@ -62,13 +117,14 @@ function cardNode(instance){
       button.title=`ついているエネルギー：${instance.attached.map(x=>repository.get(x.cardId).name).join("、")}`;
     }
   }
-  button.onclick=()=>{selected=selected===instance.instanceId?null:instance.instanceId;render();};
+  button.onclick=()=>{if(button.dataset.suppressClick)return;selected=selected===instance.instanceId?null:instance.instanceId;render();};
+  if(data.cardType==="energy"&&zoneKind==="hand")startEnergyDrag(button,instance,owner);
   return button;
 }
-function zone(title,items){
+function zone(title,items,owner){
   const wrapper=element("div","");wrapper.append(element("div","zone-title",title));
   const row=element("div","hand");if(!items.length)row.append(element("span","zone-title","なし"));
-  for(const item of items)row.append(cardNode(item));wrapper.append(row);return wrapper;
+  for(const item of items)row.append(cardNode(item,owner,"hand"));wrapper.append(row);return wrapper;
 }
 function playerView(index){
   const p=game.players[index],panel=element("section","panel"+(index===1?" opponent":""));
@@ -77,12 +133,12 @@ function playerView(index){
   sides.append(element("div","zone-title","サイド"));const prizes=element("div","prizes");
   p.prizes.forEach((_,i)=>prizes.append(element("span","prize",String(i+1))));sides.append(prizes);
   const middle=element("div","zone");middle.append(element("div","zone-title","バトル場"));
-  const active=element("div","active");active.append(p.active?cardNode(p.active):element("span","zone-title","空き"));middle.append(active);
+  const active=element("div","active");active.append(p.active?cardNode(p.active,index,"field"):element("span","zone-title","空き"));middle.append(active);
   if(p.active?.attached?.length)middle.append(element("div","attached-summary",`ついているエネルギー：${energySummary(p.active)}`));
   middle.append(element("div","zone-title","ベンチ（最大5匹）"));
-  const bench=element("div","bench");for(let i=0;i<5;i++){const slot=element("div","slot");if(p.bench[i])slot.append(cardNode(p.bench[i]));bench.append(slot);}middle.append(bench);
+  const bench=element("div","bench");for(let i=0;i<5;i++){const slot=element("div","slot");if(p.bench[i])slot.append(cardNode(p.bench[i],index,"field"));bench.append(slot);}middle.append(bench);
   const deck=element("div","zone");deck.append(element("div","zone-title","山札"),element("div","meta","🂠"),element("div","zone-title",`トラッシュ ${p.trash.length}枚`));
-  field.append(sides,middle,deck);panel.append(field,zone("手札",p.hand));return panel;
+  field.append(sides,middle,deck);panel.append(field,zone("手札",p.hand,index));return panel;
 }
 function actionLabel(action){
   const player=game.players[action.player],whose=action.player===0?"自分":"相手";
@@ -108,6 +164,27 @@ function actionLabel(action){
   }
   return action.type;
 }
+function performAction(action){
+  const label=actionLabel(action);
+  try{game=engine.applyMatchAction(game,action);selected=null;
+    ui.message.textContent=label+"を処理しました。";render();}
+  catch(error){ui.message.textContent="処理を停止しました："+error.message;}
+}
+function actionButton(action){
+  const button=element("button","action",actionLabel(action));
+  button.onclick=()=>performAction(action);return button;
+}
+function positionMenu(){
+  if(ui.menu.hidden||!selected)return;
+  const anchor=[...document.querySelectorAll('.card[data-instance-id]')]
+    .find(node=>node.dataset.instanceId===selected);
+  if(!anchor){ui.menu.hidden=true;return;}
+  const box=anchor.getBoundingClientRect(),height=ui.menu.getBoundingClientRect().height;
+  ui.menu.style.left=`${Math.max(8,Math.min(box.left,window.innerWidth-ui.menu.offsetWidth-8))}px`;
+  ui.menu.style.top=`${box.bottom+height+8<=window.innerHeight?box.bottom+6:Math.max(8,box.top-height-6)}px`;
+}
+window.addEventListener("resize",positionMenu);
+window.addEventListener("scroll",()=>{if(!ui.menu.hidden)ui.menu.hidden=true;},{passive:true});
 function render(){
   ui.opponent.replaceChildren(playerView(1));ui.self.replaceChildren(playerView(0));
   if(game.winner!=null)ui.status.textContent=`${game.winner===0?"自分":"相手"}の勝ち（${{PRIZES:"サイド取得",NO_POKEMON:"場のポケモンがいない",DECK_OUT:"山札切れ"}[game.winReason]??game.winReason}）`;
@@ -115,32 +192,38 @@ function render(){
   else if(game.pendingKnockout)ui.status.textContent="きぜつ処理：サイドを取り、次のバトルポケモンを選びます";
   else if(game.phase==="setup")ui.status.textContent="対戦準備：両者のたねポケモンをバトル場に置き、準備完了を押してください";
   else ui.status.textContent=`${game.turnNo}番目：${game.turn===0?"自分（先攻）":"相手（後攻）"}の番${game.turnNo===1?"・先攻1ターン目はワザを使えません":""}${game.stadium?` ／ スタジアム：${repository.get(game.stadium.cardId).name}`:""}${game.pendingSecondAttack?" ／ おまつりおんど：２回目のワザを選んでください":""}`;
-  ui.actions.replaceChildren();
+  ui.opponentActions.replaceChildren();ui.selfActions.replaceChildren();ui.menu.replaceChildren();ui.menu.hidden=true;
+  const legal=engine.getMatchActions(game);
+  const globalTypes=["READY_SETUP","END_TURN","TAKE_PRIZE","PROMOTE_BENCH"];
+  for(let player=0;player<2;player++){
+    const container=player===0?ui.selfActions:ui.opponentActions;
+    const common=legal.filter(action=>action.player===player&&globalTypes.includes(action.type));
+    if(common.length)container.append(...common.map(actionButton));
+    else container.append(element("span","zone-title",game.phase==="setup"?"カードをタップして初期配置":"場や手札のカードをタップして操作"));
+  }
   let picked;
   if(selected){
     picked=game.players.flatMap(p=>[...p.hand,p.active,...p.bench]).find(x=>x?.instanceId===selected);
-    if(picked?.attached?.length)ui.actions.append(element("div","attached-summary",
-      `${repository.get(picked.cardId).name}：ついているエネルギー ${picked.attached.map(x=>repository.get(x.cardId).name).join("、")}`));
   }
-  let actions=engine.getMatchActions(game);
-  if(selected)actions=actions.filter(x=>x.sourceInstanceId===selected||x.targetInstanceId===selected||["READY_SETUP","END_TURN","TAKE_PRIZE","PROMOTE_BENCH","RETREAT"].includes(x.type));
-  else actions=actions.filter(x=>!["SET_ACTIVE","SET_BENCH","BENCH_BASIC","ATTACH_ENERGY","EVOLVE","USE_ABILITY","PLAY_STADIUM"].includes(x.type));
+  if(!picked)return;
+  const owner=game.players.findIndex(p=>[...p.hand,p.active,...p.bench].some(x=>x?.instanceId===selected));
+  const actions=legal.filter(action=>action.player===owner&&!globalTypes.includes(action.type)&&
+    (action.sourceInstanceId===selected||action.targetInstanceId===selected||
+      (action.type==="RETREAT"&&game.players[owner].active?.instanceId===selected)));
+  const head=element("div","menu-head");head.append(element("span","",repository.get(picked.cardId).name));
+  const close=element("button","","閉じる");close.onclick=()=>{selected=null;ui.menu.hidden=true;render();};head.append(close);
+  ui.menu.append(head);
+  if(picked.attached?.length)ui.menu.append(element("div","attached-summary",
+    `ついているエネルギー：${picked.attached.map(x=>repository.get(x.cardId).name).join("、")}`));
   const chosenCard=picked&&repository.get(picked.cardId);
   const unsupportedReason=chosenCard?.cardType==="pokemon"&&engine.entries(picked).some(entry=>entry.status!=="supported")
     ?"このポケモンの特性が未対応のため、現在の対戦試験では場に出せません。"
     :chosenCard?.cardType==="trainer"&&!actions.some(x=>x.sourceInstanceId===selected)?"このトレーナーズの効果はまだ未対応です。"
     :chosenCard?.energyType==="special"&&!engine.isSupportedEnergy(picked)?"この特殊エネルギーの効果はまだ未対応です。":null;
-  if(unsupportedReason&&!actions.some(x=>x.sourceInstanceId===selected||x.targetInstanceId===selected))
-    ui.actions.append(element("span","",unsupportedReason));
-  if(!actions.length){
-    if(!unsupportedReason)ui.actions.append(element("span","",selected?"このカードで選べる操作はありません。":"手札や場のカードをタップして操作を選んでください。"));
-  }
-  for(const action of actions){
-    const label=actionLabel(action),button=element("button","action",label);
-    button.onclick=()=>{try{game=engine.applyMatchAction(game,action);selected=null;ui.message.textContent=label+"を処理しました。";render();}
-      catch(error){ui.message.textContent="処理を停止しました："+error.message;}};
-    ui.actions.append(button);
-  }
+  if(unsupportedReason&&!actions.length)ui.menu.append(element("p","",unsupportedReason));
+  if(!actions.length&&!unsupportedReason)ui.menu.append(element("p","","このカードで選べる操作はありません。"));
+  const list=element("div","actions");list.append(...actions.map(actionButton));ui.menu.append(list);
+  ui.menu.hidden=false;positionMenu();
 }
 function newGame(){
   try{
