@@ -1,4 +1,4 @@
-import { AttackEngine } from "./AttackEngine.js?v=20260924-ray1";
+import { AttackEngine } from "./AttackEngine.js?v=20260924-allattacks1";
 
 const BASIC = "たね";
 const TRAINERS = {
@@ -282,6 +282,39 @@ export class MatchEngine extends AttackEngine {
     }
   }
 
+  attackEffectActions(state) {
+    const pending=state.pendingAttack,owner=state.players[pending.player];
+    if(pending.type === "PROMOTE_SELF")return owner.bench.map(x=>({type:"ATTACK_PROMOTE",player:pending.player,
+      targetInstanceId:x.instanceId}));
+    if(pending.type === "DISCARD_ENERGY")return state.players[1-pending.player].active.attached.map(x=>({
+      type:"ATTACK_DISCARD_ENERGY",player:pending.player,choiceInstanceId:x.instanceId}));
+    const choices=owner.deck.filter(x=>pending.filter==="any"||this.card(x).cardType==="pokemon");
+    return [...choices.map(x=>({type:"ATTACK_SEARCH",player:pending.player,choiceInstanceId:x.instanceId})),
+      {type:"ATTACK_SEARCH_FINISH",player:pending.player}];
+  }
+
+  applyAttackEffect(state,action) {
+    const next=structuredClone(state),pending=next.pendingAttack;
+    const own=next.players[pending.player];
+    if(action.type === "ATTACK_SEARCH"){
+      const i=own.deck.findIndex(x=>x.instanceId===action.choiceInstanceId);
+      own.hand.push(own.deck.splice(i,1)[0]);pending.chosen++;
+      if(pending.chosen<pending.max && own.deck.some(x=>pending.filter==="any"||this.card(x).cardType==="pokemon"))return next;
+      this.shufflePlayer(next,own);
+    }else if(action.type === "ATTACK_SEARCH_FINISH")this.shufflePlayer(next,own);
+    else if(action.type === "ATTACK_DISCARD_ENERGY"){
+      const enemy=next.players[1-pending.player],attached=enemy.active.attached;
+      const i=attached.findIndex(x=>x.instanceId===action.choiceInstanceId);
+      enemy.trash.push(attached.splice(i,1)[0]);
+    }else if(action.type === "ATTACK_PROMOTE"){
+      const i=own.bench.findIndex(x=>x.instanceId===action.targetInstanceId);
+      own.active=own.bench.splice(i,1)[0];
+    }
+    delete next.pendingAttack;
+    if(pending.delayedVictims)return this.beginKnockout(next,pending.delayedVictims,pending.targetInstanceId);
+    return this.endTurn(next);
+  }
+
   getMatchActions(state) {
     this.assertSandbox(state);
     if (state.winner != null) return [];
@@ -304,6 +337,7 @@ export class MatchEngine extends AttackEngine {
     }
     if (state.phase !== "playing") throw new Error("Unsupported match phase");
     if (state.pendingKnockout) return this.getKnockoutActions(state);
+    if (state.pendingAttack) return this.attackEffectActions(state);
     if (state.pendingSecondAttack) return this.getLegalAttacks(state);
     if (state.pendingTrainer) return this.trainerActions(state);
     if (state.pendingAbility) return this.abilityChoiceActions(state);
@@ -357,7 +391,9 @@ export class MatchEngine extends AttackEngine {
     }
     if (action.type === "USE_ABILITY") return super.applyAction(state, action);
     if (action.type === "ATTACK") return super.applyAttack(state, action);
-    if (["TAKE_PRIZE", "PROMOTE_BENCH"].includes(action.type)) return this.applyKnockoutAction(state, action);
+    if (["TAKE_PRIZE", "PROMOTE_BENCH", "RESOLVE_KNOCKOUT"].includes(action.type)) return this.applyKnockoutAction(state, action);
+    if(action.type.startsWith("ATTACK_SEARCH") || ["ATTACK_DISCARD_ENERGY","ATTACK_PROMOTE"].includes(action.type))
+      return this.applyAttackEffect(state,action);
     if (action.type === "END_TURN") return this.endTurn(state);
     if (action.type.startsWith("TRAINER_") || action.type.startsWith("AKAMATSU_") || action.type === "PLAY_TRAINER") return this.applyTrainer(state, action);
     if (["ABILITY_SELECT","ABILITY_SKIP"].includes(action.type)) return this.applyBenchAbility(state,action);
@@ -470,6 +506,9 @@ export class MatchEngine extends AttackEngine {
         const chosen=player.deck.splice(i,1)[0];pending.selectedNames.push(this.card(chosen).name);
         if (spec.zone === "bench") {chosen.enteredTurn=next.turnNo;player.bench.push(chosen);}
         else player.hand.push(chosen);
+        if(pending.selectedNames.length >= spec.max || !player.deck.some(x=>this.searchCandidate(x,spec,pending,player))){
+          this.shufflePlayer(next,player);delete next.pendingTrainer;
+        }
       } else if (action.type === "TRAINER_FINISH") {
         this.shufflePlayer(next,player);delete next.pendingTrainer;
       }

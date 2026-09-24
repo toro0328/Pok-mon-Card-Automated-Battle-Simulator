@@ -1,0 +1,41 @@
+{
+  "officialCardId": 50749,
+  "name": "基本超エネルギー",
+  "regulation": null,
+  "cardType": "energy",
+  "trainerType": null,
+  "energyType": "basic",
+  "source": {
+    "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50749",
+    "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6a/050749_E_KIHONCHIXYOUENERUGI.jpg",
+    "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+    "fallbackDataset": "type-null/PTCG-database",
+    "fallbackPath": "data_jp/M6a/50749.json"
+  },
+  "raw": {
+    "url": "https://www.pokemon-card.com/card-search/details.php/card/50749",
+    "name": "基本超エネルギー",
+    "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6a/050749_E_KIHONCHIXYOUENERUGI.jpg",
+    "card_type": "基本エネルギー",
+    "jp_id": 50749,
+    "set_name": "M6a",
+    "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6a.gif",
+    "author": [
+      "YOSHIROTTEN"
+    ],
+    "sources": [
+      {
+        "name": "拡張パック 30th CELEBRATION（CL2027 横浜 使用可能カード）",
+        "link": null
+      }
+    ]
+  },
+  "engine": {
+    "status": "unparsed",
+    "effects": [],
+    "handler": null,
+    "notes": [
+      "Reference data only; printed regulation and effects are unverified."
+    ]
+  }
+}

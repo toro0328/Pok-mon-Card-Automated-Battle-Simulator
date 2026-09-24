@@ -29,6 +29,46 @@ const PATTERNS = [
   {
     expression: /^自分のポケモン全員のHPを、それぞれ「([1-9][0-9]*)」回復する。$/,
     convert: match => [{ type: "HEAL_OWN_FIELD", amount: Number(match[1]) }]
+  },
+  {
+    expression: /^自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。$/,
+    convert: () => [{type:"SEARCH_DECK",max:1,filter:"pokemon"}]
+  },
+  {
+    expression: /^のぞむなら、自分の山札から好きなカードを2枚まで選び、手札に加える。そして山札を切る。$/,
+    convert: () => [{type:"SEARCH_DECK",max:2,filter:"any"}]
+  },
+  {
+    expression: /^コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。$/,
+    convert: () => [{type:"COIN_DISCARD_ENERGY"}]
+  },
+  {
+    expression: /^相手のバトルポケモンについているエネルギーの数×([1-9][0-9]*)ダメージ追加。$/,
+    convert: match => [{type:"MODIFY_DAMAGE",basis:"DEFENDING_ATTACHED_ENERGY_COUNT",perEnergy:Number(match[1])}]
+  },
+  {
+    expression: /^ウラが出るまでコインを投げ、オモテの数×([1-9][0-9]*)ダメージ追加。$/,
+    convert: match => [{type:"MODIFY_DAMAGE",basis:"COIN_UNTIL_TAILS",perHeads:Number(match[1])}]
+  },
+  {
+    expression: /^このワザは、後攻プレイヤーの最初の番には使えない。自分のベンチポケモンの数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{type:"SET_DAMAGE",basis:"OWN_BENCH_COUNT",perPokemon:Number(match[1]),noFirstSecondTurn:true}]
+  },
+  {
+    expression: /^次の相手の番、このポケモンはたねポケモン（Colorlessポケモンをのぞく）からワザのダメージを受けない。$/,
+    convert: () => [{type:"PREVENT_BASIC_NON_COLORLESS_DAMAGE_NEXT_OPPONENT_TURN"}]
+  },
+  {
+    expression: /^このポケモンと、ついているすべてのカードを、手札にもどす。$/,
+    convert: () => [{type:"RETURN_SELF_TO_HAND"}]
+  },
+  {
+    expression: /^次の自分の番、このポケモンはワザが使えない。$/,
+    convert: () => [{type:"PREVENT_SELF_ATTACK_NEXT_TURN"}]
+  },
+  {
+    expression: /^相手のポケモン1匹に、([1-9][0-9]*)ダメージ。［ベンチは弱点・抵抗力を計算しない。］$/,
+    convert: match => [{type:"DAMAGE_CHOSEN_OPPONENT",amount:Number(match[1])}]
   }
 ];
 
@@ -52,7 +92,9 @@ export function inspectAttacks(card) {
       typeof type === "string" &&
       (type === "Void" ? cost.length === 1 && i === 0 :
         ["Colorless", "Grass", "Fire", "Water", "Electric", "Psychic", "Fighting", "Dark", "Metal", "Steel", "Dragon"].includes(type)));
-    const validDamage = Number.isInteger(damage?.amount) && damage.amount >= 0 &&
+    const noPrintedDamage = damage === null && parsed.effects.length === 1 &&
+      ["SEARCH_DECK","DAMAGE_CHOSEN_OPPONENT"].includes(parsed.effects[0].type);
+    const validDamage = noPrintedDamage || Number.isInteger(damage?.amount) && damage.amount >= 0 &&
       (damage.suffix === "" || (damage.suffix === "＋" && parsed.effects.length === 1 &&
         parsed.effects[0].type === "MODIFY_DAMAGE") ||
         (damage.suffix === "×" && parsed.effects.length === 1 &&

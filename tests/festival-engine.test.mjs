@@ -10,6 +10,8 @@ db.cards.push(...JSON.parse(fs.readFileSync("tests/fixtures/attack-cards.json","
   ...JSON.parse(fs.readFileSync("tests/fixtures/festival-cards.json","utf8")),
   ...JSON.parse(fs.readFileSync("tests/fixtures/trainer-cards.json","utf8")),
   ...JSON.parse(fs.readFileSync("tests/fixtures/rayquaza-cards.json","utf8")),
+  JSON.parse(fs.readFileSync("tests/fixtures/water-energy.json","utf8")),
+  JSON.parse(fs.readFileSync("tests/fixtures/psychic-energy.json","utf8")),
   JSON.parse(fs.readFileSync("tests/fixtures/grow-grass-energy.json","utf8")));
 const catalog={cardCount:db.cards.length,sourceUpdatedAt:db.updatedAt,abilities:{}};
 for(const c of db.cards)if(c.raw.abilities?.length)catalog.abilities[c.officialCardId]=
@@ -24,6 +26,113 @@ const game=(own,foe)=>({ruleset:"supported_abilities_v1",stadium:null,stadiumOwn
   retreatedThisTurn:false,players:[own,foe],usedAbilities:{instances:[],names:[]},
   knockoutThisTurn:[false,false],previousOpponentTurnKnockout:[false,false],randomState:42});
 const find=(state,type)=>engine.getMatchActions(state).find(action=>action.type===type);
+
+test("every printed attack in the two loaded decks has an executable effect definition",()=>{
+  for(const filename of ["data/decks/self-rayquaza.json","data/decks/opponent-festival.json"]){
+    const deck=JSON.parse(fs.readFileSync(filename,"utf8"));
+    for(const {officialCardId} of deck.cards){
+      const card=engine.repository.get(officialCardId);
+      if(!card||card.cardType!=="pokemon")continue;
+      assert.ok(engine.attacks({cardId:officialCardId}).every(x=>x.status==="supported"),card.name);
+    }
+  }
+});
+
+test("Applin search and Talonflame search finish immediately after the maximum selections",()=>{
+  let state=game(player(card("applin",45624,[card("e",50745)]),[],[],
+    [card("pokemon",45699),card("extra",50745)]),player(card("mega",48466)));
+  state=engine.applyMatchAction(state,find(state,"ATTACK"));
+  assert.equal(state.pendingAttack.type,"SEARCH_DECK");
+  state=engine.applyMatchAction(state,find(state,"ATTACK_SEARCH"));
+  assert.equal(state.pendingAttack,undefined);
+  assert.equal(state.players[0].hand[0].instanceId,"pokemon");
+  assert.equal(state.turn,1);
+  state=game(player(card("talon",50400,[card("a",50745),card("b",50745)]),[],[],
+    [card("one",50745),card("two",50745),card("three",50745)]),player(card("mega",48466)));
+  state=engine.applyMatchAction(state,find(state,"ATTACK"));
+  assert.equal(state.players[1].active.damage,150);
+  state=engine.applyMatchAction(state,find(state,"ATTACK_SEARCH"));
+  assert.equal(state.turn,0);
+  state=engine.applyMatchAction(state,find(state,"ATTACK_SEARCH"));
+  assert.equal(state.pendingAttack,undefined);
+  assert.equal(state.turn,1);
+});
+
+test("Kangaskhan coin damage is deterministic; Seaking bonus uses defending Energy",()=>{
+  const own=player(card("kang",47847,[card("a",50745),card("b",50745),card("c",50745)]));
+  let state=game(own,player(card("target",46027)));
+  const attack=find(state,"ATTACK"),expected=engine.calculateAttackDamage(state,attack);
+  state=engine.applyMatchAction(state,attack);
+  assert.equal(state.lastAttack.damage,expected);
+  assert.match(state.lastAttack.coin,/オモテ/);
+  const seaking=player(card("beetle",46675,[card("grass",50745)]));
+  const defending=player(card("target",47847,[card("fire",47904),card("electric",47906)]));
+  assert.equal(engine.calculateAttackDamage(game(seaking,defending),find(game(seaking,defending),"ATTACK")),70);
+});
+
+test("Goldeen heads discards a chosen opposing Energy after applying damage",()=>{
+  const own=player(card("goldeen",45717,[card("a",50745),card("b",50745)]));
+  const foe=player(card("mega",47847,[card("fire",47904),card("electric",47906)]));
+  let state=game(own,foe);
+  state.randomState=123456789;
+  state=engine.applyMatchAction(state,find(state,"ATTACK"));
+  assert.equal(state.players[1].active.damage,10);
+  assert.equal(state.pendingAttack.type,"DISCARD_ENERGY");
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.choiceInstanceId==="electric"));
+  assert.equal(state.players[1].active.attached.length,1);
+  assert.equal(state.players[1].trash[0].instanceId,"electric");
+});
+
+test("Terapagos forbids the first second-player Union Beat and blocks the specified next-turn attack",()=>{
+  let state=game(player(card("enemy",45699,[card("grass",50745)])),
+    player(card("tera",46027,[card("a",50745),card("b",47906)])));
+  state.turn=1;state.turnNo=2;state.turnsTaken=[1,0];
+  assert.equal(engine.getMatchActions(state).some(x=>x.type==="ATTACK"&&x.attackIndex===0),false);
+  state=game(player(card("tera",46027,[card("grass",50745),card("water",50747),card("electric",47906)])),
+    player(card("enemy",47315,[card("f1",47904),card("f2",47904),card("f3",47904),card("f4",47904)])));
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="ATTACK"&&x.attackIndex===1));
+  assert.equal(state.turn,1);
+  const response=engine.getMatchActions(state).find(x=>x.type==="ATTACK");
+  assert.equal(engine.calculateAttackDamage(state,response),0);
+});
+
+test("Kichikigisu hits a Bench target and resolves its prize without forcing promotion",()=>{
+  const own=player(card("bird",45913,[card("a",50745),card("b",50745),card("c",50745)]));
+  const foe=player(card("active",47847),[card("bench",45699)]);
+  let state=game(own,foe);
+  const shot=engine.getMatchActions(state).find(x=>x.type==="ATTACK"&&x.targetInstanceId==="bench");
+  state=engine.applyMatchAction(state,shot);
+  assert.equal(state.players[1].bench.length,0);
+  assert.equal(state.players[1].active.instanceId,"active");
+  assert.equal(state.pendingKnockout.remaining,1);
+  state=engine.applyMatchAction(state,find(state,"TAKE_PRIZE"));
+  state=engine.applyMatchAction(state,find(state,"RESOLVE_KNOCKOUT"));
+  assert.equal(state.turn,1);
+});
+
+test("Meowth returns itself and attachments to hand, then promotes a Bench Pokémon",()=>{
+  let state=game(player(card("cat",49694,[card("fire",47904)]),[card("ray",50396)]),
+    player(card("foe",47847)));
+  state.players[0].active.attached.push(card("a",47906),card("b",47906));
+  state=engine.applyMatchAction(state,find(state,"ATTACK"));
+  assert.equal(state.players[0].hand.length,4);
+  assert.equal(state.players[0].active,null);
+  state=engine.applyMatchAction(state,find(state,"ATTACK_PROMOTE"));
+  assert.equal(state.players[0].active.instanceId,"ray");
+  assert.equal(state.turn,1);
+});
+
+test("Latias attack prevents itself from attacking on its next own turn",()=>{
+  let state=game(player(card("latias",46248,[card("p1",50749),card("p2",50749),card("p3",50745)])),
+    player(card("foe",47847)));
+  state=engine.applyMatchAction(state,find(state,"ATTACK"));
+  state=engine.applyMatchAction(state,find(state,"END_TURN"));
+  assert.equal(state.turn,0);
+  assert.equal(engine.getMatchActions(state).some(x=>x.type==="ATTACK"),false);
+  state=engine.applyMatchAction(state,find(state,"END_TURN"));
+  state=engine.applyMatchAction(state,find(state,"END_TURN"));
+  assert.equal(engine.getMatchActions(state).some(x=>x.type==="ATTACK"),true);
+});
 
 test("Rayquaza benches from hand, attaches a Basic Energy from top four and preserves lower deck",()=>{
   const own=player(card("latias",46248),[],[card("ray",50396)],
@@ -107,10 +216,22 @@ test("Hyper Ball pays two distinct hand cards, searches a Pokémon and shuffles 
   assert.equal(engine.getMatchActions(state).filter(x=>x.type==="TRAINER_DISCARD").length,1);
   state=engine.applyMatchAction(state,find(state,"TRAINER_DISCARD"));
   state=engine.applyMatchAction(state,find(state,"TRAINER_SELECT"));
-  state=engine.applyMatchAction(state,find(state,"TRAINER_FINISH"));
   assert.equal(state.players[0].hand[0].instanceId,"mon");
   assert.equal(state.players[0].trash.length,3);
   assert.equal(state.pendingTrainer,undefined);
+});
+
+test("Poké Pad searches one ruleless Pokémon and shuffles without a finish action",()=>{
+  let state=game(player(card("dip",45703),[],[card("pad",49601)],
+    [card("ruleless",45699),card("ex",47847),card("other",50745)]),
+    player(card("mega",48466)));
+  state=engine.applyMatchAction(state,find(state,"PLAY_TRAINER"));
+  assert.deepEqual(engine.getMatchActions(state).filter(x=>x.type==="TRAINER_SELECT")
+    .map(x=>x.choiceInstanceId),["ruleless"]);
+  state=engine.applyMatchAction(state,find(state,"TRAINER_SELECT"));
+  assert.equal(state.pendingTrainer,undefined);
+  assert.equal(state.players[0].hand[0].instanceId,"ruleless");
+  assert.equal(engine.getMatchActions(state).some(x=>x.type==="TRAINER_FINISH"),false);
 });
 
 test("Poffin puts eligible Basics on Bench and Budew blocks items",()=>{
@@ -147,7 +268,7 @@ test("festival abilities compile as reusable primitives while unknown text still
     assert.ok(catalog.abilities[id].every(x=>x.status==="supported"));
   assert.equal(parseAbility("未知","未知の特性。").status,"needs_review");
   assert.equal(engine.attacks(card("dip",45703))[0].status,"supported");
-  assert.equal(engine.attacks(card("goldeen",45717))[0].status,"needs_review");
+  assert.equal(engine.attacks(card("goldeen",45717))[0].status,"supported");
 });
 
 test("festival Pokémon evolves from the printed Basic only after its placement turn",()=>{

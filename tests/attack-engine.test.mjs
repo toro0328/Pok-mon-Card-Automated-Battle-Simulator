@@ -76,14 +76,13 @@ test("Ogerpon three Grass Energy enables Manyō Shigure and counts both active P
     player(card("target", 47069))))[0]), 240); // Grass weakness, 120 × 2
 });
 
-test("unknown attack text and variable printed damage remain unavailable", () => {
+test("Talonflame search attack is supported while unrelated unknown attacks stay unavailable", () => {
   const talonflame = engine.repository.get(50400);
-  assert.equal(inspectAttacks(talonflame)[0].status, "needs_review");
+  assert.equal(inspectAttacks(talonflame)[0].status, "supported");
   const game = state(player(card("falcon", 50400, [card("e", 50745), card("f", 50745)])),
     player(card("target", 48466)));
-  assert.equal(engine.getLegalAttacks(game).length, 0);
-  assert.throws(() => engine.applyAttack(game, { type: "ATTACK", player: 0,
-    sourceInstanceId: "falcon", attackIndex: 0 }), /Illegal/);
+  assert.equal(engine.getLegalAttacks(game).length, 1);
+  assert.equal(inspectAttacks(engine.repository.get(46008))[0].status,"needs_review");
 });
 
 test("damage reduction and resistance do not drop below zero", () => {
