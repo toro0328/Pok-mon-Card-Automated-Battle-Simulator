@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: card-db-sync
+  cancel-in-progress: false
+
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -16,33 +20,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       - name: Discover official card IDs
         run: python scripts/sync-official-cards.py
-      - name: Import missing Standard cards
-        run: |
-          # cards.json is the source of truth for what has actually been imported.
-          # Pick up to 20 Standard IDs that are present in the manifest but absent
-          # from the DB. This also handles migration from the old all-regulation
-          # manifest where newIds may incorrectly be empty.
-          python - <<'PY'
-          import json, subprocess
-          manifest=json.load(open("data/cards/official-id-manifest.json",encoding="utf-8"))
-          db=json.load(open("data/cards/cards.json",encoding="utf-8"))
-          known={int(c["officialCardId"]) for c in db.get("cards",[])}
-          standard=[]
-          by_reg=manifest.get("idsByRegulation",{})
-          for reg in ("H","I","J"):
-              standard.extend(int(x) for x in by_reg.get(reg,[]))
-          if not standard:
-              standard=[int(x) for x in manifest.get("ids",[])]
-          missing=sorted(set(standard)-known, reverse=True)
-          ids=missing[:20]
-          print(f"DB cards: {len(known)} / Standard IDs: {len(set(standard))} / missing: {len(missing)} / batch: {len(ids)}")
-          if ids:
-              subprocess.check_call(["python","scripts/import-official-cards.py","--limit","20","--ids",*map(str,ids)])
-          else:
-              print("No missing Standard card IDs.")
-          PY
+
+      - name: Fetch Japanese card mirror
+        run: git clone --depth 1 https://github.com/type-null/PTCG-database.git /tmp/PTCG-database
+
+      - name: Import missing cards from mirror
+        run: python scripts/import-reference-cards.py --source-dir /tmp/PTCG-database/data_jp --limit 20
+
       - name: Commit DB changes
         run: |
           if git diff --quiet; then
