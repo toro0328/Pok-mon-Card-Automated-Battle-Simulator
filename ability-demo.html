@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>特性エンジン試験 | ポケカ対戦</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#14223a;background:#f1f5fb}
+*{box-sizing:border-box}body{margin:0}header{padding:18px;background:#142c50;color:white}
+header a{color:#bfe3ff}main{max-width:800px;margin:auto;padding:16px}
+h1{font-size:1.35rem;margin:0 0 6px}h2{font-size:1.05rem;margin:8px 0}
+.notice{background:#fff3cf;border:1px solid #e6cb76;border-radius:10px;padding:12px}
+label{display:block;margin:18px 0 8px;font-weight:700}select,button{font:inherit;border-radius:9px;padding:10px}
+select{width:100%;border:1px solid #8ca2b9;background:white}
+button{border:0;background:#16499a;color:white;margin:4px;cursor:pointer}
+button:disabled{background:#96a1ae}
+.panel{background:white;border:1px solid #d3dfeb;border-radius:12px;padding:14px;margin:12px 0}
+.row{display:flex;gap:6px;flex-wrap:wrap}.card{border-radius:8px;border:1px solid #a8bacf;background:#e9f1ff;padding:7px 10px;font-size:.87rem}
+.pokemon{background:#e8f8ed}.energy{background:#fff2c7}.muted{color:#526579}
+#message{min-height:24px;font-weight:700}small{font-weight:400}
+</style>
+</head>
+<body>
+<header><h1>特性エンジン試験</h1><a href="./index.html">対戦画面に戻る</a></header>
+<main>
+<p class="notice">実カードの特性を一部だけ試せます。ワザ・きぜつ・サイドなどを含む通常対戦は、まだ実装中です。未対応の特性は使える行動として表示しません。</p>
+<p id="message">カードDBを読み込み中…</p>
+<label for="scenario">試す場面</label>
+<select id="scenario">
+<option value="talonflame">自分のメガガルーラex＋手札のファイアローex</option>
+<option value="opponent">相手のメガガルーラex＋手札のファイアローex</option>
+<option value="trade">Nのゾロアークex：手札を捨てて2枚引く</option>
+<option value="ogerpon">オーガポンex：基本草エネルギーをつけて1枚引く</option>
+<option value="defense">モジャンボ：ワザのダメージを減らす</option>
+</select>
+<div class="panel" id="board"></div>
+<div class="panel"><h2>使用可能な特性</h2><div id="actions" class="row"></div></div>
+<div class="panel" id="result"></div>
+</main>
+<script type="module">
+import { CardRepository } from "./src/card-db/CardRepository.js";
+import { AbilityEngine } from "./src/engine/AbilityEngine.js";
+
+const message = document.getElementById("message");
+const board = document.getElementById("board");
+const actions = document.getElementById("actions");
+const result = document.getElementById("result");
+const selector = document.getElementById("scenario");
+let repo, engine, state;
+let serial = 0;
+const make = cardId => ({ instanceId: "demo-" + (++serial), cardId, attached: [] });
+const pile = (id, n) => Array.from({length:n}, () => make(id));
+const player = (active=null, hand=[], deck=[], bench=[]) => ({ active, hand, deck, bench, trash: [] });
+function scenario() {
+  serial = 0;
+  const energy = () => pile(50745, 5);
+  let self, foe;
+  switch(selector.value) {
+    case "talonflame":
+      self=player(make(48466),[make(50400)],energy()); foe=player(); break;
+    case "opponent":
+      self=player(null,[make(50400)],energy()); foe=player(make(48466)); break;
+    case "trade":
+      self=player(make(47069),[make(50745),make(50745)],energy()); foe=player(); break;
+    case "ogerpon":
+      self=player(make(45707),[make(50745)],energy()); foe=player(); break;
+    default:
+      self=player(make(45578),[],energy()); foe=player();
+  }
+  return {ruleset:"supported_abilities_v1",stadium:null,turn:0,
+    players:[self,foe],usedAbilities:{instances:[],names:[]}};
+}
+function name(card) {return repo.get(card.cardId)?.name ?? "不明";}
+function cards(items) {
+  const wrapper=document.createElement("div");wrapper.className="row";
+  if (!items.length) {wrapper.textContent="なし";wrapper.classList.add("muted");}
+  for (const item of items) {
+    const element=document.createElement("span");
+    element.className="card "+repo.get(item.cardId)?.cardType;
+    element.textContent=name(item)+(item.attached?.length ? "（エネルギー"+item.attached.length+"枚）" : "");
+    wrapper.append(element);
+  }
+  return wrapper;
+}
+function zone(parent, label, items) {
+  const title=document.createElement("h2");title.textContent=label;parent.append(title,cards(items));
+}
+function render() {
+  board.replaceChildren();actions.replaceChildren();result.replaceChildren();
+  const own=state.players[0],other=state.players[1];
+  zone(board,"相手のバトル場",other.active?[other.active]:[]);
+  zone(board,"自分のバトル場",own.active?[own.active]:[]);
+  zone(board,"自分のベンチ",own.bench);
+  zone(board,"自分の手札",own.hand);
+  const counts=document.createElement("p");counts.textContent="山札 "+own.deck.length+"枚 / トラッシュ "+own.trash.length+"枚";
+  board.append(counts);
+  const available=engine.getLegalActions(state);
+  if (!available.length) actions.textContent="この場面で使用可能な特性はありません。";
+  for (const action of available) {
+    const source=[own.active,...own.bench,...own.hand].find(x=>x?.instanceId===action.sourceInstanceId);
+    const ability=engine.entries(source)[action.abilityIndex];
+    const selected=own.hand.find(x=>x.instanceId===action.choiceInstanceId);
+    const button=document.createElement("button");
+    button.textContent=name(source)+"「"+ability.name+"」を使う"+(selected?"（"+name(selected)+"を選ぶ）":"");
+    button.onclick=()=>{state=engine.applyAction(state,action);message.textContent="特性「"+ability.name+"」を処理しました。";render();};
+    actions.append(button);
+  }
+  if (selector.value==="defense") {
+    const button=document.createElement("button");button.textContent="ワザの100ダメージを計算";
+    button.onclick=()=>{result.textContent="100ダメージ → "+engine.incomingAttackDamage(state,own.active.instanceId,100)+"ダメージ";};
+    result.append(button);
+  } else result.textContent="特性を選ぶと盤面に反映されます。";
+}
+selector.onchange=()=>{state=scenario();message.textContent="場面を切り替えました。";render();};
+try {
+  const [loaded, response]=await Promise.all([CardRepository.load("./data/cards/cards.json"),
+    fetch("./data/cards/ability-effects.json")]);
+  if(!response.ok) throw Error("特性データを取得できません");
+  repo=loaded;engine=new AbilityEngine(repo,await response.json());
+  state=scenario();message.textContent="準備できました。";render();
+} catch(error) {message.textContent="読み込みに失敗しました: "+error.message;}
+</script>
+</body>
+</html>

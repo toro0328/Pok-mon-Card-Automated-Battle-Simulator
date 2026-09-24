@@ -1,0 +1,969 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-09-24T08:41:29.255624+00:00",
+  "cards": [
+    {
+      "officialCardId": 50400,
+      "name": "ファイアローex",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50400",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050400_P_FUAIAROIEKKUSU.jpg",
+        "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+        "fallbackDataset": "type-null/PTCG-database",
+        "fallbackPath": "data_jp/M6/50400.json"
+      },
+      "raw": {
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/50400",
+        "name": "ファイアローex",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050400_P_FUAIAROIEKKUSU.jpg",
+        "card_type": "Pokémon",
+        "jp_id": 50400,
+        "tags": [
+          "ex"
+        ],
+        "set_name": "M6",
+        "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6.gif",
+        "number": "062",
+        "set_total": "076",
+        "rarity": "rare_rr",
+        "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_rr.gif",
+        "author": [
+          "5ban Graphics"
+        ],
+        "stage": "2 進化",
+        "hp": 280,
+        "types": [
+          "Colorless"
+        ],
+        "abilities": [
+          {
+            "name": "エキサイトダイブ",
+            "effect": "自分の番に、このカードが手札にあり、自分の場にColorlessタイプの「メガシンカex」がいるなら、1回使える。このカードをベンチに出す。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Colorless",
+              "Colorless"
+            ],
+            "name": "かぎづめハント",
+            "damage": {
+              "amount": 150,
+              "suffix": ""
+            },
+            "effect": "のぞむなら、自分の山札から好きなカードを2枚まで選び、手札に加える。そして山札を切る。"
+          }
+        ],
+        "rule_box": "ポケモンexがきぜつしたとき、相手はサイドを2枚とる。",
+        "weakness": {
+          "type": [
+            "Electric"
+          ],
+          "value": "×2"
+        },
+        "resistance": {
+          "type": [
+            "Fighting"
+          ],
+          "value": "－30"
+        },
+        "retreat": 0,
+        "evolve_from": "ヒノヤコマ",
+        "sources": [
+          {
+            "name": "拡張パック「ストームエメラルダ」",
+            "link": "https://www.pokemon-card.com/ex/m6/"
+          }
+        ],
+        "types_en": [
+          "Colorless"
+        ],
+        "pokedex_number": 663,
+        "print_key": "asia:M6-62",
+        "card_key": "663|280|0|5ban Graphics|150|2"
+      },
+      "engine": {
+        "status": "unparsed",
+        "effects": [],
+        "handler": null,
+        "notes": [
+          "Reference data only; printed regulation and effects are unverified."
+        ]
+      }
+    },
+    {
+      "officialCardId": 50537,
+      "name": "ファイアローex",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50537",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050537_P_FUAIAROIEKKUSU.jpg",
+        "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+        "fallbackDataset": "type-null/PTCG-database",
+        "fallbackPath": "data_jp/M6/50537.json"
+      },
+      "raw": {
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/50537",
+        "name": "ファイアローex",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050537_P_FUAIAROIEKKUSU.jpg",
+        "card_type": "Pokémon",
+        "jp_id": 50537,
+        "tags": [
+          "ex"
+        ],
+        "set_name": "M6",
+        "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6.gif",
+        "number": "096",
+        "set_total": "076",
+        "rarity": "rare_sr_c",
+        "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_sr_c.gif",
+        "author": [
+          "5ban Graphics"
+        ],
+        "stage": "2 進化",
+        "hp": 280,
+        "types": [
+          "Colorless"
+        ],
+        "abilities": [
+          {
+            "name": "エキサイトダイブ",
+            "effect": "自分の番に、このカードが手札にあり、自分の場にColorlessタイプの「メガシンカex」がいるなら、1回使える。このカードをベンチに出す。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Colorless",
+              "Colorless"
+            ],
+            "name": "かぎづめハント",
+            "damage": {
+              "amount": 150,
+              "suffix": ""
+            },
+            "effect": "のぞむなら、自分の山札から好きなカードを2枚まで選び、手札に加える。そして山札を切る。"
+          }
+        ],
+        "rule_box": "ポケモンexがきぜつしたとき、相手はサイドを2枚とる。",
+        "weakness": {
+          "type": [
+            "Electric"
+          ],
+          "value": "×2"
+        },
+        "resistance": {
+          "type": [
+            "Fighting"
+          ],
+          "value": "－30"
+        },
+        "retreat": 0,
+        "evolve_from": "ヒノヤコマ",
+        "sources": [
+          {
+            "name": "拡張パック「ストームエメラルダ」",
+            "link": "https://www.pokemon-card.com/ex/m6/"
+          }
+        ],
+        "types_en": [
+          "Colorless"
+        ],
+        "pokedex_number": 663,
+        "print_key": "asia:M6-96",
+        "card_key": "663|280|0|5ban Graphics|150|2"
+      },
+      "engine": {
+        "status": "unparsed",
+        "effects": [],
+        "handler": null,
+        "notes": [
+          "Reference data only; printed regulation and effects are unverified."
+        ]
+      }
+    },
+    {
+      "officialCardId": 48466,
+      "name": "メガガルーラex",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/48466",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M1S/048466_P_MGARURAEX.jpg",
+        "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+        "fallbackDataset": "type-null/PTCG-database",
+        "fallbackPath": "data_jp/M1S/48466.json"
+      },
+      "raw": {
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/48466",
+        "name": "メガガルーラex",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/M1S/048466_P_MGARURAEX.jpg",
+        "card_type": "Pokémon",
+        "jp_id": 48466,
+        "tags": [
+          "ex",
+          "メガシンカ"
+        ],
+        "set_name": "M1S",
+        "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M1S.gif",
+        "number": "080",
+        "set_total": "063",
+        "rarity": "rare_sr_c",
+        "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_sr_c.gif",
+        "author": [
+          "5ban Graphics"
+        ],
+        "stage": "たね",
+        "hp": 300,
+        "types": [
+          "Colorless"
+        ],
+        "abilities": [
+          {
+            "name": "おつかいダッシュ",
+            "effect": "このポケモンがバトル場にいるなら、自分の番に1回使える。自分の山札を2枚引く。この特性は別の「おつかいダッシュ」を使った番は使えない。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Colorless",
+              "Colorless",
+              "Colorless"
+            ],
+            "name": "マシンガンコンボ",
+            "damage": {
+              "amount": 200,
+              "suffix": "＋"
+            },
+            "effect": "ウラが出るまでコインを投げ、オモテの数×50ダメージ追加。"
+          }
+        ],
+        "rule_box": "メガシンカexがきぜつしたとき、相手はサイドを3枚とる。",
+        "weakness": {
+          "type": [
+            "Fighting"
+          ],
+          "value": "×2"
+        },
+        "resistance": {
+          "type": [],
+          "value": null
+        },
+        "retreat": 3,
+        "sources": [
+          {
+            "name": "拡張パック「メガシンフォニア」",
+            "link": "https://www.pokemon-card.com/ex/m1/"
+          }
+        ],
+        "types_en": [
+          "Colorless"
+        ],
+        "pokedex_number": 115,
+        "print_key": "asia:M1S-80",
+        "card_key": "115|300|3|5ban Graphics|200+|3"
+      },
+      "engine": {
+        "status": "unparsed",
+        "effects": [],
+        "handler": null,
+        "notes": [
+          "Reference data only; printed regulation and effects are unverified."
+        ]
+      }
+    },
+    {
+      "officialCardId": 47847,
+      "name": "メガガルーラex",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47847",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M1S/047847_P_MGARURAEX.jpg",
+        "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+        "fallbackDataset": "type-null/PTCG-database",
+        "fallbackPath": "data_jp/M1S/47847.json"
+      },
+      "raw": {
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/47847",
+        "name": "メガガルーラex",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/M1S/047847_P_MGARURAEX.jpg",
+        "card_type": "Pokémon",
+        "jp_id": 47847,
+        "tags": [
+          "ex"
+        ],
+        "set_name": "M1S",
+        "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M1S.gif",
+        "number": "051",
+        "set_total": "063",
+        "rarity": "rare_rr",
+        "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_rr.gif",
+        "author": [
+          "5ban Graphics"
+        ],
+        "stage": "たね",
+        "hp": 300,
+        "types": [
+          "Colorless"
+        ],
+        "abilities": [
+          {
+            "name": "おつかいダッシュ",
+            "effect": "このポケモンがバトル場にいるなら、自分の番に1回使える。自分の山札を2枚引く。この特性は別の「おつかいダッシュ」を使った番は使えない。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Colorless",
+              "Colorless",
+              "Colorless"
+            ],
+            "name": "マシンガンコンボ",
+            "damage": {
+              "amount": 200,
+              "suffix": "＋"
+            },
+            "effect": "ウラが出るまでコインを投げ、オモテの数×50ダメージ追加。"
+          }
+        ],
+        "rule_box": "メガシンカexがきぜつしたとき、相手はサイドを3枚とる。",
+        "weakness": {
+          "type": [
+            "Fighting"
+          ],
+          "value": "×2"
+        },
+        "resistance": {
+          "type": [],
+          "value": null
+        },
+        "retreat": 3,
+        "sources": [
+          {
+            "name": "拡張パック「メガシンフォニア」",
+            "link": "https://www.pokemon-card.com/ex/m1/"
+          }
+        ],
+        "types_en": [
+          "Colorless"
+        ],
+        "pokedex_number": 115,
+        "print_key": "asia:M1S-51",
+        "card_key": "115|300|3|5ban Graphics|200+|3"
+      },
+      "engine": {
+        "status": "unparsed",
+        "effects": [],
+        "handler": null,
+        "notes": [
+          "Reference data only; printed regulation and effects are unverified."
+        ]
+      }
+    },
+    {
+      "officialCardId": 47069,
+      "name": "Nのゾロアークex",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47069",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV9/047069_P_NNOZOROAKUEX.jpg",
+        "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+        "fallbackDataset": "type-null/PTCG-database",
+        "fallbackPath": "data_jp/SV9/47069.json"
+      },
+      "raw": {
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/47069",
+        "name": "Nのゾロアークex",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV9/047069_P_NNOZOROAKUEX.jpg",
+        "card_type": "Pokémon",
+        "jp_id": 47069,
+        "set_name": "SV9",
+        "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV9.gif",
+        "number": "061",
+        "set_total": "100",
+        "rarity": "rare_rr",
+        "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_rr.gif",
+        "author": [
+          "takuyoa"
+        ],
+        "stage": "1 進化",
+        "hp": 280,
+        "types": [
+          "Dark"
+        ],
+        "abilities": [
+          {
+            "name": "とりひき",
+            "effect": "自分の番に、自分の手札を1枚トラッシュするなら、1回使える。自分の山札を2枚引く。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Dark",
+              "Dark"
+            ],
+            "name": "ナイトジョーカー",
+            "damage": null,
+            "effect": "自分のベンチの「Nのポケモン」が持つワザを1つ選び、このワザとして使う。"
+          }
+        ],
+        "weakness": {
+          "type": [
+            "Grass"
+          ],
+          "value": "×2"
+        },
+        "resistance": {
+          "type": [],
+          "value": null
+        },
+        "retreat": 2,
+        "evolve_from": "Nのゾロア",
+        "sources": [
+          {
+            "name": "拡張パック「 バトルパートナーズ」",
+            "link": "https://www.pokemon-card.com/ex/sv9/"
+          }
+        ],
+        "types_en": [
+          "Darkness"
+        ],
+        "pokedex_number": 571,
+        "print_key": "asia:SV9-61",
+        "card_key": "571|280|2|takuyoa|None|2"
+      },
+      "engine": {
+        "status": "unparsed",
+        "effects": [],
+        "handler": null,
+        "notes": [
+          "Reference data only; printed regulation and effects are unverified."
+        ]
+      }
+    },
+    {
+      "officialCardId": 45707,
+      "name": "オーガポン みどりのめんex",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45707",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045707_P_OGAPONMIDORINOMENEX.jpg",
+        "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+        "fallbackDataset": "type-null/PTCG-database",
+        "fallbackPath": "data_jp/SV6/45707.json"
+      },
+      "raw": {
+        "jp_id": 45707,
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/45707",
+        "name": "オーガポン みどりのめんex",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045707_P_OGAPONMIDORINOMENEX.jpg",
+        "card_type": "Pokémon",
+        "tags": [
+          "ex"
+        ],
+        "set_name": "SV6",
+        "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6.gif",
+        "number": "016",
+        "set_total": "101",
+        "rarity": "rare_rr",
+        "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_rr.gif",
+        "author": [
+          "5ban Graphics"
+        ],
+        "stage": "たね",
+        "hp": 210,
+        "types": [
+          "Grass"
+        ],
+        "tera_effect": "このポケモンは、ベンチにいるかぎり、ワザのダメージを受けない。",
+        "abilities": [
+          {
+            "name": "みどりのまい",
+            "effect": "自分の番に1回使える。自分の手札から「基本Grassエネルギー」を1枚選び、このポケモンにつける。その後、自分の山札を1枚引く。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Grass",
+              "Grass",
+              "Grass"
+            ],
+            "name": "まんようしぐれ",
+            "damage": {
+              "amount": 30,
+              "suffix": "＋"
+            },
+            "effect": "おたがいのバトルポケモンについているエネルギーの数×30ダメージ追加。"
+          }
+        ],
+        "rule_box": "ポケモンexがきぜつしたとき、相手はサイドを2枚とる。",
+        "weakness": {
+          "type": [
+            "Fire"
+          ],
+          "value": "×2"
+        },
+        "resistance": {
+          "type": [],
+          "value": null
+        },
+        "retreat": 1,
+        "sources": [
+          {
+            "name": "拡張パック「変幻の仮面」",
+            "link": "https://www.pokemon-card.com/ex/sv6/"
+          }
+        ],
+        "types_en": [
+          "Grass"
+        ],
+        "pokedex_number": 1017,
+        "print_key": "asia:SV6-16",
+        "card_key": "1017|210|1|5ban Graphics|30+|3"
+      },
+      "engine": {
+        "status": "unparsed",
+        "effects": [],
+        "handler": null,
+        "notes": [
+          "Reference data only; printed regulation and effects are unverified."
+        ]
+      }
+    },
+    {
+      "officialCardId": 50745,
+      "name": "基本草エネルギー",
+      "regulation": null,
+      "cardType": "energy",
+      "trainerType": null,
+      "energyType": "basic",
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50745",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6a/050745_E_KIHONKUSAENERUGI.jpg",
+        "fetchedAt": "2026-09-24T08:23:17.608446+00:00",
+        "fallbackDataset": "type-null/PTCG-database",
+        "fallbackPath": "data_jp/M6a/50745.json"
+      },
+      "raw": {
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/50745",
+        "name": "基本草エネルギー",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6a/050745_E_KIHONKUSAENERUGI.jpg",
+        "card_type": "基本エネルギー",
+        "jp_id": 50745,
+        "set_name": "M6a",
+        "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6a.gif",
+        "author": [
+          "YOSHIROTTEN"
+        ],
+        "sources": [
+          {
+            "name": "拡張パック 30th CELEBRATION（CL2027 横浜 使用可能カード）",
+            "link": null
+          }
+        ]
+      },
+      "engine": {
+        "status": "unparsed",
+        "effects": [],
+        "handler": null,
+        "notes": [
+          "Reference data only; printed regulation and effects are unverified."
+        ]
+      }
+    },
+    {
+      "officialCardId": 47309,
+      "name": "ギャロップ",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47309",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV9a/047309_P_GIXYAROPPU.jpg",
+        "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+        "fallbackDataset": "type-null/PTCG-database",
+        "fallbackPath": "data_jp/SV9a/47309.json"
+      },
+      "raw": {
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/47309",
+        "name": "ギャロップ",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV9a/047309_P_GIXYAROPPU.jpg",
+        "card_type": "Pokémon",
+        "jp_id": 47309,
+        "set_name": "SV9a",
+        "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV9a.gif",
+        "number": "014",
+        "set_total": "063",
+        "rarity": "rare_u_c",
+        "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+        "author": [
+          "SIE NANAHARA"
+        ],
+        "pokedex_number": 78,
+        "pokemon_category": "ひのうまポケモン",
+        "height": "1.7 m",
+        "weight": "95.0 kg",
+        "flavor_text": "いちばん 脚が 速い ものが  リーダー。 群れが 行く 場所や  走る 速度を 決めている。",
+        "stage": "1 進化",
+        "hp": 110,
+        "types": [
+          "Fire"
+        ],
+        "abilities": [
+          {
+            "name": "いそぎあし",
+            "effect": "自分の番に1回使える。自分の山札を1枚引く。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Fire",
+              "Colorless"
+            ],
+            "name": "ほのおのたてがみ",
+            "damage": {
+              "amount": 60,
+              "suffix": ""
+            },
+            "effect": ""
+          }
+        ],
+        "weakness": {
+          "type": [
+            "Water"
+          ],
+          "value": "×2"
+        },
+        "resistance": {
+          "type": [],
+          "value": null
+        },
+        "retreat": 1,
+        "evolve_from": "ポニータ",
+        "sources": [
+          {
+            "name": "強化拡張パック「熱風のアリーナ」",
+            "link": "https://www.pokemon-card.com/products/sv/sv9a.html"
+          }
+        ],
+        "print_key": "asia:SV9a-14",
+        "card_key": "78|110|1|SIE NANAHARA|60|2",
+        "types_en": [
+          "Fire"
+        ]
+      },
+      "engine": {
+        "status": "unparsed",
+        "effects": [],
+        "handler": null,
+        "notes": [
+          "Reference data only; printed regulation and effects are unverified."
+        ]
+      }
+    },
+    {
+      "officialCardId": 46008,
+      "name": "ギギギアル",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46008",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV7/046008_P_GIGIGIARU.jpg",
+        "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+        "fallbackDataset": "type-null/PTCG-database",
+        "fallbackPath": "data_jp/SV7/46008.json"
+      },
+      "raw": {
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/46008",
+        "name": "ギギギアル",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV7/046008_P_GIGIGIARU.jpg",
+        "card_type": "Pokémon",
+        "jp_id": 46008,
+        "set_name": "SV7",
+        "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV7.gif",
+        "number": "069",
+        "set_total": "102",
+        "rarity": "rare_r_c",
+        "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_r_c.gif",
+        "author": [
+          "Tonji Matsuno"
+        ],
+        "pokedex_number": 601,
+        "pokemon_category": "はぐるまポケモン",
+        "height": "0.6 m",
+        "weight": "81.0 kg",
+        "flavor_text": "棘の 先から 強い 電撃を  発射。 赤いコアに たくさんの  エネルギーを 蓄えている。",
+        "stage": "2 進化",
+        "hp": 140,
+        "types": [
+          "Steel"
+        ],
+        "abilities": [
+          {
+            "name": "きんきゅうかいてん",
+            "effect": "自分の番に、このカードが手札にあり、相手の場に2進化ポケモンがいるなら、1回使える。このカードをベンチに出す。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Colorless",
+              "Colorless"
+            ],
+            "name": "ハイパービーム",
+            "damage": {
+              "amount": 130,
+              "suffix": ""
+            },
+            "effect": "このポケモンについているエネルギーを、すべてトラッシュする。"
+          }
+        ],
+        "weakness": {
+          "type": [
+            "Fire"
+          ],
+          "value": "×2"
+        },
+        "resistance": {
+          "type": [
+            "Grass"
+          ],
+          "value": "－30"
+        },
+        "retreat": 3,
+        "evolve_from": "ギギアル",
+        "sources": [
+          {
+            "name": "拡張パック「ステラミラクル」",
+            "link": "https://www.pokemon-card.com/ex/sv7/"
+          }
+        ],
+        "print_key": "asia:SV7-69",
+        "card_key": "601|140|3|Tonji Matsuno|130|2",
+        "types_en": [
+          "Metal"
+        ]
+      },
+      "engine": {
+        "status": "unparsed",
+        "effects": [],
+        "handler": null,
+        "notes": [
+          "Reference data only; printed regulation and effects are unverified."
+        ]
+      }
+    },
+    {
+      "officialCardId": 45578,
+      "name": "モジャンボ",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45578",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV5a/045578_P_MOJIXYANBO.jpg",
+        "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+        "fallbackDataset": "type-null/PTCG-database",
+        "fallbackPath": "data_jp/SV5a/45578.json"
+      },
+      "raw": {
+        "jp_id": 45578,
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/45578",
+        "name": "モジャンボ",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV5a/045578_P_MOJIXYANBO.jpg",
+        "card_type": "Pokémon",
+        "set_name": "SV5a",
+        "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV5a.gif",
+        "number": "002",
+        "set_total": "066",
+        "rarity": "rare_c_c",
+        "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+        "author": [
+          "LINNE"
+        ],
+        "pokedex_number": 465,
+        "pokemon_category": "ツルじょうポケモン",
+        "height": "2.0 m",
+        "weight": "128.6 kg",
+        "flavor_text": "自在に 伸びる ２本の 腕は じつは ツルが 束になったものと 最近の 研究で わかった。",
+        "stage": "1 進化",
+        "hp": 150,
+        "types": [
+          "Grass"
+        ],
+        "abilities": [
+          {
+            "name": "みつりんボディ",
+            "effect": "このポケモンが受けるワザのダメージは「-30」される。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Grass",
+              "Colorless",
+              "Colorless"
+            ],
+            "name": "おおいかぶさる",
+            "damage": {
+              "amount": 150,
+              "suffix": "－"
+            },
+            "effect": "このポケモンにのっているダメカンの数×10ダメージぶん、このワザのダメージは小さくなる。"
+          }
+        ],
+        "weakness": {
+          "type": [
+            "Fire"
+          ],
+          "value": "×2"
+        },
+        "resistance": {
+          "type": [],
+          "value": null
+        },
+        "retreat": 4,
+        "evolve_from": "モンジャラ",
+        "sources": [
+          {
+            "name": "強化拡張パック「クリムゾンヘイズ」",
+            "link": "https://www.pokemon-card.com/products/sv/SV5a.html"
+          }
+        ],
+        "print_key": "asia:SV5a-2",
+        "card_key": "465|150|4|LINNE|150-|3",
+        "types_en": [
+          "Grass"
+        ]
+      },
+      "engine": {
+        "status": "unparsed",
+        "effects": [],
+        "handler": null,
+        "notes": [
+          "Reference data only; printed regulation and effects are unverified."
+        ]
+      }
+    },
+    {
+      "officialCardId": 45233,
+      "name": "テツノイサハex",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45233",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV5M/045233_P_TETSUNOISAHAEX.jpg",
+        "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+        "fallbackDataset": "type-null/PTCG-database",
+        "fallbackPath": "data_jp/SV5M/45233.json"
+      },
+      "raw": {
+        "jp_id": 45233,
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/45233",
+        "name": "テツノイサハex",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV5M/045233_P_TETSUNOISAHAEX.jpg",
+        "card_type": "Pokémon",
+        "tags": [
+          "ex"
+        ],
+        "set_name": "SV5M",
+        "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV5M.gif",
+        "number": "016",
+        "set_total": "071",
+        "rarity": "rare_rr",
+        "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_rr.gif",
+        "author": [
+          "5ban Graphics"
+        ],
+        "stage": "たね",
+        "hp": 220,
+        "types": [
+          "Grass"
+        ],
+        "abilities": [
+          {
+            "name": "ラピッドバーニア",
+            "effect": "自分の番に、このカードを手札からベンチに出したとき、1回使える。このポケモンをバトルポケモンと入れ替える。入れ替えた場合、自分の場のポケモンについているエネルギーを好きなだけ選び、このポケモンにつけ替える。"
+          }
+        ],
+        "attacks": [
+          {
+            "cost": [
+              "Grass",
+              "Grass",
+              "Colorless"
+            ],
+            "name": "プリズムエッジ",
+            "damage": {
+              "amount": 180,
+              "suffix": ""
+            },
+            "effect": "次の自分の番、このポケモンはワザが使えない。"
+          }
+        ],
+        "rule_box": "ポケモンexがきぜつしたとき、相手はサイドを2枚とる。",
+        "weakness": {
+          "type": [
+            "Fire"
+          ],
+          "value": "×2"
+        },
+        "resistance": {
+          "type": [],
+          "value": null
+        },
+        "retreat": 1,
+        "sources": [
+          {
+            "name": "拡張パック「サイバージャッジ」",
+            "link": "https://www.pokemon-card.com/products/sv/sv5.html"
+          }
+        ],
+        "types_en": [
+          "Grass"
+        ],
+        "pokedex_number": 1010,
+        "print_key": "asia:SV5M-16",
+        "card_key": "1010|220|1|5ban Graphics|180|3"
+      },
+      "engine": {
+        "status": "unparsed",
+        "effects": [],
+        "handler": null,
+        "notes": [
+          "Reference data only; printed regulation and effects are unverified."
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+name: Compile ability effects
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/compile-abilities.mjs"
+      - "src/card-db/parse-abilities.js"
+      - "src/engine/AbilityEngine.js"
+      - ".github/workflows/ability-compile.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: card-db-sync
+  cancel-in-progress: false
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test compiled abilities against real card fixtures
+        run: node --test tests/ability-engine.test.mjs
+      - name: Compile every stored ability
+        run: node scripts/compile-abilities.mjs
+      - name: Commit catalog
+        run: |
+          if git diff --quiet -- data/cards/ability-effects.json && test -f data/cards/ability-effects.json; then
+            echo "Ability catalog unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/cards/ability-effects.json
+          git commit -m "Compile card ability effects"
+          git pull --rebase origin main
+          git push

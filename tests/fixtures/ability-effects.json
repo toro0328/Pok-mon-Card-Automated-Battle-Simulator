@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "sourceSha256": "6ec646f4b2c2b3134fcdb6d4bc84bb0174d2a33d1cc9acec5d4329b8f6b6e5bb",
+  "sourceUpdatedAt": "2026-09-24T08:41:29.255624+00:00",
+  "cardCount": 11,
+  "abilityCount": 10,
+  "counts": {
+    "supported": 9,
+    "needs_review": 1
+  },
+  "abilities": {
+    "45233": [
+      {
+        "index": 0,
+        "name": "ラピッドバーニア",
+        "text": "自分の番に、このカードを手札からベンチに出したとき、1回使える。このポケモンをバトルポケモンと入れ替える。入れ替えた場合、自分の場のポケモンについているエネルギーを好きなだけ選び、このポケモンにつけ替える。",
+        "status": "needs_review",
+        "trigger": null,
+        "conditions": [],
+        "costs": [],
+        "operations": []
+      }
+    ],
+    "45578": [
+      {
+        "index": 0,
+        "name": "みつりんボディ",
+        "text": "このポケモンが受けるワザのダメージは「-30」される。",
+        "status": "supported",
+        "trigger": "INCOMING_ATTACK_DAMAGE",
+        "conditions": [],
+        "costs": [],
+        "operations": [
+          {
+            "type": "REDUCE_DAMAGE",
+            "amount": 30
+          }
+        ],
+        "limit": null
+      }
+    ],
+    "45707": [
+      {
+        "index": 0,
+        "name": "みどりのまい",
+        "text": "自分の番に1回使える。自分の手札から「基本Grassエネルギー」を1枚選び、このポケモンにつける。その後、自分の山札を1枚引く。",
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [],
+        "costs": [
+          {
+            "type": "SELECT_BASIC_ENERGY_IN_HAND",
+            "pokemonType": "Grass"
+          }
+        ],
+        "operations": [
+          {
+            "type": "ATTACH_SELECTED_TO_SELF"
+          },
+          {
+            "type": "DRAW",
+            "count": 1
+          }
+        ],
+        "limit": "CARD_INSTANCE_PER_TURN"
+      }
+    ],
+    "46008": [
+      {
+        "index": 0,
+        "name": "きんきゅうかいてん",
+        "text": "自分の番に、このカードが手札にあり、相手の場に2進化ポケモンがいるなら、1回使える。このカードをベンチに出す。",
+        "status": "supported",
+        "trigger": "FROM_HAND",
+        "conditions": [
+          {
+            "type": "OPPONENT_FIELD_POKEMON",
+            "stage": "2 進化"
+          }
+        ],
+        "costs": [],
+        "operations": [
+          {
+            "type": "BENCH_SELF"
+          }
+        ],
+        "limit": "CARD_INSTANCE_PER_TURN"
+      }
+    ],
+    "47069": [
+      {
+        "index": 0,
+        "name": "とりひき",
+        "text": "自分の番に、自分の手札を1枚トラッシュするなら、1回使える。自分の山札を2枚引く。",
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [],
+        "costs": [
+          {
+            "type": "DISCARD_HAND",
+            "count": 1
+          }
+        ],
+        "operations": [
+          {
+            "type": "DRAW",
+            "count": 2
+          }
+        ],
+        "limit": "CARD_INSTANCE_PER_TURN"
+      }
+    ],
+    "47309": [
+      {
+        "index": 0,
+        "name": "いそぎあし",
+        "text": "自分の番に1回使える。自分の山札を1枚引く。",
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [],
+        "costs": [],
+        "operations": [
+          {
+            "type": "DRAW",
+            "count": 1
+          }
+        ],
+        "limit": "CARD_INSTANCE_PER_TURN"
+      }
+    ],
+    "47847": [
+      {
+        "index": 0,
+        "name": "おつかいダッシュ",
+        "text": "このポケモンがバトル場にいるなら、自分の番に1回使える。自分の山札を2枚引く。この特性は別の「おつかいダッシュ」を使った番は使えない。",
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [
+          {
+            "type": "SELF_IN_ACTIVE"
+          }
+        ],
+        "costs": [],
+        "operations": [
+          {
+            "type": "DRAW",
+            "count": 2
+          }
+        ],
+        "limit": "ABILITY_NAME_PER_TURN"
+      }
+    ],
+    "48466": [
+      {
+        "index": 0,
+        "name": "おつかいダッシュ",
+        "text": "このポケモンがバトル場にいるなら、自分の番に1回使える。自分の山札を2枚引く。この特性は別の「おつかいダッシュ」を使った番は使えない。",
+        "status": "supported",
+        "trigger": "FROM_FIELD",
+        "conditions": [
+          {
+            "type": "SELF_IN_ACTIVE"
+          }
+        ],
+        "costs": [],
+        "operations": [
+          {
+            "type": "DRAW",
+            "count": 2
+          }
+        ],
+        "limit": "ABILITY_NAME_PER_TURN"
+      }
+    ],
+    "50400": [
+      {
+        "index": 0,
+        "name": "エキサイトダイブ",
+        "text": "自分の番に、このカードが手札にあり、自分の場にColorlessタイプの「メガシンカex」がいるなら、1回使える。このカードをベンチに出す。",
+        "status": "supported",
+        "trigger": "FROM_HAND",
+        "conditions": [
+          {
+            "type": "OWN_FIELD_POKEMON",
+            "pokemonType": "Colorless",
+            "rule": "メガシンカex"
+          }
+        ],
+        "costs": [],
+        "operations": [
+          {
+            "type": "BENCH_SELF"
+          }
+        ],
+        "limit": "CARD_INSTANCE_PER_TURN"
+      }
+    ],
+    "50537": [
+      {
+        "index": 0,
+        "name": "エキサイトダイブ",
+        "text": "自分の番に、このカードが手札にあり、自分の場にColorlessタイプの「メガシンカex」がいるなら、1回使える。このカードをベンチに出す。",
+        "status": "supported",
+        "trigger": "FROM_HAND",
+        "conditions": [
+          {
+            "type": "OWN_FIELD_POKEMON",
+            "pokemonType": "Colorless",
+            "rule": "メガシンカex"
+          }
+        ],
+        "costs": [],
+        "operations": [
+          {
+            "type": "BENCH_SELF"
+          }
+        ],
+        "limit": "CARD_INSTANCE_PER_TURN"
+      }
+    ]
+  }
+}

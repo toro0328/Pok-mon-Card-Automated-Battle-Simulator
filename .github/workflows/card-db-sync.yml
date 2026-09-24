@@ -32,6 +32,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
 
       - name: Discover official card IDs
         run: python scripts/sync-official-cards.py
@@ -46,6 +49,9 @@ jobs:
 
       - name: Validate database
         run: python scripts/validate-card-db.py
+
+      - name: Compile ability effects
+        run: node scripts/compile-abilities.mjs
 
       - name: Commit DB changes
         run: |

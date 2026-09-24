@@ -5,6 +5,7 @@ export class CardRepository {
     if (!database || !Array.isArray(database.cards)) {
       throw new TypeError("Card database must contain a cards array");
     }
+    this.updatedAt = database.updatedAt;
     this.cards = new Map();
     this.byName = new Map();
     for (const card of database.cards) {
