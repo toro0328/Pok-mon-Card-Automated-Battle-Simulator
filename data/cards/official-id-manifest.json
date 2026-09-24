@@ -1,8 +1,12 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "source": "https://www.pokemon-card.com/card-search/resultAPI.php",
-  "searchFilter": null,
-  "verification": "legacy H/I/J filter values invalid; refresh with XY pending",
+  "searchFilter": "XY",
+  "printedMarks": [
+    "H",
+    "I",
+    "J"
+  ],
   "count": 5789,
   "ids": [
     1,
