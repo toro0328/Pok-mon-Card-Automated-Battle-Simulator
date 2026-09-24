@@ -1,0 +1,532 @@
+[
+  {
+    "officialCardId": 45209,
+    "name": "なかよしポフィン",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "item",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45209",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV5K/045209_T_NAKAYOSHIPOFUIN.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV5K/45209.json"
+    },
+    "raw": {
+      "jp_id": 45209,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45209",
+      "name": "なかよしポフィン",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV5K/045209_T_NAKAYOSHIPOFUIN.jpg",
+      "card_type": "グッズ",
+      "set_name": "SV5K",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV5K.gif",
+      "number": "063",
+      "set_total": "071",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "自分の山札から、HPが「70」以下のたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
+      "author": [
+        "AYUMI ODASHIMA"
+      ],
+      "sources": [
+        {
+          "name": "拡張パック「ワイルドフォース」",
+          "link": "https://www.pokemon-card.com/products/sv/sv5.html"
+        }
+      ],
+      "print_key": "asia:SV5K-63"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 46110,
+    "name": "ボスの指令",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "supporter",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46110",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SVK/046110_T_BOSUNOSHIREI.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SVK/46110.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/46110",
+      "name": "ボスの指令",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SVK/046110_T_BOSUNOSHIREI.jpg",
+      "card_type": "サポート",
+      "jp_id": 46110,
+      "set_name": "SVK",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SVK.gif",
+      "number": "039",
+      "set_total": "044",
+      "effect": "相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。",
+      "author": [
+        "NC Empire"
+      ],
+      "sources": [
+        {
+          "name": "デッキビルドBOX ステラミラクル",
+          "link": "https://www.pokemon-card.com/ex/sv7/"
+        }
+      ],
+      "print_key": "asia:SVK-39"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 46222,
+    "name": "ポケモンいれかえ",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "item",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46222",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SVLN/046222_T_POKEMONIREKAE.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SVLN/46222.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/46222",
+      "name": "ポケモンいれかえ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SVLN/046222_T_POKEMONIREKAE.jpg",
+      "card_type": "グッズ",
+      "jp_id": 46222,
+      "set_name": "SVLN",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SVLN.gif",
+      "number": "017",
+      "set_total": "022",
+      "effect": "自分のバトルポケモンをベンチポケモンと入れ替える。",
+      "author": [
+        "Studio Bora Inc."
+      ],
+      "sources": [
+        {
+          "name": "スターターセット テラスタイプ：ステラ ニンフィアex",
+          "link": "https://www.pokemon-card.com/products/sv/svl.html"
+        }
+      ],
+      "print_key": "asia:SVLN-17"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 46442,
+    "name": "シアノ",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "supporter",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46442",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV8/046442_T_SHIANO.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV8/46442.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/46442",
+      "name": "シアノ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV8/046442_T_SHIANO.jpg",
+      "card_type": "サポート",
+      "jp_id": 46442,
+      "set_name": "SV8",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV8.gif",
+      "number": "102",
+      "set_total": "106",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "自分の山札から「ポケモンex」を3枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
+      "author": [
+        "Akira Komayama"
+      ],
+      "sources": [
+        {
+          "name": "拡張パック「超電ブレイカー」",
+          "link": "https://www.pokemon-card.com/ex/sv8/"
+        }
+      ],
+      "print_key": "asia:SV8-102"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 47854,
+    "name": "メガシグナル",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "item",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47854",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M1S/047854_T_MSHIGUNARU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M1S/47854.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/47854",
+      "name": "メガシグナル",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M1S/047854_T_MSHIGUNARU.jpg",
+      "card_type": "グッズ",
+      "jp_id": 47854,
+      "set_name": "M1S",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M1S.gif",
+      "number": "058",
+      "set_total": "063",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "自分の山札から「メガシンカex」を1枚選び、相手に見せて、手札に加える。そして山札を切る。",
+      "author": [
+        "inose yukie"
+      ],
+      "sources": [
+        {
+          "name": "拡張パック「メガシンフォニア」",
+          "link": "https://www.pokemon-card.com/ex/m1/"
+        }
+      ],
+      "print_key": "asia:M1S-58"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 47904,
+    "name": "基本炎エネルギー",
+    "regulation": null,
+    "cardType": "energy",
+    "trainerType": null,
+    "energyType": "basic",
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47904",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/ENE/047904_E_KIHONHONOOENERUGI.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/no_set/47904.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/47904",
+      "name": "基本炎エネルギー",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/ENE/047904_E_KIHONHONOOENERUGI.jpg",
+      "card_type": "基本エネルギー",
+      "jp_id": 47904,
+      "sources": [
+        {
+          "name": "プレミアムトレーナーボックスMEGA",
+          "link": "https://www.pokemon-card.com/ex/m1/"
+        }
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 47906,
+    "name": "基本雷エネルギー",
+    "regulation": null,
+    "cardType": "energy",
+    "trainerType": null,
+    "energyType": "basic",
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47906",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/ENE/047906_E_KIHONKAMINARIENERUGI.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/no_set/47906.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/47906",
+      "name": "基本雷エネルギー",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/ENE/047906_E_KIHONKAMINARIENERUGI.jpg",
+      "card_type": "基本エネルギー",
+      "jp_id": 47906,
+      "sources": [
+        {
+          "name": "プレミアムトレーナーボックスMEGA",
+          "link": "https://www.pokemon-card.com/ex/m1/"
+        }
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 49386,
+    "name": "夜のタンカ",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "item",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/49386",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/MC/049386_T_YORUNOTANKA.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/MC/49386.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/49386",
+      "name": "夜のタンカ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/MC/049386_T_YORUNOTANKA.jpg",
+      "card_type": "グッズ",
+      "jp_id": 49386,
+      "set_name": "MC",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/MC.gif",
+      "number": "670",
+      "set_total": "742",
+      "effect": "自分のトラッシュからポケモンまたは基本エネルギーを1枚選び、相手に見せて、手札に加える。",
+      "author": [
+        "Toyste Beach"
+      ],
+      "sources": [
+        {
+          "name": "スタートデッキ100 バトルコレクション",
+          "link": "https://www.pokemon-card.com/ex/mc/"
+        }
+      ],
+      "print_key": "asia:MC-670"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 49445,
+    "name": "リーリエの決心",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "supporter",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/49445",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/MC/049445_T_RIRIENOKESSHIN.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/MC/49445.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/49445",
+      "name": "リーリエの決心",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/MC/049445_T_RIRIENOKESSHIN.jpg",
+      "card_type": "サポート",
+      "jp_id": 49445,
+      "set_name": "MC",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/MC.gif",
+      "number": "729",
+      "set_total": "742",
+      "effect": "自分の手札をすべて山札にもどして切る。その後、山札を6枚引く。自分のサイドの残り枚数が6枚なら、引く枚数は8枚になる。",
+      "author": [
+        "Atsushi Furusawa"
+      ],
+      "sources": [
+        {
+          "name": "スタートデッキ100 バトルコレクション",
+          "link": "https://www.pokemon-card.com/ex/mc/"
+        }
+      ],
+      "print_key": "asia:MC-729"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 49600,
+    "name": "ハイパーボール",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "item",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/49600",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M-P/049600_T_HAIPABORU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/MP1/49600.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/49600",
+      "name": "ハイパーボール",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M-P/049600_T_HAIPABORU.jpg",
+      "card_type": "グッズ",
+      "jp_id": 49600,
+      "set_name": "MP1",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/MP1.gif",
+      "number": "014",
+      "set_total": "023",
+      "effect": "このカードは、自分の手札を2枚トラッシュしなければ使えない。\n自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
+      "author": [
+        "Ayaka Yoshida"
+      ],
+      "sources": [
+        {
+          "name": "スタートデッキ100 バトルコレクション コロちゃおVer.",
+          "link": "https://www.pokemon-card.com/card-search/index.php?regulation_detail=all&pg=10980"
+        }
+      ],
+      "print_key": "asia:MP1-14"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 49601,
+    "name": "ポケパッド",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "item",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/49601",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M-P/049601_T_POKEPADDO.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/MP1/49601.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/49601",
+      "name": "ポケパッド",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M-P/049601_T_POKEPADDO.jpg",
+      "card_type": "グッズ",
+      "jp_id": 49601,
+      "set_name": "MP1",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/MP1.gif",
+      "number": "015",
+      "set_total": "023",
+      "effect": "自分の山札からポケモン（「ルールを持つポケモン」をのぞく）を1枚選び、相手に見せて、手札に加える。そして山札を切る。",
+      "author": [
+        "Studio Bora Inc."
+      ],
+      "sources": [
+        {
+          "name": "スタートデッキ100 バトルコレクション コロちゃおVer.",
+          "link": "https://www.pokemon-card.com/card-search/index.php?regulation_detail=all&pg=10980"
+        }
+      ],
+      "print_key": "asia:MP1-15"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50402,
+    "name": "ぼうけんのランタン",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "item",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50402",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050402_T_BOUKENNORANTAN.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M6/50402.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50402",
+      "name": "ぼうけんのランタン",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050402_T_BOUKENNORANTAN.jpg",
+      "card_type": "グッズ",
+      "jp_id": 50402,
+      "set_name": "M6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6.gif",
+      "number": "064",
+      "set_total": "076",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "自分の山札から「基本Fireエネルギー」と「基本Electricエネルギー」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。",
+      "author": [
+        "inose yukie"
+      ],
+      "sources": [
+        {
+          "name": "拡張パック「ストームエメラルダ」",
+          "link": "https://www.pokemon-card.com/ex/m6/"
+        }
+      ],
+      "print_key": "asia:M6-64"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  }
+]

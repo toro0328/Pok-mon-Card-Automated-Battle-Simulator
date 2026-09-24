@@ -8,6 +8,7 @@ import { MatchEngine } from "../src/engine/MatchEngine.js";
 const db=JSON.parse(fs.readFileSync("tests/fixtures/ability-cards.json","utf8"));
 db.cards.push(...JSON.parse(fs.readFileSync("tests/fixtures/attack-cards.json","utf8")),
   ...JSON.parse(fs.readFileSync("tests/fixtures/festival-cards.json","utf8")),
+  ...JSON.parse(fs.readFileSync("tests/fixtures/trainer-cards.json","utf8")),
   JSON.parse(fs.readFileSync("tests/fixtures/grow-grass-energy.json","utf8")));
 const catalog={cardCount:db.cards.length,sourceUpdatedAt:db.updatedAt,abilities:{}};
 for(const c of db.cards)if(c.raw.abilities?.length)catalog.abilities[c.officialCardId]=
@@ -22,6 +23,51 @@ const game=(own,foe)=>({ruleset:"supported_abilities_v1",stadium:null,stadiumOwn
   retreatedThisTurn:false,players:[own,foe],usedAbilities:{instances:[],names:[]},
   knockoutThisTurn:[false,false],previousOpponentTurnKnockout:[false,false],randomState:42});
 const find=(state,type)=>engine.getMatchActions(state).find(action=>action.type===type);
+
+test("Hyper Ball pays two distinct hand cards, searches a Pokémon and shuffles reproducibly",()=>{
+  const own=player(card("dip",45703),[],[card("ball",49600),card("one",50745),card("two",50745)],
+    [card("mon",45699),card("energy",50745)]);
+  let state=game(own,player(card("mega",48466)));
+  state=engine.applyMatchAction(state,find(state,"PLAY_TRAINER"));
+  assert.deepEqual(engine.getMatchActions(state).map(x=>x.type),["TRAINER_DISCARD","TRAINER_DISCARD"]);
+  state=engine.applyMatchAction(state,find(state,"TRAINER_DISCARD"));
+  assert.equal(engine.getMatchActions(state).filter(x=>x.type==="TRAINER_DISCARD").length,1);
+  state=engine.applyMatchAction(state,find(state,"TRAINER_DISCARD"));
+  state=engine.applyMatchAction(state,find(state,"TRAINER_SELECT"));
+  state=engine.applyMatchAction(state,find(state,"TRAINER_FINISH"));
+  assert.equal(state.players[0].hand[0].instanceId,"mon");
+  assert.equal(state.players[0].trash.length,3);
+  assert.equal(state.pendingTrainer,undefined);
+});
+
+test("Poffin puts eligible Basics on Bench and Budew blocks items",()=>{
+  const own=player(card("dip",45703),[],[card("poffin",45209)],
+    [card("small",45624),card("big",48466),card("second",45699)]);
+  let state=game(own,player(card("mega",48466)));
+  state=engine.applyMatchAction(state,find(state,"PLAY_TRAINER"));
+  assert.deepEqual(engine.getMatchActions(state).filter(x=>x.type==="TRAINER_SELECT")
+    .map(x=>x.choiceInstanceId),["small","second"]);
+  state=engine.applyMatchAction(state,find(state,"TRAINER_SELECT"));
+  assert.equal(state.players[0].bench.length,1);
+  assert.equal(state.players[0].bench[0].enteredTurn,3);
+  state=engine.applyMatchAction(state,find(state,"TRAINER_FINISH"));
+  assert.equal(state.players[0].deck.length,2);
+  const locked=game(own,player(card("mega",48466)));
+  locked.itemLocks=[true,false];
+  assert.equal(engine.getMatchActions(locked).some(x=>x.type==="PLAY_TRAINER"),false);
+});
+
+test("Lillie shuffles remaining hand and draws eight with six prizes, only once per turn",()=>{
+  const own=player(card("dip",45703),[],[card("lillie",49445),card("extra",50745)],pile("draw",10));
+  let state=game(own,player(card("mega",48466)));
+  state=engine.applyMatchAction(state,find(state,"PLAY_TRAINER"));
+  assert.equal(state.players[0].hand.length,8);
+  assert.equal(state.players[0].trash[0].instanceId,"lillie");
+  assert.equal(state.supporterUsedThisTurn,true);
+  own.hand=[card("lillie",49445)];state=game(own,player(card("mega",48466)));
+  state.turnNo=1;
+  assert.equal(engine.getMatchActions(state).some(x=>x.type==="PLAY_TRAINER"),false);
+});
 
 test("festival abilities compile as reusable primitives while unknown text still needs review",()=>{
   for(const id of [45703,45700,45717,46690,46675,47301])
