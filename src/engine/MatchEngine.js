@@ -1,4 +1,4 @@
-import { AttackEngine } from "./AttackEngine.js";
+import { AttackEngine } from "./AttackEngine.js?v=20260924-festival1";
 
 const BASIC = "たね";
 

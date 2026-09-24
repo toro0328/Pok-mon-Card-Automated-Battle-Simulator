@@ -36,7 +36,7 @@ main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border
 </main>
 <script type="module">
 import { CardRepository } from "./src/card-db/CardRepository.js";
-import { MatchEngine } from "./src/engine/MatchEngine.js";
+import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260924-festival1";
 const sampleDeck=[...[49956,50339,45913,45707,48466,46248].flatMap(id=>Array(4).fill(id)),...Array(36).fill(50745)];
 const ui={opponent:document.getElementById("opponent"),self:document.getElementById("self"),
   status:document.getElementById("status"),message:document.getElementById("message"),
@@ -152,7 +152,8 @@ function newGame(){
 document.getElementById("restart").onclick=newGame;
 try{
   const [loaded,response,deckResponse]=await Promise.all([CardRepository.load("./data/cards/cards.json"),
-    fetch("./data/cards/ability-effects.json"),fetch("./data/decks/opponent-festival.json")]);
+    fetch("./data/cards/ability-effects.json?v=20260924-festival1"),
+    fetch("./data/decks/opponent-festival.json?v=20260924-festival1")]);
   if(!response.ok||!deckResponse.ok)throw Error("特性カタログまたは相手デッキを取得できません");
   repository=loaded;opponentDeck=await deckResponse.json();
   if(opponentDeck.cards.reduce((total,entry)=>total+entry.count,0)!==60||

@@ -1,5 +1,5 @@
-import { AbilityEngine } from "./AbilityEngine.js";
-import { inspectAttacks } from "../card-db/parse-effects.js";
+import { AbilityEngine } from "./AbilityEngine.js?v=20260924-festival1";
+import { inspectAttacks } from "../card-db/parse-effects.js?v=20260924-festival1";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
 // ordinary numeric damage. Ordinary single knockouts use explicit prize and
