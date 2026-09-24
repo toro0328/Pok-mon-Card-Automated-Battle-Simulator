@@ -45,7 +45,7 @@ export class MatchEngine extends AttackEngine {
       const prizes = deck.splice(0, 6);
       return { active: null, bench: [], hand, deck, prizes, trash: [] };
     });
-    return { ruleset: "supported_abilities_v1", stadium: null,
+    return { ruleset: "supported_abilities_v1", stadium: null, stadiumOwner: null, randomState,
       phase: "setup", seed, turn: 0, turnNo: 0, turnsTaken: [0, 0],
       setupReady: [false, false], energyAttachedThisTurn: false,
       retreatedThisTurn: false, players,
@@ -56,7 +56,18 @@ export class MatchEngine extends AttackEngine {
 
   getLegalAttacks(state) {
     if (state.phase === "playing" && state.turnNo === 1) return [];
-    return super.getLegalAttacks(state);
+    const attacks=super.getLegalAttacks(state);
+    if (!state.pendingSecondAttack) return attacks.filter(action=>{
+      const source=state.players[state.turn].active;
+      if (!this.attacksTwice(state,source)) return true;
+      const drawCount=this.attacks(source)[action.attackIndex].effects
+        .filter(effect=>effect.type==="DRAW").reduce((sum,effect)=>sum+effect.count,0);
+      return state.players[state.turn].deck.length >= drawCount*2;
+    });
+    return attacks.filter(action=>
+      action.player === state.pendingSecondAttack.player &&
+      action.sourceInstanceId === state.pendingSecondAttack.sourceInstanceId &&
+      action.attackIndex === state.pendingSecondAttack.attackIndex);
   }
 
   startTurn(state) {
@@ -90,7 +101,9 @@ export class MatchEngine extends AttackEngine {
       for (const target of this.field(own)) {
         const before = this.card(target);
         if (before.name !== evolution.raw.evolve_from || target.enteredTurn === state.turnNo ||
-            (target.damage ?? 0) >= evolution.raw.hp) continue;
+            (target.damage ?? 0) >= evolution.raw.hp +
+              (evolution.raw.types?.includes("Grass") ? (target.attached??[]).filter(x=>
+                this.card(x).name === "グロウ草エネルギー" && this.isSupportedEnergy(x)).length*20 : 0)) continue;
         actions.push({ type: "EVOLVE", player: state.turn,
           sourceInstanceId: fromHand.instanceId, targetInstanceId: target.instanceId });
       }
@@ -120,6 +133,7 @@ export class MatchEngine extends AttackEngine {
     }
     if (state.phase !== "playing") throw new Error("Unsupported match phase");
     if (state.pendingKnockout) return this.getKnockoutActions(state);
+    if (state.pendingSecondAttack) return this.getLegalAttacks(state);
     const player = state.players[state.turn];
     const actions = [...super.getLegalActions(state), ...this.getLegalAttacks(state),
       ...this.evolveCandidates(state)];
@@ -128,15 +142,18 @@ export class MatchEngine extends AttackEngine {
           this.entries(card).every(entry => entry.status === "supported")) {
         actions.push({ type: "BENCH_BASIC", player: state.turn, sourceInstanceId: card.instanceId });
       }
-      if (!state.energyAttachedThisTurn && this.card(card).energyType === "basic") {
+      if (!state.energyAttachedThisTurn && this.card(card).cardType === "energy" && this.isSupportedEnergy(card)) {
         for (const target of this.field(player)) actions.push({ type: "ATTACH_ENERGY", player: state.turn,
           sourceInstanceId: card.instanceId, targetInstanceId: target.instanceId });
       }
+      if (this.card(card).trainerType === "stadium" && this.isSupportedStadium(card) &&
+          (!state.stadium || this.card(state.stadium).name !== this.card(card).name))
+        actions.push({type:"PLAY_STADIUM",player:state.turn,sourceInstanceId:card.instanceId});
     }
     if (!state.retreatedThisTurn && player.active && player.bench.length) {
       const count = this.retreatCost(state, state.turn, player.active.instanceId);
       const attached = player.active.attached ?? [];
-      if (count <= attached.length && attached.every(x => this.card(x).energyType === "basic")) {
+      if (count <= attached.length && attached.every(x => this.isSupportedEnergy(x))) {
         const subsets = (start, chosen) => {
           if (chosen.length === count) return [chosen];
           const result = [];
@@ -181,6 +198,10 @@ export class MatchEngine extends AttackEngine {
       const energy = player.hand.splice(handIndex, 1)[0];
       this.field(player).find(x => x.instanceId === action.targetInstanceId).attached.push(energy);
       next.energyAttachedThisTurn = true;
+    } else if (action.type === "PLAY_STADIUM") {
+      if(next.stadium)next.players[next.stadiumOwner].trash.push(next.stadium);
+      next.stadium=player.hand.splice(handIndex,1)[0];
+      next.stadiumOwner=action.player;
     } else if (action.type === "RETREAT") {
       const active = player.active;
       for (const id of action.paymentInstanceIds) {

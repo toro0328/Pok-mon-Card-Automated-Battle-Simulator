@@ -30,7 +30,7 @@ main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border
 <body>
 <header><b>ポケカ対戦試験</b><a href="./ability-demo.html">特性・ワザの個別試験</a><label>シード <input id="seed" type="number" value="1" min="1" step="1"></label><button id="restart">新しい試合</button></header>
 <main>
-<p class="notice">自分はサンプル60枚、相手は<a id="opponent-link" href="#">公式のお祭り会場デッキ</a>（60枚）です。１台で両側を操作します。相手のカードは正確な枚数で入っていますが、おまつりおんど・ドンドンだいこなどの未対応の特性、トレーナーズ、特殊エネルギーはまだ使用できません。手札のカードをタップすると可能な操作が表示されます。</p>
+<p class="notice">自分はサンプル60枚、相手は<a id="opponent-link" href="#">公式のお祭り会場デッキ</a>（60枚）です。１台で両側を操作します。「おまつりおんど」「ドンドンだいこ」、お祭り会場、グロウ草エネルギーに対応しました。ほかのトレーナーズや未解析のワザはまだ使えません。<span id="ability-coverage"></span>手札のカードをタップすると可能な操作が表示されます。</p>
 <div id="opponent"></div><div class="summary" id="status">読み込み中…</div><div id="self"></div>
 <section class="panel"><h2>使用可能な操作</h2><p id="message"></p><div id="actions"></div></section>
 </main>
@@ -56,7 +56,7 @@ function cardNode(instance){
   const data=repository.get(instance.cardId),button=element("button","card "+data.cardType+(selected===instance.instanceId?" chosen":""));
   button.append(document.createTextNode(data.name));
   if(data.cardType==="pokemon"){
-    button.append(element("small","",`HP ${data.raw.hp} / ダメージ ${instance.damage??0}`));
+    button.append(element("small","",`HP ${engine.effectiveHP(instance)} / ダメージ ${instance.damage??0}`));
     if(instance.attached?.length){
       button.append(element("small","",`エネ：${energySummary(instance)}`));
       button.title=`ついているエネルギー：${instance.attached.map(x=>repository.get(x.cardId).name).join("、")}`;
@@ -93,14 +93,15 @@ function actionLabel(action){
     case "SET_ACTIVE":return `${whose}：${name(source)}をバトル場へ`;
     case "SET_BENCH":case "BENCH_BASIC":return `${whose}：${name(source)}をベンチへ`;
     case "READY_SETUP":return `${whose}：準備完了`;
-    case "ATTACH_ENERGY":return `${whose}：${name(target)}にエネルギーをつける`;
+    case "ATTACH_ENERGY":return `${whose}：${name(target)}に${name(source)}をつける`;
     case "EVOLVE":return `${whose}：${name(target)}を${name(source)}に進化`;
     case "RETREAT":return `${whose}：${name(player.active)}をにがす → ${name(target)}（エネルギー${action.paymentInstanceIds.length}枚）`;
     case "USE_ABILITY":{
-      const ability=engine.entries(source)[action.abilityIndex],choice=player.hand.find(x=>x.instanceId===action.choiceInstanceId);
+      const ability=engine.entries(source)[action.abilityIndex],choice=[...player.hand,...player.deck].find(x=>x.instanceId===action.choiceInstanceId);
       return `${whose}：${name(source)}「${ability.name}」${choice?`（${name(choice)}を選ぶ）`:""}`;
     }
     case "ATTACK":return `${whose}：${name(source)}「${engine.attacks(source)[action.attackIndex].name}」`;
+    case "PLAY_STADIUM":return `${whose}：${name(source)}を場に出す`;
     case "TAKE_PRIZE":return `${whose}：サイド${action.prizeIndex+1}を取る`;
     case "PROMOTE_BENCH":return `${whose}：${name(source)}をバトル場へ`;
     case "END_TURN":return `${whose}：番を終える`;
@@ -113,7 +114,7 @@ function render(){
   else if(game.pendingKnockout?.reason)ui.status.textContent="同時きぜつ：この試験環境では処理を停止します";
   else if(game.pendingKnockout)ui.status.textContent="きぜつ処理：サイドを取り、次のバトルポケモンを選びます";
   else if(game.phase==="setup")ui.status.textContent="対戦準備：両者のたねポケモンをバトル場に置き、準備完了を押してください";
-  else ui.status.textContent=`${game.turnNo}番目：${game.turn===0?"自分（先攻）":"相手（後攻）"}の番${game.turnNo===1?"・先攻1ターン目はワザを使えません":""}`;
+  else ui.status.textContent=`${game.turnNo}番目：${game.turn===0?"自分（先攻）":"相手（後攻）"}の番${game.turnNo===1?"・先攻1ターン目はワザを使えません":""}${game.stadium?` ／ スタジアム：${repository.get(game.stadium.cardId).name}`:""}${game.pendingSecondAttack?" ／ おまつりおんど：２回目のワザを選んでください":""}`;
   ui.actions.replaceChildren();
   let picked;
   if(selected){
@@ -123,12 +124,12 @@ function render(){
   }
   let actions=engine.getMatchActions(game);
   if(selected)actions=actions.filter(x=>x.sourceInstanceId===selected||x.targetInstanceId===selected||["READY_SETUP","END_TURN","TAKE_PRIZE","PROMOTE_BENCH","RETREAT"].includes(x.type));
-  else actions=actions.filter(x=>!["SET_ACTIVE","SET_BENCH","BENCH_BASIC","ATTACH_ENERGY","EVOLVE","USE_ABILITY"].includes(x.type));
+  else actions=actions.filter(x=>!["SET_ACTIVE","SET_BENCH","BENCH_BASIC","ATTACH_ENERGY","EVOLVE","USE_ABILITY","PLAY_STADIUM"].includes(x.type));
   const chosenCard=picked&&repository.get(picked.cardId);
   const unsupportedReason=chosenCard?.cardType==="pokemon"&&engine.entries(picked).some(entry=>entry.status!=="supported")
     ?"このポケモンの特性が未対応のため、現在の対戦試験では場に出せません。"
-    :chosenCard?.cardType==="trainer"?"トレーナーズの使用はまだ未対応です。"
-    :chosenCard?.energyType==="special"?"特殊エネルギーの使用はまだ未対応です。":null;
+    :chosenCard?.cardType==="trainer"&&!actions.some(x=>x.sourceInstanceId===selected)?"このトレーナーズの効果はまだ未対応です。"
+    :chosenCard?.energyType==="special"&&!engine.isSupportedEnergy(picked)?"この特殊エネルギーの効果はまだ未対応です。":null;
   if(unsupportedReason&&!actions.some(x=>x.sourceInstanceId===selected||x.targetInstanceId===selected))
     ui.actions.append(element("span","",unsupportedReason));
   if(!actions.length){
@@ -157,7 +158,13 @@ try{
   if(opponentDeck.cards.reduce((total,entry)=>total+entry.count,0)!==60||
       opponentDeck.cards.some(entry=>!repository.get(entry.officialCardId)))throw Error("相手デッキの枚数またはカードIDが不正です");
   document.getElementById("opponent-link").href=opponentDeck.sourceUrl;
-  engine=new MatchEngine(repository,await response.json());newGame();
+  engine=new MatchEngine(repository,await response.json());
+  const abilities=opponentDeck.cards.flatMap(entry=>engine.entries({cardId:entry.officialCardId}));
+  const unsupported=abilities.filter(entry=>entry.status!=="supported");
+  document.getElementById("ability-coverage").textContent=unsupported.length
+    ?`このデッキの未対応特性：${unsupported.map(entry=>entry.name).join("、")}。`
+    :`このデッキの特性${abilities.length}件はすべて解析済みです。`;
+  newGame();
 }catch(error){ui.status.textContent="カードDBの読み込みに失敗しました";ui.message.textContent=error.message;}
 </script>
 </body>

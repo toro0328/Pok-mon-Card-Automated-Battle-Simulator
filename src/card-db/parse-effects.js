@@ -17,6 +17,10 @@ const PATTERNS = [
     expression: /^おたがいのバトルポケモンについているエネルギーの数×([1-9][0-9]*)ダメージ追加。$/,
     convert: match => [{ type: "MODIFY_DAMAGE", basis: "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT",
       perEnergy: Number(match[1]) }]
+  },
+  {
+    expression: /^自分のベンチポケモンの数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{ type: "SET_DAMAGE", basis: "OWN_BENCH_COUNT", perPokemon: Number(match[1]) }]
   }
 ];
 
@@ -42,7 +46,9 @@ export function inspectAttacks(card) {
         ["Colorless", "Grass", "Fire", "Water", "Electric", "Psychic", "Fighting", "Dark", "Metal", "Steel", "Dragon"].includes(type)));
     const validDamage = Number.isInteger(damage?.amount) && damage.amount >= 0 &&
       (damage.suffix === "" || (damage.suffix === "＋" && parsed.effects.length === 1 &&
-        parsed.effects[0].type === "MODIFY_DAMAGE"));
+        parsed.effects[0].type === "MODIFY_DAMAGE") ||
+        (damage.suffix === "×" && parsed.effects.length === 1 &&
+        parsed.effects[0].type === "SET_DAMAGE" && parsed.effects[0].perPokemon === damage.amount));
     return {
       index, name: attack.name, printedDamage: damage, cost, text: attack.effect ?? "",
       status: parsed.recognized && validCost && validDamage ? "supported" : "needs_review",

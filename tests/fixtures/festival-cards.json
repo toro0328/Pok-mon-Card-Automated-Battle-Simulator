@@ -1,0 +1,943 @@
+[
+  {
+    "officialCardId": 45624,
+    "name": "カジッチュ",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45624",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV5a/045624_P_KAJITCHIXYU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV5a/45624.json"
+    },
+    "raw": {
+      "jp_id": 45624,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45624",
+      "name": "カジッチュ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV5a/045624_P_KAJITCHIXYU.jpg",
+      "card_type": "Pokémon",
+      "set_name": "SV5a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV5a.gif",
+      "number": "048",
+      "set_total": "066",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "Teeziro"
+      ],
+      "pokedex_number": 840,
+      "pokemon_category": "りんごぐらしポケモン",
+      "height": "0.2 m",
+      "weight": "0.5 kg",
+      "flavor_text": "りんごの 中で 暮らしている。 りんごが なくなると 体の 水分が 抜けて 弱ってしまう。",
+      "stage": "たね",
+      "hp": 40,
+      "types": [
+        "Dragon"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless"
+          ],
+          "name": "ともだちをさがす",
+          "damage": null,
+          "effect": "自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。"
+        },
+        {
+          "cost": [
+            "Grass",
+            "Fire"
+          ],
+          "name": "ころがりタックル",
+          "damage": {
+            "amount": 30,
+            "suffix": ""
+          },
+          "effect": ""
+        }
+      ],
+      "weakness": {
+        "type": [],
+        "value": null
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "強化拡張パック「クリムゾンヘイズ」",
+          "link": "https://www.pokemon-card.com/products/sv/SV5a.html"
+        }
+      ],
+      "print_key": "asia:SV5a-48",
+      "card_key": "840|40|1|Teeziro|None,30|1,2",
+      "types_en": [
+        "Dragon"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45699,
+    "name": "サルノリ",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45699",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045699_P_SARUNORI.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV6/45699.json"
+    },
+    "raw": {
+      "jp_id": 45699,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45699",
+      "name": "サルノリ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045699_P_SARUNORI.jpg",
+      "card_type": "Pokémon",
+      "set_name": "SV6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6.gif",
+      "number": "008",
+      "set_total": "101",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "Tomomi Ozaki"
+      ],
+      "pokedex_number": 810,
+      "pokemon_category": "こざるポケモン",
+      "height": "0.3 m",
+      "weight": "5.0 kg",
+      "flavor_text": "特別な スティックで リズムを  刻むと 草花を 元気にする  パワーが 音波になって 広がる。",
+      "stage": "たね",
+      "hp": 70,
+      "types": [
+        "Grass"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Grass"
+          ],
+          "name": "けとばす",
+          "damage": {
+            "amount": 10,
+            "suffix": ""
+          },
+          "effect": ""
+        },
+        {
+          "cost": [
+            "Grass",
+            "Grass"
+          ],
+          "name": "えだづき",
+          "damage": {
+            "amount": 30,
+            "suffix": ""
+          },
+          "effect": ""
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "拡張パック「変幻の仮面」",
+          "link": "https://www.pokemon-card.com/ex/sv6/"
+        }
+      ],
+      "print_key": "asia:SV6-8",
+      "card_key": "810|70|1|Tomomi Ozaki|10,30|1,2",
+      "types_en": [
+        "Grass"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45700,
+    "name": "バチンキー",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45700",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045700_P_BACHINKI.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV6/45700.json"
+    },
+    "raw": {
+      "jp_id": 45700,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45700",
+      "name": "バチンキー",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045700_P_BACHINKI.jpg",
+      "card_type": "Pokémon",
+      "set_name": "SV6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6.gif",
+      "number": "009",
+      "set_total": "101",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "GOSSAN"
+      ],
+      "pokedex_number": 811,
+      "pokemon_category": "ビートポケモン",
+      "height": "0.7 m",
+      "weight": "14.0 kg",
+      "flavor_text": "２本の スティックで 激しい  ビートを 刻める バチンキーほど  仲間たちの 尊敬を 集める。",
+      "stage": "1 進化",
+      "hp": 100,
+      "types": [
+        "Grass"
+      ],
+      "abilities": [
+        {
+          "name": "ドンドンだいこ",
+          "effect": "自分のバトルポケモンが特性「おまつりおんど」を持つポケモンなら、自分の番に1回使える。自分の山札から好きなカードを1枚選び、手札に加える。そして山札を切る。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Grass",
+            "Grass"
+          ],
+          "name": "たたく",
+          "damage": {
+            "amount": 50,
+            "suffix": ""
+          },
+          "effect": ""
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 2,
+      "evolve_from": "サルノリ",
+      "sources": [
+        {
+          "name": "拡張パック「変幻の仮面」",
+          "link": "https://www.pokemon-card.com/ex/sv6/"
+        }
+      ],
+      "print_key": "asia:SV6-9",
+      "card_key": "811|100|2|GOSSAN|50|2",
+      "types_en": [
+        "Grass"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45703,
+    "name": "カミッチュ",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45703",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045703_P_KAMITCHIXYU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV6/45703.json"
+    },
+    "raw": {
+      "jp_id": 45703,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45703",
+      "name": "カミッチュ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045703_P_KAMITCHIXYU.jpg",
+      "card_type": "Pokémon",
+      "set_name": "SV6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6.gif",
+      "number": "012",
+      "set_total": "101",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "author": [
+        "Saboteri"
+      ],
+      "pokedex_number": 1011,
+      "pokemon_category": "りんごあめポケモン",
+      "height": "0.4 m",
+      "weight": "4.4 kg",
+      "flavor_text": "頭を 出している そとッチュと 尻尾を 出している なかッチュが 助け合い りんごのなかで 暮らす。",
+      "stage": "1 進化",
+      "hp": 80,
+      "types": [
+        "Grass"
+      ],
+      "abilities": [
+        {
+          "name": "おまつりおんど",
+          "effect": "場に「お祭り会場」が出ているなら、このポケモンは、持っているワザを2回連続で使える。（1回目のワザで相手のバトルポケモンがきぜつしたなら、次のバトルポケモンが出たあと、2回目のワザを使う。）"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Grass"
+          ],
+          "name": "ともだちのわ",
+          "damage": {
+            "amount": 20,
+            "suffix": "×"
+          },
+          "effect": "自分のベンチポケモンの数×20ダメージ。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 2,
+      "evolve_from": "カジッチュ",
+      "sources": [
+        {
+          "name": "拡張パック「変幻の仮面」",
+          "link": "https://www.pokemon-card.com/ex/sv6/"
+        }
+      ],
+      "print_key": "asia:SV6-12",
+      "card_key": "1011|80|2|Saboteri|20x|1",
+      "types_en": [
+        "Grass"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45717,
+    "name": "トサキント",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45717",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045717_P_TOSAKINTO.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV6/45717.json"
+    },
+    "raw": {
+      "jp_id": 45717,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45717",
+      "name": "トサキント",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045717_P_TOSAKINTO.jpg",
+      "card_type": "Pokémon",
+      "set_name": "SV6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6.gif",
+      "number": "026",
+      "set_total": "101",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "saino misaki"
+      ],
+      "pokedex_number": 118,
+      "pokemon_category": "きんぎょポケモン",
+      "height": "0.6 m",
+      "weight": "15.0 kg",
+      "flavor_text": "背びれ 胸びれ 尾びれが  優雅に たなびくので  水の踊り子 と呼ばれる。",
+      "stage": "たね",
+      "hp": 50,
+      "types": [
+        "Water"
+      ],
+      "abilities": [
+        {
+          "name": "おまつりおんど",
+          "effect": "場に「お祭り会場」が出ているなら、このポケモンは、持っているワザを2回連続で使える。（1回目のワザで相手のバトルポケモンがきぜつしたなら、次のバトルポケモンが出たあと、2回目のワザを使う。）"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless",
+            "Colorless"
+          ],
+          "name": "うずしお",
+          "damage": {
+            "amount": 10,
+            "suffix": ""
+          },
+          "effect": "コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Electric"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "拡張パック「変幻の仮面」",
+          "link": "https://www.pokemon-card.com/ex/sv6/"
+        }
+      ],
+      "print_key": "asia:SV6-26",
+      "card_key": "118|50|1|saino misaki|10|2",
+      "types_en": [
+        "Water"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45790,
+    "name": "お祭り会場",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "stadium",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45790",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045790_T_OMATSURIKAIJIXYOU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV6/45790.json"
+    },
+    "raw": {
+      "jp_id": 45790,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45790",
+      "name": "お祭り会場",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045790_T_OMATSURIKAIJIXYOU.jpg",
+      "card_type": "スタジアム",
+      "set_name": "SV6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6.gif",
+      "number": "099",
+      "set_total": "101",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "エネルギーがついているおたがいのポケモン全員は、特殊状態にならず、受けている特殊状態は、すべて回復する。",
+      "author": [
+        "MARINA Chikazawa"
+      ],
+      "sources": [
+        {
+          "name": "拡張パック「変幻の仮面」",
+          "link": "https://www.pokemon-card.com/ex/sv6/"
+        }
+      ],
+      "print_key": "asia:SV6-99"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 46669,
+    "name": "カジッチュ",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46669",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV8a/046669_P_KAJITCHIXYU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV8a/46669.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/46669",
+      "name": "カジッチュ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV8a/046669_P_KAJITCHIXYU.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 46669,
+      "set_name": "SV8a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV8a.gif",
+      "number": "008",
+      "set_total": "187",
+      "author": [
+        "Yoriyuki Ikegami"
+      ],
+      "pokedex_number": 840,
+      "pokemon_category": "りんごぐらしポケモン",
+      "height": "0.2 m",
+      "weight": "0.5 kg",
+      "flavor_text": "りんごの 中で 暮らしている。 りんごが なくなると 体の 水分が 抜けて 弱ってしまう。",
+      "stage": "たね",
+      "hp": 40,
+      "types": [
+        "Grass"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Grass"
+          ],
+          "name": "しるをとばす",
+          "damage": {
+            "amount": 20,
+            "suffix": ""
+          },
+          "effect": ""
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "ハイクラスパック「テラスタルフェスex」",
+          "link": "https://www.pokemon-card.com/ex/sv8a/"
+        }
+      ],
+      "print_key": "asia:SV8a-8",
+      "card_key": "840|40|1|Yoriyuki Ikegami|20|1",
+      "types_en": [
+        "Grass"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 46674,
+    "name": "シガロコ",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46674",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV8a/046674_P_SHIGAROKO.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV8a/46674.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/46674",
+      "name": "シガロコ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV8a/046674_P_SHIGAROKO.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 46674,
+      "set_name": "SV8a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV8a.gif",
+      "number": "013",
+      "set_total": "187",
+      "author": [
+        "Saboteri"
+      ],
+      "pokedex_number": 953,
+      "pokemon_category": "ころがしポケモン",
+      "height": "0.2 m",
+      "weight": "1.0 kg",
+      "flavor_text": "泥玉を 転がしながら 進化の エネルギーを 熟成させる。 やがて 進化のときを 迎える。",
+      "stage": "たね",
+      "hp": 50,
+      "types": [
+        "Grass"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless"
+          ],
+          "name": "ちょっとつっこむ",
+          "damage": {
+            "amount": 30,
+            "suffix": ""
+          },
+          "effect": "このポケモンにも10ダメージ。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "ハイクラスパック「テラスタルフェスex」",
+          "link": "https://www.pokemon-card.com/ex/sv8a/"
+        }
+      ],
+      "print_key": "asia:SV8a-13",
+      "card_key": "953|50|1|Saboteri|30|1",
+      "types_en": [
+        "Grass"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 46675,
+    "name": "ベラカス",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46675",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV8a/046675_P_BERAKASU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV8a/46675.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/46675",
+      "name": "ベラカス",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV8a/046675_P_BERAKASU.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 46675,
+      "set_name": "SV8a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV8a.gif",
+      "number": "014",
+      "set_total": "187",
+      "author": [
+        "mingo"
+      ],
+      "pokedex_number": 954,
+      "pokemon_category": "ころがしポケモン",
+      "height": "0.3 m",
+      "weight": "3.5 kg",
+      "flavor_text": "玉の中に 赤ん坊が 眠る。 心地よく 眠れるように 脚で 玉を まわして あやしているのだ。",
+      "stage": "1 進化",
+      "hp": 70,
+      "types": [
+        "Grass"
+      ],
+      "abilities": [
+        {
+          "name": "スフィアシールド",
+          "effect": "このポケモンがいるかぎり、自分のベンチポケモン全員は、相手のポケモンからワザのダメージや効果を受けない。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Grass"
+          ],
+          "name": "サイコキネシス",
+          "damage": {
+            "amount": 10,
+            "suffix": "＋"
+          },
+          "effect": "相手のバトルポケモンについているエネルギーの数×30ダメージ追加。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "evolve_from": "シガロコ",
+      "sources": [
+        {
+          "name": "ハイクラスパック「テラスタルフェスex」",
+          "link": "https://www.pokemon-card.com/ex/sv8a/"
+        }
+      ],
+      "print_key": "asia:SV8a-14",
+      "card_key": "954|70|1|mingo|10+|1",
+      "types_en": [
+        "Grass"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 46690,
+    "name": "アズマオウ",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46690",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV8a/046690_P_AZUMAOU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV8a/46690.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/46690",
+      "name": "アズマオウ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV8a/046690_P_AZUMAOU.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 46690,
+      "set_name": "SV8a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV8a.gif",
+      "number": "029",
+      "set_total": "187",
+      "author": [
+        "Nelnal"
+      ],
+      "pokedex_number": 119,
+      "pokemon_category": "きんぎょポケモン",
+      "height": "1.3 m",
+      "weight": "39.0 kg",
+      "flavor_text": "秋になると プロポーズのため  体に 脂が のってきて  とても きれいな色に 変化する。",
+      "stage": "1 進化",
+      "hp": 110,
+      "types": [
+        "Water"
+      ],
+      "abilities": [
+        {
+          "name": "おまつりおんど",
+          "effect": "場に「お祭り会場」が出ているなら、このポケモンは、持っているワザを2回連続で使える。（1回目のワザで相手のバトルポケモンがきぜつしたなら、次のバトルポケモンが出たあと、2回目のワザを使う。）"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless"
+          ],
+          "name": "クイックドロー",
+          "damage": {
+            "amount": 60,
+            "suffix": ""
+          },
+          "effect": "自分の山札を2枚引く。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Electric"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "evolve_from": "トサキント",
+      "sources": [
+        {
+          "name": "ハイクラスパック「テラスタルフェスex」",
+          "link": "https://www.pokemon-card.com/ex/sv8a/"
+        }
+      ],
+      "print_key": "asia:SV8a-29",
+      "card_key": "119|110|1|Nelnal|60|1",
+      "types_en": [
+        "Water"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 47301,
+    "name": "シェイミ",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47301",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV9a/047301_P_SHIEIMI.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV9a/47301.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/47301",
+      "name": "シェイミ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV9a/047301_P_SHIEIMI.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 47301,
+      "set_name": "SV9a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV9a.gif",
+      "number": "006",
+      "set_total": "063",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "author": [
+        "tono"
+      ],
+      "pokedex_number": 492,
+      "pokemon_category": "かんしゃポケモン",
+      "height": "0.2 m",
+      "weight": "2.1 kg",
+      "flavor_text": "グラシデアの花が 咲く 季節  感謝の 心を 届けるために  飛び立つと 言われている。",
+      "stage": "たね",
+      "hp": 80,
+      "types": [
+        "Grass"
+      ],
+      "abilities": [
+        {
+          "name": "はなのカーテン",
+          "effect": "このポケモンがいるかぎり、自分のベンチポケモン（「ルールを持つポケモン」をのぞく）全員は、相手のワザのダメージを受けない。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless",
+            "Colorless"
+          ],
+          "name": "けとばす",
+          "damage": {
+            "amount": 30,
+            "suffix": ""
+          },
+          "effect": ""
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "強化拡張パック「熱風のアリーナ」",
+          "link": "https://www.pokemon-card.com/products/sv/sv9a.html"
+        }
+      ],
+      "print_key": "asia:SV9a-6",
+      "card_key": "492|80|1|tono|30|2",
+      "types_en": [
+        "Grass"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  }
+]

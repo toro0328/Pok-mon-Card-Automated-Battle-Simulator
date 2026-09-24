@@ -7,6 +7,14 @@ import { inspectAttacks } from "../card-db/parse-effects.js";
 export class AttackEngine extends AbilityEngine {
   attacks(instance) { return inspectAttacks(this.card(instance)); }
 
+  effectiveHP(instance) {
+    const card=this.card(instance);
+    const boost=card.raw.types?.includes("Grass")
+      ? (instance.attached??[]).filter(energy=>this.card(energy).name === "グロウ草エネルギー" &&
+          this.isSupportedEnergy(energy)).length * 20 : 0;
+    return card.raw.hp + boost;
+  }
+
   getLegalActions(state) {
     return state.pendingKnockout || state.winner != null ? [] : super.getLegalActions(state);
   }
@@ -16,6 +24,7 @@ export class AttackEngine extends AbilityEngine {
     const attached = active.attached ?? [];
     const types = attached.map(energy => {
       const card = this.card(energy);
+      if (card.energyType === "special" && this.isSupportedEnergy(energy)) return "Grass";
       if (card.energyType !== "basic") return null;
       const type = Object.entries({ 草: "Grass", 炎: "Fire", 水: "Water", 雷: "Electric",
         超: "Psychic", 闘: "Fighting", 悪: "Dark", 鋼: "Metal" })
@@ -57,8 +66,8 @@ export class AttackEngine extends AbilityEngine {
     const selfDamage = attack.effects.filter(x => x.type === "DAMAGE" &&
       x.target === "ATTACKING_POKEMON").reduce((sum, x) => sum + x.amount, 0);
     const knockedOut = [
-      (own.damage ?? 0) + selfDamage >= this.card(own).raw.hp ? state.turn : null,
-      (foe.damage ?? 0) + damage >= this.card(foe).raw.hp ? 1 - state.turn : null
+      (own.damage ?? 0) + selfDamage >= this.effectiveHP(own) ? state.turn : null,
+      (foe.damage ?? 0) + damage >= this.effectiveHP(foe) ? 1 - state.turn : null
     ].filter(x => x !== null);
     if (knockedOut.length !== 1) return true; // Simultaneous KO remains visibly unresolved.
     try {
@@ -81,6 +90,8 @@ export class AttackEngine extends AbilityEngine {
     for (const effect of attack.effects) {
       if (effect.type === "MODIFY_DAMAGE" && effect.basis === "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT") {
         damage += ((source.attached?.length ?? 0) + (target.attached?.length ?? 0)) * effect.perEnergy;
+      } else if (effect.type === "SET_DAMAGE" && effect.basis === "OWN_BENCH_COUNT") {
+        damage = state.players[action.player].bench.length * effect.perPokemon;
       }
     }
     if (defender.weakness?.type?.includes(attacker.types?.[0])) {
@@ -185,7 +196,17 @@ export class AttackEngine extends AbilityEngine {
     const index = owner.bench.findIndex(x => x.instanceId === action.sourceInstanceId);
     owner.active = owner.bench.splice(index, 1)[0];
     next.pendingKnockout = null;
+    if (next.pendingSecondAttack && next.pendingSecondAttack.player !== pending.owner &&
+        next.players[next.pendingSecondAttack.player].active?.instanceId === next.pendingSecondAttack.sourceInstanceId)
+      return next;
+    delete next.pendingSecondAttack;
     return this.endTurn(next);
+  }
+
+  attacksTwice(state, instance) {
+    return !!state.stadium && this.entries(instance).some(entry=>entry.status === "supported" &&
+      entry.operations.some(op=>op.type === "ATTACK_TWICE_IF_STADIUM" &&
+        op.stadiumName === this.card(state.stadium).name));
   }
 
   applyAttack(state, action) {
@@ -202,7 +223,8 @@ export class AttackEngine extends AbilityEngine {
         own.hand.push(...own.deck.splice(0, effect.count));
       } else if (effect.type === "DAMAGE" && effect.target === "ATTACKING_POKEMON") {
         own.active.damage = (own.active.damage ?? 0) + effect.amount;
-      } else if (effect.type === "MODIFY_DAMAGE" && effect.basis === "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT") {
+      } else if ((effect.type === "MODIFY_DAMAGE" && effect.basis === "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT") ||
+                 (effect.type === "SET_DAMAGE" && effect.basis === "OWN_BENCH_COUNT")) {
         // The bonus was already included in calculateAttackDamage.
       } else if (effect.type === "LOCK_ITEM_FROM_HAND" && effect.target === "OPPONENT") {
         next.itemLocks ??= [false, false];
@@ -211,11 +233,16 @@ export class AttackEngine extends AbilityEngine {
     }
     const knockedOut = [0, 1].filter(i => {
       const active = next.players[i].active;
-      return active.damage >= this.card(active).raw.hp;
+      return active.damage >= this.effectiveHP(active);
     });
+    const firstOfTwo = !state.pendingSecondAttack && this.attacksTwice(state, own.active);
+    if (firstOfTwo) next.pendingSecondAttack = { player: state.turn,
+      sourceInstanceId: own.active.instanceId, attackIndex: action.attackIndex };
+    else delete next.pendingSecondAttack;
     if (knockedOut.length) {
       return this.beginKnockout(next, knockedOut);
     }
+    if (firstOfTwo) return next;
     return this.endTurn(next);
   }
 }

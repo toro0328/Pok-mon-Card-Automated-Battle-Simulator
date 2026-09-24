@@ -1,5 +1,7 @@
 // Deterministic execution for the explicitly compiled ability subset.
 // This is a restricted ability sandbox, not a complete Pokémon TCG match.
+const FESTIVAL_STADIUM_TEXT = "エネルギーがついているおたがいのポケモン全員は、特殊状態にならず、受けている特殊状態は、すべて回復する。";
+const GROW_GRASS_TEXT = "このカードは、ポケモンについているかぎり、Grassエネルギー1個ぶんとしてはたらく。\nこのカードをつけているGrassポケモンは、最大HPが「＋20」される。";
 export class AbilityEngine {
   constructor(repository, catalog) {
     if (catalog?.cardCount !== repository.cards.size ||
@@ -30,8 +32,22 @@ export class AbilityEngine {
     return [player.active, ...player.bench].filter(Boolean);
   }
 
+  isSupportedStadium(instance) {
+    const card = this.card(instance);
+    return card.name === "お祭り会場" && card.trainerType === "stadium" &&
+      card.raw.effect === FESTIVAL_STADIUM_TEXT;
+  }
+
+  isSupportedEnergy(instance) {
+    const card = this.card(instance);
+    return card.energyType === "basic" ||
+      (card.energyType === "special" && card.name === "グロウ草エネルギー" &&
+        card.raw.effect === GROW_GRASS_TEXT);
+  }
+
   assertSandbox(state) {
-    if (state.ruleset !== "supported_abilities_v1" || state.stadium != null ||
+    if (state.ruleset !== "supported_abilities_v1" ||
+        (state.stadium != null && !this.isSupportedStadium(state.stadium)) ||
         ![0, 1].includes(state.turn) || state.players?.length !== 2) {
       throw new Error("Unsupported game state for ability sandbox");
     }
@@ -44,7 +60,7 @@ export class AbilityEngine {
             this.entries(pokemon).some(e => e.status !== "supported")) {
           throw new Error("Unsupported ability or card on the field");
         }
-        if ((pokemon.attached ?? []).some(x => this.card(x).cardType !== "energy")) {
+        if ((pokemon.attached ?? []).some(x => this.card(x).cardType !== "energy" || !this.isSupportedEnergy(x))) {
           throw new Error("Unsupported attachment in ability sandbox");
         }
       }
@@ -65,6 +81,8 @@ export class AbilityEngine {
         return this.field(opponent).some(instance => this.card(instance).raw.stage === condition.stage);
       case "OWN_POKEMON_KNOCKED_OUT_PREVIOUS_OPPONENT_TURN":
         return state.previousOpponentTurnKnockout?.[playerIndex] === true;
+      case "OWN_ACTIVE_HAS_ABILITY":
+        return !!own.active && this.entries(own.active).some(entry => entry.name === condition.name);
       default: throw new Error(`Unknown condition: ${condition.type}`);
     }
   }
@@ -106,7 +124,9 @@ export class AbilityEngine {
         if (entry.operations.some(op => op.type === "BENCH_SELF") && player.bench.length >= 5) continue;
         const drawCount = entry.operations.filter(op => op.type === "DRAW").reduce((n, op) => n + op.count, 0);
         if (player.deck.length < drawCount) continue;
-        for (const choiceInstanceId of this.choices(entry.costs, player)) {
+        const deckChoices = entry.operations.some(op => op.type === "SEARCH_DECK")
+          ? player.deck.map(card => card.instanceId) : this.choices(entry.costs, player);
+        for (const choiceInstanceId of deckChoices) {
           actions.push({
             type: "USE_ABILITY", player: state.turn, sourceInstanceId: instance.instanceId,
             abilityIndex: entry.index, ...(choiceInstanceId ? { choiceInstanceId } : {})
@@ -150,6 +170,21 @@ export class AbilityEngine {
           source.attached.push(next.selectedForAbility);
           delete next.selectedForAbility;
           break;
+        case "SEARCH_DECK": {
+          if (operation.count !== 1 || operation.destination !== "HAND" || !operation.shuffle)
+            throw new Error("Unsupported deck search");
+          const index = player.deck.findIndex(card => card.instanceId === action.choiceInstanceId);
+          player.hand.push(player.deck.splice(index, 1)[0]);
+          next.randomState ??= 1;
+          for (let i = player.deck.length - 1; i > 0; i--) {
+            next.randomState ^= next.randomState << 13;
+            next.randomState ^= next.randomState >>> 17;
+            next.randomState ^= next.randomState << 5;
+            const j = Math.floor(((next.randomState >>> 0) / 0x100000000) * (i + 1));
+            [player.deck[i], player.deck[j]] = [player.deck[j], player.deck[i]];
+          }
+          break;
+        }
         default: throw new Error(`Unsupported operation: ${operation.type}`);
       }
     }
@@ -164,6 +199,12 @@ export class AbilityEngine {
     if (!Number.isInteger(damage) || damage < 0) throw new Error("Invalid damage");
     const target = state.players.flatMap(p => this.field(p)).find(x => x.instanceId === targetInstanceId);
     if (!target) throw new Error("Target is not on the field");
+    const owner = state.players.find(p=>this.field(p).includes(target));
+    if (owner.bench.includes(target) && this.field(owner).some(instance=>this.entries(instance).some(entry=>
+      entry.status === "supported" && entry.operations.some(op=>
+        (op.type === "PREVENT_BENCH_ATTACK" || op.type === "PREVENT_BENCH_ATTACK_DAMAGE") &&
+        (!op.rulelessOnly || (!this.card(target).raw.rule_box && !this.card(target).raw.tags?.includes("ex")))))))
+      return 0;
     const reduction = this.entries(target)
       .filter(e => e.status === "supported" && e.trigger === "INCOMING_ATTACK_DAMAGE")
       .flatMap(e => e.operations)

@@ -7,6 +7,24 @@ export function parseAbility(name, text) {
     return { status: "needs_review", trigger: null, conditions: [], costs: [], operations: [] };
   }
   let match;
+  if ((match = text.match(/^場に「([^」]+)」が出ているなら、このポケモンは、持っているワザを2回連続で使える。（1回目のワザで相手のバトルポケモンがきぜつしたなら、次のバトルポケモンが出たあと、2回目のワザを使う。）$/))) {
+    return { status: "supported", trigger: "CONTINUOUS", conditions: [], costs: [],
+      operations: [{ type: "ATTACK_TWICE_IF_STADIUM", stadiumName: match[1] }], limit: null };
+  }
+  if ((match = text.match(/^自分のバトルポケモンが特性「([^」]+)」を持つポケモンなら、自分の番に1回使える。自分の山札から好きなカードを1枚選び、手札に加える。そして山札を切る。$/))) {
+    return { status: "supported", trigger: "FROM_FIELD",
+      conditions: [{ type: "OWN_ACTIVE_HAS_ABILITY", name: match[1] }],
+      costs: [], operations: [{ type: "SEARCH_DECK", count: 1, destination: "HAND", shuffle: true }],
+      limit: "CARD_INSTANCE_PER_TURN" };
+  }
+  if (text === "このポケモンがいるかぎり、自分のベンチポケモン全員は、相手のポケモンからワザのダメージや効果を受けない。") {
+    return { status: "supported", trigger: "CONTINUOUS", conditions: [], costs: [],
+      operations: [{ type: "PREVENT_BENCH_ATTACK", scope: "OWN_FIELD", rulelessOnly: false }], limit: null };
+  }
+  if (text === "このポケモンがいるかぎり、自分のベンチポケモン（「ルールを持つポケモン」をのぞく）全員は、相手のワザのダメージを受けない。") {
+    return { status: "supported", trigger: "CONTINUOUS", conditions: [], costs: [],
+      operations: [{ type: "PREVENT_BENCH_ATTACK_DAMAGE", scope: "OWN_FIELD", rulelessOnly: true }], limit: null };
+  }
   if ((match = text.match(new RegExp(`^自分の番に、このカードが手札にあり、自分の場に${TYPE}タイプの「メガシンカex」がいるなら、1回使える。このカードをベンチに出す。$`)))) {
     return {
       status: "supported", trigger: "FROM_HAND",
