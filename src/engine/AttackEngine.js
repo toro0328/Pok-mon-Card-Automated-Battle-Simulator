@@ -132,7 +132,7 @@ export class AttackEngine extends AbilityEngine {
     return this.incomingAttackDamage(state, target.instanceId, damage);
   }
 
-  coinSequence(seed, single=false) {
+  coinSequence(seed, single=false,maxFlips=null) {
     let randomState=seed>>>0||1, heads=0, flips=0;
     do {
       randomState^=randomState<<13;randomState^=randomState>>>17;randomState^=randomState<<5;
