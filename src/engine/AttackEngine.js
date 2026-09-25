@@ -330,6 +330,8 @@ export class AttackEngine extends AbilityEngine {
           if(!victim.statuses.some(x=>(typeof x==="string"?x:x.name)===status))
             victim.statuses.push({name:status,appliedTurnNo:next.turnNo,ownerPlayer:1-state.turn});
         }
+      } else if (effect.type === "HEAL_OWN_FIELD") {
+        for(const pokemon of this.field(own)) pokemon.damage=Math.max(0,(pokemon.damage??0)-effect.amount);
       } else if(effect.type === "HEAL") {
         own.active.damage=Math.max(0,(own.active.damage??0)-effect.amount);
       } else if(effect.type === "DISCARD_ATTACHED") {
