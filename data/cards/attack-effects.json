@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 2739,
-    "needs_review": 2423
+    "supported": 2804,
+    "needs_review": 2358
   },
   "attacks": {
     "45147": [
@@ -3635,8 +3635,14 @@
           "Colorless"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -3968,8 +3974,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -6872,8 +6884,14 @@
           "Colorless"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -7152,8 +7170,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -10294,8 +10318,18 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくにする。次の相手の番、このワザを受けたポケモンは、にげられない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "PREVENT_RETREAT_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE"
+          }
+        ]
       },
       {
         "index": 1,
@@ -10805,8 +10839,14 @@
           "Colorless"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -11659,8 +11699,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -13343,8 +13389,18 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。次の相手の番、このワザを受けたポケモンは、にげられない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          },
+          {
+            "type": "PREVENT_RETREAT_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE"
+          }
+        ]
       },
       {
         "index": 1,
@@ -13654,8 +13710,14 @@
           "Electric"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -14671,8 +14733,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -15908,8 +15976,18 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。次の相手の番、このワザを受けたポケモンは、にげられない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          },
+          {
+            "type": "PREVENT_RETREAT_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE"
+          }
+        ]
       },
       {
         "index": 1,
@@ -16705,8 +16783,14 @@
           "Colorless"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -19309,8 +19393,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -19336,8 +19426,14 @@
           "Colorless"
         ],
         "text": "自分の山札を3枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 3
+          }
+        ]
       },
       {
         "index": 1,
@@ -20035,8 +20131,18 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。次の相手の番、このワザを受けたポケモンは、にげられない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          },
+          {
+            "type": "PREVENT_RETREAT_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE"
+          }
+        ]
       },
       {
         "index": 1,
@@ -20092,8 +20198,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -21037,8 +21149,18 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。次の相手の番、このワザを受けたポケモンは、にげられない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "PREVENT_RETREAT_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE"
+          }
+        ]
       }
     ],
     "46416": [
@@ -23211,8 +23333,18 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。次の相手の番、このワザを受けたポケモンは、にげられない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "PREVENT_RETREAT_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE"
+          }
+        ]
       },
       {
         "index": 1,
@@ -24194,8 +24326,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -24311,8 +24449,14 @@
           "Colorless"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -31318,8 +31462,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -34040,8 +34190,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -35251,8 +35407,18 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。次の相手の番、このワザを受けたポケモンは、にげられない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          },
+          {
+            "type": "PREVENT_RETREAT_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE"
+          }
+        ]
       },
       {
         "index": 1,
@@ -35666,8 +35832,14 @@
           "Colorless"
         ],
         "text": "自分の山札を3枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 3
+          }
+        ]
       },
       {
         "index": 1,
@@ -36543,8 +36715,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -36924,8 +37102,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -38351,8 +38535,14 @@
           "Colorless"
         ],
         "text": "自分の山札を4枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 4
+          }
+        ]
       },
       {
         "index": 1,
@@ -38752,8 +38942,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -41839,8 +42035,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -42781,8 +42983,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -43394,8 +43602,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -43775,8 +43989,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -45069,8 +45289,14 @@
           "Colorless"
         ],
         "text": "自分の山札を4枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 4
+          }
+        ]
       },
       {
         "index": 1,
@@ -45780,8 +46006,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -47892,8 +48124,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -48050,8 +48288,14 @@
           "Colorless"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -49265,8 +49509,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       }
     ],
     "48378": [
@@ -49416,8 +49666,18 @@
           "Fighting"
         ],
         "text": "相手のバトルポケモンをどくにする。次の相手の番、このワザを受けたポケモンは、にげられない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "PREVENT_RETREAT_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE"
+          }
+        ]
       }
     ],
     "48385": [
@@ -49822,8 +50082,14 @@
           "Colorless"
         ],
         "text": "自分の山札を3枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 3
+          }
+        ]
       },
       {
         "index": 1,
@@ -53456,8 +53722,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -53804,8 +54076,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -55821,8 +56099,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -61658,8 +61942,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -61966,8 +62256,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -63199,8 +63495,14 @@
           "Colorless"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -63371,8 +63673,14 @@
           "Colorless"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -67059,8 +67367,18 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくにする。次の相手の番、このワザを受けたポケモンは、にげられない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "PREVENT_RETREAT_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE"
+          }
+        ]
       },
       {
         "index": 1,
@@ -67650,8 +67968,14 @@
           "Colorless"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -67877,8 +68201,18 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。次の相手の番、このワザを受けたポケモンは、にげられない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "PREVENT_RETREAT_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE"
+          }
+        ]
       }
     ],
     "49207": [
@@ -70247,8 +70581,14 @@
           "Colorless"
         ],
         "text": "自分の山札を3枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 3
+          }
+        ]
       },
       {
         "index": 1,
@@ -70754,8 +71094,14 @@
           "Colorless"
         ],
         "text": "自分の山札を4枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 4
+          }
+        ]
       },
       {
         "index": 1,
@@ -71406,8 +71752,14 @@
           "Colorless"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -71998,8 +72350,14 @@
           "Colorless"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -72028,8 +72386,14 @@
           "Colorless"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -72080,8 +72444,14 @@
           "Colorless"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -72173,8 +72543,18 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンをどくにする。次の相手の番、このワザを受けたポケモンは、にげられない。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "PREVENT_RETREAT_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE"
+          }
+        ]
       }
     ],
     "49636": [
@@ -73140,8 +73520,14 @@
           "Fighting"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -73744,8 +74130,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -75485,8 +75877,14 @@
           "Fighting"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -76623,8 +77021,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -78006,8 +78410,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -78976,8 +79386,14 @@
           "Electric"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
@@ -82533,8 +82949,14 @@
           "Colorless"
         ],
         "text": "自分の山札を3枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 3
+          }
+        ]
       },
       {
         "index": 1,
@@ -82922,8 +83344,14 @@
           "Colorless"
         ],
         "text": "自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       },
       {
         "index": 1,
@@ -85755,8 +86183,14 @@
           "Colorless"
         ],
         "text": "自分の山札を1枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 1
+          }
+        ]
       },
       {
         "index": 1,
