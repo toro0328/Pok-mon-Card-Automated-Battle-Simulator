@@ -96,7 +96,8 @@ test("coin-gated status is only applied on Heads",()=>{
     const game=state(player(card("budew",49956)),player(card("target",50339)));
     game.randomState=seed;
     const after=testEngine.applyAttack(game,testEngine.getLegalAttacks(game)[0]);
-    assert.equal(after.players[1].active.statuses?.[0]?.name,expected);
+    assert.equal(after.lastAttack.coin?.includes("オモテ1回"),true,JSON.stringify({seed,attack:testEngine.attacks(game.players[0].active)[0],lastAttack:after.lastAttack}));
+    assert.equal(after.players[1].active.statuses?.[0]?.name,expected,JSON.stringify({seed,status:after.players[1].active.statuses}));
   }
 });
 

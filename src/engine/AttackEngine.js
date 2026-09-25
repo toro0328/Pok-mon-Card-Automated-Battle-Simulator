@@ -278,7 +278,7 @@ export class AttackEngine extends AbilityEngine {
   }
 
   applyStatus(state,target,status,ownerPlayer){
-    if(this.isSupportedStadium(state.stadium)&&(target.attached??[]).length)return;
+    if(state.stadium&&this.isSupportedStadium(state.stadium)&&(target.attached??[]).length)return;
     target.statuses??=[];
     const recover=new Set(["ねむり","マヒ","こんらん"]);
     if(recover.has(status))target.statuses=target.statuses.filter(x=>!recover.has(typeof x==="string"?x:x.name));
