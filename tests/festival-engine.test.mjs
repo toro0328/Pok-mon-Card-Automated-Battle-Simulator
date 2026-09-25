@@ -50,6 +50,29 @@ test("Pokémon Check applies Poison to both Active Pokémon and clears paralysis
   assert.equal(state.players[1].active.statuses.some(x=>(typeof x==="string"?x:x.name)==="マヒ"),false);
 });
 
+test("Confusion tails cancels the attack and places 30 damage on the attacker",()=>{
+  const own=player(card("heracross",50339,[card("grass",50745)]));
+  const foe=player(card("defender",49956));
+  own.active.statuses=[{name:"こんらん",appliedTurnNo:1,ownerPlayer:0}];
+  let state=game(own,foe);
+  state.randomState=Array.from({length:100},(_,i)=>i+1).find(seed=>engine.coinSequence(seed,true).heads===0);
+  const attack=engine.getMatchActions(state).find(x=>x.type==="ATTACK");
+  state=engine.applyMatchAction(state,attack);
+  assert.equal(state.players[0].active.damage,30);
+  assert.equal(state.players[1].active.damage??0,0);
+  assert.equal(state.lastAttack.damage,0);
+  assert.match(state.lastAttack.coin,/ウラ/);
+});
+
+test("switching recovers confusion sleep paralysis; evolution recovers all special conditions",()=>{
+  const pokemon=card("status",49956);
+  pokemon.statuses=[{name:"こんらん"},{name:"どく"},{name:"やけど"},{name:"ねむり"}];
+  engine.clearSwitchStatuses(pokemon);
+  assert.deepEqual(pokemon.statuses.map(x=>x.name),["どく","やけど"]);
+  engine.clearSwitchStatuses(pokemon,true);
+  assert.deepEqual(pokemon.statuses,[]);
+});
+
 test("Applin search and Talonflame search finish immediately after the maximum selections",()=>{
   let state=game(player(card("applin",45624,[card("e",50745)]),[],[],
     [card("pokemon",45699),card("extra",50745)]),player(card("mega",48466)));

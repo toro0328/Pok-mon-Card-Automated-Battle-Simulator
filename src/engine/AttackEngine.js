@@ -1,5 +1,5 @@
-import { AbilityEngine } from "./AbilityEngine.js?v=20260925-status1";
-import { inspectAttacks } from "../card-db/parse-effects.js?v=20260925-status1";
+import { AbilityEngine } from "./AbilityEngine.js?v=20260925-status2";
+import { inspectAttacks } from "../card-db/parse-effects.js?v=20260925-status2";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
 // ordinary numeric damage. Ordinary single knockouts use explicit prize and
@@ -282,10 +282,22 @@ export class AttackEngine extends AbilityEngine {
     if (!this.getLegalAttacks(state).some(candidate => JSON.stringify(candidate) === JSON.stringify(action))) {
       throw new Error("Illegal or unsupported attack");
     }
-    const damage = this.calculateAttackDamage(state, action);
     const next = structuredClone(state);
     const own = next.players[next.turn], opponent = next.players[1 - next.turn];
     const attack = this.attacks(own.active)[action.attackIndex];
+    const confused=(own.active.statuses??[]).some(x=>(typeof x==="string"?x:x.name)==="こんらん");
+    let confusion=null;
+    if(confused){
+      confusion=this.coinSequence(next.randomState??1,true);next.randomState=confusion.randomState;
+      if(!confusion.heads){
+        const before=own.active.damage??0;own.active.damage=before+30;
+        next.lastAttack={player:state.turn,attacker:this.card(own.active).name,defender:this.card(own.active).name,
+          attack:attack.name,damage:0,before,hp:this.effectiveHP(own.active),coin:"こんらん判定：ウラ・自分に30ダメージ",selfDamage:30};
+        if(own.active.damage>=this.effectiveHP(own.active))return this.beginKnockout(next,[state.turn]);
+        return this.endTurn(next);
+      }
+    }
+    const damage = this.calculateAttackDamage(next, action);
     const victim=action.targetInstanceId
       ? this.field(opponent).find(x=>x.instanceId===action.targetInstanceId):opponent.active;
     const coin=attack.effects.some(x=>x.basis==="COIN_UNTIL_TAILS"||x.type==="COIN_DISCARD_ENERGY")
@@ -294,7 +306,7 @@ export class AttackEngine extends AbilityEngine {
     next.lastAttack={player:state.turn,attacker:this.card(own.active).name,
       defender:this.card(victim).name,attack:attack.name,damage,
       before:victim.damage??0,hp:this.effectiveHP(victim),
-      ...(coin?{coin:`${coin.flips}回投げてオモテ${coin.heads}回`}:{}),
+      ...((confusion||coin)?{coin:[confusion?`こんらん判定：オモテ`:null,coin?`${coin.flips}回投げてオモテ${coin.heads}回`:null].filter(Boolean).join(" ／ ")}:{}),
       selfDamage:attack.effects.filter(x=>x.type==="DAMAGE" && x.target==="ATTACKING_POKEMON")
         .reduce((total,x)=>total+x.amount,0)};
     victim.damage = (victim.damage ?? 0) + damage;
@@ -304,12 +316,14 @@ export class AttackEngine extends AbilityEngine {
       } else if (effect.type === "DAMAGE" && effect.target === "ATTACKING_POKEMON") {
         own.active.damage = (own.active.damage ?? 0) + effect.amount;
       } else if(effect.type === "APPLY_STATUS") {
-        const status=effect.status;
-        victim.statuses??=[];
-        if(["ねむり","マヒ"].includes(status))
-          victim.statuses=victim.statuses.filter(x=>!["ねむり","マヒ"].includes(typeof x==="string"?x:x.name));
-        if(!victim.statuses.some(x=>(typeof x==="string"?x:x.name)===status))
-          victim.statuses.push({name:status,appliedTurnNo:next.turnNo,ownerPlayer:1-state.turn});
+        if(!(this.isSupportedStadium(next.stadium)&&(victim.attached??[]).length)){
+          const status=effect.status;
+          victim.statuses??=[];
+          if(["ねむり","マヒ","こんらん"].includes(status))
+            victim.statuses=victim.statuses.filter(x=>!["ねむり","マヒ","こんらん"].includes(typeof x==="string"?x:x.name));
+          if(!victim.statuses.some(x=>(typeof x==="string"?x:x.name)===status))
+            victim.statuses.push({name:status,appliedTurnNo:next.turnNo,ownerPlayer:1-state.turn});
+        }
       } else if (effect.type === "HEAL_OWN_FIELD") {
         for(const pokemon of this.field(own)) pokemon.damage=Math.max(0,(pokemon.damage??0)-effect.amount);
       } else if (effect.type === "COIN_DISCARD_ENERGY") {

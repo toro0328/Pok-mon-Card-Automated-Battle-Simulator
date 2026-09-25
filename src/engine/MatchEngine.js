@@ -1,4 +1,4 @@
-import { AttackEngine } from "./AttackEngine.js?v=20260925-status1";
+import { AttackEngine } from "./AttackEngine.js?v=20260925-status2";
 
 const BASIC = "たね";
 const TRAINERS = {
@@ -322,6 +322,12 @@ export class MatchEngine extends AttackEngine {
     return this.endTurn(next);
   }
 
+  clearSwitchStatuses(instance,evolved=false){
+    if(!instance)return;
+    const recover=new Set(["ねむり","マヒ","こんらん"]);
+    instance.statuses=evolved?[]:(instance.statuses??[]).filter(x=>!recover.has(typeof x==="string"?x:x.name));
+  }
+
   getMatchActions(state) {
     this.assertSandbox(state);
     if (state.winner != null) return [];
@@ -371,9 +377,10 @@ export class MatchEngine extends AttackEngine {
         actions.push({type:"PLAY_STADIUM",player:state.turn,sourceInstanceId:card.instanceId});
     }
     if (!state.retreatedThisTurn && player.active && player.bench.length) {
+      const blockedStatus=(player.active.statuses??[]).some(x=>["マヒ","ねむり"].includes(typeof x==="string"?x:x.name));
       const count = this.retreatCost(state, state.turn, player.active.instanceId);
       const attached = player.active.attached ?? [];
-      if (count <= attached.length && attached.every(x => this.isSupportedEnergy(x))) {
+      if (!blockedStatus && count <= attached.length && attached.every(x => this.isSupportedEnergy(x))) {
         const subsets = (start, chosen) => {
           if (chosen.length === count) return [chosen];
           const result = [];
@@ -442,12 +449,14 @@ export class MatchEngine extends AttackEngine {
         player.trash.push(active.attached.splice(index, 1)[0]);
       }
       const benchIndex = player.bench.findIndex(x => x.instanceId === action.targetInstanceId);
+      this.clearSwitchStatuses(active);
       player.active = player.bench[benchIndex];
       player.bench[benchIndex] = active;
       next.retreatedThisTurn = true;
     } else if (action.type === "EVOLVE") {
       const evolution = player.hand.splice(handIndex, 1)[0];
       const before = this.field(player).find(x => x.instanceId === action.targetInstanceId);
+      this.clearSwitchStatuses(before,true);
       const { attached = [], stack = [], damage = 0, ...face } = before;
       const evolved = { ...evolution, attached, stack: [...stack, face], damage,
         enteredTurn: next.turnNo };
@@ -474,6 +483,7 @@ export class MatchEngine extends AttackEngine {
       } else if (spec.effect === "boss" || spec.effect === "switch") {
         const target = next.players[spec.effect === "boss" ? 1-action.player : action.player];
         const i=target.bench.findIndex(x=>x.instanceId===action.choiceInstanceId);
+        this.clearSwitchStatuses(target.active);
         [target.active,target.bench[i]]=[target.bench[i],target.active];
       } else if(spec.effect === "transfer"){
         const from=this.field(player).find(x=>(x.attached??[]).some(y=>y.instanceId===action.choiceInstanceId));

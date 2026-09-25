@@ -6,7 +6,7 @@ const PATTERNS = [
     convert: match => [{ type: "DRAW", player: "SELF", count: Number(match[1]) }]
   },
   {
-    expression: /^相手のバトルポケモンを(どく|やけど|ねむり|マヒ)にする。$/,
+    expression: /^相手のバトルポケモンを(どく|やけど|ねむり|マヒ|こんらん)にする。$/,
     convert: match => [{ type: "APPLY_STATUS", target: "DEFENDING_ACTIVE", status: match[1] }]
   },
   {
