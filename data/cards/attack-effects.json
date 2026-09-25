@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 2221,
-    "needs_review": 2941
+    "supported": 2271,
+    "needs_review": 2891
   },
   "attacks": {
     "45147": [
@@ -799,8 +799,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "45179": [
@@ -2366,8 +2372,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "45249": [
@@ -3029,8 +3041,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -4980,8 +4998,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "45519": [
@@ -7078,8 +7102,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "45612": [
@@ -9560,8 +9590,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "45747": [
@@ -10718,8 +10754,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "45850": [
@@ -11771,8 +11813,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "45898": [
@@ -13575,8 +13623,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "45986": [
@@ -15682,8 +15736,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "46168": [
@@ -15842,8 +15902,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "46178": [
@@ -16360,8 +16426,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "46214": [
@@ -16925,8 +16997,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -17669,8 +17747,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "46278": [
@@ -21810,8 +21894,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "46504": [
@@ -21918,8 +22008,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "46509": [
@@ -25221,8 +25317,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "46730": [
@@ -25287,8 +25389,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "46737": [
@@ -25504,8 +25612,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -27571,8 +27685,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -27753,8 +27873,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -28228,8 +28354,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "47090": [
@@ -28782,8 +28914,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -29369,8 +29507,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -30311,8 +30455,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -34001,8 +34151,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "47459": [
@@ -34330,8 +34486,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "47473": [
@@ -35055,8 +35217,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "47528": [
@@ -38017,8 +38185,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "47660": [
@@ -39283,8 +39457,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "47743": [
@@ -41193,8 +41373,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -44731,8 +44917,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "48033": [
@@ -46108,8 +46300,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "48250": [
@@ -51869,8 +52067,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "48604": [
@@ -52271,8 +52475,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "48623": [
@@ -60799,8 +61009,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "49019": [
@@ -61270,8 +61486,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "49039": [
@@ -61590,8 +61812,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "49053": [
@@ -61708,8 +61936,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -61878,8 +62112,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "49065": [
@@ -62141,8 +62381,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "49075": [
@@ -64228,8 +64474,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "49156": [
@@ -64363,8 +64615,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -67345,8 +67603,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "49277": [
@@ -68648,8 +68912,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "49332": [
@@ -70336,8 +70606,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -74620,8 +74896,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "50133": [
@@ -76913,8 +77195,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -79233,8 +79521,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "50387": [
@@ -80880,8 +81174,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "50536": [
