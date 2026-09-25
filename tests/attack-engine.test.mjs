@@ -85,6 +85,21 @@ test("Talonflame search attack is supported while unrelated unknown attacks stay
   assert.equal(inspectAttacks(engine.repository.get(46008))[0].status,"needs_review");
 });
 
+test("coin-gated status is only applied on Heads",()=>{
+  const text="コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。";
+  const testDb=structuredClone(db),budew=testDb.cards.find(x=>x.officialCardId===49956);
+  budew.raw.attacks[0].effect=text;
+  const testEngine=new AttackEngine(new CardRepository(testDb),abilities);
+  const heads=Array.from({length:100},(_,i)=>i+1).find(seed=>testEngine.coinSequence(seed,true).heads===1);
+  const tails=Array.from({length:100},(_,i)=>i+1).find(seed=>testEngine.coinSequence(seed,true).heads===0);
+  for(const [seed,expected] of [[heads,"マヒ"],[tails,undefined]]){
+    const game=state(player(card("budew",49956)),player(card("target",50339)));
+    game.randomState=seed;
+    const after=testEngine.applyAttack(game,testEngine.getLegalAttacks(game)[0]);
+    assert.equal(after.players[1].active.statuses?.[0]?.name,expected);
+  }
+});
+
 test("exact status effect phrases parse; added unknown phrases stay unsupported",()=>{
   assert.equal(parseEffectText("相手のバトルポケモンをねむりにする。").recognized,true);
   assert.equal(parseEffectText("相手のバトルポケモンをねむりにする。追加の効果は不明。").recognized,false);

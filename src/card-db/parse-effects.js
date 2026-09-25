@@ -6,6 +6,10 @@ const PATTERNS = [
     convert: match => [{ type: "DRAW", player: "SELF", count: Number(match[1]) }]
   },
   {
+    expression: /^コインを1回投げオモテなら、相手のバトルポケモンを(どく|やけど|ねむり|マヒ|こんらん)にする。$/,
+    convert: match => [{type:"COIN_APPLY_STATUS",target:"DEFENDING_ACTIVE",status:match[1]}]
+  },
+  {
     expression: /^相手のバトルポケモンを(どく|やけど|ねむり|マヒ|こんらん)にする。$/,
     convert: match => [{ type: "APPLY_STATUS", target: "DEFENDING_ACTIVE", status: match[1] }]
   },
@@ -149,7 +153,7 @@ export function inspectAttacks(card) {
       typeof type === "string" &&
       (type === "Void" ? cost.length === 1 && i === 0 :
         ["Colorless", "Grass", "Fire", "Water", "Electric", "Psychic", "Fighting", "Dark", "Metal", "Steel", "Dragon"].includes(type)));
-    const noDamageTypes=new Set(["SEARCH_DECK","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS","HEAL","DRAW","DAMAGE",
+    const noDamageTypes=new Set(["SEARCH_DECK","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS","COIN_APPLY_STATUS","HEAL","DRAW","DAMAGE",
       "DISCARD_ATTACHED","DISCARD_OPPONENT_ENERGY","PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN"]);
     const noPrintedDamage=damage===null&&parsed.effects.length>0&&parsed.effects.every(x=>noDamageTypes.has(x.type));
     const bonus=parsed.effects.find(x=>x.type==="MODIFY_DAMAGE"||x.type==="COIN_BONUS");

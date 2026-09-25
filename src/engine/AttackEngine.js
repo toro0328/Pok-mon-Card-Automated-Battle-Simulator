@@ -277,6 +277,15 @@ export class AttackEngine extends AbilityEngine {
     return this.endTurn(next);
   }
 
+  applyStatus(state,target,status,ownerPlayer){
+    if(this.isSupportedStadium(state.stadium)&&(target.attached??[]).length)return;
+    target.statuses??=[];
+    const recover=new Set(["ねむり","マヒ","こんらん"]);
+    if(recover.has(status))target.statuses=target.statuses.filter(x=>!recover.has(typeof x==="string"?x:x.name));
+    if(!target.statuses.some(x=>(typeof x==="string"?x:x.name)===status))
+      target.statuses.push({name:status,appliedTurnNo:state.turnNo,ownerPlayer});
+  }
+
   attacksTwice(state, instance) {
     return !!state.stadium && this.entries(instance).some(entry=>entry.status === "supported" &&
       entry.operations.some(op=>op.type === "ATTACK_TWICE_IF_STADIUM" &&
@@ -305,9 +314,9 @@ export class AttackEngine extends AbilityEngine {
     const damage = this.calculateAttackDamage(next, action);
     const victim=action.targetInstanceId
       ? this.field(opponent).find(x=>x.instanceId===action.targetInstanceId):opponent.active;
-    const coinEffect=attack.effects.find(x=>x.basis==="COIN_UNTIL_TAILS"||["COIN_DISCARD_ENERGY","COIN_BONUS","COIN_DAMAGE"].includes(x.type));
+    const coinEffect=attack.effects.find(x=>x.basis==="COIN_UNTIL_TAILS"||["COIN_DISCARD_ENERGY","COIN_BONUS","COIN_DAMAGE","COIN_APPLY_STATUS"].includes(x.type));
     const coin=coinEffect?this.coinSequence(next.randomState??1,
-      ["COIN_DISCARD_ENERGY","COIN_BONUS"].includes(coinEffect.type),coinEffect.count??null):null;
+      ["COIN_DISCARD_ENERGY","COIN_BONUS","COIN_APPLY_STATUS"].includes(coinEffect.type),coinEffect.count??null):null;
     if(coin)next.randomState=coin.randomState;
     next.lastAttack={player:state.turn,attacker:this.card(own.active).name,
       defender:this.card(victim).name,attack:attack.name,damage,
@@ -322,14 +331,9 @@ export class AttackEngine extends AbilityEngine {
       } else if (effect.type === "DAMAGE" && effect.target === "ATTACKING_POKEMON") {
         own.active.damage = (own.active.damage ?? 0) + effect.amount;
       } else if(effect.type === "APPLY_STATUS") {
-        if(!(this.isSupportedStadium(next.stadium)&&(victim.attached??[]).length)){
-          const status=effect.status;
-          victim.statuses??=[];
-          if(["ねむり","マヒ","こんらん"].includes(status))
-            victim.statuses=victim.statuses.filter(x=>!["ねむり","マヒ","こんらん"].includes(typeof x==="string"?x:x.name));
-          if(!victim.statuses.some(x=>(typeof x==="string"?x:x.name)===status))
-            victim.statuses.push({name:status,appliedTurnNo:next.turnNo,ownerPlayer:1-state.turn});
-        }
+        this.applyStatus(next,victim,effect.status,1-state.turn);
+      } else if(effect.type === "COIN_APPLY_STATUS") {
+        if(coin?.heads)this.applyStatus(next,victim,effect.status,1-state.turn);
       } else if (effect.type === "HEAL_OWN_FIELD") {
         for(const pokemon of this.field(own)) pokemon.damage=Math.max(0,(pokemon.damage??0)-effect.amount);
       } else if(effect.type === "HEAL") {
