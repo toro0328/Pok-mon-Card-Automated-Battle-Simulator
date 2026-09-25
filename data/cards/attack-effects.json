@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 2137,
-    "needs_review": 3025
+    "supported": 2221,
+    "needs_review": 2941
   },
   "attacks": {
     "45147": [
@@ -248,8 +248,14 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
@@ -449,8 +455,14 @@
           "Water"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "45166": [
@@ -1178,8 +1190,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "45193": [
@@ -2087,8 +2105,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "45240": [
@@ -4906,8 +4930,14 @@
           "Water"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "45517": [
@@ -5830,8 +5860,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "45558": [
@@ -6428,8 +6464,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "45589": [
@@ -6445,8 +6487,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
@@ -7230,8 +7278,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "45619": [
@@ -7884,8 +7938,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
@@ -8759,8 +8819,14 @@
           "Water"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       },
       {
         "index": 1,
@@ -8787,8 +8853,14 @@
           "Water"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       },
       {
         "index": 1,
@@ -9800,8 +9872,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       },
       {
         "index": 1,
@@ -9888,8 +9966,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       },
       {
         "index": 1,
@@ -13859,8 +13943,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "46001": [
@@ -13891,8 +13981,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "46002": [
@@ -15409,8 +15505,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "46161": [
@@ -16474,8 +16576,14 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
@@ -17794,8 +17902,14 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
@@ -18744,8 +18858,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "46358": [
@@ -18954,8 +19074,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "46367": [
@@ -18970,8 +19096,14 @@
           "Water"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "46368": [
@@ -20772,8 +20904,14 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "46464": [
@@ -20788,8 +20926,14 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       },
       {
         "index": 1,
@@ -23410,8 +23554,14 @@
           "Water"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "46635": [
@@ -23589,8 +23739,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "46645": [
@@ -23755,8 +23911,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "46655": [
@@ -26206,8 +26368,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       },
       {
         "index": 1,
@@ -30757,8 +30925,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "47317": [
@@ -32777,8 +32951,14 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
@@ -33182,8 +33362,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "47431": [
@@ -33793,8 +33979,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "47458": [
@@ -34058,8 +34250,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "47470": [
@@ -35240,8 +35438,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "47547": [
@@ -35322,8 +35526,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
@@ -35947,8 +36157,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "47576": [
@@ -36405,8 +36621,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "47594": [
@@ -38271,8 +38493,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "47680": [
@@ -39189,8 +39417,14 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
@@ -39882,8 +40116,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "47777": [
@@ -40195,8 +40435,14 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       },
       {
         "index": 1,
@@ -40399,8 +40645,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "47808": [
@@ -41789,8 +42041,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "47920": [
@@ -41871,8 +42129,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
@@ -42430,8 +42694,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "47947": [
@@ -42839,8 +43109,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "47963": [
@@ -44914,8 +45190,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "48052": [
@@ -45890,8 +46172,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "48257": [
@@ -47371,8 +47659,14 @@
           "Fighting"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "48384": [
@@ -48260,8 +48554,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "48430": [
@@ -50590,8 +50890,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "48559": [
@@ -51943,8 +52249,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "48622": [
@@ -53054,8 +53366,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "48719": [
@@ -53101,8 +53419,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       },
       {
         "index": 1,
@@ -54128,8 +54452,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "48765": [
@@ -55218,8 +55548,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "48812": [
@@ -55235,8 +55571,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
@@ -55406,8 +55748,14 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
@@ -55630,8 +55978,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "48828": [
@@ -55740,8 +56094,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
@@ -56162,8 +56522,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "48849": [
@@ -56421,8 +56787,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "48859": [
@@ -56536,8 +56908,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "48865": [
@@ -57448,8 +57826,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "48902": [
@@ -57513,8 +57897,14 @@
           "Water"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "48905": [
@@ -60075,8 +60465,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "49005": [
@@ -63810,8 +64206,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "49155": [
@@ -63904,8 +64306,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "49160": [
@@ -64275,8 +64683,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       },
       {
         "index": 1,
@@ -64470,8 +64884,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "49183": [
@@ -65007,8 +65427,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       },
       {
         "index": 1,
@@ -66807,8 +67233,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "49272": [
@@ -69651,8 +70083,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "49656": [
@@ -70304,8 +70742,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "49684": [
@@ -71263,8 +71707,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "49985": [
@@ -71471,8 +71921,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "49994": [
@@ -73195,8 +73651,14 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "50093": [
@@ -75463,8 +75925,14 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
@@ -77944,8 +78412,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
@@ -78348,8 +78822,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "50369": [
@@ -78628,8 +79108,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       },
       {
         "index": 1,
@@ -81515,8 +82001,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "50614": [
@@ -81597,8 +82089,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          }
+        ]
       }
     ],
     "50618": [
@@ -81691,8 +82189,14 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       },
       {
         "index": 1,
