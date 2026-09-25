@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 2433,
-    "needs_review": 2729
+    "supported": 2476,
+    "needs_review": 2686
   },
   "attacks": {
     "45147": [
@@ -1527,8 +1527,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを3枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 3,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -5223,8 +5230,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを3枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 3,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -7232,8 +7246,15 @@
           "Colorless"
         ],
         "text": "自分の山札から基本エネルギーを3枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 3,
+            "filter": "basicEnergy",
+            "destination": "HAND"
+          }
+        ]
       },
       {
         "index": 1,
@@ -8684,8 +8705,15 @@
           "Colorless"
         ],
         "text": "自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicEnergy",
+            "destination": "HAND"
+          }
+        ]
       },
       {
         "index": 1,
@@ -10698,8 +10726,15 @@
           "Colorless"
         ],
         "text": "自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicEnergy",
+            "destination": "HAND"
+          }
+        ]
       },
       {
         "index": 1,
@@ -14123,8 +14158,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -17284,8 +17326,15 @@
           "Colorless"
         ],
         "text": "自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicEnergy",
+            "destination": "HAND"
+          }
+        ]
       },
       {
         "index": 1,
@@ -17313,8 +17362,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -22220,8 +22276,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -23402,8 +23465,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを3枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 3,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -27651,8 +27721,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -30071,8 +30148,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -36525,8 +36609,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -37472,8 +37563,15 @@
           "Colorless"
         ],
         "text": "自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicEnergy",
+            "destination": "HAND"
+          }
+        ]
       }
     ],
     "47607": [
@@ -39988,8 +40086,15 @@
           "Fire"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -41385,8 +41490,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -43202,8 +43314,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -44049,8 +44168,15 @@
           "Colorless"
         ],
         "text": "自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicEnergy",
+            "destination": "HAND"
+          }
+        ]
       }
     ],
     "47975": [
@@ -47897,8 +48023,15 @@
           "Fire"
         ],
         "text": "自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicEnergy",
+            "destination": "HAND"
+          }
+        ]
       },
       {
         "index": 1,
@@ -48770,8 +48903,15 @@
           "Dark"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -50263,8 +50403,15 @@
           "Dark"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -50348,8 +50495,15 @@
           "Fire"
         ],
         "text": "自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicEnergy",
+            "destination": "HAND"
+          }
+        ]
       },
       {
         "index": 1,
@@ -51721,8 +51875,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -56051,8 +56212,15 @@
           "Colorless"
         ],
         "text": "自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicEnergy",
+            "destination": "HAND"
+          }
+        ]
       },
       {
         "index": 1,
@@ -58433,8 +58601,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -60529,8 +60704,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -62341,8 +62523,15 @@
           "Colorless"
         ],
         "text": "自分の山札から基本エネルギーを3枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 3,
+            "filter": "basicEnergy",
+            "destination": "HAND"
+          }
+        ]
       },
       {
         "index": 1,
@@ -62550,8 +62739,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -63167,8 +63363,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -66622,8 +66825,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -69093,8 +69303,15 @@
           "Colorless"
         ],
         "text": "自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicEnergy",
+            "destination": "HAND"
+          }
+        ]
       },
       {
         "index": 1,
@@ -69271,8 +69488,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを3枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 3,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -70273,8 +70497,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -73602,8 +73833,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -74832,8 +75070,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -75309,8 +75554,15 @@
           "Colorless"
         ],
         "text": "自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicEnergy",
+            "destination": "HAND"
+          }
+        ]
       },
       {
         "index": 1,
@@ -76378,8 +76630,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -77845,8 +78104,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -79490,8 +79756,15 @@
           "Colorless"
         ],
         "text": "自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicEnergy",
+            "destination": "HAND"
+          }
+        ]
       },
       {
         "index": 1,
@@ -79742,8 +80015,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -81110,8 +81390,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -82572,8 +82859,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
@@ -83084,8 +83378,15 @@
           "Colorless"
         ],
         "text": "自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_DECK",
+            "max": 2,
+            "filter": "basicPokemon",
+            "destination": "BENCH"
+          }
+        ]
       },
       {
         "index": 1,
