@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 2804,
-    "needs_review": 2358
+    "supported": 2868,
+    "needs_review": 2294
   },
   "attacks": {
     "45147": [
@@ -2137,8 +2137,14 @@
           "Fire"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "45238": [
@@ -2373,8 +2379,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -3088,8 +3100,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -3606,8 +3624,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -4596,8 +4620,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "45469": [
@@ -5803,8 +5833,14 @@
           "Fire"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "45548": [
@@ -7061,8 +7097,14 @@
           "Water"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "45601": [
@@ -7141,8 +7183,14 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -7274,8 +7322,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -8571,8 +8625,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -9651,8 +9711,14 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "45735": [
@@ -11113,8 +11179,14 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "45848": [
@@ -14400,8 +14472,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -16805,8 +16883,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "46191": [
@@ -17423,8 +17507,14 @@
           "Water"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "46240": [
@@ -22650,8 +22740,14 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -27649,8 +27745,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "47022": [
@@ -27667,8 +27769,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "47023": [
@@ -28123,8 +28231,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "47043": [
@@ -32253,8 +32367,14 @@
           "Water"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "47319": [
@@ -34670,8 +34790,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "47429": [
@@ -35115,8 +35241,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -36667,8 +36799,14 @@
           "Grass"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -37504,8 +37642,14 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -39269,8 +39413,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "47648": [
@@ -40140,8 +40290,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -41258,8 +41414,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -42675,8 +42837,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -42723,8 +42891,14 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "47825": [
@@ -43573,8 +43747,14 @@
           "Grass"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -44358,8 +44538,14 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -46300,8 +46486,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "48022": [
@@ -47121,8 +47313,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -52313,8 +52511,14 @@
           "Grass"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -55859,8 +56063,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "48731": [
@@ -56069,8 +56279,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -56549,8 +56765,14 @@
           "Grass"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -57732,8 +57954,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "48808": [
@@ -57750,8 +57978,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをやけどにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          }
+        ]
       }
     ],
     "48809": [
@@ -58793,8 +59027,14 @@
           "Fire"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "48847": [
@@ -59470,8 +59710,14 @@
           "Water"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "48872": [
@@ -60671,8 +60917,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "48917": [
@@ -60737,8 +60989,14 @@
           "Water"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "48919": [
@@ -61704,8 +61962,14 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -62411,8 +62675,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -62543,8 +62813,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -62746,8 +63022,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -63695,8 +63977,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "49035": [
@@ -67768,8 +68056,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -68839,8 +69133,14 @@
           "Steel"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -72150,8 +72450,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -73166,8 +73472,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "49662": [
@@ -74225,8 +74537,14 @@
           "Grass"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -75211,8 +75529,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "50012": [
@@ -76014,8 +76338,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "50053": [
@@ -77235,8 +77565,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "50112": [
@@ -78954,8 +79290,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "50222": [
@@ -79648,8 +79990,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "50250": [
@@ -81858,8 +82206,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -82799,8 +83153,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "50414": [
@@ -83868,8 +84228,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       },
       {
         "index": 1,
@@ -84927,8 +85293,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "50577": [
@@ -85658,8 +86030,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "50624": [
@@ -85771,8 +86149,14 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "50630": [
