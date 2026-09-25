@@ -38,6 +38,18 @@ test("every printed attack in the two loaded decks has an executable effect defi
   }
 });
 
+test("Pokémon Check applies Poison to both Active Pokémon and clears paralysis after its owner turn",()=>{
+  let state=game(player(card("own",50339)),player(card("foe",49956)));
+  state.players[0].active.statuses=[{name:"どく",appliedTurnNo:state.turnNo,ownerPlayer:1}];
+  state.players[1].active.statuses=[{name:"マヒ",appliedTurnNo:state.turnNo-1,ownerPlayer:0}];
+  state=engine.applyMatchAction(state,find(state,"END_TURN"));
+  assert.equal(state.players[0].active.damage,10);
+  assert.equal(state.players[1].active.statuses.some(x=>(typeof x==="string"?x:x.name)==="マヒ"),true);
+  state=engine.applyMatchAction(state,find(state,"END_TURN"));
+  assert.equal(state.players[0].active.damage,20);
+  assert.equal(state.players[1].active.statuses.some(x=>(typeof x==="string"?x:x.name)==="マヒ"),false);
+});
+
 test("Applin search and Talonflame search finish immediately after the maximum selections",()=>{
   let state=game(player(card("applin",45624,[card("e",50745)]),[],[],
     [card("pokemon",45699),card("extra",50745)]),player(card("mega",48466)));

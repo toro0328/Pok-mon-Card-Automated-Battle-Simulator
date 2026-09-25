@@ -1,5 +1,5 @@
-import { AbilityEngine } from "./AbilityEngine.js?v=20260924-allattacks1";
-import { inspectAttacks } from "../card-db/parse-effects.js?v=20260924-allattacks1";
+import { AbilityEngine } from "./AbilityEngine.js?v=20260925-status1";
+import { inspectAttacks } from "../card-db/parse-effects.js?v=20260925-status1";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
 // ordinary numeric damage. Ordinary single knockouts use explicit prize and
@@ -47,6 +47,7 @@ export class AttackEngine extends AbilityEngine {
     const active = state.players[state.turn].active;
     const target = state.players[1 - state.turn].active;
     if (!active || !target || !this.abilityAllowsAttack(state, state.turn, active.instanceId)) return [];
+    if ((active.statuses??[]).some(x=>["マヒ","ねむり"].includes(typeof x==="string"?x:x.name))) return [];
     return this.attacks(active).filter(attack => attack.status === "supported" &&
       !(state.attackLocks??[]).some(lock=>lock.player===state.turn && lock.instanceId===active.instanceId &&
         state.turnsTaken?.[state.turn]===lock.turnsTakenAt+1) &&
@@ -162,6 +163,30 @@ export class AttackEngine extends AbilityEngine {
     return next;
   }
 
+  pokemonCheck(state, endingPlayer) {
+    const next=structuredClone(state),victims=[];
+    for(const playerIndex of [0,1]){
+      const active=next.players[playerIndex].active;
+      if(!active)continue;
+      active.statuses=(active.statuses??[]).map(x=>typeof x==="string"?{name:x,appliedTurnNo:0}:x);
+      const has=name=>active.statuses.some(x=>x.name===name);
+      if(has("どく"))active.damage=(active.damage??0)+10;
+      if(has("やけど")){
+        active.damage=(active.damage??0)+20;
+        const coin=this.coinSequence(next.randomState??1,true);next.randomState=coin.randomState;
+        if(coin.heads)active.statuses=active.statuses.filter(x=>x.name!=="やけど");
+      }
+      if(has("ねむり")){
+        const coin=this.coinSequence(next.randomState??1,true);next.randomState=coin.randomState;
+        if(coin.heads)active.statuses=active.statuses.filter(x=>x.name!=="ねむり");
+      }
+      if(has("マヒ")&&playerIndex===endingPlayer&&active.statuses.some(x=>x.name==="マヒ"&&x.appliedTurnNo<next.turnNo))
+        active.statuses=active.statuses.filter(x=>x.name!=="マヒ");
+      if(active.damage>=this.effectiveHP(active))victims.push(playerIndex);
+    }
+    return {state:next,victims};
+  }
+
   prizeValue(instance) {
     const { name, raw } = this.card(instance);
     if (raw.rule_box === "メガシンカexがきぜつしたとき、相手はサイドを3枚とる。") return 3;
@@ -231,6 +256,7 @@ export class AttackEngine extends AbilityEngine {
     if(action.type === "RESOLVE_KNOCKOUT"){
       next.pendingKnockout=null;
       if(next.pendingAttack)return next;
+      if(next.pendingTurnAdvance){delete next.pendingTurnAdvance;return this.startTurn(next);}
       return this.endTurn(next);
     }
     const owner = next.players[pending.owner];
@@ -242,6 +268,7 @@ export class AttackEngine extends AbilityEngine {
         next.players[next.pendingSecondAttack.player].active?.instanceId === next.pendingSecondAttack.sourceInstanceId)
       return next;
     delete next.pendingSecondAttack;
+    if(next.pendingTurnAdvance){delete next.pendingTurnAdvance;return this.startTurn(next);}
     return this.endTurn(next);
   }
 
@@ -276,6 +303,13 @@ export class AttackEngine extends AbilityEngine {
         own.hand.push(...own.deck.splice(0, effect.count));
       } else if (effect.type === "DAMAGE" && effect.target === "ATTACKING_POKEMON") {
         own.active.damage = (own.active.damage ?? 0) + effect.amount;
+      } else if(effect.type === "APPLY_STATUS") {
+        const status=effect.status;
+        victim.statuses??=[];
+        if(["ねむり","マヒ"].includes(status))
+          victim.statuses=victim.statuses.filter(x=>!["ねむり","マヒ"].includes(typeof x==="string"?x:x.name));
+        if(!victim.statuses.some(x=>(typeof x==="string"?x:x.name)===status))
+          victim.statuses.push({name:status,appliedTurnNo:next.turnNo,ownerPlayer:1-state.turn});
       } else if (effect.type === "HEAL_OWN_FIELD") {
         for(const pokemon of this.field(own)) pokemon.damage=Math.max(0,(pokemon.damage??0)-effect.amount);
       } else if (effect.type === "COIN_DISCARD_ENERGY") {

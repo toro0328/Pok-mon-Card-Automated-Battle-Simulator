@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { CardRepository } from "../src/card-db/CardRepository.js";
 import { AttackEngine } from "../src/engine/AttackEngine.js";
-import { inspectAttacks } from "../src/card-db/parse-effects.js";
+import { inspectAttacks, parseEffectText } from "../src/card-db/parse-effects.js";
 
 const db = JSON.parse(fs.readFileSync("tests/fixtures/ability-cards.json", "utf8"));
 db.cards.push(...JSON.parse(fs.readFileSync("tests/fixtures/attack-cards.json", "utf8")));
@@ -83,6 +83,11 @@ test("Talonflame search attack is supported while unrelated unknown attacks stay
     player(card("target", 48466)));
   assert.equal(engine.getLegalAttacks(game).length, 1);
   assert.equal(inspectAttacks(engine.repository.get(46008))[0].status,"needs_review");
+});
+
+test("exact status effect phrases parse; added unknown phrases stay unsupported",()=>{
+  assert.equal(parseEffectText("相手のバトルポケモンをねむりにする。").recognized,true);
+  assert.equal(parseEffectText("相手のバトルポケモンをねむりにする。追加の効果は不明。").recognized,false);
 });
 
 test("damage reduction and resistance do not drop below zero", () => {

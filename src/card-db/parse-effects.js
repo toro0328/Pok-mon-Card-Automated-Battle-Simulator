@@ -6,6 +6,10 @@ const PATTERNS = [
     convert: match => [{ type: "DRAW", player: "SELF", count: Number(match[1]) }]
   },
   {
+    expression: /^相手のバトルポケモンを(どく|やけど|ねむり|マヒ)にする。$/,
+    convert: match => [{ type: "APPLY_STATUS", target: "DEFENDING_ACTIVE", status: match[1] }]
+  },
+  {
     expression: /^このポケモンにも([1-9][0-9]*)ダメージ。$/,
     convert: match => [{ type: "DAMAGE", target: "ATTACKING_POKEMON", amount: Number(match[1]), source: "ATTACK_EFFECT" }]
   },
@@ -93,7 +97,7 @@ export function inspectAttacks(card) {
       (type === "Void" ? cost.length === 1 && i === 0 :
         ["Colorless", "Grass", "Fire", "Water", "Electric", "Psychic", "Fighting", "Dark", "Metal", "Steel", "Dragon"].includes(type)));
     const noPrintedDamage = damage === null && parsed.effects.length === 1 &&
-      ["SEARCH_DECK","DAMAGE_CHOSEN_OPPONENT"].includes(parsed.effects[0].type);
+      ["SEARCH_DECK","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS"].includes(parsed.effects[0].type);
     const validDamage = noPrintedDamage || Number.isInteger(damage?.amount) && damage.amount >= 0 &&
       (damage.suffix === "" || (damage.suffix === "＋" && parsed.effects.length === 1 &&
         parsed.effects[0].type === "MODIFY_DAMAGE") ||

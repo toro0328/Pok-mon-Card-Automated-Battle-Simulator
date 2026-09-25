@@ -1,4 +1,4 @@
-import { AttackEngine } from "./AttackEngine.js?v=20260924-allattacks1";
+import { AttackEngine } from "./AttackEngine.js?v=20260925-status1";
 
 const BASIC = "たね";
 const TRAINERS = {
@@ -101,8 +101,15 @@ export class MatchEngine extends AttackEngine {
 
   endTurn(state) {
     if (state.phase !== "playing") throw new Error("Finish setup before ending a turn");
-    const next = super.endTurn(state);
-    next.turnsTaken[state.turn]++;
+    const endingPlayer=state.turn,checked=this.pokemonCheck(state,endingPlayer);
+    const next=super.endTurn(checked.state);
+    next.turnsTaken[endingPlayer]++;
+    if(checked.victims.length){
+      if(checked.victims.length>1)next.pendingKnockout={reason:"SIMULTANEOUS_KNOCKOUT_NEEDS_REVIEW",victims:checked.victims};
+      else this.beginKnockout(next,checked.victims);
+      next.pendingTurnAdvance=true;
+      return next;
+    }
     return this.startTurn(next);
   }
 
