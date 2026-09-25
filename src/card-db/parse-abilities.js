@@ -55,6 +55,16 @@ export function parseAbility(name, text) {
       limit: "ABILITY_NAME_PER_TURN"
     };
   }
+  if (text === "自分の番に1回使える。自分の山札からサポートを1枚選び、相手に見せて、手札に加える。そして山札を切る。") {
+    return { status: "supported", trigger: "FROM_FIELD", conditions: [], costs: [],
+      operations: [{ type: "SEARCH_DECK", count: 1, filter: "supporter", destination: "HAND", shuffle: true }],
+      limit: "CARD_INSTANCE_PER_TURN" };
+  }
+  if (text === "自分の番に1回使える。自分の山札から基本エネルギーを1枚選び、手札に加える。そして山札を切る。") {
+    return { status: "supported", trigger: "FROM_FIELD", conditions: [], costs: [],
+      operations: [{ type: "SEARCH_DECK", count: 1, filter: "basicEnergy", destination: "HAND", shuffle: true }],
+      limit: "CARD_INSTANCE_PER_TURN" };
+  }
   if ((match = text.match(/^自分の番に1回使える。自分の山札を([1-9][0-9]*)枚引く。$/))) {
     return {
       status: "supported", trigger: "FROM_FIELD", conditions: [], costs: [],

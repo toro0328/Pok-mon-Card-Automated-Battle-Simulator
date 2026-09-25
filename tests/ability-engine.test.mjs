@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import { CardRepository } from "../src/card-db/CardRepository.js";
 import { AbilityEngine } from "../src/engine/AbilityEngine.js";
+import { parseAbility } from "../src/card-db/parse-abilities.js";
 
 const db = JSON.parse(fs.readFileSync("tests/fixtures/ability-cards.json", "utf8"));
 const catalog = JSON.parse(fs.readFileSync("tests/fixtures/ability-effects.json", "utf8"));
@@ -32,6 +33,22 @@ test("Talonflame can bench directly from hand only with own Colorless Mega ex", 
   assert.equal(engine.getLegalActions(state(player({ hand: [falcon], active: mega,
     bench: Array.from({length: 5}, (_, i) => instance("b"+i, 47309)) })))
     .some(x => x.sourceInstanceId === "falcon"), false);
+});
+
+test("basic-Energy ability searches expose only matching cards and shuffle the deck",()=>{
+  const text="自分の番に1回使える。自分の山札から基本エネルギーを1枚選び、手札に加える。そして山札を切る。";
+  const testDb=structuredClone(db),host=testDb.cards.find(x=>x.officialCardId===50400);
+  host.raw.abilities=[{name:"基本エネルギーサーチ",effect:text}];
+  const parsed=parseAbility(host.raw.abilities[0].name,text);
+  const repository=new CardRepository(testDb);
+  const testEngine=new AbilityEngine(repository,{cardCount:testDb.cards.length,sourceUpdatedAt:testDb.updatedAt,
+    abilities:{[host.officialCardId]:[{index:0,name:host.raw.abilities[0].name,text,...parsed}]}});
+  const game=state(player({active:instance("host",50400),deck:[instance("grass",50745),instance("pokemon",47309)]}));
+  const actions=testEngine.getLegalActions(game);
+  assert.deepEqual(actions.map(x=>x.choiceInstanceId),["grass"]);
+  const after=testEngine.applyAction(game,actions[0]);
+  assert.equal(after.players[0].hand[0].instanceId,"grass");
+  assert.equal(after.players[0].deck.length,1);
 });
 
 test("active Mega Kangaskhan draws two and locks same named ability this turn", () => {

@@ -1,4 +1,4 @@
-import { AttackEngine } from "./AttackEngine.js?v=20260925-status2";
+import { AttackEngine } from "./AttackEngine.js?v=20260925-abilitysearch1";
 
 const BASIC = "たね";
 const TRAINERS = {

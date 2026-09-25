@@ -131,8 +131,11 @@ export class AbilityEngine {
         if (entry.operations.some(op => op.type === "BENCH_SELF") && player.bench.length >= 5) continue;
         const drawCount = entry.operations.filter(op => op.type === "DRAW").reduce((n, op) => n + op.count, 0);
         if (player.deck.length < drawCount) continue;
-        const deckChoices = entry.operations.some(op => op.type === "SEARCH_DECK")
-          ? player.deck.map(card => card.instanceId) : this.choices(entry.costs, player);
+        const search=entry.operations.find(op=>op.type === "SEARCH_DECK");
+        const deckChoices=search?player.deck.filter(card=>
+          search.filter==="supporter"?this.card(card).trainerType==="supporter":
+          search.filter==="basicEnergy"?this.card(card).energyType==="basic":true).map(card=>card.instanceId)
+          :this.choices(entry.costs,player);
         for (const choiceInstanceId of deckChoices) {
           actions.push({
             type: "USE_ABILITY", player: state.turn, sourceInstanceId: instance.instanceId,
@@ -181,6 +184,11 @@ export class AbilityEngine {
           if (operation.count !== 1 || operation.destination !== "HAND" || !operation.shuffle)
             throw new Error("Unsupported deck search");
           const index = player.deck.findIndex(card => card.instanceId === action.choiceInstanceId);
+          if(index<0)throw new Error("Selected card is not in the deck");
+          const selected=this.card(player.deck[index]);
+          if(operation.filter==="supporter"&&selected.trainerType!=="supporter" ||
+             operation.filter==="basicEnergy"&&selected.energyType!=="basic")
+            throw new Error("Selected card does not match the search filter");
           player.hand.push(player.deck.splice(index, 1)[0]);
           next.randomState ??= 1;
           for (let i = player.deck.length - 1; i > 0; i--) {
