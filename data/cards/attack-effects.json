@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 2271,
-    "needs_review": 2891
+    "supported": 2433,
+    "needs_review": 2729
   },
   "attacks": {
     "45147": [
@@ -164,8 +164,14 @@
           "Grass"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "45154": [
@@ -577,8 +583,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×90ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 90
+          }
+        ]
       }
     ],
     "45170": [
@@ -671,8 +683,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 30
+          }
+        ]
       },
       {
         "index": 1,
@@ -771,8 +788,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 30
+          }
+        ]
       }
     ],
     "45178": [
@@ -1014,8 +1037,13 @@
           "Fighting"
         ],
         "text": "コインを1回投げオモテなら、40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 40
+          }
+        ]
       },
       {
         "index": 1,
@@ -1236,8 +1264,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "45195": [
@@ -1675,8 +1708,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 30
+          }
+        ]
       }
     ],
     "45222": [
@@ -1719,8 +1758,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 10
+          }
+        ]
       },
       {
         "index": 1,
@@ -2657,8 +2702,14 @@
           "Steel"
         ],
         "text": "コインを3回投げ、オモテの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 30
+          }
+        ]
       },
       {
         "index": 1,
@@ -2997,8 +3048,14 @@
           "Colorless"
         ],
         "text": "コインを4回投げ、オモテの数×70ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 4,
+            "perCoin": 70
+          }
+        ]
       }
     ],
     "45272": [
@@ -4029,8 +4086,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、60ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 60
+          }
+        ]
       }
     ],
     "45425": [
@@ -4504,8 +4566,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、100ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 100
+          }
+        ]
       }
     ],
     "45472": [
@@ -4684,8 +4751,14 @@
           "Fighting"
         ],
         "text": "コインを2回投げ、オモテの数×40ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 40
+          }
+        ]
       }
     ],
     "45493": [
@@ -4830,8 +4903,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×100ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 100
+          }
+        ]
       }
     ],
     "45499": [
@@ -6583,8 +6662,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "45592": [
@@ -7522,8 +7606,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "45627": [
@@ -7918,8 +8007,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "45674": [
@@ -8216,8 +8310,14 @@
           "Grass"
         ],
         "text": "コインを4回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 4,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "45693": [
@@ -8490,8 +8590,13 @@
           "Grass"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "45703": [
@@ -8836,8 +8941,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "45715": [
@@ -8870,8 +8981,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 30
+          }
+        ]
       }
     ],
     "45716": [
@@ -9643,8 +9760,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "45749": [
@@ -11850,8 +11973,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "45899": [
@@ -12060,8 +12188,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "45907": [
@@ -12474,8 +12608,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "45924": [
@@ -12491,8 +12631,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×50ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -12734,8 +12880,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 30
+          }
+        ]
       }
     ],
     "45947": [
@@ -12750,8 +12901,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "45948": [
@@ -12930,8 +13087,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、10ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "45956": [
@@ -13259,8 +13421,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "45970": [
@@ -13535,8 +13703,13 @@
           "Psychic"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "45982": [
@@ -14414,8 +14587,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "46016": [
@@ -14873,8 +15052,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "46050": [
@@ -14940,8 +15125,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×50ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -16205,8 +16396,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "46193": [
@@ -16701,8 +16898,14 @@
           "Fire"
         ],
         "text": "コインを2回投げ、オモテの数×70ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 70
+          }
+        ]
       }
     ],
     "46238": [
@@ -16841,8 +17044,13 @@
           "Water"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "46243": [
@@ -17661,8 +17869,13 @@
           "Fire"
         ],
         "text": "コインを1回投げオモテなら、30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 30
+          }
+        ]
       }
     ],
     "46275": [
@@ -18965,8 +19178,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 50
+          }
+        ]
       }
     ],
     "46359": [
@@ -19543,8 +19761,13 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "46383": [
@@ -19963,8 +20186,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "46401": [
@@ -20406,8 +20635,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "46419": [
@@ -20439,8 +20673,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×100ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 100
+          }
+        ]
       }
     ],
     "46420": [
@@ -20730,8 +20970,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、10ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "46432": [
@@ -20757,8 +21002,14 @@
           "Colorless"
         ],
         "text": "コインを4回投げ、オモテの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 4,
+            "perCoin": 30
+          }
+        ]
       }
     ],
     "46433": [
@@ -21031,8 +21282,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、80ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 80
+          }
+        ]
       }
     ],
     "46465": [
@@ -22256,8 +22512,13 @@
           "Fighting"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "46519": [
@@ -22423,8 +22684,13 @@
           "Dark"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "46528": [
@@ -22881,8 +23147,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "46546": [
@@ -22898,8 +23170,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×50ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -22977,8 +23255,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×120ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 120
+          }
+        ]
       }
     ],
     "46550": [
@@ -24182,8 +24466,14 @@
           "Grass"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "46666": [
@@ -25662,8 +25952,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "46758": [
@@ -26585,8 +26881,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "47019": [
@@ -27042,8 +27344,13 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "47040": [
@@ -27857,8 +28164,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "47073": [
@@ -27926,8 +28239,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×120ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 120
+          }
+        ]
       }
     ],
     "47075": [
@@ -29285,8 +29604,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "47161": [
@@ -29301,8 +29626,13 @@
           "Dark"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "47162": [
@@ -29457,8 +29787,13 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "47168": [
@@ -29602,8 +29937,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "47183": [
@@ -30907,8 +31248,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "47309": [
@@ -33055,8 +33402,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×40ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 40
+          }
+        ]
       }
     ],
     "47413": [
@@ -33854,8 +34207,13 @@
           "Fighting"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "47447": [
@@ -34344,8 +34702,14 @@
           "Colorless"
         ],
         "text": "コインを4回投げ、オモテの数×80ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 4,
+            "perCoin": 80
+          }
+        ]
       }
     ],
     "47467": [
@@ -34456,8 +34820,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "47472": [
@@ -34525,8 +34895,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×90ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 90
+          }
+        ]
       }
     ],
     "47474": [
@@ -34703,8 +35079,14 @@
           "Colorless"
         ],
         "text": "コインを4回投げ、オモテの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 4,
+            "perCoin": 30
+          }
+        ]
       },
       {
         "index": 1,
@@ -34974,8 +35356,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "47514": [
@@ -35007,8 +35395,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×90ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 90
+          }
+        ]
       }
     ],
     "47515": [
@@ -36209,8 +36603,14 @@
           "Colorless"
         ],
         "text": "コインを4回投げ、オモテの数×100ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 4,
+            "perCoin": 100
+          }
+        ]
       }
     ],
     "47572": [
@@ -36500,8 +36900,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×80ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 80
+          }
+        ]
       },
       {
         "index": 1,
@@ -36747,8 +37153,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、60ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 60
+          }
+        ]
       }
     ],
     "47592": [
@@ -37229,8 +37640,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "47614": [
@@ -37306,8 +37723,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 40
+          }
+        ]
       }
     ],
     "47626": [
@@ -37843,8 +38265,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "47647": [
@@ -38155,8 +38582,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "47659": [
@@ -38775,8 +39207,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×40ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 40
+          }
+        ]
       },
       {
         "index": 1,
@@ -38988,8 +39426,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、60ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 60
+          }
+        ]
       }
     ],
     "47692": [
@@ -39058,8 +39501,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "47695": [
@@ -39183,8 +39631,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 40
+          }
+        ]
       },
       {
         "index": 1,
@@ -40527,8 +40980,14 @@
           "Colorless"
         ],
         "text": "コインを5回投げ、オモテの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 5,
+            "perCoin": 30
+          }
+        ]
       }
     ],
     "47787": [
@@ -41104,8 +41563,14 @@
           "Water"
         ],
         "text": "コインを2回投げ、オモテの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 30
+          }
+        ]
       }
     ],
     "47819": [
@@ -41357,8 +41822,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "47831": [
@@ -41575,8 +42046,14 @@
           "Psychic"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "47841": [
@@ -41983,8 +42460,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "47868": [
@@ -42797,8 +43280,14 @@
           "Colorless"
         ],
         "text": "コインを4回投げ、オモテの数×100ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 4,
+            "perCoin": 100
+          }
+        ]
       }
     ],
     "47944": [
@@ -43055,8 +43544,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×80ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 80
+          }
+        ]
       },
       {
         "index": 1,
@@ -43253,8 +43748,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、60ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 60
+          }
+        ]
       }
     ],
     "47961": [
@@ -43717,8 +44217,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "47982": [
@@ -44131,8 +44637,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 40
+          }
+        ]
       }
     ],
     "48002": [
@@ -44608,8 +45119,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "48021": [
@@ -44887,8 +45403,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "48032": [
@@ -45490,8 +46011,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×40ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 40
+          }
+        ]
       },
       {
         "index": 1,
@@ -45683,8 +46210,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、60ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 60
+          }
+        ]
       }
     ],
     "48063": [
@@ -45753,8 +46285,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "48066": [
@@ -45860,8 +46397,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 40
+          }
+        ]
       },
       {
         "index": 1,
@@ -46353,8 +46895,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "48256": [
@@ -46392,8 +46940,13 @@
           "Water"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "48258": [
@@ -46513,8 +47066,13 @@
           "Dark"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "48266": [
@@ -47128,8 +47686,14 @@
           "Grass"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "48350": [
@@ -47397,8 +47961,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×70ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 70
+          }
+        ]
       }
     ],
     "48363": [
@@ -47445,8 +48015,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 30
+          }
+        ]
       },
       {
         "index": 1,
@@ -47604,8 +48179,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "48371": [
@@ -47621,8 +48201,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、70ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 70
+          }
+        ]
       }
     ],
     "48372": [
@@ -47895,8 +48480,14 @@
           "Fighting"
         ],
         "text": "コインを2回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "48386": [
@@ -49225,8 +49816,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "48457": [
@@ -49732,8 +50329,14 @@
           "Grass"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "48489": [
@@ -49776,8 +50379,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×70ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 70
+          }
+        ]
       }
     ],
     "48491": [
@@ -49821,8 +50430,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "48493": [
@@ -51577,8 +52191,13 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "48581": [
@@ -51628,8 +52247,13 @@
           "Psychic"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "48584": [
@@ -53356,8 +53980,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "48660": [
@@ -54133,8 +54763,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 10
+          }
+        ]
       },
       {
         "index": 1,
@@ -54891,8 +55527,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 30
+          }
+        ]
       }
     ],
     "48774": [
@@ -55054,8 +55695,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "48782": [
@@ -55620,8 +56267,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、60ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 60
+          }
+        ]
       }
     ],
     "48806": [
@@ -55996,8 +56648,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "48820": [
@@ -56270,8 +56927,14 @@
           "Fire"
         ],
         "text": "コインを2回投げ、オモテの数×70ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 70
+          }
+        ]
       }
     ],
     "48832": [
@@ -56857,8 +57520,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、10ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "48854": [
@@ -57020,8 +57688,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 50
+          }
+        ]
       }
     ],
     "48860": [
@@ -58452,8 +59125,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "48916": [
@@ -58710,8 +59388,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、100ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 100
+          }
+        ]
       }
     ],
     "48925": [
@@ -58775,8 +59458,13 @@
           "Water"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "48928": [
@@ -59112,8 +59800,13 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -60349,8 +61042,13 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "48992": [
@@ -60429,8 +61127,13 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "48995": [
@@ -60843,8 +61546,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 30
+          }
+        ]
       },
       {
         "index": 1,
@@ -61081,8 +61789,14 @@
           "Psychic"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "49022": [
@@ -61427,8 +62141,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "49037": [
@@ -62946,8 +63665,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "49098": [
@@ -63683,8 +64407,13 @@
           "Fighting"
         ],
         "text": "コインを1回投げオモテなら、40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 40
+          }
+        ]
       },
       {
         "index": 1,
@@ -64752,8 +65481,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "49168": [
@@ -65395,8 +66129,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×40ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 40
+          }
+        ]
       },
       {
         "index": 1,
@@ -66019,8 +66759,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "49217": [
@@ -66052,8 +66797,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×100ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 100
+          }
+        ]
       }
     ],
     "49218": [
@@ -66519,8 +67270,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×100ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 100
+          }
+        ]
       }
     ],
     "49236": [
@@ -67179,8 +67936,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、60ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 60
+          }
+        ]
       }
     ],
     "49261": [
@@ -67545,8 +68307,14 @@
           "Colorless"
         ],
         "text": "コインを5回投げ、オモテの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 5,
+            "perCoin": 30
+          }
+        ]
       }
     ],
     "49275": [
@@ -67573,8 +68341,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "49276": [
@@ -67899,8 +68673,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "49289": [
@@ -67992,8 +68772,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "49293": [
@@ -68638,8 +69423,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "49320": [
@@ -68719,8 +69510,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 40
+          }
+        ]
       },
       {
         "index": 1,
@@ -69399,8 +70195,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "49590": [
@@ -69811,8 +70613,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 30
+          }
+        ]
       }
     ],
     "49619": [
@@ -69886,8 +70693,14 @@
           "Colorless"
         ],
         "text": "コインを3回投げ、オモテの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "49634": [
@@ -70240,8 +71053,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、80ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 80
+          }
+        ]
       }
     ],
     "49651": [
@@ -70426,8 +71244,14 @@
           "Electric"
         ],
         "text": "コインを2回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "49659": [
@@ -72530,8 +73354,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、10ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "50014": [
@@ -77550,8 +78379,14 @@
           "Colorless"
         ],
         "text": "コインを2回投げ、オモテの数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "50284": [
@@ -78418,8 +79253,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、10ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 10
+          }
+        ]
       }
     ],
     "50343": [
@@ -79591,8 +80431,14 @@
           "Fighting"
         ],
         "text": "コインを2回投げ、オモテの数×70ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 2,
+            "perCoin": 70
+          }
+        ]
       }
     ],
     "50390": [
@@ -79881,8 +80727,13 @@
           "Electric"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "50415": [
@@ -80080,8 +80931,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "50433": [
@@ -80407,8 +81263,13 @@
           "Grass"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "50455": [
@@ -80522,8 +81383,13 @@
           "Grass"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "50470": [
@@ -80556,8 +81422,14 @@
           "Water"
         ],
         "text": "コインを3回投げ、オモテの数×150ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 150
+          }
+        ]
       }
     ],
     "50472": [
@@ -82157,8 +83029,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "50589": [
@@ -82174,8 +83051,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "50590": [
@@ -83146,8 +84028,13 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、20ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_BONUS",
+            "perCoin": 20
+          }
+        ]
       }
     ],
     "50654": [
@@ -84276,8 +85163,14 @@
           "Steel"
         ],
         "text": "コインを3回投げ、オモテの数×50ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_DAMAGE",
+            "count": 3,
+            "perCoin": 50
+          }
+        ]
       }
     ],
     "50700": [
