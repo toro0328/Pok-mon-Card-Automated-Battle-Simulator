@@ -106,6 +106,13 @@ test("healing, energy discard and one-turn attack locks parse as exact primitive
     "PREVENT_ATTACK_NEXT_TURN");
 });
 
+test("known attack clauses compose in order while any unknown clause stays in review",()=>{
+  const parsed=parseEffectText("自分の山札を2枚引く。このポケモンにも20ダメージ。");
+  assert.equal(parsed.recognized,true);
+  assert.deepEqual(parsed.effects.map(x=>x.type),["DRAW","DAMAGE"]);
+  assert.equal(parseEffectText("自分の山札を2枚引く。未知の効果を使う。").recognized,false);
+});
+
 test("fixed-count coin damage continues after tails and resolves reproducibly",()=>{
   const parsed=parseEffectText("コインを3回投げ、オモテの数×20ダメージ。");
   assert.equal(parsed.recognized,true);

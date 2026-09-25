@@ -112,14 +112,31 @@ const PATTERNS = [
   }
 ];
 
+function parseSingle(text) {
+  const match=PATTERNS.map(pattern=>[pattern,text.match(pattern.expression)])
+    .find(([,result])=>result!==null);
+  return match?match[0].convert(match[1]):null;
+}
+
+const CHOICE_EFFECTS=new Set(["SEARCH_DECK","COIN_DISCARD_ENERGY","DISCARD_ATTACHED",
+  "DISCARD_OPPONENT_ENERGY","DISCARD_OPPONENT_HAND","SWITCH_SELF","SWITCH_OPPONENT_CHOICE","RETURN_SELF_TO_HAND"]);
+
 export function parseEffectText(text) {
   if (text === "") return { recognized: true, effects: [] };
   if (typeof text !== "string") return { recognized: false, effects: [] };
-  const match = PATTERNS.map(pattern => [pattern, text.match(pattern.expression)])
-    .find(([, result]) => result !== null);
-  return match
-    ? { recognized: true, effects: match[0].convert(match[1]) }
-    : { recognized: false, effects: [] };
+  const exact=parseSingle(text);
+  if(exact)return {recognized:true,effects:exact};
+  const clauses=text.match(/[^。]+。(?:［[^］]*］)?/g);
+  if(!clauses||clauses.length<2||clauses.join("")!==text)return {recognized:false,effects:[]};
+  const effects=[];
+  for(const clause of clauses){
+    const parsed=parseSingle(clause);
+    if(!parsed)return {recognized:false,effects:[]};
+    effects.push(...parsed);
+  }
+  if(effects.filter(effect=>CHOICE_EFFECTS.has(effect.type)).length>1)
+    return {recognized:false,effects:[]};
+  return {recognized:true,effects};
 }
 
 export function inspectAttacks(card) {
@@ -132,16 +149,15 @@ export function inspectAttacks(card) {
       typeof type === "string" &&
       (type === "Void" ? cost.length === 1 && i === 0 :
         ["Colorless", "Grass", "Fire", "Water", "Electric", "Psychic", "Fighting", "Dark", "Metal", "Steel", "Dragon"].includes(type)));
-    const noPrintedDamage = damage === null && parsed.effects.length === 1 &&
-      ["SEARCH_DECK","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS","HEAL","DISCARD_ATTACHED","DISCARD_OPPONENT_ENERGY",
-       "PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN"].includes(parsed.effects[0].type);
-    const validDamage = noPrintedDamage || Number.isInteger(damage?.amount) && damage.amount >= 0 &&
-      (damage.suffix === "" || (damage.suffix === "＋" && parsed.effects.length === 1 &&
-        ["MODIFY_DAMAGE","COIN_BONUS"].includes(parsed.effects[0].type)) ||
-        (damage.suffix === "×" && parsed.effects.length === 1 &&
-        ((parsed.effects[0].type === "SET_DAMAGE" &&
-          (parsed.effects[0].perPokemon === damage.amount || parsed.effects[0].perEnergy === damage.amount)) ||
-         parsed.effects[0].type === "COIN_DAMAGE" && parsed.effects[0].perCoin === damage.amount)));
+    const noDamageTypes=new Set(["SEARCH_DECK","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS","HEAL","DRAW","DAMAGE",
+      "DISCARD_ATTACHED","DISCARD_OPPONENT_ENERGY","PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN"]);
+    const noPrintedDamage=damage===null&&parsed.effects.length>0&&parsed.effects.every(x=>noDamageTypes.has(x.type));
+    const bonus=parsed.effects.find(x=>x.type==="MODIFY_DAMAGE"||x.type==="COIN_BONUS");
+    const multiplier=parsed.effects.find(x=>x.type==="COIN_DAMAGE"||x.type==="SET_DAMAGE");
+    const validDamage=noPrintedDamage||Number.isInteger(damage?.amount)&&damage.amount>=0&&
+      (damage.suffix===""||damage.suffix==="＋"&&!!bonus||damage.suffix==="×"&&!!multiplier&&
+       (multiplier.type==="COIN_DAMAGE"?multiplier.perCoin===damage.amount:
+        multiplier.perPokemon===damage.amount||multiplier.perEnergy===damage.amount));
     return {
       index, name: attack.name, printedDamage: damage, cost, text: attack.effect ?? "",
       status: parsed.recognized && validCost && validDamage ? "supported" : "needs_review",
