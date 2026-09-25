@@ -90,6 +90,14 @@ test("exact status effect phrases parse; added unknown phrases stay unsupported"
   assert.equal(parseEffectText("相手のバトルポケモンをねむりにする。追加の効果は不明。").recognized,false);
 });
 
+test("fixed-count coin damage continues after tails and resolves reproducibly",()=>{
+  const parsed=parseEffectText("コインを3回投げ、オモテの数×20ダメージ。");
+  assert.equal(parsed.recognized,true);
+  assert.deepEqual(parsed.effects,[{type:"COIN_DAMAGE",count:3,perCoin:20}]);
+  assert.equal(engine.coinSequence(1,false,3).flips,3);
+  assert.equal(engine.coinSequence(1,true).flips,1);
+});
+
 test("damage reduction and resistance do not drop below zero", () => {
   const grass = card("energy", 50745);
   const game = state(player(card("heracross", 50339, [grass]), [],

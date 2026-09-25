@@ -1,5 +1,5 @@
-import { AbilityEngine } from "./AbilityEngine.js?v=20260925-status2";
-import { inspectAttacks } from "../card-db/parse-effects.js?v=20260925-status2";
+import { AbilityEngine } from "./AbilityEngine.js?v=20260925-coins1";
+import { inspectAttacks } from "../card-db/parse-effects.js?v=20260925-coins1";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
 // ordinary numeric damage. Ordinary single knockouts use explicit prize and
@@ -108,6 +108,10 @@ export class AttackEngine extends AbilityEngine {
         damage += (target.attached?.length??0)*effect.perEnergy;
       } else if (effect.type === "MODIFY_DAMAGE" && effect.basis === "COIN_UNTIL_TAILS") {
         damage += this.coinSequence(state.randomState??1).heads*effect.perHeads;
+      } else if(effect.type === "COIN_BONUS") {
+        damage+=this.coinSequence(state.randomState??1,true).heads*effect.perCoin;
+      } else if(effect.type === "COIN_DAMAGE") {
+        damage=this.coinSequence(state.randomState??1,false,effect.count).heads*effect.perCoin;
       } else if (effect.type === "DAMAGE_CHOSEN_OPPONENT") {
         damage = effect.amount;
       }
@@ -134,8 +138,8 @@ export class AttackEngine extends AbilityEngine {
       randomState^=randomState<<13;randomState^=randomState>>>17;randomState^=randomState<<5;
       flips++;
       if ((randomState>>>0)/0x100000000>=0.5) heads++;
-      else break;
-    } while(!single && flips<64);
+      else if(!maxFlips)break;
+    } while(maxFlips?flips<maxFlips:!single && flips<64);
     return {heads,flips,randomState};
   }
 
@@ -300,8 +304,9 @@ export class AttackEngine extends AbilityEngine {
     const damage = this.calculateAttackDamage(next, action);
     const victim=action.targetInstanceId
       ? this.field(opponent).find(x=>x.instanceId===action.targetInstanceId):opponent.active;
-    const coin=attack.effects.some(x=>x.basis==="COIN_UNTIL_TAILS"||x.type==="COIN_DISCARD_ENERGY")
-      ? this.coinSequence(next.randomState??1,attack.effects.some(x=>x.type==="COIN_DISCARD_ENERGY")) : null;
+    const coinEffect=attack.effects.find(x=>x.basis==="COIN_UNTIL_TAILS"||["COIN_DISCARD_ENERGY","COIN_BONUS","COIN_DAMAGE"].includes(x.type));
+    const coin=coinEffect?this.coinSequence(next.randomState??1,
+      ["COIN_DISCARD_ENERGY","COIN_BONUS"].includes(coinEffect.type),coinEffect.count??null):null;
     if(coin)next.randomState=coin.randomState;
     next.lastAttack={player:state.turn,attacker:this.card(own.active).name,
       defender:this.card(victim).name,attack:attack.name,damage,
@@ -348,7 +353,7 @@ export class AttackEngine extends AbilityEngine {
       } else if ((effect.type === "MODIFY_DAMAGE" && effect.basis === "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT") ||
                  (effect.type === "SET_DAMAGE" && ["OWN_BENCH_COUNT","OWN_FIELD_FIRE_ELECTRIC_ENERGY_COUNT"].includes(effect.basis)) ||
                  (effect.type === "MODIFY_DAMAGE" && ["DEFENDING_ATTACHED_ENERGY_COUNT","COIN_UNTIL_TAILS"].includes(effect.basis)) ||
-                 effect.type === "DAMAGE_CHOSEN_OPPONENT") {
+                 ["DAMAGE_CHOSEN_OPPONENT","COIN_BONUS","COIN_DAMAGE"].includes(effect.type)) {
         // The bonus was already included in calculateAttackDamage.
       } else if (effect.type === "LOCK_ITEM_FROM_HAND" && effect.target === "OPPONENT") {
         next.itemLocks ??= [false, false];

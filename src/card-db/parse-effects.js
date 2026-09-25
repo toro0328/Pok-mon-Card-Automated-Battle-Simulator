@@ -43,6 +43,14 @@ const PATTERNS = [
     convert: () => [{type:"SEARCH_DECK",max:2,filter:"any"}]
   },
   {
+    expression: /^コインを1回投げオモテなら、([1-9][0-9]*)ダメージ追加。$/,
+    convert: match => [{type:"COIN_BONUS",perCoin:Number(match[1])}]
+  },
+  {
+    expression: /^コインを([1-9][0-9]*)回投げ、オモテの数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{type:"COIN_DAMAGE",count:Number(match[1]),perCoin:Number(match[2])}]
+  },
+  {
     expression: /^コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。$/,
     convert: () => [{type:"COIN_DISCARD_ENERGY"}]
   },
@@ -100,10 +108,11 @@ export function inspectAttacks(card) {
       ["SEARCH_DECK","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS"].includes(parsed.effects[0].type);
     const validDamage = noPrintedDamage || Number.isInteger(damage?.amount) && damage.amount >= 0 &&
       (damage.suffix === "" || (damage.suffix === "＋" && parsed.effects.length === 1 &&
-        parsed.effects[0].type === "MODIFY_DAMAGE") ||
+        ["MODIFY_DAMAGE","COIN_BONUS"].includes(parsed.effects[0].type)) ||
         (damage.suffix === "×" && parsed.effects.length === 1 &&
-        parsed.effects[0].type === "SET_DAMAGE" &&
-        (parsed.effects[0].perPokemon === damage.amount || parsed.effects[0].perEnergy === damage.amount)));
+        ((parsed.effects[0].type === "SET_DAMAGE" &&
+          (parsed.effects[0].perPokemon === damage.amount || parsed.effects[0].perEnergy === damage.amount)) ||
+         parsed.effects[0].type === "COIN_DAMAGE" && parsed.effects[0].perCoin === damage.amount)));
     return {
       index, name: attack.name, printedDamage: damage, cost, text: attack.effect ?? "",
       status: parsed.recognized && validCost && validDamage ? "supported" : "needs_review",
