@@ -1,4 +1,4 @@
-import { AttackEngine } from "./AttackEngine.js?v=20260925-abilitysearch1";
+import { AttackEngine } from "./AttackEngine.js?v=20260925-attacksearch1";
 
 const BASIC = "たね";
 const TRAINERS = {
@@ -289,13 +289,23 @@ export class MatchEngine extends AttackEngine {
     }
   }
 
+  attackSearchMatches(instance,pending,owner){
+    const card=this.card(instance);
+    if(pending.filter==="any")return true;
+    if(pending.filter==="pokemon")return card.cardType==="pokemon";
+    if(pending.filter==="basicEnergy")return card.energyType==="basic";
+    if(pending.filter==="basicPokemon")return card.cardType==="pokemon"&&card.raw.stage==="たね"&&owner.bench.length<5&&
+      this.entries(instance).every(entry=>entry.status==="supported");
+    return false;
+  }
+
   attackEffectActions(state) {
     const pending=state.pendingAttack,owner=state.players[pending.player];
     if(pending.type === "PROMOTE_SELF")return owner.bench.map(x=>({type:"ATTACK_PROMOTE",player:pending.player,
       targetInstanceId:x.instanceId}));
     if(pending.type === "DISCARD_ENERGY")return state.players[1-pending.player].active.attached.map(x=>({
       type:"ATTACK_DISCARD_ENERGY",player:pending.player,choiceInstanceId:x.instanceId}));
-    const choices=owner.deck.filter(x=>pending.filter==="any"||this.card(x).cardType==="pokemon");
+    const choices=owner.deck.filter(x=>this.attackSearchMatches(x,pending,owner));
     return [...choices.map(x=>({type:"ATTACK_SEARCH",player:pending.player,choiceInstanceId:x.instanceId})),
       {type:"ATTACK_SEARCH_FINISH",player:pending.player}];
   }
@@ -305,8 +315,11 @@ export class MatchEngine extends AttackEngine {
     const own=next.players[pending.player];
     if(action.type === "ATTACK_SEARCH"){
       const i=own.deck.findIndex(x=>x.instanceId===action.choiceInstanceId);
-      own.hand.push(own.deck.splice(i,1)[0]);pending.chosen++;
-      if(pending.chosen<pending.max && own.deck.some(x=>pending.filter==="any"||this.card(x).cardType==="pokemon"))return next;
+      const selected=own.deck.splice(i,1)[0];
+      if(pending.destination==="BENCH"){selected.enteredTurn=next.turnNo;own.bench.push(selected);}
+      else own.hand.push(selected);
+      pending.chosen++;
+      if(pending.chosen<pending.max && own.deck.some(x=>this.attackSearchMatches(x,pending,own)))return next;
       this.shufflePlayer(next,own);
     }else if(action.type === "ATTACK_SEARCH_FINISH")this.shufflePlayer(next,own);
     else if(action.type === "ATTACK_DISCARD_ENERGY"){

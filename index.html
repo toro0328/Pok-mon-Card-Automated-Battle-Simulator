@@ -160,7 +160,7 @@ function actionLabel(action){
       return `${whose}：${name(source)}「${ability.name}」${choice?`（${name(choice)}を選ぶ）`:""}`;
     }
     case "ATTACK":return `${whose}：${name(source)}「${engine.attacks(source)[action.attackIndex].name}」${action.targetInstanceId?` → ${name([...game.players[1-action.player].bench,game.players[1-action.player].active].find(x=>x?.instanceId===action.targetInstanceId))}`:""}`;
-    case "ATTACK_SEARCH":return `${whose}：山札から${name(choice)}を手札へ`;
+    case "ATTACK_SEARCH":return game.pendingAttack?.destination==="BENCH"?`${whose}：山札から${name(choice)}をベンチへ`:`${whose}：山札から${name(choice)}を手札へ`;
     case "ATTACK_SEARCH_FINISH":return `${whose}：山札を切ってワザを終える`;
     case "ATTACK_DISCARD_ENERGY":return `${whose}：相手の${name(choice)}をトラッシュ`;
     case "ATTACK_PROMOTE":return `${whose}：${name(target)}をバトル場へ`;

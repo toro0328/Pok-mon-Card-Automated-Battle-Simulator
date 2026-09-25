@@ -90,6 +90,13 @@ test("exact status effect phrases parse; added unknown phrases stay unsupported"
   assert.equal(parseEffectText("相手のバトルポケモンをねむりにする。追加の効果は不明。").recognized,false);
 });
 
+test("basic-energy and Basic-to-Bench searches parse as distinct destinations",()=>{
+  assert.deepEqual(parseEffectText("自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。").effects,
+    [{type:"SEARCH_DECK",max:2,filter:"basicEnergy",destination:"HAND"}]);
+  assert.deepEqual(parseEffectText("自分の山札からたねポケモンを2枚まで選び、ベンチに出す。そして山札を切る。").effects,
+    [{type:"SEARCH_DECK",max:2,filter:"basicPokemon",destination:"BENCH"}]);
+});
+
 test("fixed-count coin damage continues after tails and resolves reproducibly",()=>{
   const parsed=parseEffectText("コインを3回投げ、オモテの数×20ダメージ。");
   assert.equal(parsed.recognized,true);

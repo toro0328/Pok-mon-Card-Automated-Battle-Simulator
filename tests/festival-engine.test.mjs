@@ -73,6 +73,18 @@ test("switching recovers confusion sleep paralysis; evolution recovers all speci
   assert.deepEqual(pokemon.statuses,[]);
 });
 
+test("attack deck search only benches a Basic and auto-shuffles when no eligible target remains",()=>{
+  let state=game(player(card("attacker",50339),[],[],[card("basic",49956),card("energy",50745)]),
+    player(card("defender",48466)));
+  state.pendingAttack={type:"SEARCH_DECK",player:0,sourceInstanceId:"attacker",max:2,filter:"basicPokemon",destination:"BENCH",chosen:0};
+  const actions=engine.getMatchActions(state);
+  assert.deepEqual(actions.filter(x=>x.type==="ATTACK_SEARCH").map(x=>x.choiceInstanceId),["basic"]);
+  state=engine.applyMatchAction(state,actions.find(x=>x.type==="ATTACK_SEARCH"));
+  assert.equal(state.players[0].bench[0].instanceId,"basic");
+  assert.equal(state.pendingAttack,undefined);
+  assert.equal(state.turn,1);
+});
+
 test("Applin search and Talonflame search finish immediately after the maximum selections",()=>{
   let state=game(player(card("applin",45624,[card("e",50745)]),[],[],
     [card("pokemon",45699),card("extra",50745)]),player(card("mega",48466)));

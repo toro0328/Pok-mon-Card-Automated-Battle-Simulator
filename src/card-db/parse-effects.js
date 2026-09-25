@@ -51,6 +51,14 @@ const PATTERNS = [
     convert: match => [{type:"COIN_DAMAGE",count:Number(match[1]),perCoin:Number(match[2])}]
   },
   {
+    expression: /^自分の山札から基本エネルギーを([1-9][0-9]*)枚まで選び、相手に見せて、手札に加える。そして山札を切る。$/,
+    convert: match => [{type:"SEARCH_DECK",max:Number(match[1]),filter:"basicEnergy",destination:"HAND"}]
+  },
+  {
+    expression: /^自分の山札からたねポケモンを([1-9][0-9]*)枚まで選び、ベンチに出す。そして山札を切る。$/,
+    convert: match => [{type:"SEARCH_DECK",max:Number(match[1]),filter:"basicPokemon",destination:"BENCH"}]
+  },
+  {
     expression: /^コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。$/,
     convert: () => [{type:"COIN_DISCARD_ENERGY"}]
   },
