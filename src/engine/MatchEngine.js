@@ -1,4 +1,4 @@
-import { AttackEngine } from "./AttackEngine.js?v=20260925-coinstatus2";
+import { AttackEngine } from "./AttackEngine.js?v=20260925-coinstatus3";
 
 const BASIC = "たね";
 const TRAINERS = {
