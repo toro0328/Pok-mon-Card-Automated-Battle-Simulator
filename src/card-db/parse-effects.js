@@ -59,6 +59,26 @@ const PATTERNS = [
     convert: match => [{type:"SEARCH_DECK",max:Number(match[1]),filter:"basicPokemon",destination:"BENCH"}]
   },
   {
+    expression: /^このポケモンのHPを「([1-9][0-9]*)」回復する。$/,
+    convert: match => [{type:"HEAL",target:"ATTACKING_POKEMON",amount:Number(match[1])}]
+  },
+  {
+    expression: /^このポケモンについているエネルギーを([1-9][0-9]*)個選び、トラッシュする。$/,
+    convert: match => [{type:"DISCARD_ATTACHED",target:"ATTACKING_POKEMON",count:Number(match[1])}]
+  },
+  {
+    expression: /^相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。$/,
+    convert: () => [{type:"DISCARD_OPPONENT_ENERGY",count:1}]
+  },
+  {
+    expression: /^次の相手の番、このワザを受けたポケモンは、にげられない。$/,
+    convert: () => [{type:"PREVENT_RETREAT_NEXT_TURN",target:"DEFENDING_ACTIVE"}]
+  },
+  {
+    expression: /^次の相手の番、このワザを受けたポケモンは、ワザが使えない。$/,
+    convert: () => [{type:"PREVENT_ATTACK_NEXT_TURN",target:"DEFENDING_ACTIVE"}]
+  },
+  {
     expression: /^コインを1回投げオモテなら、相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。$/,
     convert: () => [{type:"COIN_DISCARD_ENERGY"}]
   },
@@ -113,7 +133,8 @@ export function inspectAttacks(card) {
       (type === "Void" ? cost.length === 1 && i === 0 :
         ["Colorless", "Grass", "Fire", "Water", "Electric", "Psychic", "Fighting", "Dark", "Metal", "Steel", "Dragon"].includes(type)));
     const noPrintedDamage = damage === null && parsed.effects.length === 1 &&
-      ["SEARCH_DECK","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS"].includes(parsed.effects[0].type);
+      ["SEARCH_DECK","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS","HEAL","DISCARD_ATTACHED","DISCARD_OPPONENT_ENERGY",
+       "PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN"].includes(parsed.effects[0].type);
     const validDamage = noPrintedDamage || Number.isInteger(damage?.amount) && damage.amount >= 0 &&
       (damage.suffix === "" || (damage.suffix === "＋" && parsed.effects.length === 1 &&
         ["MODIFY_DAMAGE","COIN_BONUS"].includes(parsed.effects[0].type)) ||

@@ -73,6 +73,21 @@ test("switching recovers confusion sleep paralysis; evolution recovers all speci
   assert.deepEqual(pokemon.statuses,[]);
 });
 
+test("attack discard-energy effect lets the player choose the exact count",()=>{
+  const own=player(card("attacker",50339,[card("e1",50745),card("e2",50745)]));
+  let state=game(own,player(card("defender",48466)));
+  state.pendingAttack={type:"DISCARD_ENERGY",player:0,side:"own",count:2,sourceInstanceId:"attacker"};
+  let actions=engine.getMatchActions(state);
+  assert.deepEqual(actions.map(x=>x.choiceInstanceId).sort(),["e1","e2"]);
+  state=engine.applyMatchAction(state,actions[0]);
+  assert.equal(state.pendingAttack.count,1);
+  actions=engine.getMatchActions(state);
+  state=engine.applyMatchAction(state,actions[0]);
+  assert.equal(state.pendingAttack,undefined);
+  assert.deepEqual(state.players[0].trash.map(x=>x.instanceId).sort(),["e1","e2"]);
+  assert.equal(state.turn,1);
+});
+
 test("attack deck search only benches a Basic and auto-shuffles when no eligible target remains",()=>{
   let state=game(player(card("attacker",50339),[],[],[card("basic",49956),card("energy",50745)]),
     player(card("defender",48466)));

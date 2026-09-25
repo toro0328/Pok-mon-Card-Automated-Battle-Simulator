@@ -51,6 +51,7 @@ export class AttackEngine extends AbilityEngine {
     return this.attacks(active).filter(attack => attack.status === "supported" &&
       !(state.attackLocks??[]).some(lock=>lock.player===state.turn && lock.instanceId===active.instanceId &&
         state.turnsTaken?.[state.turn]===lock.turnsTakenAt+1) &&
+      !(state.temporaryLocks??[]).some(lock=>lock.targetInstanceId===active.instanceId&&lock.type==="PREVENT_ATTACK_NEXT_TURN"&&lock.expiresTurnNo>=state.turnNo) &&
       !(attack.effects.some(x=>x.noFirstSecondTurn) && state.turn===1 && state.turnsTaken?.[1]===0) &&
       this.energyPaysCost(active, attack.cost) &&
       attack.effects.filter(x => x.type === "DRAW").reduce((sum, x) => sum + x.count, 0) <=
@@ -329,11 +330,19 @@ export class AttackEngine extends AbilityEngine {
           if(!victim.statuses.some(x=>(typeof x==="string"?x:x.name)===status))
             victim.statuses.push({name:status,appliedTurnNo:next.turnNo,ownerPlayer:1-state.turn});
         }
-      } else if (effect.type === "HEAL_OWN_FIELD") {
-        for(const pokemon of this.field(own)) pokemon.damage=Math.max(0,(pokemon.damage??0)-effect.amount);
+      } else if(effect.type === "HEAL") {
+        own.active.damage=Math.max(0,(own.active.damage??0)-effect.amount);
+      } else if(effect.type === "DISCARD_ATTACHED") {
+        const count=effect.count==="ALL"?own.active.attached.length:effect.count;
+        if(count)next.pendingAttack={type:"DISCARD_ENERGY",player:state.turn,side:"own",count,sourceInstanceId:own.active.instanceId};
+      } else if(effect.type === "DISCARD_OPPONENT_ENERGY") {
+        if(opponent.active.attached?.length)next.pendingAttack={type:"DISCARD_ENERGY",player:state.turn,side:"opponent",count:effect.count,sourceInstanceId:own.active.instanceId};
+      } else if(effect.type==="PREVENT_RETREAT_NEXT_TURN"||effect.type==="PREVENT_ATTACK_NEXT_TURN") {
+        next.temporaryLocks??=[];
+        next.temporaryLocks.push({owner:state.turn,targetInstanceId:victim.instanceId,type:effect.type,expiresTurnNo:next.turnNo+1});
       } else if (effect.type === "COIN_DISCARD_ENERGY") {
         if(coin.heads && opponent.active.attached?.length)
-          next.pendingAttack={type:"DISCARD_ENERGY",player:state.turn,sourceInstanceId:own.active.instanceId};
+          next.pendingAttack={type:"DISCARD_ENERGY",player:state.turn,side:"opponent",count:1,sourceInstanceId:own.active.instanceId};
       } else if (effect.type === "PREVENT_BASIC_NON_COLORLESS_DAMAGE_NEXT_OPPONENT_TURN") {
         next.attackProtection??=[];
         next.attackProtection.push({owner:state.turn,instanceId:own.active.instanceId});

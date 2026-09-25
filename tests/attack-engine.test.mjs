@@ -97,6 +97,15 @@ test("basic-energy and Basic-to-Bench searches parse as distinct destinations",(
     [{type:"SEARCH_DECK",max:2,filter:"basicPokemon",destination:"BENCH"}]);
 });
 
+test("healing, energy discard and one-turn attack locks parse as exact primitives",()=>{
+  assert.deepEqual(parseEffectText("このポケモンのHPを「30」回復する。").effects,
+    [{type:"HEAL",target:"ATTACKING_POKEMON",amount:30}]);
+  assert.deepEqual(parseEffectText("このポケモンについているエネルギーを2個選び、トラッシュする。").effects,
+    [{type:"DISCARD_ATTACHED",target:"ATTACKING_POKEMON",count:2}]);
+  assert.equal(parseEffectText("次の相手の番、このワザを受けたポケモンは、ワザが使えない。").effects[0].type,
+    "PREVENT_ATTACK_NEXT_TURN");
+});
+
 test("fixed-count coin damage continues after tails and resolves reproducibly",()=>{
   const parsed=parseEffectText("コインを3回投げ、オモテの数×20ダメージ。");
   assert.equal(parsed.recognized,true);

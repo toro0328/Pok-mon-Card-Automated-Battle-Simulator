@@ -1,4 +1,4 @@
-import { AttackEngine } from "./AttackEngine.js?v=20260925-attacksearch1";
+import { AttackEngine } from "./AttackEngine.js?v=20260925-effects2";
 
 const BASIC = "たね";
 const TRAINERS = {
@@ -303,8 +303,11 @@ export class MatchEngine extends AttackEngine {
     const pending=state.pendingAttack,owner=state.players[pending.player];
     if(pending.type === "PROMOTE_SELF")return owner.bench.map(x=>({type:"ATTACK_PROMOTE",player:pending.player,
       targetInstanceId:x.instanceId}));
-    if(pending.type === "DISCARD_ENERGY")return state.players[1-pending.player].active.attached.map(x=>({
-      type:"ATTACK_DISCARD_ENERGY",player:pending.player,choiceInstanceId:x.instanceId}));
+    if(pending.type === "DISCARD_ENERGY"){
+      const ownerIndex=pending.side==="own"?pending.player:1-pending.player;
+      const target=state.players[ownerIndex].active;
+      return (target?.attached??[]).map(x=>({type:"ATTACK_DISCARD_ENERGY",player:pending.player,choiceInstanceId:x.instanceId}));
+    }
     const choices=owner.deck.filter(x=>this.attackSearchMatches(x,pending,owner));
     return [...choices.map(x=>({type:"ATTACK_SEARCH",player:pending.player,choiceInstanceId:x.instanceId})),
       {type:"ATTACK_SEARCH_FINISH",player:pending.player}];
@@ -323,9 +326,12 @@ export class MatchEngine extends AttackEngine {
       this.shufflePlayer(next,own);
     }else if(action.type === "ATTACK_SEARCH_FINISH")this.shufflePlayer(next,own);
     else if(action.type === "ATTACK_DISCARD_ENERGY"){
-      const enemy=next.players[1-pending.player],attached=enemy.active.attached;
+      const owner=pending.side==="own"?own:next.players[1-pending.player];
+      const target=owner.active,attached=target.attached;
       const i=attached.findIndex(x=>x.instanceId===action.choiceInstanceId);
-      enemy.trash.push(attached.splice(i,1)[0]);
+      owner.trash.push(attached.splice(i,1)[0]);
+      pending.count=(pending.count??1)-1;
+      if(pending.count>0&&attached.length)return next;
     }else if(action.type === "ATTACK_PROMOTE"){
       const i=own.bench.findIndex(x=>x.instanceId===action.targetInstanceId);
       own.active=own.bench.splice(i,1)[0];
@@ -391,9 +397,11 @@ export class MatchEngine extends AttackEngine {
     }
     if (!state.retreatedThisTurn && player.active && player.bench.length) {
       const blockedStatus=(player.active.statuses??[]).some(x=>["マヒ","ねむり"].includes(typeof x==="string"?x:x.name));
+      const retreatLock=(state.temporaryLocks??[]).some(lock=>lock.targetInstanceId===player.active.instanceId&&
+        lock.type==="PREVENT_RETREAT_NEXT_TURN"&&lock.expiresTurnNo>=state.turnNo);
       const count = this.retreatCost(state, state.turn, player.active.instanceId);
       const attached = player.active.attached ?? [];
-      if (!blockedStatus && count <= attached.length && attached.every(x => this.isSupportedEnergy(x))) {
+      if (!blockedStatus && !retreatLock && count <= attached.length && attached.every(x => this.isSupportedEnergy(x))) {
         const subsets = (start, chosen) => {
           if (chosen.length === count) return [chosen];
           const result = [];
