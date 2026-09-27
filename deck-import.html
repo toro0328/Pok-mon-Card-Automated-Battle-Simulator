@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>デッキコード読み込み | ポケカ対戦試験</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#edf5ff;background:#09182b}
+*{box-sizing:border-box}body{margin:0}header{padding:14px;background:#102741;border-bottom:1px solid #405f7b}a{color:#b9e3ff}
+main{max-width:760px;margin:auto;padding:16px}.panel{background:#10263f;border:1px solid #395a79;border-radius:14px;padding:16px;margin:12px 0}
+h1{font-size:1.3rem;margin:4px 0 12px}h2{font-size:1rem;margin:0 0 12px}
+label{display:block;font-weight:700;margin:12px 0 6px}input,select,textarea,button{font:inherit}
+input,select,textarea{width:100%;border:1px solid #7899b6;border-radius:9px;background:#f0f7ff;color:#132641;padding:12px}
+textarea{min-height:88px;resize:vertical}
+button{background:#1765a8;color:white;border:1px solid #87add1;border-radius:9px;padding:12px 16px;font-weight:750;cursor:pointer;min-height:46px}
+button:disabled{opacity:.55;cursor:wait}.row{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.row button{flex:1}
+.help,.status{font-size:.9rem;line-height:1.55;color:#c7e3fd}.status{padding:12px;border-radius:9px;background:#183856;margin-top:12px;white-space:pre-wrap}
+.status.error{background:#552c32;color:#ffe3e6}.status.ok{background:#17452f;color:#d7ffe2}
+#preview{margin-top:12px}#preview[hidden]{display:none}
+table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{text-align:left;padding:7px;border-bottom:1px solid #395a79}td:last-child,th:last-child{text-align:right}
+@media(max-width:520px){main{padding:10px}.panel{padding:13px}.row{flex-direction:column}}
+</style>
+</head>
+<body>
+<header><a href="./index.html">← 対戦画面へ</a></header>
+<main>
+<section class="panel">
+<h1>公式デッキコードを読み込む</h1>
+<p class="help">デッキコードか、公式デッキのURLを貼り付けてください。カードIDを公式デッキ情報から読み込み、この端末のブラウザに保存します。</p>
+<label for="code">デッキコード / URL</label>
+<input id="code" autocomplete="off" autocapitalize="off" placeholder="例：9HnLnH-dqvzJ5-6PQngL">
+<label for="slot">設定する側</label>
+<select id="slot"><option value="self">自分のデッキ</option><option value="opponent">相手のデッキ</option></select>
+<div class="row"><button id="load">デッキを読み込む</button><button id="open" type="button">公式ページを開く</button></div>
+<div id="status" class="status" role="status">コードを貼り付けて「デッキを読み込む」を押してください。</div>
+<div id="preview" hidden></div>
+</section>
+<section class="panel">
+<h2>読み込みについて</h2>
+<p class="help">公式サイトのページからカードIDと枚数を取り出し、カードDBにあるIDだけを採用します。合計60枚で、すべてのカードIDがDBに見つかったデッキを対戦に設定できます。保存はこのブラウザ内です。</p>
+<p class="help">ブラウザから公式サイトへの接続が制限されて読み込めない場合は、画面にその理由を表示します。公式ページが開けることと、シミュレーターへ取り込めることは別です。</p>
+</section>
+</main>
+<script type="module">
+import { CardRepository } from "./src/card-db/CardRepository.js";
+const status=document.getElementById("status"),button=document.getElementById("load");
+let repository;
+function setStatus(message,kind=""){status.textContent=message;status.className="status"+(kind?" "+kind:"");}
+function getCode(value){
+  const match=value.trim().match(/[A-Za-z0-9]{6}-[A-Za-z0-9]{6}-[A-Za-z0-9]{6}/);
+  if(!match)throw new Error("デッキコードを確認してください。6文字-6文字-6文字の形式が必要です。");
+  return match[0];
+}
+function parseDeck(html){
+  const doc=new DOMParser().parseFromString(html,"text/html");
+  const fieldTypes=[["deck_pke","pokemon"],["deck_gds","trainer"],["deck_tool","trainer"],["deck_sup","trainer"],["deck_sta","trainer"],["deck_ene","energy"]];
+  const cards=new Map();
+  for(const [field,type] of fieldTypes){
+    const input=doc.getElementById(field);
+    if(!input)continue;
+    const value=input.value||input.getAttribute("value")||"";
+    const matches=[...value.matchAll(/(\d{5})_(\d+)_([19])/g)];
+    for(const m of matches){
+      const id=Number(m[1]),count=Number(m[2]);
+      if(!Number.isInteger(count)||count<1||count>60)continue;
+      const prev=cards.get(id);
+      if(prev)prev.count+=count;else cards.set(id,{officialCardId:id,count,fieldType:type});
+    }
+  }
+  if(!cards.size)throw new Error("公式ページからカード一覧を見つけられませんでした。デッキが非公開か、公式ページの形式が変わった可能性があります。");
+  return [...cards.values()].map(({fieldType,...entry})=>entry);
+}
+function showPreview(deck){
+  const root=document.getElementById("preview");root.replaceChildren();
+  const total=deck.cards.reduce((sum,entry)=>sum+entry.count,0);
+  const heading=document.createElement("p");heading.className="help";
+  heading.textContent=`読み込み結果：${total}枚 / ${deck.cards.length}種類${deck.unknown.length?` / DB未登録 ${deck.unknown.length}種類`:""}`;
+  root.append(heading);
+  const table=document.createElement("table"),head=document.createElement("tr");
+  for(const label of ["カード","枚数"]) {const th=document.createElement("th");th.textContent=label;head.append(th);}
+  const thead=document.createElement("thead");thead.append(head);table.append(thead);
+  const body=document.createElement("tbody");
+  for(const item of deck.cards){const row=document.createElement("tr"),name=document.createElement("td"),count=document.createElement("td");
+    name.textContent=item.name;count.textContent=`${item.count}枚`;row.append(name,count);body.append(row);}
+  for(const item of deck.unknown){const row=document.createElement("tr"),name=document.createElement("td"),count=document.createElement("td");
+    name.textContent=`DB未登録（ID ${item.officialCardId}）`;count.textContent=`${item.count}枚`;row.append(name,count);body.append(row);}
+  table.append(body);root.append(table);root.hidden=false;
+}
+document.getElementById("open").onclick=()=>{
+  try{const code=getCode(document.getElementById("code").value);
+    window.open(`https://www.pokemon-card.com/deck/confirm.html/deckID/${code}/`,"_blank","noopener");}
+  catch(error){setStatus(error.message,"error");}
+};
+button.onclick=async()=>{
+  button.disabled=true;document.getElementById("preview").hidden=true;
+  try{
+    const code=getCode(document.getElementById("code").value);
+    setStatus("公式デッキページを取得しています…");
+    repository=repository??await CardRepository.load("./data/cards/cards.json");
+    const officialUrl=`https://www.pokemon-card.com/deck/confirm.html/deckID/${code}/`;
+    let html,lastError;
+    for(const url of [officialUrl,`https://api.allorigins.win/raw?url=${encodeURIComponent(officialUrl)}`]){
+      try{const response=await fetch(url,{cache:"no-store"});if(!response.ok)throw new Error(`HTTP ${response.status}`);html=await response.text();if(html.length<300)throw new Error("応答が短すぎます");break;}
+      catch(error){lastError=error;}
+    }
+    if(!html)throw new Error(`公式ページをブラウザから取得できませんでした（${lastError?.message??"接続エラー"}）。公式ページを開いてデッキが表示されるか確認してください。CORSまたは中継サービスの制限が原因の場合、このページだけでは取得できません。`);
+    const rawCards=parseDeck(html);
+    const cards=[],unknown=[];
+    for(const item of rawCards){const card=repository.get(item.officialCardId);if(card)cards.push({...item,name:card.name});else unknown.push(item);}
+    const total=rawCards.reduce((sum,item)=>sum+item.count,0);
+    const deck={name:`公式デッキ ${code}`,deckCode:code,sourceUrl:officialUrl,importedAt:new Date().toISOString(),cards:cards.map(({name,...item})=>item)};
+    showPreview({cards,unknown});
+    if(total!==60||unknown.length){
+      setStatus(`読み込みはできましたが対戦には設定できません。合計 ${total}枚、DB未登録 ${unknown.length}種類です。カードDBに全IDがあり、合計60枚のデッキが必要です。`,"error");
+      return;
+    }
+    const slot=document.getElementById("slot").value;
+    localStorage.setItem(`pokemon-card-simulator-deck-${slot}`,JSON.stringify(deck));
+    setStatus(`読み込み成功：60枚を${slot==="self"?"自分":"相手"}のデッキとしてこのブラウザに保存しました。対戦画面へ戻って「ランダムで新しい試合」を押してください。`,"ok");
+  }catch(error){setStatus(error.message,"error");}
+  finally{button.disabled=false;}
+};
+</script>
+</body>
+</html>
