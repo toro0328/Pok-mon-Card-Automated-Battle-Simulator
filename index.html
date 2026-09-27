@@ -32,6 +32,24 @@ main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border
 .drag-card{position:fixed;z-index:20;pointer-events:none;opacity:.87;transform:translate(-50%,-50%);padding:8px;background:#ffecae;color:#16304b;border:2px solid #eda719;border-radius:8px;font-weight:700}
 .hand .energy{touch-action:none}.card.drop-target{outline:3px solid #f4bc42;outline-offset:2px}
 @media(max-width:650px){.field{grid-template-columns:62px minmax(0,1fr) 62px;gap:4px}.card{font-size:.66rem;min-height:78px}.card small{font-size:.56rem}.slot{min-height:84px}.zone{padding:3px}.zone-title{font-size:.61rem}.meta{font-size:.79rem}.prize{font-size:.64rem;padding:3px}}
+
+/* Small-screen board and hand layout */
+@media(max-width:650px){
+  main{padding:6px}.panel{padding:7px;margin:7px 0}
+  header{gap:6px;padding:7px 9px}header b{font-size:.9rem}header a{font-size:.78rem}header button{padding:8px}
+  .field{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:5px}
+  .field>.zone:first-child{grid-column:1;grid-row:1;min-height:56px}
+  .field>.zone:nth-child(2){grid-column:1/-1;grid-row:2}
+  .field>.zone:nth-child(3){grid-column:2;grid-row:1;min-height:56px}
+  .active{min-height:90px}.bench{gap:4px}.slot{min-height:84px}
+  .hand{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;overflow:visible;min-height:0}
+  .hand .card{width:100%;min-width:0;min-height:98px;padding:5px;font-size:.7rem;line-height:1.25}
+  .card small{font-size:.58rem}.zone-title{font-size:.68rem}
+  .actions .action,header button{min-height:44px}
+  #card-menu{left:8px!important;right:8px;bottom:max(8px,env(safe-area-inset-bottom));top:auto!important;width:auto;max-height:45vh;padding:12px}
+  #card-menu .action{min-height:46px}
+}
+@media(max-width:380px){.hand{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -122,10 +140,33 @@ function cardNode(instance,owner,zoneKind){
   if(data.cardType==="energy"&&zoneKind==="hand")startEnergyDrag(button,instance,owner);
   return button;
 }
+function handSortKey(instance){
+  const card=repository.get(instance.cardId);
+  if(card.cardType==="pokemon"){
+    const stage=card.raw.stage??"";
+    const order=stage.includes("たね")||stage==="基本"?0:stage.includes("1")?1:stage.includes("2")?2:3;
+    return [0,order,card.name,card.officialCardId];
+  }
+  if(card.cardType==="trainer"){
+    const order={item:0,supporter:1,tool:2,stadium:3,unspecified:4}[card.trainerType]??5;
+    return [1,order,card.name,card.officialCardId];
+  }
+  return [2,card.energyType==="basic"?0:1,card.name,card.officialCardId];
+}
+function sortedHand(items){
+  return [...items].sort((a,b)=>{
+    const x=handSortKey(a),y=handSortKey(b);
+    for(let i=0;i<x.length;i++){
+      const compare=typeof x[i]==="string"?x[i].localeCompare(y[i],"ja"):x[i]-y[i];
+      if(compare)return compare;
+    }
+    return 0;
+  });
+}
 function zone(title,items,owner){
   const wrapper=element("div","");wrapper.append(element("div","zone-title",title));
   const row=element("div","hand");if(!items.length)row.append(element("span","zone-title","なし"));
-  for(const item of items)row.append(cardNode(item,owner,"hand"));wrapper.append(row);return wrapper;
+  for(const item of sortedHand(items))row.append(cardNode(item,owner,"hand"));wrapper.append(row);return wrapper;
 }
 function playerView(index){
   const p=game.players[index],panel=element("section","panel"+(index===1?" opponent":""));
@@ -139,7 +180,7 @@ function playerView(index){
   middle.append(element("div","zone-title","ベンチ（最大5匹）"));
   const bench=element("div","bench");for(let i=0;i<5;i++){const slot=element("div","slot");if(p.bench[i])slot.append(cardNode(p.bench[i],index,"field"));bench.append(slot);}middle.append(bench);
   const deck=element("div","zone");deck.append(element("div","zone-title","山札"),element("div","meta","🂠"),element("div","zone-title",`トラッシュ ${p.trash.length}枚`));
-  field.append(sides,middle,deck);panel.append(field,zone("手札",p.hand,index));return panel;
+  field.append(sides,middle,deck);panel.append(field,zone("手札（カード種別順）",p.hand,index));return panel;
 }
 function actionLabel(action){
   const player=game.players[action.player],whose=action.player===0?"自分":"相手";
@@ -198,6 +239,7 @@ function positionMenu(){
   const anchor=[...document.querySelectorAll('.card[data-instance-id]')]
     .find(node=>node.dataset.instanceId===selected);
   if(!anchor){ui.menu.hidden=true;return;}
+  if(window.innerWidth<=650){ui.menu.style.left="";ui.menu.style.top="";return;}
   const box=anchor.getBoundingClientRect(),height=ui.menu.getBoundingClientRect().height;
   ui.menu.style.left=`${Math.max(8,Math.min(box.left,window.innerWidth-ui.menu.offsetWidth-8))}px`;
   ui.menu.style.top=`${box.bottom+height+8<=window.innerHeight?box.bottom+6:Math.max(8,box.top-height-6)}px`;
