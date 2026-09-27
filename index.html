@@ -64,6 +64,18 @@ main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border
   .hand .card{height:82px;font-size:.64rem}
   .hand .card small{font-size:.53rem}
 }
+
+/* Hand is a single horizontally swipable row on phones. */
+@media(max-width:650px){
+  .hand{display:flex;flex-flow:row nowrap;overflow-x:auto;overflow-y:hidden;min-height:0;
+    padding:5px 4px 10px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;touch-action:pan-x}
+  .hand .card{flex:0 0 68px;width:68px;min-width:68px;height:86px;min-height:86px;
+    padding:4px 3px;font-size:.62rem;line-height:1.15;scroll-snap-align:start}
+  .hand .card small{font-size:.5rem;line-height:1.1;margin-top:2px}
+  .hand::-webkit-scrollbar{height:5px}.hand::-webkit-scrollbar-thumb{background:#7a9bb8;border-radius:5px}
+  .hand .energy{touch-action:pan-x}
+}
 </style>
 </head>
 <body>
@@ -97,14 +109,19 @@ function energySummary(instance){
 function startEnergyDrag(button,energy,owner){
   button.addEventListener("pointerdown",down=>{
     if(down.button!==0 || !game || game.phase!=="playing")return;
-    let moved=false,ghost=null,highlight=null;
+    let moved=false,horizontalSwipe=false,ghost=null,highlight=null;
     const origin={x:down.clientX,y:down.clientY};
-    button.setPointerCapture(down.pointerId);
     const targetAt=(x,y)=>document.elementFromPoint(x,y)?.closest('.card[data-zone="field"]');
     const clear=()=>{ghost?.remove();highlight?.classList.remove("drop-target");ghost=null;highlight=null;};
+    const cleanup=()=>{
+      window.removeEventListener("pointermove",move);
+      window.removeEventListener("pointerup",finish);
+      window.removeEventListener("pointercancel",cancel);
+    };
     const move=event=>{
       if(event.pointerId!==down.pointerId)return;
-      if(!moved && Math.hypot(event.clientX-origin.x,event.clientY-origin.y)>12){
+      if(!moved&&!horizontalSwipe&&Math.hypot(event.clientX-origin.x,event.clientY-origin.y)>12){
+        if(Math.abs(event.clientX-origin.x)>Math.abs(event.clientY-origin.y)){horizontalSwipe=true;return;}
         moved=true;ghost=element("div","drag-card",repository.get(energy.cardId).name);
         document.body.append(ghost);ui.menu.hidden=true;
       }
@@ -116,12 +133,15 @@ function startEnergyDrag(button,energy,owner){
     };
     const finish=event=>{
       if(event.pointerId!==down.pointerId)return;
-      button.removeEventListener("pointermove",move);
-      button.removeEventListener("pointerup",finish);
-      button.removeEventListener("pointercancel",cancel);
+      cleanup();
       const target=moved&&event.type==="pointerup"?targetAt(event.clientX,event.clientY):null;
       const targetId=target?.dataset.player===String(owner)?target.dataset.instanceId:null;
       clear();
+      if(horizontalSwipe){
+        button.dataset.suppressClick="true";
+        setTimeout(()=>{delete button.dataset.suppressClick;},400);
+        return;
+      }
       if(!moved)return;
       button.dataset.suppressClick="true";
       setTimeout(()=>{delete button.dataset.suppressClick;},400);
@@ -131,12 +151,10 @@ function startEnergyDrag(button,energy,owner){
       if(legal)performAction(legal);
       else ui.message.textContent="今はこのポケモンにエネルギーをつけられません。";
     };
-    const cancel=event=>{if(event.pointerId!==down.pointerId)return;
-      button.removeEventListener("pointermove",move);button.removeEventListener("pointerup",finish);
-      button.removeEventListener("pointercancel",cancel);clear();};
-    button.addEventListener("pointermove",move);
-    button.addEventListener("pointerup",finish);
-    button.addEventListener("pointercancel",cancel);
+    const cancel=event=>{if(event.pointerId!==down.pointerId)return;cleanup();clear();};
+    window.addEventListener("pointermove",move);
+    window.addEventListener("pointerup",finish);
+    window.addEventListener("pointercancel",cancel);
   });
 }
 function cardNode(instance,owner,zoneKind){
@@ -194,7 +212,7 @@ function playerView(index){
   middle.append(element("div","zone-title","ベンチ（最大5匹）"));
   const bench=element("div","bench");for(let i=0;i<5;i++){const slot=element("div","slot");if(p.bench[i])slot.append(cardNode(p.bench[i],index,"field"));bench.append(slot);}middle.append(bench);
   const deck=element("div","zone");deck.append(element("div","zone-title","山札"),element("div","meta","🂠"),element("div","zone-title",`トラッシュ ${p.trash.length}枚`));
-  field.append(sides,middle,deck);panel.append(field,zone("手札（カード種別順）",p.hand,index));return panel;
+  field.append(sides,middle,deck);panel.append(field,zone("手札・左右にスワイプ",p.hand,index));return panel;
 }
 function actionLabel(action){
   const player=game.players[action.player],whose=action.player===0?"自分":"相手";
