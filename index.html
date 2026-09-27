@@ -76,6 +76,35 @@ main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border
   .hand::-webkit-scrollbar{height:5px}.hand::-webkit-scrollbar-thumb{background:#7a9bb8;border-radius:5px}
   .hand .energy{touch-action:pan-x}
 }
+/* Compact two-player battle view for a phone screen. */
+@media(max-width:650px){
+  .notice{display:none}
+  .panel{padding:4px;margin:4px 0;border-radius:9px}
+  .meta{padding:2px 3px;font-size:.66rem;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .field{display:block}
+  .field>.zone:first-child,.field>.zone:nth-child(3){display:none}
+  .field>.zone:nth-child(2){min-height:0;padding:4px 5px}
+  .field>.zone:nth-child(2)>.zone-title{font-size:.58rem;line-height:1.1}
+  .active{min-height:64px;margin:2px 0}
+  .active .card{width:70px;min-height:64px;padding:3px;font-size:.59rem}
+  .field>.zone:nth-child(2)>.attached-summary{display:none}
+  .bench{gap:3px;margin-top:2px}
+  .bench .slot{min-height:52px;border-radius:5px}
+  .bench .card{width:100%;min-height:48px;height:50px;padding:2px;font-size:.53rem;line-height:1.05;border-radius:5px}
+  .bench .card small{font-size:.45rem;line-height:1.05}
+  .hand-zone{margin-top:3px;border-top:1px solid #355674;padding-top:2px}
+  .hand-toggle{display:block;width:100%;min-height:28px;padding:3px 5px;text-align:left;
+    color:#d7ecff;background:#183552;border:0;border-radius:5px;font:inherit;font-size:.65rem}
+  .hand-zone:not(.open) .hand{display:none}
+  .hand-zone .hand{min-height:0;padding:3px 2px 6px}
+  .summary{padding:5px;font-size:.72rem;line-height:1.25}
+  #damage-report{padding:6px;margin:4px 0;font-size:.7rem;line-height:1.2}
+  #damage-report strong{font-size:1rem}
+  #message{min-height:1em;margin:3px 2px;font-size:.72rem}
+  .controls{padding:4px;margin:4px 0}
+  .controls h2{font-size:.7rem;margin:0 0 3px}
+  .actions{gap:4px}.actions .action{min-height:36px;padding:6px;font-size:.7rem}
+}
 </style>
 </head>
 <body>
@@ -95,7 +124,7 @@ const ui={opponent:document.getElementById("opponent"),self:document.getElementB
   status:document.getElementById("status"),damageReport:document.getElementById("damage-report"),message:document.getElementById("message"),
   opponentActions:document.getElementById("opponent-actions"),selfActions:document.getElementById("self-actions"),
   menu:document.getElementById("card-menu"),seed:document.getElementById("seed")};
-let repository,engine,game,selected=null,opponentDeck,selfDeck;
+let repository,engine,game,selected=null,opponentDeck,selfDeck,openHands=new Set();
 function element(tag,cls,value){const node=document.createElement(tag);if(cls)node.className=cls;if(value!==undefined)node.textContent=value;return node;}
 function energySummary(instance){
   const counts=new Map();
@@ -196,7 +225,13 @@ function sortedHand(items){
   });
 }
 function zone(title,items,owner){
-  const wrapper=element("div","");wrapper.append(element("div","zone-title",title));
+  const mobile=window.matchMedia("(max-width:650px)").matches;
+  const isOpen=!mobile||openHands.has(owner);
+  const wrapper=element("div","hand-zone"+(isOpen?" open":""));
+  const toggle=element("button","hand-toggle",`${mobile?(isOpen?"▴ ":"▾ "):""}${title} ${items.length}枚${mobile&&!isOpen?"（タップで表示）":""}`);
+  toggle.type="button";toggle.setAttribute("aria-expanded",String(isOpen));
+  if(mobile)toggle.onclick=()=>{if(openHands.has(owner))openHands.delete(owner);else openHands.add(owner);render();};
+  wrapper.append(toggle);
   const row=element("div","hand");if(!items.length)row.append(element("span","zone-title","なし"));
   for(const item of sortedHand(items))row.append(cardNode(item,owner,"hand"));wrapper.append(row);return wrapper;
 }
@@ -334,7 +369,7 @@ function newGame(){
   try{
     const seed=globalThis.crypto?.getRandomValues?crypto.getRandomValues(new Uint32Array(1))[0]||1:Math.floor(Math.random()*0xffffffff)+1;
     ui.seed.value=String(seed);
-    game=engine.createMatch([selfDeck,opponentDeck].map(deck=>deck.cards.flatMap(entry=>Array(entry.count).fill(entry.officialCardId))),seed);selected=null;
+    game=engine.createMatch([selfDeck,opponentDeck].map(deck=>deck.cards.flatMap(entry=>Array(entry.count).fill(entry.officialCardId))),seed);selected=null;openHands.clear();
     ui.message.textContent="自分と相手に指定の公式60枚デッキを設定しました。";render();
   }catch(error){ui.message.textContent=error.message;}
 }
