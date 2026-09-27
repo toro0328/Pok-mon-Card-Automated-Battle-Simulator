@@ -108,7 +108,7 @@ main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border
 </style>
 </head>
 <body>
-<header><b>ポケカ対戦試験</b><a href="./ability-demo.html">特性・ワザの個別試験</a><label>今回のシード <input id="seed" type="number" value="" readonly></label><button id="restart">ランダムで新しい試合</button></header>
+<header><b>ポケカ対戦試験</b><a href="./ability-demo.html">特性・ワザの個別試験</a><a href="./deck-import.html">デッキコード読み込み</a><label>今回のシード <input id="seed" type="number" value="" readonly></label><button id="restart">ランダムで新しい試合</button></header>
 <main>
 <p class="notice">自分は<a id="self-link" href="#">公式メガレックウザexデッキ</a>（60枚）、相手は<a id="opponent-link" href="#">公式のお祭り会場デッキ</a>（60枚）です。１台で両側を操作します。「おまつりおんど」「ドンドンだいこ」、お祭り会場、グロウ草エネルギーに対応しました。一部のトレーナーズに対応しました。未対応のカード効果はまだ使えません。<span id="ability-coverage"></span>手札のカードをタップすると可能な操作が表示されます。</p>
 <section class="panel controls"><h2>相手の操作</h2><div class="actions" id="opponent-actions"></div></section>
@@ -237,7 +237,7 @@ function zone(title,items,owner){
 }
 function playerView(index){
   const p=game.players[index],panel=element("section","panel"+(index===1?" opponent":""));
-  panel.append(element("div","meta",`${index===0?"自分（メガレックウザex）":"相手（お祭り会場）"}　山札 ${p.deck.length}　手札 ${p.hand.length}　サイド ${p.prizes.length}　トラッシュ ${p.trash.length}`));
+  panel.append(element("div","meta",`${index===0?"自分（${selfDeck.name}）":"相手（${opponentDeck.name}）"}　山札 ${p.deck.length}　手札 ${p.hand.length}　サイド ${p.prizes.length}　トラッシュ ${p.trash.length}`));
   const field=element("div","field"),sides=element("div","zone");
   sides.append(element("div","zone-title","サイド"));const prizes=element("div","prizes");
   p.prizes.forEach((_,i)=>prizes.append(element("span","prize",String(i+1))));sides.append(prizes);
@@ -381,6 +381,18 @@ try{
     fetch("./data/decks/self-rayquaza.json?v=20260925-coins1")]);
   if(!response.ok||!deckResponse.ok||!selfResponse.ok)throw Error("特性カタログまたは相手デッキを取得できません");
   repository=loaded;opponentDeck=await deckResponse.json();selfDeck=await selfResponse.json();
+  for(const [slot,fallback] of [["self",selfDeck],["opponent",opponentDeck]]){
+    try{
+      const saved=JSON.parse(localStorage.getItem(`pokemon-card-simulator-deck-${slot}`)||"null");
+      if(saved){
+        const count=saved.cards?.reduce((sum,entry)=>sum+entry.count,0)??0;
+        if(count!==60||saved.cards.some(entry=>!repository.get(entry.officialCardId)))throw Error("保存デッキは60枚またはカードIDが不正です");
+        if(slot==="self")selfDeck=saved;else opponentDeck=saved;
+      }
+    }catch(error){console.warn(`保存済み${slot}デッキを使えません:`,error);}
+  }
+  document.getElementById("self-link").textContent=selfDeck.name;
+  document.getElementById("opponent-link").textContent=opponentDeck.name;
   if(selfDeck.cards.reduce((total,entry)=>total+entry.count,0)!==60||
       selfDeck.cards.some(entry=>!repository.get(entry.officialCardId)))throw Error("自分デッキの枚数またはカードIDが不正です");
   document.getElementById("self-link").href=selfDeck.sourceUrl;
