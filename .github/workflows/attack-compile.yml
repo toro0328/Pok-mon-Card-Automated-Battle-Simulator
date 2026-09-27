@@ -10,6 +10,7 @@ on:
       - "src/engine/MatchEngine.js"
       - "index.html"
       - "data/cards/cards.json"
+      - "tests/**"
       - ".github/workflows/attack-compile.yml"
   workflow_dispatch:
 
