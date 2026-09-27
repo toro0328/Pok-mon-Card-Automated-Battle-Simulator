@@ -79,7 +79,7 @@ main{max-width:1100px;margin:auto;padding:10px}.notice{background:#233d59;border
 </style>
 </head>
 <body>
-<header><b>ポケカ対戦試験</b><a href="./ability-demo.html">特性・ワザの個別試験</a><label>シード <input id="seed" type="number" value="1" min="1" step="1"></label><button id="restart">新しい試合</button></header>
+<header><b>ポケカ対戦試験</b><a href="./ability-demo.html">特性・ワザの個別試験</a><label>今回のシード <input id="seed" type="number" value="" readonly></label><button id="restart">ランダムで新しい試合</button></header>
 <main>
 <p class="notice">自分は<a id="self-link" href="#">公式メガレックウザexデッキ</a>（60枚）、相手は<a id="opponent-link" href="#">公式のお祭り会場デッキ</a>（60枚）です。１台で両側を操作します。「おまつりおんど」「ドンドンだいこ」、お祭り会場、グロウ草エネルギーに対応しました。一部のトレーナーズに対応しました。未対応のカード効果はまだ使えません。<span id="ability-coverage"></span>手札のカードをタップすると可能な操作が表示されます。</p>
 <section class="panel controls"><h2>相手の操作</h2><div class="actions" id="opponent-actions"></div></section>
@@ -332,7 +332,8 @@ function render(){
 }
 function newGame(){
   try{
-    const seed=Number(ui.seed.value);if(!Number.isSafeInteger(seed)||seed<1)throw Error("シードは1以上の整数にしてください");
+    const seed=globalThis.crypto?.getRandomValues?crypto.getRandomValues(new Uint32Array(1))[0]||1:Math.floor(Math.random()*0xffffffff)+1;
+    ui.seed.value=String(seed);
     game=engine.createMatch([selfDeck,opponentDeck].map(deck=>deck.cards.flatMap(entry=>Array(entry.count).fill(entry.officialCardId))),seed);selected=null;
     ui.message.textContent="自分と相手に指定の公式60枚デッキを設定しました。";render();
   }catch(error){ui.message.textContent=error.message;}
