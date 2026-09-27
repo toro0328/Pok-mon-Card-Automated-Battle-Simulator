@@ -237,7 +237,7 @@ function zone(title,items,owner){
 }
 function playerView(index){
   const p=game.players[index],panel=element("section","panel"+(index===1?" opponent":""));
-  panel.append(element("div","meta",`${index===0?"自分（${selfDeck.name}）":"相手（${opponentDeck.name}）"}　山札 ${p.deck.length}　手札 ${p.hand.length}　サイド ${p.prizes.length}　トラッシュ ${p.trash.length}`));
+  panel.append(element("div","meta",`${index===0?`自分（${selfDeck.name}）`:`相手（${opponentDeck.name}）`}　山札 ${p.deck.length}　手札 ${p.hand.length}　サイド ${p.prizes.length}　トラッシュ ${p.trash.length}`));
   const field=element("div","field"),sides=element("div","zone");
   sides.append(element("div","zone-title","サイド"));const prizes=element("div","prizes");
   p.prizes.forEach((_,i)=>prizes.append(element("span","prize",String(i+1))));sides.append(prizes);
