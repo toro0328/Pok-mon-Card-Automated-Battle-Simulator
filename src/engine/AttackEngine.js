@@ -127,8 +127,6 @@ export class AttackEngine extends AbilityEngine {
         if(modifier.rulelessAttacker&&!attackerHasRule)damage+=modifier.amount;
         if(modifier.vsRulePokemon&&defenderIsExOrV)damage+=modifier.amount;
       }
-      const attackerHasRule=!!attacker.rule_box||(attacker.tags??[]).some(tag=>["ex","V","GX","メガシンカ"].includes(tag));
-      const defenderIsExOrV=!!defender.rule_box||(defender.tags??[]).some(tag=>["ex","V"].includes(tag));
       if(!attackerHasRule&&defenderIsExOrV&&(source.attached??[]).some(card=>this.isSupportedTool(card)&&this.card(card).name==="ブレイブバングル"))damage+=30;
     }
     if (!isBench && defender.weakness?.type?.includes(attacker.types?.[0])) {
