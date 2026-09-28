@@ -245,6 +245,9 @@ export class AttackEngine extends AbilityEngine {
     if (pending.remaining > 0) return state.players[pending.recipient].prizes.map((_, prizeIndex) => ({
       type: "TAKE_PRIZE", player: pending.recipient, prizeIndex
     }));
+    const overfull=state.players[pending.owner];
+    if(overfull.bench.length>this.maxBenchCount(state,pending.owner))
+      return overfull.bench.map(instance=>({type:"DISCARD_EXCESS_BENCH",player:pending.owner,sourceInstanceId:instance.instanceId}));
     if(state.players[pending.owner].active)return [{type:"RESOLVE_KNOCKOUT",player:pending.recipient}];
     return state.players[pending.owner].bench.map(instance => ({
       type: "PROMOTE_BENCH", player: pending.owner, sourceInstanceId: instance.instanceId
@@ -257,6 +260,10 @@ export class AttackEngine extends AbilityEngine {
     }
     const next = structuredClone(state);
     const pending = next.pendingKnockout;
+    if(action.type==="DISCARD_EXCESS_BENCH"){
+      const owner=next.players[pending.owner],i=owner.bench.findIndex(x=>x.instanceId===action.sourceInstanceId),pokemon=owner.bench.splice(i,1)[0];
+      owner.trash.push(...(pokemon.stack??[]),pokemon,...(pokemon.attached??[]));return next;
+    }
     if (action.type === "TAKE_PRIZE") {
       const recipient = next.players[pending.recipient];
       recipient.hand.push(...recipient.prizes.splice(action.prizeIndex, 1));
@@ -289,7 +296,7 @@ export class AttackEngine extends AbilityEngine {
   }
 
   applyStatus(state,target,status,ownerPlayer){
-    if(state.stadium&&this.isSupportedStadium(state.stadium)&&(target.attached??[]).length)return;
+    if(state.stadium&&this.card(state.stadium).name==="お祭り会場"&&(target.attached??[]).length)return;
     target.statuses??=[];
     const recover=new Set(["ねむり","マヒ","こんらん"]);
     if(recover.has(status))target.statuses=target.statuses.filter(x=>!recover.has(typeof x==="string"?x:x.name));
