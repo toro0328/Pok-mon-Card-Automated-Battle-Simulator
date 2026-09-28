@@ -1,4 +1,4 @@
-import { AttackEngine } from "./AttackEngine.js?v=20260928-deckcompile4";
+import { AttackEngine } from "./AttackEngine.js?v=20260928-deckcompile5";
 import { parseTrainerText } from "../card-db/parse-trainers.js?v=20260928-deckcompile1";
 import { parseAbility } from "../card-db/parse-abilities.js?v=20260928-fourcardfix2";
 import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-fourcardfix1";
