@@ -1,6 +1,7 @@
 // Deterministic execution for the explicitly compiled ability subset.
 // This is a restricted ability sandbox, not a complete Pokémon TCG match.
 const FESTIVAL_STADIUM_TEXT = "エネルギーがついているおたがいのポケモン全員は、特殊状態にならず、受けている特殊状態は、すべて回復する。";
+const ZERO_DOME_TEXT = "自分の場に「テラスタル」のポケモンがいるプレイヤーが、ベンチに出せるポケモンの数は8匹になる。\n（このカードがトラッシュされたときか、自分の場に「テラスタル」のポケモンがいなくなったとき、ベンチが5匹になるまでトラッシュする。おたがいにトラッシュするなら、このカードの持ち主から行う。）";
 const TOOL_TEXT = {
   "ブレイブバングル": "このカードをつけているポケモン（「ルールを持つポケモン」をのぞく）が使うワザの、相手のバトル場の「ポケモンex」へのダメージは「+30」される。",
   "ふうせん": "このカードをつけているポケモンは、にげるためのエネルギーが2個ぶん少なくなる。"
@@ -48,10 +49,20 @@ export class AbilityEngine {
     return card.trainerType==="tool" && TOOL_TEXT[card.name]===card.raw.effect;
   }
 
+  isTeraPokemon(instance) {
+    return (this.card(instance).raw.tags??[]).includes("テラスタル");
+  }
+
+  maxBenchCount(state,playerIndex) {
+    return state.stadium&&this.card(state.stadium).name==="ゼロの大空洞"&&
+      this.field(state.players[playerIndex]).some(instance=>this.isTeraPokemon(instance))?8:5;
+  }
+
   isSupportedStadium(instance) {
     const card = this.card(instance);
-    return card.name === "お祭り会場" && card.trainerType === "stadium" &&
-      card.raw.effect === FESTIVAL_STADIUM_TEXT;
+    return card.trainerType==="stadium"&&
+      ((card.name==="お祭り会場"&&card.raw.effect===FESTIVAL_STADIUM_TEXT)||
+       (card.name==="ゼロの大空洞"&&card.raw.effect===ZERO_DOME_TEXT));
   }
 
   isSupportedEnergy(instance) {
@@ -70,7 +81,7 @@ export class AbilityEngine {
     for (const player of state.players) {
       if (!Array.isArray(player.hand) || !Array.isArray(player.deck) ||
           !Array.isArray(player.bench) || !Array.isArray(player.trash) ||
-          player.bench.length > (state.stadium&&this.card(state.stadium).name==="ゼロの大空洞"&&this.field(player).some(x=>(this.card(x).raw.tags??[]).includes("テラスタル"))?8:5)) throw new Error("Invalid player zones");
+          player.bench.length > (state.stadium&&this.card(state.stadium).name==="ゼロの大空洞"?8:5)) throw new Error("Invalid player zones");
       for (const pokemon of this.field(player)) {
         if (this.card(pokemon).cardType !== "pokemon" ||
             this.entries(pokemon).some(e => e.status !== "supported")) {
