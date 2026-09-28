@@ -529,6 +529,8 @@ export class AttackEngine extends AbilityEngine {
         next.pendingAttack={type:"PROMOTE_SELF",player:state.turn,sourceInstanceId:own.active.instanceId};
       } else if(effect.type==="SWITCH_OPPONENT_CHOICE"){
         next.pendingAttack={type:"SWITCH_OPPONENT_CHOICE",player:state.turn};
+      } else if(effect.type==="SEARCH_BASIC_ENERGY_ATTACH_BENCH"){
+        next.pendingAttack={type:"SEARCH_BASIC_ENERGY_ATTACH_BENCH",player:state.turn,remaining:effect.max};
       } else if (effect.type === "SEARCH_DECK") {
         next.pendingAttack={type:"SEARCH_DECK",player:state.turn,
           sourceInstanceId:own.active.instanceId,max:effect.max,filter:effect.filter,name:effect.name,destination:effect.destination,chosen:0,optional:!!effect.optional};
