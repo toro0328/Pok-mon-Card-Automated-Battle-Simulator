@@ -118,6 +118,16 @@ export class AttackEngine extends AbilityEngine {
       }
     }
     const isBench=target!==opponent.active;
+    if(!isBench){
+      const attackerTags=attacker.tags??[],defenderTags=defender.tags??[];
+      const attackerHasRule=!!attacker.rule_box||attackerTags.some(tag=>["ex","V","GX","メガシンカ"].includes(tag));
+      const defenderIsExOrV=!!defender.rule_box||defenderTags.some(tag=>["ex","V"].includes(tag));
+      for(const modifier of state.damageBonuses??[]){
+        if(modifier.player!==action.player||modifier.turnNo!==state.turnNo)continue;
+        if(modifier.rulelessAttacker&&!attackerHasRule)damage+=modifier.amount;
+        if(modifier.vsRulePokemon&&defenderIsExOrV)damage+=modifier.amount;
+      }
+    }
     if (!isBench && defender.weakness?.type?.includes(attacker.types?.[0])) {
       if (defender.weakness.value !== "×2") throw new Error("Unsupported weakness");
       damage *= 2;
