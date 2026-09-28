@@ -2,6 +2,15 @@
 // until the whole card and the corresponding game rules are implemented.
 const PATTERNS = [
   {
+    expression: /^自分の山札から基本エネルギーを([1-9][0-9]*)枚まで選び、ベンチポケモンに好きなようにつける。そして山札を切る。$/,
+    convert: match => [{ type: "SEARCH_BASIC_ENERGY_ATTACH_BENCH", max: Number(match[1]) }]
+  },
+  {
+    expression: /^このポケモンをねむりにする。$/,
+    convert: () => [{ type: "APPLY_STATUS", target: "ATTACKING_POKEMON", status: "ねむり" }]
+  },
+
+  {
     expression: /^自分の山札を([1-9][0-9]*)枚引く。$/,
     convert: match => [{ type: "DRAW", player: "SELF", count: Number(match[1]) }]
   },
@@ -294,7 +303,7 @@ export function inspectAttacks(card) {
       (type === "Void" ? cost.length === 1 && i === 0 :
         ["Colorless", "Grass", "Fire", "Water", "Electric", "Psychic", "Fighting", "Dark", "Metal", "Steel", "Dragon"].includes(type)));
     const noDamageTypes=new Set(["SEARCH_DECK","SEARCH_TRASH_TO_HAND","SEARCH_TRASH_TO_BENCH","ATTACH_BASIC_FIGHTING_FROM_TRASH_TO_BENCH","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS","COIN_APPLY_STATUS","HEAL","DRAW","DRAW_UNTIL_HAND_SIZE","DISCARD_HAND_DRAW","DAMAGE","SET_DAMAGE","IGNORE_RESISTANCE","RETURN_ATTACHED_ENERGY_TO_HAND","COPY_BENCH_N_ATTACK",
-      "DISCARD_ATTACHED","DISCARD_OPPONENT_ENERGY","MILL_OPPONENT_DECK","PLACE_DAMAGE_COUNTERS","PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN","PREVENT_SAME_ATTACK_NEXT_TURN","SWITCH_SELF","REQUIRE_STADIUM_IN_PLAY"]);
+      "DISCARD_ATTACHED","DISCARD_OPPONENT_ENERGY","MILL_OPPONENT_DECK","PLACE_DAMAGE_COUNTERS","SEARCH_BASIC_ENERGY_ATTACH_BENCH","PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN","PREVENT_SAME_ATTACK_NEXT_TURN","SWITCH_SELF","REQUIRE_STADIUM_IN_PLAY"]);
     const noPrintedDamage=damage===null&&parsed.effects.length>0&&parsed.effects.every(x=>noDamageTypes.has(x.type));
     const bonus=parsed.effects.find(x=>x.type==="MODIFY_DAMAGE"||x.type==="COIN_BONUS"||
       x.type==="OPTIONAL_DISCARD_THREE_STEEL_ENERGY_FOR_DAMAGE");
