@@ -389,7 +389,8 @@ el.load.onclick=async()=>{
     updateProgress(24,"公式デッキ2件を取得・照合");
     const decks=await Promise.all([readDeck(el.codeA.value,"self"),readDeck(el.codeB.value,"opponent")]);
     if(decks[0].deckCode)el.codeA.value=decks[0].deckCode;if(decks[1].deckCode)el.codeB.value=decks[1].deckCode;
-    await loadMissingOfficialCards(decks);\n    updateProgress(55,"カードごとの特性・ワザ・効果を解析");const analysis=await analyzeDecks(decks);startMatch(decks,analysis);
+    await loadMissingOfficialCards(decks);
+    updateProgress(55,"カードごとの特性・ワザ・効果を解析");const analysis=await analyzeDecks(decks);startMatch(decks,analysis);
   }catch(error){setStatus(error.message||"デッキ解析中にエラーが発生しました。","error");el.load.disabled=false;el.start.disabled=true;el.progress.hidden=true;el.turn.textContent="読み込みエラー：コードを確認して再試行してください。";}
   finally{clearInterval(loadClock);loadClock=null;}
 };
