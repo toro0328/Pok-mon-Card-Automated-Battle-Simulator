@@ -627,7 +627,8 @@ export class MatchEngine extends AttackEngine {
         }
         }
       } else if (action.type === "TRAINER_FINISH") {
-        this.shufflePlayer(next,player);delete next.pendingTrainer;
+        if(pending.name!=="ガラスのラッパ")this.shufflePlayer(next,player);
+        delete next.pendingTrainer;
       }
     }
     return next;
