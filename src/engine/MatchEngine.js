@@ -41,6 +41,8 @@ const TRAINERS = {
 export class MatchEngine extends AttackEngine {
   createMatch(deckLists, seed = 1) {
     if (!Array.isArray(deckLists) || deckLists.length !== 2) throw new Error("Two decks are required");
+    const legality=this.deckRuleChecks(deckLists.map(ids=>({cards:ids.map(officialCardId=>({officialCardId,count:1}))})));
+    if(legality.length)throw new Error(legality.map(issue=>issue.message).join(" "));
     let randomState = (seed >>> 0) || 1;
     const random = () => {
       randomState ^= randomState << 13;
