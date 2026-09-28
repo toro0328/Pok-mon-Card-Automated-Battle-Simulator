@@ -91,7 +91,7 @@ test("second stage opposing Pokémon enables Klinklang hand ability", () => {
   assert.equal(engine.applyAction(game, action).players[0].bench[0].cardId, 46008);
 });
 
-test("passive reduction affects attack damage only; unknown field ability stops sandbox", () => {
+test("passive reduction affects attack damage only; unknown field ability stays inert", () => {
   const game = state(player({ active: instance("tank", 45578) }));
   assert.equal(engine.incomingAttackDamage(game, "tank", 20), 0);
   assert.equal(engine.incomingAttackDamage(game, "tank", 100), 70);
@@ -99,8 +99,9 @@ test("passive reduction affects attack damage only; unknown field ability stops 
   unknown.raw.abilities[0].effect="未知の特性効果。";
   const unsupportedCatalog=structuredClone(catalog);unsupportedCatalog.cardCount=unsupportedDb.cards.length;
   const unsupportedEngine=new AbilityEngine(new CardRepository(unsupportedDb),unsupportedCatalog);
-  assert.throws(() => unsupportedEngine.getLegalActions(state(player({ active: instance("unknown", 45233) }))),
-    /Unsupported ability/);
+  assert.doesNotThrow(() => unsupportedEngine.getLegalActions(state(player({ active: instance("unknown", 45233) }))));
+  assert.equal(unsupportedEngine.getLegalActions(state(player({ active: instance("unknown", 45233) })))
+    .some(action => action.type === "USE_ABILITY"), false);
 });
 
 test("Kichikigisu draws only after own KO in previous opponent turn and shares name limit", () => {
