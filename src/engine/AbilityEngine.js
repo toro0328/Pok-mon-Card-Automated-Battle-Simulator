@@ -104,9 +104,8 @@ export class AbilityEngine {
           player.bench.length > this.benchLimit(state,playerIndex)&&
             !state.pendingBenchCleanup?.players?.includes(playerIndex)) throw new Error("Invalid player zones");
       for (const pokemon of this.field(player)) {
-        if (this.card(pokemon).cardType !== "pokemon" ||
-            this.entries(pokemon, state).some(e => e.status !== "supported")) {
-          throw new Error("Unsupported ability or card on the field");
+        if (this.card(pokemon).cardType !== "pokemon") {
+          throw new Error("Unsupported card type on the field");
         }
         if ((pokemon.attached ?? []).some(x =>
           this.card(x).cardType !== "energy" && !this.isSupportedTool(x) ||
