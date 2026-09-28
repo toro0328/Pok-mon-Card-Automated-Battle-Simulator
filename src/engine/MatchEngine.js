@@ -195,6 +195,34 @@ export class MatchEngine extends AttackEngine {
     return matched??parseTrainerText(card);
   }
 
+  deckRuleChecks(decks) {
+    const errors=[];
+    for(let side=0;side<decks.length;side++){
+      const counts=new Map(),ids=decks[side].cards??[];
+      const total=ids.reduce((n,item)=>n+(Number(item.count)||0),0);
+      if(total!==60)errors.push({side,rule:"deck_size",message:`デッキは60枚必要です（現在${total}枚）。`});
+      let basics=0,aceSpecs=0;
+      for(const item of ids){
+        const id=item.officialCardId??item.cardId??item.id,card=this.repository.get(id);
+        if(!card){errors.push({side,rule:"unknown_card",message:`カードID ${id??"?"} がカードDBにありません。`});continue;}
+        const count=Number(item.count)||0;
+        if(card.cardType==="pokemon"&&card.raw.stage===BASIC)basics+=count;
+        if(card.energyType!=="basic"){
+          const copies=(counts.get(card.name)??0)+count;counts.set(card.name,copies);
+          if(copies>4)errors.push({side,rule:"copy_limit",message:`${card.name} は基本エネルギー以外4枚までです（現在${copies}枚）。`});
+        }
+        const text=[card.raw?.rule_box,card.raw?.effect,card.raw?.text,...(card.raw?.abilities??[]).map(x=>x.effect)].filter(Boolean).join("\\n");
+        const aceSpec=card.raw?.ace_spec===true||card.raw?.aceSpec===true||card.raw?.tags?.includes("ACE SPEC")||
+          /ACE SPEC|ACE\s*SPEC|ACE SPECカード|ACE SPECのカード/u.test(text)||
+          card.name==="シークレットボックス"||card.name==="プライムキャッチャー"||card.name==="マキシマムベルト"||card.name==="ヒーローマント"||card.name==="覚醒のドラム"||card.name==="アンフェアスタンプ"||card.name==="リブートポッド"||card.name==="ネオアッパーエネルギー";
+        if(aceSpec)aceSpecs+=count;
+      }
+      if(!basics)errors.push({side,rule:"basic_pokemon",message:"たねポケモンが1枚以上必要です。"});
+      if(aceSpecs>1)errors.push({side,rule:"ace_spec_limit",message:`ACE SPECは1デッキ1枚までです（現在${aceSpecs}枚）。`});
+    }
+    return errors;
+  }
+
   async compileDeck(decks,onProgress=()=>{}) {
     if(!Array.isArray(decks)||decks.length!==2)throw new Error("Two decks are required for effect compilation");
     const counts=new Map();
@@ -221,9 +249,10 @@ export class MatchEngine extends AttackEngine {
       const program={abilities,attacks,trainer,sourceText:{abilities:(card.raw.abilities??[]).map(x=>x.effect),attacks:(card.raw.attacks??[]).map(x=>x.effect??"").concat((card.raw.attacks??[]).map(x=>x.text??"")),trainer:card.raw.effect??""}};
       this.deckPrograms.set(id,program);
       const effects=[...abilities,...attacks,...(card.trainerType?[trainer]:[])].filter(Boolean);
-      const supported=effects.every(effect=>effect.status==="supported"||effect.status===undefined)&&
-        (!card.trainerType||trainer!==null);
-      results.push({officialCardId:id,name:card.name,copies:meta.copies,supported,program});
+      const unsupported=effects.filter(effect=>!(effect.status==="supported"||effect.status===undefined));
+      if(card.trainerType&&!trainer)unsupported.push({name:card.name,text:card.raw.effect??"",status:"needs_review"});
+      const supported=unsupported.length===0;
+      results.push({officialCardId:id,name:card.name,copies:meta.copies,supported,unsupported,program});
       onProgress({done:index+1,total:rows.length,card:card.name,result:results.at(-1)});
       await new Promise(resolve=>setTimeout(resolve,0));
     }
