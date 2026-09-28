@@ -36,7 +36,8 @@ export class AttackEngine extends AbilityEngine {
     const attached = active.attached ?? [];
     const types = attached.map(energy => {
       const card = this.card(energy);
-      if (card.energyType === "special" && this.isSupportedEnergy(energy)) return "Grass";
+      if (card.energyType === "special" && this.isSupportedEnergy(energy))
+        return card.name === "バブル水エネルギー" ? "Water" : "Grass";
       if (card.energyType !== "basic") return null;
       const type = Object.entries({ 草: "Grass", 炎: "Fire", 水: "Water", 雷: "Electric",
         超: "Psychic", 闘: "Fighting", 悪: "Dark", 鋼: "Metal" })
@@ -397,7 +398,10 @@ export class AttackEngine extends AbilityEngine {
   }
 
   applyStatus(state,target,status,ownerPlayer){
-    if(state.stadium&&this.isSupportedStadium(state.stadium)&&(target.attached??[]).length)return;
+    if(state.stadium&&this.card(state.stadium).name==="お祭り会場"&&(target.attached??[]).length)return;
+    const targetCard=this.card(target);
+    if(targetCard.raw.types?.includes("Water")&&(target.attached??[]).some(energy=>
+      this.card(energy).name==="バブル水エネルギー"&&this.isSupportedEnergy(energy)))return;
     target.statuses??=[];
     const recover=new Set(["ねむり","マヒ","こんらん"]);
     if(recover.has(status))target.statuses=target.statuses.filter(x=>!recover.has(typeof x==="string"?x:x.name));
