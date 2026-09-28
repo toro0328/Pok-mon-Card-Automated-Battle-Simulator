@@ -197,7 +197,6 @@
     "ヘビーバトンとバブル水エネルギーでエネルギー維持と状態対策"
   ],
   "unresolved": [
-    "ACE SPECを複数採用した他デッキを拒否する共通構築ルールゲート",
     "エースバーンのフレアターボをAI対AIの実対戦で使うエンドツーエンド確認",
     "ヘビーバトンの発動をAI対AIの実対戦で確認",
     "60枚全体の長時間対戦・例外ケース統合テスト"
@@ -267,6 +266,12 @@
       "effect": "トラッシュから水ポケモン・基本水エネルギー",
       "status": "implemented",
       "detail": "各種類を最大3枚ずつ選択し山札へ戻す。"
+    },
+    {
+      "card": "共通デッキ構築ルール",
+      "effect": "60枚・たねポケモン・同名4枚・ACE SPEC上限",
+      "status": "implemented",
+      "detail": "デッキ解析と対戦生成の両方でチェックし、違反内容を具体的に表示。"
     }
   ],
   "deckRuleChecks": {
@@ -283,6 +288,12 @@
       "status": "passed",
       "count": 60
     },
-    "aceSpecEngineEnforcement": "未実装（他デッキで複数ACE SPECを拒否する共通ゲートは未追加）"
+    "aceSpecEngineEnforcement": "implemented_in_compile_and_createMatch",
+    "commonRules": [
+      "60枚",
+      "たねポケモン1枚以上",
+      "基本エネルギーを除き同名4枚まで",
+      "ACE SPECは1枚まで"
+    ]
   }
 }
