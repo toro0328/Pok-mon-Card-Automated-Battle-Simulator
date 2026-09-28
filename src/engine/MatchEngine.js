@@ -16,6 +16,7 @@ const TRAINERS = {
   "スペシャルレッドカード": { type: "item", effect: "red", text: "このカードは、相手のサイドの残り枚数が3枚以下のときにしか使えない。\n相手は相手自身の手札をすべてウラにして切り、山札の下にもどす。その後、相手は山札を3枚引く。" },
   "アカマツ": { type: "supporter", effect: "akamatsu", text: "自分の山札から、それぞれちがうタイプの基本エネルギーを2枚まで選び、相手に見せて、どちらか1枚を手札に加え、残りのエネルギーを自分のポケモンにつける。そして山札を切る。" },
   "せいなるはい": { type: "item", effect: "sacredAsh", text: "自分のトラッシュからポケモンを5枚まで選び、相手に見せて、山札にもどして切る。" },
+  "むしとりセット": { type: "item", effect: "bugCatcher", text: "自分の山札を上から7枚見て、その中からGrassポケモンと「基本Grassエネルギー」を合計2枚まで選び、相手に見せて、手札に加える。残りのカードは山札にもどして切る。" },
   "プライムキャッチャー": { type: "item", effect: "primeCatcher", text: "相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。その後、自分のバトルポケモンをベンチポケモンと入れ替える。" }
 };
 
@@ -171,6 +172,12 @@ export class MatchEngine extends AttackEngine {
     const player = state.players[state.turn], actions = [];
     if (state.pendingTrainer) {
       const pending = state.pendingTrainer, spec = TRAINERS[pending.name];
+      if (pending.name === "むしとりセット") {
+        const shown=new Set(pending.shownIds),eligible=player.deck.filter(card=>shown.has(card.instanceId)&&
+          ((this.card(card).cardType==="pokemon"&&(this.card(card).raw.types??[]).includes("Grass"))||this.card(card).name==="基本草エネルギー"));
+        if((pending.selectedCount??0)<2)for(const card of eligible)actions.push({type:"TRAINER_SELECT",player:state.turn,sourceInstanceId:pending.sourceInstanceId,choiceInstanceId:card.instanceId});
+        actions.push({type:"TRAINER_FINISH",player:state.turn,sourceInstanceId:pending.sourceInstanceId});return actions;
+      }
       if (pending.name === "せいなるはい") {
         for (const card of player.trash) if (this.card(card).cardType === "pokemon" && (pending.selectedCount ?? 0) < 5)
           actions.push({type:"TRAINER_SELECT",player:state.turn,sourceInstanceId:pending.sourceInstanceId,choiceInstanceId:card.instanceId});
@@ -509,7 +516,9 @@ export class MatchEngine extends AttackEngine {
       const trainer = player.hand.splice(index, 1)[0], spec = this.trainerSpec(trainer);
       player.trash.push(trainer);
       if (spec.type === "supporter") next.supporterUsedThisTurn = true;
-      if (spec.effect === "lillie") {
+      if(spec.effect==="bugCatcher"){
+        next.pendingTrainer={name:"むしとりセット",sourceInstanceId:trainer.instanceId,shownIds:player.deck.slice(0,7).map(x=>x.instanceId),selectedCount:0};
+      } else if (spec.effect === "lillie") {
         player.deck.push(...player.hand.splice(0));
         this.shufflePlayer(next,player);
         player.hand.push(...player.deck.splice(0,player.prizes.length===6?8:6));
@@ -560,7 +569,11 @@ export class MatchEngine extends AttackEngine {
         const i=player.hand.findIndex(x=>x.instanceId===action.choiceInstanceId);
         player.trash.push(player.hand.splice(i,1)[0]);pending.costLeft--;
       } else if (action.type === "TRAINER_SELECT") {
-        if(pending.name==="せいなるはい"){
+        if(pending.name==="むしとりセット"){
+          const i=player.deck.findIndex(x=>x.instanceId===action.choiceInstanceId);player.hand.push(player.deck.splice(i,1)[0]);pending.selectedCount=(pending.selectedCount??0)+1;
+          const shown=new Set(pending.shownIds),eligible=player.deck.some(card=>shown.has(card.instanceId)&&((this.card(card).cardType==="pokemon"&&(this.card(card).raw.types??[]).includes("Grass"))||this.card(card).name==="基本草エネルギー"));
+          if(pending.selectedCount>=2||!eligible){this.shufflePlayer(next,player);delete next.pendingTrainer;}
+        } else if(pending.name==="せいなるはい"){
           const i=player.trash.findIndex(x=>x.instanceId===action.choiceInstanceId),returned=player.trash.splice(i,1)[0];player.deck.push(returned);pending.selectedCount=(pending.selectedCount??0)+1;
           if(pending.selectedCount>=5||!player.trash.some(x=>this.card(x).cardType==="pokemon")){this.shufflePlayer(next,player);delete next.pendingTrainer;}
         } else {
