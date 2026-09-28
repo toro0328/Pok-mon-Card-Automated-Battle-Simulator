@@ -313,16 +313,24 @@ function start(){if(!game||game.winner!=null||!analysisAllowsMatch)return;runnin
 function pause(){running=false;clearTimeout(timer);timer=null;el.start.disabled=false;el.pause.disabled=true;setStatus("一時停止中です。再開できます。");}
 function startMatch(decks,analysis){
   analysisByPlayer=analysis.profiles??analysisByPlayer;analysisAllowsMatch=analysis.complete;names=decks.map(deck=>deck.name);moveCount=0;entries=[];el.log.replaceChildren();
+  el.start.disabled=!analysisAllowsMatch;el.pause.disabled=true;el.load.disabled=false;
+  const blocker=analysis.unresolved.map(report=>report.name).filter((name,index,array)=>array.indexOf(name)===index);
+  if(!analysisAllowsMatch){
+    game=null;el.p0.replaceChildren();el.p1.replaceChildren();el.turn.textContent="効果の未対応が残っているため、対戦準備を保留しています。";el.seed.textContent="";
+    updateProgress(100,"効果の走査完了・未対応あり");
+    setStatus("カードの効果確認は終わりましたが、"+blocker.length+"種類に未対応の効果があります。すべて対応するまで対戦を開始できません："+blocker.join("、"),"error");
+    logAction("事前確認完了・未対応効果のため対戦開始を保留");return;
+  }
   const seed=globalThis.crypto?.getRandomValues?globalThis.crypto.getRandomValues(new Uint32Array(1))[0]||1:Math.floor(Math.random()*0xffffffff)+1;
   game=engine.createMatch(decks.map(deck=>deck.cards.flatMap(entry=>Array(entry.count).fill(entry.officialCardId))),seed);
-  el.start.disabled=!analysisAllowsMatch;el.pause.disabled=true;el.load.disabled=false;updateProgress(100,"全カード走査完了");
-  const blocker=analysis.unresolved.map(report=>report.name).filter((name,index,array)=>array.indexOf(name)===index);
-  if(analysisAllowsMatch){setStatus("全カードの効果対応を確認しました。スタートを押すと自動対戦します。");logAction("カード効果100%対応・対戦を準備しました");}
-  else{setStatus("解析走査は100%完了。効果未対応カードが"+blocker.length+"種類あるため、対戦開始を保留中："+blocker.join("、"),"error");logAction("全カードを走査しました。未対応効果のため開始保留");}
+  updateProgress(100,"効果確認完了・対戦準備完了");
+  setStatus("全カードの特性・ワザ・トレーナーズ効果がエンジン対応済みです。スタートを押すと自動対戦します。");logAction("事前効果確認完了・対戦を準備しました");
   render();
 }
 el.load.onclick=async()=>{
-  pause();el.load.disabled=true;el.analysisPanel.hidden=true;el.progress.hidden=false;loadStarted=Date.now();
+  pause();analysisAllowsMatch=false;game=null;el.start.disabled=true;el.pause.disabled=true;
+  el.p0.replaceChildren();el.p1.replaceChildren();el.turn.textContent="カード効果を事前確認中…";el.seed.textContent="";
+  el.load.disabled=true;el.analysisPanel.hidden=true;el.progress.hidden=false;loadStarted=Date.now();
   updateProgress(2,"読み込みを開始");setStatus("カードDBと公式デッキを確認しています…");
   clearInterval(loadClock);loadClock=setInterval(()=>{const current=Number(el.progressBar.value||0);const label=el.progressLabel.textContent.replace(/^\\d+%　/,"");updateProgress(current,label);},1000);
   try{
