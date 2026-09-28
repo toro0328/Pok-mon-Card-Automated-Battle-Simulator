@@ -11,7 +11,15 @@ const TRAINERS = {
   "メガシグナル": { type: "item", max: 1, zone: "hand", filter: "mega", text: "自分の山札から「メガシンカex」を1枚選び、相手に見せて、手札に加える。そして山札を切る。" },
   "シアノ": { type: "supporter", max: 3, zone: "hand", filter: "ex", text: "自分の山札から「ポケモンex」を3枚まで選び、相手に見せて、手札に加える。そして山札を切る。" },
   "ぼうけんのランタン": { type: "item", max: 2, zone: "hand", filter: "lantern", text: "自分の山札から「基本Fireエネルギー」と「基本Electricエネルギー」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。" },
-  "リーリエの決心": { type: "supporter", effect: "lillie", text: "自分の手札をすべて山札にもどして切る。その後、山札を6枚引く。自分のサイドの残り枚数が6枚なら、引く枚数は8枚になる。" },\n  "カスミの元気": { type: "supporter", effect: "kasumi", text: "このカードを使ったなら、自分の番は終わる。\\n自分の山札から「基本Waterエネルギー」を4枚まで選び、自分のポケモン1匹につける。そして山札を切る。" },\n  "ポケギア3.0": { type: "item", effect: "pokegear", max: 1, filter: "supporter", text: "自分の山札を上から7枚見て、その中からサポートを1枚選び、相手に見せて、手札に加える。残りのカードは山札にもどして切る。" },\n  "ジャンボアイス": { type: "item", effect: "jumbice", text: "エネルギーが3個以上ついている自分のバトルポケモンのHPを「80」回復する。" },\n  "大漁ネット": { type: "item", effect: "tairyounet", max: 6, filter: "waterRecovery", text: "自分のトラッシュからWaterポケモンと「基本Waterエネルギー」をそれぞれ3枚まで選び、相手に見せて、山札にもどして切る。" },\n  "スグリ": { type: "supporter", effect: "suguri", text: "このカードは、2つの効果から1つを選んで使う。\\n◆自分のバトルポケモンをベンチポケモンと入れ替える。\\n◆この番、自分のポケモンが使うワザの、相手のバトル場の「ポケモンex・V」へのダメージは「+30」される。" },\n  "なみのりビーチ": { type: "stadium", effect: "surfingBeach", text: "おたがいのプレイヤーは、自分の番ごとに1回、自分のバトル場のWaterポケモンを、ベンチのWaterポケモンと入れ替えてよい。" },\n  "ヘビーバトン": { type: "tool", effect: "heavyBaton", text: "このカードをつけているにげるためのエネルギーが4個のポケモンが、バトル場で相手のポケモンからワザのダメージを受けてきぜつしたとき、そのポケモンについている基本エネルギーを3枚まで選び、自分のベンチポケモンに好きなようにつけ替える。" },\n  "バブル水エネルギー": { type: "specialEnergy", effect: "bubbleWater", text: "このカードは、ポケモンについているかぎり、Waterエネルギー1個ぶんとしてはたらく。\\nこのカードをつけているWaterポケモンは、特殊状態にならず、受けている特殊状態は、すべて回復する。" },
+  "リーリエの決心": { type: "supporter", effect: "lillie", text: "自分の手札をすべて山札にもどして切る。その後、山札を6枚引く。自分のサイドの残り枚数が6枚なら、引く枚数は8枚になる。" },
+  "カスミの元気": { type: "supporter", effect: "kasumi", text: "このカードを使ったなら、自分の番は終わる。\\n自分の山札から「基本Waterエネルギー」を4枚まで選び、自分のポケモン1匹につける。そして山札を切る。" },
+  "ポケギア3.0": { type: "item", effect: "pokegear", max: 1, filter: "supporter", text: "自分の山札を上から7枚見て、その中からサポートを1枚選び、相手に見せて、手札に加える。残りのカードは山札にもどして切る。" },
+  "ジャンボアイス": { type: "item", effect: "jumbice", text: "エネルギーが3個以上ついている自分のバトルポケモンのHPを「80」回復する。" },
+  "大漁ネット": { type: "item", effect: "tairyounet", max: 6, filter: "waterRecovery", text: "自分のトラッシュからWaterポケモンと「基本Waterエネルギー」をそれぞれ3枚まで選び、相手に見せて、山札にもどして切る。" },
+  "スグリ": { type: "supporter", effect: "suguri", text: "このカードは、2つの効果から1つを選んで使う。\\n◆自分のバトルポケモンをベンチポケモンと入れ替える。\\n◆この番、自分のポケモンが使うワザの、相手のバトル場の「ポケモンex・V」へのダメージは「+30」される。" },
+  "なみのりビーチ": { type: "stadium", effect: "surfingBeach", text: "おたがいのプレイヤーは、自分の番ごとに1回、自分のバトル場のWaterポケモンを、ベンチのWaterポケモンと入れ替えてよい。" },
+  "ヘビーバトン": { type: "tool", effect: "heavyBaton", text: "このカードをつけているにげるためのエネルギーが4個のポケモンが、バトル場で相手のポケモンからワザのダメージを受けてきぜつしたとき、そのポケモンについている基本エネルギーを3枚まで選び、自分のベンチポケモンに好きなようにつけ替える。" },
+  "バブル水エネルギー": { type: "specialEnergy", effect: "bubbleWater", text: "このカードは、ポケモンについているかぎり、Waterエネルギー1個ぶんとしてはたらく。\\nこのカードをつけているWaterポケモンは、特殊状態にならず、受けている特殊状態は、すべて回復する。" },
   "夜のタンカ": { type: "item", effect: "rod", text: "自分のトラッシュからポケモンまたは基本エネルギーを1枚選び、相手に見せて、手札に加える。" },
   "ボスの指令": { type: "supporter", effect: "boss", text: "相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。" },
   "ポケモンいれかえ": { type: "item", effect: "switch", text: "自分のバトルポケモンをベンチポケモンと入れ替える。" },
@@ -272,11 +280,13 @@ export class MatchEngine extends AttackEngine {
       if(pending.name==="カスミの元気"){
         const choices=player.deck.filter(x=>this.card(x).name==="基本水エネルギー");
         if(!pending.selectedTargetId)for(const target of this.field(player))actions.push({type:"KASUMI_TARGET",player:state.turn,targetInstanceId:target.instanceId});
-        if(pending.selectedTargetId)for(const energy of choices)actions.push({type:"KASUMI_ENERGY",player:state.turn,choiceInstanceId:energy.instanceId});
+        if(pending.selectedTargetId&&pending.remaining>0)for(const energy of choices)actions.push({type:"KASUMI_ENERGY",player:state.turn,choiceInstanceId:energy.instanceId});
         actions.push({type:"KASUMI_FINISH",player:state.turn});return actions;
       }
       if(pending.name==="大漁ネット"){
-        const candidates=player.trash.filter(x=>{const c=this.card(x);return c.cardType==="pokemon"&&c.raw.types?.includes("Water")&&!pending.selectedTypes.includes("pokemon")||c.name==="基本水エネルギー"&&!pending.selectedTypes.includes("energy");});
+        const pokemonCount=pending.selectedTypes.filter(x=>x==="pokemon").length;
+        const energyCount=pending.selectedTypes.filter(x=>x==="energy").length;
+        const candidates=player.trash.filter(x=>{const c=this.card(x);return c.cardType==="pokemon"&&c.raw.types?.includes("Water")&&pokemonCount<3||c.name==="基本水エネルギー"&&energyCount<3;});
         if(pending.selectedNames.length<6)for(const candidate of candidates)actions.push({type:"TAIRYOU_SELECT",player:state.turn,choiceInstanceId:candidate.instanceId});
         actions.push({type:"TAIRYOU_FINISH",player:state.turn});return actions;
       }
@@ -345,6 +355,9 @@ export class MatchEngine extends AttackEngine {
         for(const energy of energies)for(const target of targets)actions.push({type:"PLAY_TRAINER",player:state.turn,
           sourceInstanceId:instance.instanceId,choiceInstanceId:energy.instanceId,targetInstanceId:target.instanceId});
       } else if(spec.effect==="pokegear"){
+        const looked=player.deck.slice(0,7);
+        for(const choice of looked)if(this.card(choice).trainerType==="supporter")actions.push({type:"PLAY_TRAINER",player:state.turn,
+          sourceInstanceId:instance.instanceId,choiceInstanceId:choice.instanceId});
         actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId});
       } else if(spec.effect==="jumbice"){
         if(player.active&&(player.active.attached??[]).length>=3&&(player.active.damage??0)>0)actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId});
@@ -1110,12 +1123,11 @@ export class MatchEngine extends AttackEngine {
       else if(action.type==="KASUMI_ENERGY"){
         const i=player.deck.findIndex(x=>x.instanceId===action.choiceInstanceId);
         if(i>=0){this.field(player).find(x=>x.instanceId===pending.selectedTargetId).attached.push(player.deck.splice(i,1)[0]);pending.remaining--;}
-      }else if(action.type==="KASUMI_FINISH"){this.shufflePlayer(next,player);delete next.pendingTrainer;next.endTurnAfterTrainer=true;}
+      }else if(action.type==="KASUMI_FINISH"){this.shufflePlayer(next,player);delete next.pendingTrainer;return this.endTurn(next);}
       else if(action.type==="TAIRYOU_SELECT"){
         const i=player.trash.findIndex(x=>x.instanceId===action.choiceInstanceId);
         if(i>=0){const chosen=player.trash.splice(i,1)[0],c=this.card(chosen),type=c.name==="基本水エネルギー"?"energy":"pokemon";player.deck.push(chosen);pending.selectedTypes.push(type);pending.selectedNames.push(c.name);}
-        if(pending.selectedTypes.filter(x=>x==="energy").length>=3)pending.selectedTypes.push("energy");
-        if(pending.selectedTypes.filter(x=>x==="pokemon").length>=3)pending.selectedTypes.push("pokemon");
+        
       }else if(action.type==="TAIRYOU_FINISH"){this.shufflePlayer(next,player);delete next.pendingTrainer;}
       if(action.type === "AKAMATSU_PICK") pending.selected.push(action.choiceInstanceId);
       else if(action.type === "AKAMATSU_HAND"){
