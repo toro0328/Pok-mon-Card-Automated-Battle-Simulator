@@ -1,0 +1,211 @@
+{
+  "schemaVersion": 1,
+  "deckCode": "y3pRpR-oXY0ej-Mp32yX",
+  "name": "ホエルオーex／エースバーン",
+  "sourceUrl": "https://www.pokemon-card.com/deck/confirm.html/deckID/y3pRpR-oXY0ej-Mp32yX/",
+  "totalCards": 60,
+  "checkedAt": "2026-09-28",
+  "status": "needs_review",
+  "statusReason": "60枚の公式構成とカード本文を照合。対戦開始に必要なすべての効果・ルールはまだ実装確認中。",
+  "cards": [
+    {
+      "officialCardId": 50233,
+      "name": "ホエルコ",
+      "count": 4,
+      "attacks": [
+        {
+          "name": "みずでっぽう",
+          "cost": [
+            "Water",
+            "Water"
+          ],
+          "damage": 40
+        },
+        {
+          "name": "スプラッシュ",
+          "cost": [
+            "Water",
+            "Water",
+            "Water"
+          ],
+          "damage": 80
+        }
+      ]
+    },
+    {
+      "officialCardId": 50315,
+      "name": "ホエルオーex",
+      "count": 4,
+      "stage": "1進化",
+      "evolvesFrom": "ホエルコ",
+      "hp": 380,
+      "rule": "きぜつ時に相手がサイド2枚",
+      "attacks": [
+        {
+          "name": "なみのり",
+          "cost": [
+            "Water",
+            "Water",
+            "Water"
+          ],
+          "damage": 120
+        },
+        {
+          "name": "フォーリングダウン",
+          "cost": [
+            "Water",
+            "Water",
+            "Water",
+            "Water",
+            "Water"
+          ],
+          "damage": 270,
+          "effect": "このポケモンをねむりにする。"
+        }
+      ]
+    },
+    {
+      "officialCardId": 47750,
+      "name": "エースバーン",
+      "count": 4,
+      "stage": "2進化",
+      "evolvesFrom": "ラビフット",
+      "hp": 160,
+      "ability": {
+        "name": "しゅんぱつりょく",
+        "text": "対戦準備でポケモンをバトル場に出すとき、このカードが手札にあるなら、ウラにしてバトル場に出してよい。"
+      },
+      "attacks": [
+        {
+          "name": "フレアターボ",
+          "cost": [
+            "Colorless"
+          ],
+          "damage": 50,
+          "effect": "自分の山札から基本エネルギーを3枚まで選び、ベンチポケモンに好きなようにつける。そして山札を切る。"
+        }
+      ]
+    },
+    {
+      "officialCardId": 49694,
+      "name": "ニャースex",
+      "count": 1,
+      "ability": "おくのてキャッチ",
+      "attack": "しっぽをまく",
+      "implementedAbilityStatus": "supported"
+    },
+    {
+      "officialCardId": 45783,
+      "name": "シークレットボックス",
+      "count": 1,
+      "effect": "手札3枚トラッシュし、グッズ・どうぐ・サポート・スタジアムを1枚ずつ手札へ"
+    },
+    {
+      "officialCardId": 47617,
+      "name": "ポケギア3.0",
+      "count": 4,
+      "effect": "山札上7枚からサポート1枚を手札へ"
+    },
+    {
+      "officialCardId": 49367,
+      "name": "ハイパーボール",
+      "count": 4,
+      "effect": "手札2枚トラッシュし、山札からポケモン1枚を手札へ"
+    },
+    {
+      "officialCardId": 49703,
+      "name": "ポケパッド",
+      "count": 4,
+      "effect": "ルールを持つポケモン以外を山札から1枚手札へ"
+    },
+    {
+      "officialCardId": 50204,
+      "name": "ジャンボアイス",
+      "count": 3,
+      "effect": "エネルギー3個以上の自分のバトルポケモンを80回復"
+    },
+    {
+      "officialCardId": 48316,
+      "name": "夜のタンカ",
+      "count": 1,
+      "effect": "トラッシュのポケモンまたは基本エネルギー1枚を手札へ"
+    },
+    {
+      "officialCardId": 50157,
+      "name": "大漁ネット",
+      "count": 1,
+      "effect": "トラッシュの水ポケモンと基本水エネルギーをそれぞれ3枚まで山札へ戻す"
+    },
+    {
+      "officialCardId": 45283,
+      "name": "ヘビーバトン",
+      "count": 3,
+      "effect": "にげるエネルギー4個のポケモンが相手ワザできぜつ時、基本エネルギー3枚までをベンチへ付け替え"
+    },
+    {
+      "officialCardId": 50489,
+      "name": "リーリエの決心",
+      "count": 4,
+      "effect": "手札を山札に戻し、サイド6枚なら8枚、そうでなければ6枚引く"
+    },
+    {
+      "officialCardId": 50294,
+      "name": "カスミの元気",
+      "count": 3,
+      "effect": "基本水エネルギーを4枚まで1匹につけて番を終える"
+    },
+    {
+      "officialCardId": 50476,
+      "name": "ボスの指令",
+      "count": 3,
+      "effect": "相手ベンチ1匹をバトル場へ"
+    },
+    {
+      "officialCardId": 49427,
+      "name": "ジャッジマン",
+      "count": 2,
+      "effect": "おたがいの手札を山札に戻して切り、4枚引く"
+    },
+    {
+      "officialCardId": 47498,
+      "name": "スグリ",
+      "count": 1,
+      "effect": "自分バトルポケモンを入れ替える、またはこの番ex/Vへのダメージ+30"
+    },
+    {
+      "officialCardId": 50211,
+      "name": "なみのりビーチ",
+      "count": 2,
+      "effect": "各プレイヤーは自分の番に1回、水バトルポケモンを水ベンチと入れ替え可"
+    },
+    {
+      "officialCardId": 50747,
+      "name": "基本水エネルギー",
+      "count": 9
+    },
+    {
+      "officialCardId": 50547,
+      "name": "バブル水エネルギー",
+      "count": 2,
+      "effect": "水エネルギー1個分。付いた水ポケモンは特殊状態にならず、受けている状態を回復"
+    }
+  ],
+  "strategicPlan": [
+    "エースバーンのフレアターボで基本エネルギーをベンチへ加速",
+    "高HPのホエルオーexへ水エネルギーを集め、なみのり／フォーリングダウンを使う",
+    "カスミの元気は番終了効果を加味して判断",
+    "ヘビーバトンとバブル水エネルギーでエネルギー維持と状態対策"
+  ],
+  "unresolved": [
+    "デッキ内全カードの対戦エンジン統合テスト",
+    "なみのりビーチのターン毎入れ替え処理",
+    "ヘビーバトンのきぜつ時誘発処理",
+    "カスミの元気の複数エネルギー選択と番終了処理",
+    "大漁ネットのカード選択・山札戻し処理",
+    "ACE SPECの構築制限確認"
+  ],
+  "references": [
+    "https://www.pokemon-card.com/deck/confirm.html/deckID/y3pRpR-oXY0ej-Mp32yX/",
+    "https://www.pokemon-card.com/card-search/details.php/card/50294"
+  ]
+}
