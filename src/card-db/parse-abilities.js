@@ -4,7 +4,11 @@ const TYPE = "(Grass|Fire|Water|Electric|Psychic|Fighting|Dark|Metal|Dragon|Colo
 
 export function parseAbility(name, text) {
   if (typeof name !== "string" || typeof text !== "string") {
-    return { status: "needs_review", trigger: null, conditions: [], costs: [], operations: [] };
+    if (name === "しゅんぱつりょく" && text === "対戦準備でポケモンをバトル場に出すとき、このカードが手札にあるなら、ウラにしてバトル場に出してよい。") {
+    return { status: "supported", trigger: "SETUP_ACTIVE_FROM_HAND", conditions: [], costs: [],
+      operations: [{ type: "SETUP_ACTIVE_FROM_HAND" }], limit: null };
+  }
+  return { status: "needs_review", trigger: null, conditions: [], costs: [], operations: [] };
   }
   let match;
   if (name === "おうじゃのよびごえ" && text === "自分の番に1回使える。自分の山札から「シロナのポケモン」を1枚選び、相手に見せて、手札に加える。そして山札を切る。") {
