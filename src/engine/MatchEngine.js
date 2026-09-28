@@ -152,18 +152,39 @@ export class MatchEngine extends AttackEngine {
     }
   }
 
+  queueBenchCleanup(state,orderedPlayers) {
+    const players=orderedPlayers.filter(index=>state.players[index].bench.length>this.maxBenchCount(state,index));
+    if(players.length)state.pendingBenchCleanup={players};
+  }
+
+  benchCleanupActions(state) {
+    const index=state.pendingBenchCleanup.players[0];
+    return state.players[index].bench.map(instance=>({type:"DISCARD_EXCESS_BENCH",player:index,sourceInstanceId:instance.instanceId}));
+  }
+
+  applyBenchCleanup(state,action) {
+    if(!this.getMatchActions(state).some(candidate=>JSON.stringify(candidate)===JSON.stringify(action)))throw new Error("Illegal bench cleanup action");
+    const next=structuredClone(state),player=next.players[action.player],i=player.bench.findIndex(x=>x.instanceId===action.sourceInstanceId),pokemon=player.bench.splice(i,1)[0];
+    player.trash.push(...(pokemon.stack??[]),pokemon,...(pokemon.attached??[]));
+    if(player.bench.length<=this.maxBenchCount(next,action.player)){
+      next.pendingBenchCleanup.players.shift();
+      if(!next.pendingBenchCleanup.players.length)delete next.pendingBenchCleanup;
+    }
+    return next;
+  }
+
   trainerSpec(instance) {
     const card = this.card(instance), spec = TRAINERS[card.name];
     const normalize=text=>(text??"").replace(/\s+/g," ").trim();
     return spec && card.trainerType === spec.type && normalize(card.raw.effect) === normalize(spec.text) ? spec : null;
   }
 
-  searchCandidate(instance, spec, pending, player) {
+  searchCandidate(instance, spec, pending, player, state) {
     const card = this.card(instance);
     switch (spec.filter) {
       case "pokemon": return card.cardType === "pokemon";
       case "smallBasic": return card.cardType === "pokemon" && card.raw.stage === BASIC && card.raw.hp <= 70 &&
-        this.entries(instance).every(x => x.status === "supported") && player.bench.length < 5;
+        this.entries(instance).every(x => x.status === "supported") && player.bench.length < this.maxBenchCount(state,state.turn);
       case "nonRulePokemon": return card.cardType === "pokemon" && !card.raw.rule_box && !(card.raw.tags ?? []).some(x => ["ex", "V", "GX", "メガシンカ"].includes(x));
       case "mega": return card.cardType === "pokemon" && (card.raw.tags ?? []).includes("メガシンカ");
       case "ex": return card.cardType === "pokemon" && (card.raw.tags ?? []).includes("ex");
@@ -221,7 +242,7 @@ export class MatchEngine extends AttackEngine {
           sourceInstanceId: pending.sourceInstanceId, choiceInstanceId: card.instanceId });
       } else {
         if (pending.selectedNames.length < spec.max) for (const card of player.deck) {
-          if (this.searchCandidate(card, spec, pending, player)) actions.push({ type: "TRAINER_SELECT", player: state.turn,
+          if (this.searchCandidate(card, spec, pending, player, state)) actions.push({ type: "TRAINER_SELECT", player: state.turn,
             sourceInstanceId: pending.sourceInstanceId, choiceInstanceId: card.instanceId });
         }
         actions.push({ type: "TRAINER_FINISH", player: state.turn, sourceInstanceId: pending.sourceInstanceId });
@@ -412,6 +433,7 @@ export class MatchEngine extends AttackEngine {
       return actions;
     }
     if (state.phase !== "playing") throw new Error("Unsupported match phase");
+    if(state.pendingBenchCleanup?.players?.length)return this.benchCleanupActions(state);
     if (state.pendingKnockout) return this.getKnockoutActions(state);
     if (state.pendingAttack) return this.attackEffectActions(state);
     if (state.pendingSecondAttack) return this.getLegalAttacks(state);
@@ -427,7 +449,7 @@ export class MatchEngine extends AttackEngine {
           actions.push({type:"USE_HOOH",player:state.turn,sourceInstanceId:source.instanceId,
             targetInstanceId:target.instanceId});
     for (const card of player.hand) {
-      if (this.card(card).raw.stage === BASIC && player.bench.length < 5 &&
+      if (this.card(card).raw.stage === BASIC && player.bench.length < this.maxBenchCount(state,state.turn) &&
           this.entries(card).every(entry => entry.status === "supported")) {
         actions.push({ type: "BENCH_BASIC", player: state.turn, sourceInstanceId: card.instanceId });
       }
@@ -475,6 +497,7 @@ export class MatchEngine extends AttackEngine {
     if (action.type === "USE_ABILITY") return super.applyAction(state, action);
     if (action.type === "ATTACK") return super.applyAttack(state, action);
     if (["TAKE_PRIZE", "PROMOTE_BENCH", "RESOLVE_KNOCKOUT"].includes(action.type)) return this.applyKnockoutAction(state, action);
+    if(action.type==="DISCARD_EXCESS_BENCH")return state.pendingKnockout?this.applyKnockoutAction(state,action):this.applyBenchCleanup(state,action);
     if(action.type.startsWith("ATTACK_SEARCH") || ["ATTACK_DISCARD_ENERGY","ATTACK_PROMOTE"].includes(action.type))
       return this.applyAttackEffect(state,action);
     if (action.type === "END_TURN") return this.endTurn(state);
@@ -511,9 +534,11 @@ export class MatchEngine extends AttackEngine {
       const tool=player.hand.splice(handIndex,1)[0];
       this.field(player).find(x=>x.instanceId===action.targetInstanceId).attached.push(tool);
     } else if (action.type === "PLAY_STADIUM") {
+      const removesZero=next.stadium&&this.card(next.stadium).name==="ゼロの大空洞",zeroOwner=next.stadiumOwner;
       if(next.stadium)next.players[next.stadiumOwner].trash.push(next.stadium);
       next.stadium=player.hand.splice(handIndex,1)[0];
       next.stadiumOwner=action.player;
+      if(removesZero&&this.card(next.stadium).name!=="ゼロの大空洞")this.queueBenchCleanup(next,[zeroOwner,1-zeroOwner]);
     } else if (action.type === "RETREAT") {
       const active = player.active;
       for (const id of action.paymentInstanceIds) {
@@ -623,7 +648,7 @@ export class MatchEngine extends AttackEngine {
         if(spec.filter==="secretBox")pending.selectedTypes.push(this.card(chosen).trainerType);
         if (spec.zone === "bench") {chosen.enteredTurn=next.turnNo;player.bench.push(chosen);}
         else player.hand.push(chosen);
-        if(pending.selectedNames.length >= spec.max || !player.deck.some(x=>this.searchCandidate(x,spec,pending,player))){
+        if(pending.selectedNames.length >= spec.max || !player.deck.some(x=>this.searchCandidate(x,spec,pending,player,state))){
           this.shufflePlayer(next,player);delete next.pendingTrainer;
         }
         }
