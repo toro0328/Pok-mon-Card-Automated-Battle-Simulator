@@ -302,7 +302,7 @@ function schedule(){
     }
   },delay());
 }
-function start(){if(!game||game.winner!=null)return;running=true;el.start.disabled=true;el.pause.disabled=false;setStatus("自動対戦中… 1手ごとに4〜6秒待ちます。");schedule();}
+function start(){if(!game||game.winner!=null)return;running=true;el.start.disabled=true;el.pause.disabled=false;setStatus("自動対戦中… 1手ごとに約1〜1.5秒待ちます。");schedule();}
 function pause(){running=false;clearTimeout(timer);timer=null;el.start.disabled=false;el.pause.disabled=true;setStatus("一時停止中です。再開できます。");}
 function startMatch(decks,profiles){
   analysisByPlayer=profiles??analysisByPlayer;names=decks.map(deck=>deck.name);moveCount=0;entries=[];el.log.replaceChildren();
