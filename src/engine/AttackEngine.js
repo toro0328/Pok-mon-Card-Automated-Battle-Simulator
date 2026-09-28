@@ -1,4 +1,4 @@
-import { AbilityEngine } from "./AbilityEngine.js?v=20260928-deckcompile2";
+import { AbilityEngine } from "./AbilityEngine.js?v=20260928-deckcompile3";
 import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-fourcardfix1";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
