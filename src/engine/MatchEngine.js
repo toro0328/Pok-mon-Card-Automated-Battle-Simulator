@@ -154,7 +154,8 @@ export class MatchEngine extends AttackEngine {
 
   trainerSpec(instance) {
     const card = this.card(instance), spec = TRAINERS[card.name];
-    return spec && card.trainerType === spec.type && card.raw.effect === spec.text ? spec : null;
+    const normalize=text=>(text??"").replace(/\s+/g," ").trim();
+    return spec && card.trainerType === spec.type && normalize(card.raw.effect) === normalize(spec.text) ? spec : null;
   }
 
   searchCandidate(instance, spec, pending, player) {
