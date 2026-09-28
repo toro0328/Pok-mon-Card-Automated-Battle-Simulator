@@ -13,6 +13,11 @@ catcher.officialCardId=60003;catcher.name="試験用コインキャッチャー"
 catcher.raw.name=catcher.name;catcher.raw.effect="コインを1回投げオモテなら、相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。";
 catcher.source.detailUrl="https://www.pokemon-card.com/card-search/details.php/card/60003";
 db.cards.push(catcher);
+const coinSearch=structuredClone(catcher);coinSearch.officialCardId=60004;coinSearch.name="試験用コインサーチ";
+coinSearch.raw.jp_id=60004;coinSearch.raw.name=coinSearch.name;
+coinSearch.raw.effect="コインを1回投げオモテなら、自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。";
+coinSearch.source.detailUrl="https://www.pokemon-card.com/card-search/details.php/card/60004";
+db.cards.push(coinSearch);
 const catalog = JSON.parse(fs.readFileSync("tests/fixtures/ability-effects.json", "utf8"));
 catalog.cardCount = db.cards.length;
 const engine = new MatchEngine(new CardRepository(db), catalog);
@@ -119,6 +124,37 @@ test("printed coin-gust Trainer text resolves a deterministic flip and switches 
   assert.equal(next.players[1].active.instanceId,flip.heads?"bench-target":"target");
   assert.equal(next.randomState,flip.randomState);
   assert.equal(next.players[0].trash.at(-1).instanceId,"catcher");
+});
+
+test("coin-search Trainer only offers Pokémon after heads, then takes one and shuffles",()=>{
+  const headsSeed=8192;
+  const tailsSeed=1;
+  const run=(seed)=>{
+    const own=player(card("own",50339),[card("coin-search",60004)],
+      [card("pokemon-choice",50339),card("item-choice",60003),card("second-pokemon",49956)]);
+    const foe=player(card("target",50339));
+    const game=state(own,foe,3);game.randomState=seed;
+    const use=engine.getMatchActions(game).find(action=>action.type==="PLAY_TRAINER"&&action.sourceInstanceId==="coin-search");
+    assert.ok(use);
+    return {game,next:engine.applyMatchAction(game,use)};
+  };
+
+  const {game:headsGame,next:heads}=run(headsSeed);
+  assert.equal(heads.pendingTrainer.name,"試験用コインサーチ");
+  const choices=engine.getMatchActions(heads);
+  assert.equal(choices.some(action=>action.type==="TRAINER_SELECT"&&action.choiceInstanceId==="pokemon-choice"),true);
+  assert.equal(choices.some(action=>action.type==="TRAINER_SELECT"&&action.choiceInstanceId==="item-choice"),false);
+  const selected=engine.applyMatchAction(heads,choices.find(action=>action.type==="TRAINER_SELECT"&&
+    action.choiceInstanceId==="pokemon-choice"));
+  assert.equal(selected.players[0].hand.some(x=>x.instanceId==="pokemon-choice"),true);
+  assert.equal(selected.players[0].deck.some(x=>x.instanceId==="item-choice"),true);
+  assert.equal(selected.pendingTrainer,undefined);
+  assert.notEqual(selected.randomState,heads.randomState);
+
+  const {next:tails}=run(tailsSeed);
+  assert.equal(tails.pendingTrainer,undefined);
+  assert.deepEqual(tails.players[0].deck.map(x=>x.instanceId),["pokemon-choice","item-choice","second-pokemon"]);
+  assert.equal(tails.players[0].trash.some(x=>x.instanceId==="coin-search"),true);
 });
 
 test("retreat pays from attached Energy once, then a valid attack ends the turn", () => {

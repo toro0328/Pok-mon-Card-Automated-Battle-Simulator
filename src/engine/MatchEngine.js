@@ -1,5 +1,5 @@
 import { AttackEngine } from "./AttackEngine.js?v=20260928-deckcompile5";
-import { parseTrainerText } from "../card-db/parse-trainers.js?v=20260928-genericgust1";
+import { parseTrainerText } from "../card-db/parse-trainers.js?v=20260928-coinsearch1";
 import { parseAbility } from "../card-db/parse-abilities.js?v=20260928-fourcardfix2";
 import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-fourcardfix1";
 
@@ -1189,6 +1189,11 @@ export class MatchEngine extends AttackEngine {
       } else if(spec.effect==="secretBox"){
         next.pendingTrainer={name:"シークレットボックス",sourceInstanceId:trainer.instanceId,
           costLeft:3,selectedNames:[],selectedTypes:[]};
+      } else if(spec.effect==="coinSearch"){
+        const result=this.coinSequence(next.randomState??1,true);
+        next.randomState=result.randomState;
+        if(result.heads)next.pendingTrainer={name:this.card(trainer).name,sourceInstanceId:trainer.instanceId,
+          selectedNames:[]};
       } else if(spec.effect==="draw") {
         player.hand.push(...player.deck.splice(0,spec.count));
       } else if(spec.effect==="shuffleDraw") {

@@ -32,6 +32,17 @@ export function parseTrainerText(card) {
     return {type:card.trainerType,effect:"boss",text:raw,compiledFromText:true};
   if(raw==="コインを1回投げオモテなら、相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。")
     return {type:card.trainerType,effect:"coinBoss",text:raw,compiledFromText:true};
+  if(card.trainerType==="item"){
+    const coinPokemonSearch=[
+      /^コインを1回投げオモテなら、自分の山札からポケモンを([0-9０-９]+)枚選び、相手(?:プレイヤー)?に見せ(?:てから|て)、手札に加える。(?:そして|その後、)山札を切る。$/u,
+      /^コインを1回投げオモテなら、自分の山札(?:にある|の)ポケモンを([0-9０-９]+)枚、相手(?:プレイヤー)?に見せ(?:てから|て)、手札に加える。(?:そして|その後、)山札を切る。$/u
+    ].map(pattern=>raw.match(pattern)).find(Boolean);
+    if(coinPokemonSearch){
+      const max=number(coinPokemonSearch[1]);
+      if(max)return {type:"item",effect:"coinSearch",max,zone:"hand",destination:"hand",filter:"pokemon",
+        text:raw,compiledFromText:true};
+    }
+  }
   if(card.trainerType==="item"&&/(自分の)?山札を?上から7枚見て/u.test(raw)&&
       /(草|Grass)ポケモン/u.test(raw)&&/基本(草|Grass)エネルギー/u.test(raw)&&
       /合計2枚まで/u.test(raw)&&/手札に加える/u.test(raw)&&/(残り|のこり).*(山札|デッキ).*(切|シャッフル)/u.test(raw))
