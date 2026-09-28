@@ -419,6 +419,10 @@ export class MatchEngine extends AttackEngine {
         for (const target of this.field(player)) actions.push({ type: "ATTACH_ENERGY", player: state.turn,
           sourceInstanceId: card.instanceId, targetInstanceId: target.instanceId });
       }
+      if(this.isSupportedTool(card)){
+        for(const target of this.field(player))if(!(target.attached??[]).some(attached=>this.isSupportedTool(attached)))
+          actions.push({type:"ATTACH_TOOL",player:state.turn,sourceInstanceId:card.instanceId,targetInstanceId:target.instanceId});
+      }
       if (this.card(card).trainerType === "stadium" && this.isSupportedStadium(card) &&
           (!state.stadium || this.card(state.stadium).name !== this.card(card).name))
         actions.push({type:"PLAY_STADIUM",player:state.turn,sourceInstanceId:card.instanceId});
@@ -487,6 +491,9 @@ export class MatchEngine extends AttackEngine {
       const energy = player.hand.splice(handIndex, 1)[0];
       this.field(player).find(x => x.instanceId === action.targetInstanceId).attached.push(energy);
       next.energyAttachedThisTurn = true;
+    } else if(action.type==="ATTACH_TOOL") {
+      const tool=player.hand.splice(handIndex,1)[0];
+      this.field(player).find(x=>x.instanceId===action.targetInstanceId).attached.push(tool);
     } else if (action.type === "PLAY_STADIUM") {
       if(next.stadium)next.players[next.stadiumOwner].trash.push(next.stadium);
       next.stadium=player.hand.splice(handIndex,1)[0];
