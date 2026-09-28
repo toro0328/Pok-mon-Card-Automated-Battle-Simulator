@@ -311,6 +311,12 @@ export class AttackEngine extends AbilityEngine {
     const benchIndex=targetInstanceId?state.players[owner].bench.findIndex(x=>x.instanceId===targetInstanceId):-1;
     const victim=benchIndex>=0?state.players[owner].bench[benchIndex]:state.players[owner].active;
     const prizeValue = this.prizeValue(victim);
+    const heavyBatonEnergyIds=cause?.source==="opponentAttack"&&owner!==cause.attacker&&benchIndex<0&&
+      this.retreatCost?.(state,owner,victim.instanceId)===4&&
+      this.field(state.players[owner]).length>1&&
+      (victim.attached??[]).some(item=>this.card(item).name==="ヘビーバトン"&&this.isSupportedTool(item))
+      ?(victim.attached??[]).filter(item=>this.card(item).energyType==="basic").map(item=>item.instanceId):[];
+    const heavyBaton=heavyBatonEnergyIds.length?{energyIds:heavyBatonEnergyIds,selected:0,max:3}:null;
     if (!state.players.every(p => Array.isArray(p.prizes)) || !state.players[recipient].prizes.length) {
       throw new Error("Prize zones are required for knockout resolution");
     }
@@ -322,7 +328,8 @@ export class AttackEngine extends AbilityEngine {
     state.knockoutThisTurn ??= [false, false];
     state.knockoutThisTurn[owner] = true;
     state.pendingKnockout = { owner, recipient,
-      remaining: Math.min(prizeValue, state.players[recipient].prizes.length) };
+      remaining: Math.min(prizeValue, state.players[recipient].prizes.length),
+      ...(heavyBaton?{heavyBaton}:{}) };
     this.scheduleBenchCleanup?.(state, owner);
     return state;
   }
