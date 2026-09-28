@@ -333,6 +333,21 @@ export class MatchEngine extends AttackEngine {
         const targets=player.bench.filter(x=>this.card(x).name.startsWith("Nの"));
         for(const energy of energies)for(const target of targets)actions.push({type:"PLAY_TRAINER",player:state.turn,
           sourceInstanceId:instance.instanceId,choiceInstanceId:energy.instanceId,targetInstanceId:target.instanceId});
+      } else if(spec.effect==="pokegear"){
+        actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId});
+      } else if(spec.effect==="jumbice"){
+        if(player.active&&(player.active.attached??[]).length>=3&&(player.active.damage??0)>0)actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId});
+      } else if(spec.effect==="tairyounet"){
+        if(player.trash.some(x=>this.card(x).cardType==="pokemon"&&this.card(x).raw.types?.includes("Water"))||
+          player.trash.some(x=>this.card(x).name==="基本水エネルギー"))
+          actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId});
+      } else if(spec.effect==="kasumi"){
+        if(player.deck.some(x=>this.card(x).name==="基本水エネルギー")&&this.field(player).length)
+          actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId});
+      } else if(spec.effect==="suguri"){
+        for(const target of player.bench)actions.push({type:"PLAY_TRAINER",player:state.turn,
+          sourceInstanceId:instance.instanceId,choiceInstanceId:target.instanceId,mode:"switch"});
+        actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId,mode:"damage"});
       } else if(spec.effect==="mushitoriSet"){
         actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId});
       } else if(spec.effect==="secretBox"){
