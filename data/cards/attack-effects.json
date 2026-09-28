@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 3343,
-    "needs_review": 1819
+    "supported": 3351,
+    "needs_review": 1811
   },
   "attacks": {
     "45147": [
@@ -38824,8 +38824,19 @@
           "Colorless"
         ],
         "text": "このポケモンをねむりにする。このポケモンのHPを「30」回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "ATTACKING_POKEMON",
+            "status": "ねむり"
+          },
+          {
+            "type": "HEAL",
+            "target": "ATTACKING_POKEMON",
+            "amount": 30
+          }
+        ]
       },
       {
         "index": 1,
@@ -42432,8 +42443,13 @@
           "Colorless"
         ],
         "text": "自分の山札から基本エネルギーを3枚まで選び、ベンチポケモンに好きなようにつける。そして山札を切る。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SEARCH_BASIC_ENERGY_ATTACH_BENCH",
+            "max": 3
+          }
+        ]
       }
     ],
     "47751": [
@@ -45858,8 +45874,19 @@
           "Colorless"
         ],
         "text": "このポケモンをねむりにする。このポケモンのHPを「30」回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "ATTACKING_POKEMON",
+            "status": "ねむり"
+          },
+          {
+            "type": "HEAL",
+            "target": "ATTACKING_POKEMON",
+            "amount": 30
+          }
+        ]
       },
       {
         "index": 1,
@@ -74017,8 +74044,19 @@
           "Colorless"
         ],
         "text": "このポケモンをねむりにする。自分の山札を2枚引く。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "ATTACKING_POKEMON",
+            "status": "ねむり"
+          },
+          {
+            "type": "DRAW",
+            "player": "SELF",
+            "count": 2
+          }
+        ]
       }
     ],
     "49336": [
@@ -76539,8 +76577,14 @@
           "Colorless"
         ],
         "text": "このポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "ATTACKING_POKEMON",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "49696": [
@@ -81967,8 +82011,14 @@
           "Water"
         ],
         "text": "このポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "ATTACKING_POKEMON",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "50235": [
@@ -83676,8 +83726,14 @@
           "Water"
         ],
         "text": "このポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "ATTACKING_POKEMON",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "50316": [
@@ -90600,8 +90656,14 @@
           "Colorless"
         ],
         "text": "このポケモンをねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "ATTACKING_POKEMON",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "50708": [
