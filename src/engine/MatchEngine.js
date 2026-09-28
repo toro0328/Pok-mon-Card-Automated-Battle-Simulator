@@ -213,7 +213,7 @@ export class MatchEngine extends AttackEngine {
           const copies=(counts.get(card.name)??0)+count;counts.set(card.name,copies);
           if(copies>4)errors.push({side,rule:"copy_limit",message:`${card.name} は基本エネルギー以外4枚までです（現在${copies}枚）。`});
         }
-        const text=[card.raw?.rule_box,card.raw?.effect,card.raw?.text,...(card.raw?.abilities??[]).map(x=>x.effect)].filter(Boolean).join("\\n");
+        const text=[JSON.stringify(card.raw??{}),card.raw?.rule_box,card.raw?.effect,card.raw?.text,...(card.raw?.abilities??[]).map(x=>x.effect)].filter(Boolean).join("\\n");
         const aceSpec=card.raw?.ace_spec===true||card.raw?.aceSpec===true||card.raw?.tags?.includes("ACE SPEC")||
           /ACE SPEC|ACE\s*SPEC|ACE SPECカード|ACE SPECのカード/u.test(text)||
           card.name==="シークレットボックス"||card.name==="プライムキャッチャー"||card.name==="マキシマムベルト"||card.name==="ヒーローマント"||card.name==="覚醒のドラム"||card.name==="アンフェアスタンプ"||card.name==="リブートポッド"||card.name==="ネオアッパーエネルギー";
