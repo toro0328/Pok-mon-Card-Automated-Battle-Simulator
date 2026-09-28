@@ -22,7 +22,7 @@ button:disabled{opacity:.5;cursor:wait}
 .players{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .player{background:#10263f;border:1px solid #395a79;border-radius:12px;padding:10px;min-width:0}
 .player h2{font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.player.opponent{transform:rotate(180deg)}
+.player.opponent{transform:rotate(180deg)}.opponent h2,.opponent .active,.opponent .bench,.opponent .info,.opponent .hand{transform:rotate(180deg)}
 .active{min-height:125px;display:flex;justify-content:center;align-items:center;gap:8px;border:1px solid #355674;border-radius:9px;padding:8px}
 .bench{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-top:6px}
 .slot{min-width:0;min-height:75px;border:1px dashed #567a9a;border-radius:7px;display:flex;justify-content:center;align-items:center}
@@ -45,7 +45,7 @@ button:disabled{opacity:.5;cursor:wait}
 <main>
 <section class="panel">
 <h1>AI同士の自動対戦</h1>
-<p class="help">2つの公式デッキコードを入れると、対応済みの合法手からAIが行動を選びます。対戦を開始すると、4〜6秒ごとに1手ずつ進みます。</p>
+<p class="help">2つの公式デッキコードを入れると、対応済みの合法手からAIが行動を選びます。対戦を開始すると、4〜6秒ごとに1手ずつ進みます。公式ページのCORS制限時は公開中継サービス経由で読み込みます。</p>
 <div class="codes">
 <div><label for="codeA">自分側のデッキコード / URL</label><input id="codeA" placeholder="6文字-6文字-6文字"></div>
 <div><label for="codeB">相手側のデッキコード / URL</label><input id="codeB" placeholder="6文字-6文字-6文字"></div>
@@ -142,7 +142,7 @@ function cardView(pokemon){
 }
 function playerView(index){
   const p=game.players[index],root=index===0?el.p0:el.p1;root.replaceChildren();
-  const title=document.createElement("h2");title.textContent=`${names[index]}：${names[index]===p.deckName?"":""}${p.deck.length}枚`;
+  const title=document.createElement("h2");
   title.textContent=`${names[index]}　山札${p.deck.length}・手札${p.hand.length}・サイド${p.prizes.length}・トラッシュ${p.trash.length}`;
   root.append(title);
   const active=document.createElement("div");active.className="active";active.append(cardView(p.active));root.append(active);
@@ -195,8 +195,8 @@ function score(action,actions){
     TRAINER_DISCARD:116,TRAINER_SELECT:112,AKAMATSU_PICK:112,AKAMATSU_HAND:111,
     AKAMATSU_ATTACH:110,ATTACK_SEARCH:110,ATTACK_DISCARD_ENERGY:110,ATTACK_PROMOTE:110,
     ABILITY_SELECT:109,ABILITY_SKIP:30,TRAINER_FINISH:25,AKAMATSU_FINISH:25,ATTACK_SEARCH_FINISH:25,
-    EVOLVE:80,USE_ABILITY:72,USE_HOOH:75,ATTACH_ENERGY:65,
-    PLAY_TRAINER:58,PLAY_STADIUM:45,BENCH_BASIC:40,RETREAT:30,ATTACK:90,END_TURN:0
+    EVOLVE:84,USE_ABILITY:74,USE_HOOH:76,ATTACH_ENERGY:68,
+    PLAY_TRAINER:61,PLAY_STADIUM:45,BENCH_BASIC:42,RETREAT:32,ATTACK:54,END_TURN:0
   }[action.type]??20;
   if(action.type==="ATTACH_ENERGY"){
     const target=instanceById(action.targetInstanceId);
@@ -258,7 +258,7 @@ function start(){if(!game||game.winner!=null)return;running=true;el.start.disabl
 function pause(){running=false;clearTimeout(timer);timer=null;el.start.disabled=false;el.pause.disabled=true;setStatus("一時停止中です。再開できます。");}
 function startMatch(decks){
   names=decks.map(deck=>deck.name);moveCount=0;entries=[];el.log.replaceChildren();
-  const seed=crypto?.getRandomValues?crypto.getRandomValues(new Uint32Array(1))[0]||1:Math.floor(Math.random()*0xffffffff)+1;
+  const seed=globalThis.crypto?.getRandomValues?globalThis.crypto.getRandomValues(new Uint32Array(1))[0]||1:Math.floor(Math.random()*0xffffffff)+1;
   game=engine.createMatch(decks.map(deck=>deck.cards.flatMap(entry=>Array(entry.count).fill(entry.officialCardId))),seed);
   el.start.disabled=false;el.pause.disabled=true;el.restart.disabled=false;
   setStatus("デッキ2つを確認しました。スタートを押すと自動対戦します。");
