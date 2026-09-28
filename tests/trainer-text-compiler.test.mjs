@@ -17,6 +17,22 @@ test("compiles Boss-style gust and coin-gated Catcher wording independent of car
   assert.equal(parseTrainerText({...item,raw:{effect:item.raw.effect.replace("オモテなら","ウラなら")}}),null);
 });
 
+test("compiles common coin-search text variants as a Pokémon-only search",()=>{
+  const variants=[
+    "コインを1回投げオモテなら、自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
+    "コインを1回投げオモテなら、自分の山札からポケモンを1枚選び、相手プレイヤーに見せてから、手札に加える。その後、山札を切る。",
+    "コインを1回投げオモテなら、自分の山札のポケモンを1枚、相手プレイヤーに見せてから、手札に加える。そして山札を切る。",
+    "コインを1回投げオモテなら、自分の山札にあるポケモンを1枚、相手に見せてから、手札に加える。そして山札を切る。"
+  ];
+  for(const effect of variants){
+    const result=parseTrainerText({trainerType:"item",raw:{effect}});
+    assert.equal(result?.effect,"coinSearch",effect);
+    assert.equal(result.filter,"pokemon",effect);
+    assert.equal(result.max,1,effect);
+  }
+  assert.equal(parseTrainerText({trainerType:"item",raw:{effect:variants[0].replace("オモテなら","ウラなら")}}),null);
+});
+
 test("compiles Secret Box only when all four Trainer types and the three card cost are present",()=>{
   const card={trainerType:"item",raw:{effect:"このカードは、自分の手札を3枚トラッシュしなければ使えない。\n自分の山札から「グッズ」「ポケモンのどうぐ」「サポート」「スタジアム」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。"}};
   assert.equal(parseTrainerText(card)?.effect,"secretBox");
