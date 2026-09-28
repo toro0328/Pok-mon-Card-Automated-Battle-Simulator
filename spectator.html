@@ -69,6 +69,7 @@ button:disabled{opacity:.5;cursor:wait}
 <script type="module">
 import { CardRepository } from "./src/card-db/CardRepository.js";
 import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260928-deckcompile1";
+import { createDeckAnalysisRecord, saveDeckAnalysis } from "./src/decks/analysis-store.js";
 
 const el={
   codeA:document.getElementById("codeA"),codeB:document.getElementById("codeB"),
@@ -104,7 +105,8 @@ function parseOfficialDeck(html){
 async function readDeck(input,slot){
   const saved=JSON.parse(localStorage.getItem(`pokemon-card-simulator-deck-${slot}`)||"null");
   const typed=input.trim()?parseCode(input):null;
-  if(saved&&(!typed||saved.deckCode===typed))return saved;
+  if(saved&&(!typed||saved.deckCode===typed))return {...saved,
+    missingCardIds:saved.cards.filter(item=>!repository.get(item.officialCardId)).map(item=>item.officialCardId)};
   if(!typed)throw new Error("2つのデッキコードを入力してください。");
   const code=typed,officialUrl=`https://www.pokemon-card.com/deck/confirm.html/deckID/${code}/`;
   let html,lastError;
@@ -118,8 +120,8 @@ async function readDeck(input,slot){
   if(!cards.length)throw new Error(`${code} のカード一覧を読み取れません。公式ページの形式変更または非公開デッキの可能性があります。`);
   if(total!==60)throw new Error(`${code} は${total}枚として読み取られました。60枚デッキを指定してください。`);
   const missing=cards.filter(x=>!repository.get(x.officialCardId));
-  if(missing.length)throw new Error(`${code} は読み込めましたが、カードDB未登録IDがあります：${missing.map(x=>x.officialCardId).join("、")}`);
-  const deck={name:`公式デッキ ${code}`,deckCode:code,sourceUrl:officialUrl,cards};
+  const deck={name:`公式デッキ ${code}`,deckCode:code,sourceUrl:officialUrl,cards,
+    missingCardIds:missing.map(x=>x.officialCardId)};
   localStorage.setItem(`pokemon-card-simulator-deck-${slot}`,JSON.stringify(deck));
   return deck;
 }
@@ -250,16 +252,32 @@ function addAnalysisCard(report,counts){
 async function analyzeDecks(decks){
   const combined=new Map();for(let side=0;side<decks.length;side++)for(const item of decks[side].cards){const entry=combined.get(item.officialCardId)||{counts:[0,0]};entry.counts[side]+=item.count;combined.set(item.officialCardId,entry);}
   const ids=[...combined.keys()],reports=[];el.analysisList.replaceChildren();el.analysisPanel.hidden=false;
-  const compiled=await engine.compileDeck(decks,({done,total,card})=>{
+  const knownDecks=decks.map(deck=>({...deck,cards:deck.cards.filter(item=>repository.get(item.officialCardId))}));
+  const compiled=await engine.compileDeck(knownDecks,({done,total,card})=>{
     const percent=5+50*done/total;updateProgress(percent,`カード文を効果プログラムに変換 ${done}/${total}種類：${card}`);
     const elapsed=Math.max(0,Date.now()-loadStarted),remaining=done?Math.max(0,Math.ceil((elapsed/done)*(total-done)/1000)):null;
     el.elapsed.textContent=`経過 ${Math.floor(elapsed/1000)}秒・読込残り目安 ${remaining===null?"計算中":"約"+remaining+"秒"}`;
   });
+  const compiledById=new Map(compiled.map(card=>[card.officialCardId,card]));
+  for(const deck of decks){
+    const analysis=deck.cards.map(item=>{
+      const existing=compiledById.get(item.officialCardId);
+      return existing?{...existing,copies:[item.count,0]}:{officialCardId:item.officialCardId,
+        name:`カードDB未登録（ID ${item.officialCardId}）`,copies:[item.count,0],supported:false,
+        issues:[{kind:"missing_card",name:`カードID ${item.officialCardId}`,
+          text:"この公式カードIDのカード情報がDBにありません。カード情報を確認して追加してください。"}]};
+    });
+    saveDeckAnalysis(createDeckAnalysisRecord(deck,analysis,deck.missingCardIds??[]));
+  }
   const compiledSupported=compiled.filter(x=>x.supported).length;
   el.analysisSummary.textContent=`デッキ内${compiled.length}種類のカード本文を走査し、${compiledSupported}/${compiled.length}種類の効果を対戦エンジンへ接続しました。残りも文章解析を続けています。`;
   const profiles=[0,1].map(()=>({attackerIds:[],roles:new Set()}));
   for(let index=0;index<ids.length;index++){
-    const id=ids[index],report=analyzeCard(id),copies=combined.get(id).counts;reports.push(report);addAnalysisCard(report,copies);
+    const id=ids[index],copies=combined.get(id).counts;
+    const report=repository.get(id)?analyzeCard(id):{officialCardId:id,name:`カードDB未登録（ID ${id}）`,
+      type:"unknown",details:[{label:"カード情報",status:"needs_review",text:"公式カードIDの情報がDBにありません。"}],
+      roles:[],supported:false,bestDamage:0};
+    reports.push(report);addAnalysisCard(report,copies);
     for(let side=0;side<2;side++)if(copies[side]){for(const role of report.roles)profiles[side].roles.add(role);if(report.type==="pokemon"&&report.bestDamage>0)profiles[side].attackerIds.push({id,damage:report.bestDamage});}
     const percent=55+40*(index+1)/ids.length;updateProgress(percent,"効果解析 "+(index+1)+"/"+ids.length+"種類");
     const elapsed=Math.max(0,Date.now()-loadStarted),remaining=index?Math.max(0,Math.ceil((elapsed/(index+1))*(ids.length-index)/1000)):null;el.elapsed.textContent="経過 "+Math.floor(elapsed/1000)+"秒・解析残り目安 "+(remaining===null?"計算中":"約"+remaining+"秒");await new Promise(resolve=>setTimeout(resolve,0));
