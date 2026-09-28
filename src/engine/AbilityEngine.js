@@ -1,6 +1,10 @@
 // Deterministic execution for the explicitly compiled ability subset.
 // This is a restricted ability sandbox, not a complete Pokémon TCG match.
 const FESTIVAL_STADIUM_TEXT = "エネルギーがついているおたがいのポケモン全員は、特殊状態にならず、受けている特殊状態は、すべて回復する。";
+const TOOL_TEXT = {
+  "ブレイブバングル": "このカードをつけているポケモン（「ルールを持つポケモン」をのぞく）が使うワザの、相手のバトル場の「ポケモンex」へのダメージは「+30」される。",
+  "ふうせん": "このカードをつけているポケモンは、にげるためのエネルギーが2個ぶん少なくなる。"
+};
 const GROW_GRASS_TEXT = "このカードは、ポケモンについているかぎり、Grassエネルギー1個ぶんとしてはたらく。\nこのカードをつけているGrassポケモンは、最大HPが「＋20」される。";
 const VERIFIED_ABILITIES = {
   50396: ["はしゃのほうこう", "自分の番に、このカードを手札からベンチに出したとき、1回使える。自分の山札を上から4枚見て、その中から基本エネルギーを1枚選び、このポケモンにつける。残りのカードはウラにして切り、山札の下にもどす。"],
@@ -39,6 +43,11 @@ export class AbilityEngine {
     return [player.active, ...player.bench].filter(Boolean);
   }
 
+  isSupportedTool(instance) {
+    const card=this.card(instance);
+    return card.trainerType==="tool" && TOOL_TEXT[card.name]===card.raw.effect;
+  }
+
   isSupportedStadium(instance) {
     const card = this.card(instance);
     return card.name === "お祭り会場" && card.trainerType === "stadium" &&
@@ -61,13 +70,13 @@ export class AbilityEngine {
     for (const player of state.players) {
       if (!Array.isArray(player.hand) || !Array.isArray(player.deck) ||
           !Array.isArray(player.bench) || !Array.isArray(player.trash) ||
-          player.bench.length > 5) throw new Error("Invalid player zones");
+          player.bench.length > (state.stadium&&this.card(state.stadium).name==="ゼロの大空洞"&&this.field(player).some(x=>(this.card(x).raw.tags??[]).includes("テラスタル"))?8:5)) throw new Error("Invalid player zones");
       for (const pokemon of this.field(player)) {
         if (this.card(pokemon).cardType !== "pokemon" ||
             this.entries(pokemon).some(e => e.status !== "supported")) {
           throw new Error("Unsupported ability or card on the field");
         }
-        if ((pokemon.attached ?? []).some(x => this.card(x).cardType !== "energy" || !this.isSupportedEnergy(x))) {
+        if ((pokemon.attached ?? []).some(x => !(this.card(x).cardType === "energy" && this.isSupportedEnergy(x)) && !this.isSupportedTool(x))) {
           throw new Error("Unsupported attachment in ability sandbox");
         }
       }
@@ -240,7 +249,8 @@ export class AbilityEngine {
       entry.status === "supported" && entry.trigger === "CONTINUOUS" &&
       entry.operations.some(op => op.type === "SET_RETREAT_COST_ZERO" &&
         op.scope === "OWN_FIELD" && op.stage === "たね")));
-    return freeRetreat ? 0 : printed;
+    const toolReduction=(target.attached??[]).some(card=>this.isSupportedTool(card)&&this.card(card).name==="ふうせん")?2:0;
+    return Math.max(0,(freeRetreat?0:printed)-toolReduction);
   }
 
   abilityAllowsAttack(state, playerIndex, sourceInstanceId) {
