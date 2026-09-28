@@ -1,4 +1,4 @@
-import { AttackEngine } from "./AttackEngine.js?v=20260928-deckcompile1";
+import { AttackEngine } from "./AttackEngine.js?v=20260928-deckcompile2";
 import { parseTrainerText } from "../card-db/parse-trainers.js?v=20260928-deckcompile1";
 import { parseAbility } from "../card-db/parse-abilities.js?v=20260928-fourcardfix1";
 import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-fourcardfix1";
@@ -831,6 +831,12 @@ export class MatchEngine extends AttackEngine {
       for (const item of player.hand) actions.push({type:"NIGHT_ACADEMY_RETURN",player:state.turn,
         sourceInstanceId:item.instanceId});
     }
+    if(state.stadium&&this.card(state.stadium).name==="なみのりビーチ"&&
+        state.stadiumEffectUsedTurns?.[state.turn]!==state.turnNo&&
+        player.active&&this.card(player.active).raw.types?.includes("Water")){
+      for(const target of player.bench)if(this.card(target).raw.types?.includes("Water"))
+        actions.push({type:"SURFING_BEACH_SWITCH",player:state.turn,targetInstanceId:target.instanceId});
+    }
     if(player.hand.some(x=>this.card(x).name === "基本炎エネルギー"))
       for(const source of this.field(player)) if(this.entries(source, state).some(x=>x.operations.some(op=>
           op.type === "ATTACH_UP_TO_BASIC_FIRE_TO_BENCHED_HIBIKI")) &&
@@ -953,6 +959,15 @@ export class MatchEngine extends AttackEngine {
       next.stadiumEffectUsedTurns[action.player]=state.turnNo;
       return next;
     }
+    if(action.type==="SURFING_BEACH_SWITCH"){
+      const next=structuredClone(state),own=next.players[action.player];
+      const i=own.bench.findIndex(x=>x.instanceId===action.targetInstanceId);
+      if(i<0)throw new Error("Surfing Beach target is not on the Bench");
+      const outgoing=own.active;own.active=own.bench.splice(i,1)[0];own.bench.push(outgoing);
+      this.clearSwitchStatuses(outgoing);this.clearSwitchStatuses(own.active);
+      next.stadiumEffectUsedTurns??=[-1,-1];next.stadiumEffectUsedTurns[action.player]=state.turnNo;
+      return next;
+    }
     if (action.type.startsWith("TRAINER_") || action.type.startsWith("AKAMATSU_") || action.type === "PLAY_TRAINER") return this.applyTrainer(state, action);
     if (["ABILITY_SELECT","ABILITY_SKIP"].includes(action.type)) return this.applyBenchAbility(state,action);
     if (action.type === "USE_HOOH") {
@@ -980,7 +995,10 @@ export class MatchEngine extends AttackEngine {
       }
     } else if (action.type === "ATTACH_ENERGY") {
       const energy = player.hand.splice(handIndex, 1)[0];
-      this.field(player).find(x => x.instanceId === action.targetInstanceId).attached.push(energy);
+      const target=this.field(player).find(x => x.instanceId === action.targetInstanceId);
+      target.attached.push(energy);
+      if(this.card(energy).name==="バブル水エネルギー"&&this.card(target).raw.types?.includes("Water"))
+        target.statuses=[];
       next.energyAttachedThisTurn = true;
     } else if (action.type === "ATTACH_TOOL") {
       const tool=player.hand.splice(handIndex,1)[0];
