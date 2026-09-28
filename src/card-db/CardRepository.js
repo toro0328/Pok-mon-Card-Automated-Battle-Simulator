@@ -8,17 +8,22 @@ export class CardRepository {
     this.updatedAt = database.updatedAt;
     this.cards = new Map();
     this.byName = new Map();
-    for (const card of database.cards) {
-      const result = validateCard(card);
-      if (!result.ok) throw new Error(`Invalid card ${card?.officialCardId}: ${result.errors.join(", ")}`);
-      if (this.cards.has(card.officialCardId)) {
-        throw new Error(`Duplicate officialCardId: ${card.officialCardId}`);
-      }
-      this.cards.set(card.officialCardId, card);
-      const matches = this.byName.get(card.name) ?? [];
-      matches.push(card);
-      this.byName.set(card.name, matches);
+    for (const card of database.cards) this.add(card);
+  }
+
+  add(card) {
+    const result = validateCard(card);
+    if (!result.ok) throw new Error(`Invalid card ${card?.officialCardId}: ${result.errors.join(", ")}`);
+    const existing = this.cards.get(card.officialCardId);
+    if (existing) {
+      if (existing.name === card.name && existing.source?.detailUrl === card.source?.detailUrl) return existing;
+      throw new Error(`Duplicate officialCardId: ${card.officialCardId}`);
     }
+    this.cards.set(card.officialCardId, card);
+    const matches = this.byName.get(card.name) ?? [];
+    matches.push(card);
+    this.byName.set(card.name, matches);
+    return card;
   }
 
   static async load(url = "./data/cards/cards.json", fetcher = fetch) {
