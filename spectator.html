@@ -63,7 +63,7 @@ button:disabled{opacity:.5;cursor:wait}
 <section class="players">
 <div id="player1" class="player opponent"></div><div id="player0" class="player"></div>
 </section>
-<section id="analysis-panel" class="panel" hidden><h2>デッキ解析</h2><p id="analysis-summary" class="help"></p><div id="analysis-list" class="analysis-list"></div></section>
+<section id="analysis-panel" class="panel" hidden><h2>デッキ解析</h2><p id="analysis-summary" class="help"></p><p id="strategy-summary" class="help"></p><div id="analysis-list" class="analysis-list"></div></section>
 <section class="panel"><h2>直近の行動</h2><div id="log" class="log"><div>対戦ログはここに表示されます。</div></div></section>
 </main>
 <script type="module">
@@ -75,11 +75,11 @@ const el={
   load:document.getElementById("load"),start:document.getElementById("start"),
   pause:document.getElementById("pause"),status:document.getElementById("status"),
   progress:document.getElementById("load-progress"),progressBar:document.getElementById("progress-bar"),progressLabel:document.getElementById("progress-label"),elapsed:document.getElementById("elapsed"),
-  analysisPanel:document.getElementById("analysis-panel"),analysisSummary:document.getElementById("analysis-summary"),analysisList:document.getElementById("analysis-list"),turn:document.getElementById("turn"),
+  analysisPanel:document.getElementById("analysis-panel"),analysisSummary:document.getElementById("analysis-summary"),strategySummary:document.getElementById("strategy-summary"),analysisList:document.getElementById("analysis-list"),turn:document.getElementById("turn"),
   seed:document.getElementById("seed"),p0:document.getElementById("player0"),
   p1:document.getElementById("player1"),log:document.getElementById("log")
 };
-let repository,engine,game,names=["自分側","相手側"],timer=null,running=false,moveCount=0,entries=[],analysisByPlayer=[],loadStarted=0,loadClock=null;
+let repository,engine,game,names=["自分側","相手側"],timer=null,running=false,moveCount=0,entries=[],analysisByPlayer=[],analysisAllowsMatch=false,loadStarted=0,loadClock=null;
 const delay=()=>1000+Math.floor(Math.random()*501);
 function setStatus(message,kind=""){el.status.textContent=message;el.status.className=kind;}
 function updateProgress(percent,label){el.progress.hidden=false;el.progressBar.value=percent;el.progressLabel.textContent=Math.round(percent)+"%　"+label;const seconds=Math.max(0,Math.floor((Date.now()-loadStarted)/1000));el.elapsed.textContent="経過 "+seconds+"秒"+(percent<55?"・公式ページ取得時間は回線により変わります":"");}
@@ -258,8 +258,13 @@ async function analyzeDecks(decks){
   }
   const totalCopies=decks.reduce((sum,d)=>sum+d.cards.reduce((n,x)=>n+x.count,0),0),supportedCopies=reports.reduce((sum,r)=>sum+combined.get(r.officialCardId).counts.reduce((n,count)=>n+(r.supported?count:0),0),0);
   const totalEffects=reports.reduce((sum,r)=>sum+r.details.length,0),supportedEffects=reports.reduce((sum,r)=>sum+r.details.filter(d=>d.status==="supported").length,0),pct=totalCopies?Math.round(supportedCopies/totalCopies*100):0;
-  el.analysisSummary.textContent="2デッキ計"+totalCopies+"枚・"+ids.length+"種類を走査。効果まで対応済み "+supportedCopies+"/"+totalCopies+"枚（"+pct+"%）、対応済み効果 "+supportedEffects+"/"+totalEffects+"件。未対応のカードも内容を表示し、効果は推測で実行しません。";
-  for(const profile of profiles)profile.attackerIds.sort((a,b)=>b.damage-a.damage);return profiles;
+  const unresolved=reports.filter(report=>!report.supported);el.analysisSummary.textContent="カード文・効果の走査："+totalCopies+"/"+totalCopies+"枚完了（100%）。実戦対応率："+supportedCopies+"/"+totalCopies+"枚（"+pct+"%）、対応済み効果 "+supportedEffects+"/"+totalEffects+"件。未対応効果は推測で処理しません。";
+  const deckNames=new Set(reports.map(report=>report.name)),plans=[];
+  if(deckNames.has("メガレックウザex"))plans.push("メガレックウザex：はしゃのほうこうやヒビキのホウオウexで基本炎・雷エネルギーを場に増やし、ストームエメラルダの打点につなげる。テラパゴスexがいる場合はゼロの大空洞・ガラスのラッパも展開候補。参考：公式デッキ解説（https://www.pokemon-card.com/info/005568.html）");
+  if(deckNames.has("バチンキー")&&deckNames.has("カミッチュ"))plans.push("おまつりおんど：バチンキーのドンドンだいこで必要札を探し、お祭り会場を維持。カミッチュなどのおまつりおんど持ちを育て、ワザを2回使う。参考：晴れる屋2の回し方解説（https://www.hareruya2.com/blogs/news/just-nowv4）");
+  el.strategySummary.textContent=plans.length?"デッキの基本プラン（カード構成から判定）："+plans.join(" ／ "):"デッキ固有の回し方資料は未登録です。カード文と合法手に基づく基本判断で進めます。";
+  for(const profile of profiles)profile.attackerIds.sort((a,b)=>b.damage-a.damage);
+  return {profiles,complete:unresolved.length===0,unresolved};
 }
 function chooseAction(actions){
   if(!actions.length)return null;
@@ -302,14 +307,17 @@ function schedule(){
     }
   },delay());
 }
-function start(){if(!game||game.winner!=null)return;running=true;el.start.disabled=true;el.pause.disabled=false;setStatus("自動対戦中… 1手ごとに約1〜1.5秒待ちます。");schedule();}
+function start(){if(!game||game.winner!=null||!analysisAllowsMatch)return;running=true;el.start.disabled=true;el.pause.disabled=false;setStatus("自動対戦中… 1手ごとに約1〜1.5秒待ちます。");schedule();}
 function pause(){running=false;clearTimeout(timer);timer=null;el.start.disabled=false;el.pause.disabled=true;setStatus("一時停止中です。再開できます。");}
-function startMatch(decks,profiles){
-  analysisByPlayer=profiles??analysisByPlayer;names=decks.map(deck=>deck.name);moveCount=0;entries=[];el.log.replaceChildren();
+function startMatch(decks,analysis){
+  analysisByPlayer=analysis.profiles??analysisByPlayer;analysisAllowsMatch=analysis.complete;names=decks.map(deck=>deck.name);moveCount=0;entries=[];el.log.replaceChildren();
   const seed=globalThis.crypto?.getRandomValues?globalThis.crypto.getRandomValues(new Uint32Array(1))[0]||1:Math.floor(Math.random()*0xffffffff)+1;
   game=engine.createMatch(decks.map(deck=>deck.cards.flatMap(entry=>Array(entry.count).fill(entry.officialCardId))),seed);
-  el.start.disabled=false;el.pause.disabled=true;el.load.disabled=false;updateProgress(100,"解析完了");setStatus("2デッキの解析が終わりました。スタートを押すと自動対戦します。");
-  logAction("対戦を準備しました");render();
+  el.start.disabled=!analysisAllowsMatch;el.pause.disabled=true;el.load.disabled=false;updateProgress(100,"全カード走査完了");
+  const blocker=analysis.unresolved.map(report=>report.name).filter((name,index,array)=>array.indexOf(name)===index);
+  if(analysisAllowsMatch){setStatus("全カードの効果対応を確認しました。スタートを押すと自動対戦します。");logAction("カード効果100%対応・対戦を準備しました");}
+  else{setStatus("解析走査は100%完了。効果未対応カードが"+blocker.length+"種類あるため、対戦開始を保留中："+blocker.join("、"),"error");logAction("全カードを走査しました。未対応効果のため開始保留");}
+  render();
 }
 el.load.onclick=async()=>{
   pause();el.load.disabled=true;el.analysisPanel.hidden=true;el.progress.hidden=false;loadStarted=Date.now();
@@ -322,7 +330,7 @@ el.load.onclick=async()=>{
     updateProgress(24,"公式デッキ2件を取得・照合");
     const decks=await Promise.all([readDeck(el.codeA.value,"self"),readDeck(el.codeB.value,"opponent")]);
     if(decks[0].deckCode)el.codeA.value=decks[0].deckCode;if(decks[1].deckCode)el.codeB.value=decks[1].deckCode;
-    updateProgress(55,"カードごとの特性・ワザ・効果を解析");const profiles=await analyzeDecks(decks);startMatch(decks,profiles);
+    updateProgress(55,"カードごとの特性・ワザ・効果を解析");const analysis=await analyzeDecks(decks);startMatch(decks,analysis);
   }catch(error){setStatus(error.message,"error");el.load.disabled=false;}
   finally{clearInterval(loadClock);loadClock=null;}
 };
