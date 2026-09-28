@@ -28,3 +28,7 @@ Add the returned namespace ID to `wrangler.toml` under `[[kv_namespaces]]` as sh
 ## Local smoke test
 
 `npm test` includes mocked provider calls; tests do not make billable API requests. For a local Worker, run `npx wrangler dev` after setting local secrets in an ignored `.dev.vars` file. Never commit `.dev.vars`.
+
+## Cloudflare Git build settings
+
+For the connected Worker, set the repository to this project, production branch to `main`, root directory to `/effect-ai-worker`, and deploy command to `npx wrangler deploy`. Keep the Worker name as `pokemon-card-effect-ai` so it matches `wrangler.toml`.
