@@ -29,6 +29,21 @@ export function loadEffectLibrary(storage=globalThis.localStorage){
   return readLibrary(storage);
 }
 
+export function recordAiEffectAnalyses(analyses,storage=globalThis.localStorage){
+  const library=readLibrary(storage);let saved=0;
+  for(const analysis of analyses??[]){
+    const effect=library.effects[analysis?.key];
+    if(!effect||typeof analysis.summary!=="string")continue;
+    effect.aiAnalysis={summary:analysis.summary,steps:Array.isArray(analysis.steps)?analysis.steps:[],
+      timing:analysis.timing??"不明",conditions:Array.isArray(analysis.conditions)?analysis.conditions:[],
+      questions:Array.isArray(analysis.questions)?analysis.questions:[],confidence:analysis.confidence??"low",
+      officialRulesVerified:false,analyzedAt:analysis.analyzedAt??new Date().toISOString()};
+    effect.lastSeenAt=new Date().toISOString();saved++;
+  }
+  storage?.setItem(KEY,JSON.stringify(library));
+  return {saved};
+}
+
 export function restoreLearnedPrograms(compiled,repository,engine,storage=globalThis.localStorage){
   const library=readLibrary(storage);let restoredCards=0,restoredEffects=0;
   for(const item of compiled){

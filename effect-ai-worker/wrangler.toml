@@ -1,0 +1,13 @@
+name = "pokemon-card-effect-ai"
+main = "worker.js"
+compatibility_date = "2026-09-28"
+
+[vars]
+ALLOWED_ORIGIN = "https://toro0328.github.io"
+OPENAI_MODEL = "gpt-6-luna"
+
+# Optional shared cache across browsers. Create the namespace, then uncomment
+# and replace the ID: wrangler kv namespace create EFFECTS
+# [[kv_namespaces]]
+# binding = "EFFECTS"
+# id = "REPLACE_WITH_NAMESPACE_ID"

@@ -19,6 +19,7 @@ button{background:#1765a8;color:white;border:1px solid #87add1;border-radius:9px
 button:disabled{opacity:.5;cursor:wait}
 #load-progress{display:grid;grid-template-columns:minmax(130px,1fr) auto;gap:4px 10px;align-items:center;margin:9px 0}#load-progress[hidden]{display:none}#progress-bar{width:100%;height:14px;accent-color:#5bd09b}#progress-label{font-weight:800;font-size:.86rem}#elapsed{grid-column:1/-1;color:#aac9e4;font-size:.78rem}.analysis-list{display:grid;grid-template-columns:1fr 1fr;gap:7px}.analysis-card{background:#183856;border:1px solid #496a89;border-radius:8px;padding:8px;font-size:.78rem;line-height:1.4}.analysis-card strong{display:block;color:#e8f4ff}.analysis-card .supported{color:#a4f2be}.analysis-card .review{color:#ffd18c}.analysis-card small{display:block;color:#bdd6ed;margin-top:3px;white-space:pre-wrap}@media(max-width:600px){.analysis-list{grid-template-columns:1fr}}
 #status{border-radius:9px;background:#183856;padding:9px;color:#d9edff;min-height:42px}
+#ai-settings{display:grid;grid-template-columns:1fr 1fr;gap:8px}#ai-settings input{padding:8px;font-size:.82rem}.ai-note{color:#aac9e4;font-size:.78rem}@media(max-width:600px){#ai-settings{grid-template-columns:1fr}}
 #status.error{background:#552c32;color:#ffe2e4}#status.done{background:#17452f}
 .players{display:flex;flex-direction:column;gap:10px}
 .player{background:#10263f;border:1px solid #395a79;border-radius:12px;padding:10px;min-width:0}
@@ -56,6 +57,7 @@ button:disabled{opacity:.5;cursor:wait}
 <button id="start" disabled>自動対戦スタート</button>
 <button id="pause" disabled>一時停止</button>
 </div>
+<details style="margin-top:10px"><summary>AI効果解析の接続設定</summary><p class="ai-note">AI解析サービスのHTTPS URLと、そのサービス用トークンを設定します。OpenAI APIキーはここに入力しません。解析結果は「AIの読み取りメモ」として図鑑に保存し、公式ルール確認や対戦エンジン対応済みとは区別します。</p><div id="ai-settings"><label>解析サービスURL<input id="ai-endpoint" type="url" placeholder="https://your-worker.example.workers.dev/analyze"></label><label>接続トークン<input id="ai-token" type="password" autocomplete="off" placeholder="Worker側で設定したトークン"></label></div><button id="ai-save" type="button">接続設定を保存</button> <small id="ai-settings-status" class="ai-note"></small></details>
 <div id="load-progress" hidden><progress id="progress-bar" max="100" value="0"></progress><span id="progress-label">0%</span><small id="elapsed">経過 0秒</small></div>
 <p id="status" role="status">コードを入力してください。以前読み込んだデッキは入力欄に表示されます。</p>
 </section>
@@ -70,13 +72,15 @@ button:disabled{opacity:.5;cursor:wait}
 import { CardRepository } from "./src/card-db/CardRepository.js";
 import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260929-trainerprimitives1";
 import { createDeckAnalysisRecord, saveDeckAnalysis } from "./src/decks/analysis-store.js";
-import { recordDeckLearning, restoreLearnedPrograms } from "./src/decks/effect-library.js?v=20260929-decklearning2";
+import { loadEffectLibrary, recordAiEffectAnalyses, recordDeckLearning, restoreLearnedPrograms } from "./src/decks/effect-library.js?v=20260929-ai-connection1";
+import { analyzeEffectsWithAi, readEffectAiSettings, saveEffectAiSettings } from "./src/decks/effect-ai-client.js?v=20260929-ai-connection1";
 import { parseOfficialCardDetails, applyOfficialCardCompile } from "./src/card-db/parse-official-details.js";
 
 const el={
   codeA:document.getElementById("codeA"),codeB:document.getElementById("codeB"),
   load:document.getElementById("load"),start:document.getElementById("start"),
   pause:document.getElementById("pause"),status:document.getElementById("status"),
+  aiEndpoint:document.getElementById("ai-endpoint"),aiToken:document.getElementById("ai-token"),aiSave:document.getElementById("ai-save"),aiSettingsStatus:document.getElementById("ai-settings-status"),
   progress:document.getElementById("load-progress"),progressBar:document.getElementById("progress-bar"),progressLabel:document.getElementById("progress-label"),elapsed:document.getElementById("elapsed"),
   analysisPanel:document.getElementById("analysis-panel"),analysisSummary:document.getElementById("analysis-summary"),strategySummary:document.getElementById("strategy-summary"),analysisList:document.getElementById("analysis-list"),turn:document.getElementById("turn"),
   seed:document.getElementById("seed"),p0:document.getElementById("player0"),
@@ -285,7 +289,9 @@ function addAnalysisCard(report,counts){
   const node=document.createElement("div");node.className="analysis-card";const title=document.createElement("strong");title.textContent=report.name+"　自分 "+counts[0]+"枚 / 相手 "+counts[1]+"枚";node.append(title);
   const state=document.createElement("span");state.className=report.supported?"supported":"review";state.textContent=report.supported?"効果処理：対応済み":"効果処理：未対応箇所を確認中";node.append(state);
   if(report.roles.length){const roles=document.createElement("small");roles.textContent="役割の目安："+report.roles.join("・");node.append(roles);}
-  for(const detail of (report.details??[])){const line=document.createElement("small");line.textContent=(detail.status==="supported"?"✓ ":"△ ")+detail.label+(detail.text?"\\n"+detail.text:"");node.append(line);}el.analysisList.append(node);
+  for(const detail of (report.details??[])){const line=document.createElement("small");line.textContent=(detail.status==="supported"?"✓ ":"△ ")+detail.label+(detail.text?"\\n"+detail.text:"");node.append(line);
+    if(detail.aiAnalysis){const memo=document.createElement("small");memo.textContent=`AI読み取りメモ（公式ルール照合なし・実行未対応）：${detail.aiAnalysis.summary}${detail.aiAnalysis.steps.length?"\n"+detail.aiAnalysis.steps.map((step,index)=>`${index+1}. ${step}`).join("\n"):""}${detail.aiAnalysis.questions.length?"\n確認事項："+detail.aiAnalysis.questions.join("、"):""}`;node.append(memo);}
+  }el.analysisList.append(node);
 }
 async function analyzeDecks(decks){
   const combined=new Map();for(let side=0;side<decks.length;side++)for(const item of decks[side].cards){const entry=combined.get(item.officialCardId)||{counts:[0,0]};entry.counts[side]+=item.count;combined.set(item.officialCardId,entry);}
@@ -325,6 +331,32 @@ async function analyzeDecks(decks){
   try{learning=recordDeckLearning(decks,reports,compiled);}catch(error){
     learning={saveError:error?.message??"保存に失敗しました"};
   }
+  let aiResult={status:"not_configured",analyses:[]};
+  const aiSettings=readEffectAiSettings(),effects=new Map(),knownAiAnalyses=loadEffectLibrary().effects;
+  for(const report of reports)for(const detail of report.details??[]){
+    if(detail.status==="supported"||!detail.text?.trim()||detail.label?.startsWith("未対応効果")||detail.label==="カード情報")continue;
+    const kind=detail.label?.startsWith("特性：")?"ability":detail.label?.startsWith("ワザ：")?"attack":detail.label?.includes("エネルギー")?"energy":detail.label?.includes("ルール")?"rule":["item","supporter","stadium","tool"].includes(detail.label)?detail.label:"card_effect";
+    const normalized=detail.text.replace(/\s+/gu," ").trim(),key=`${kind}:${normalized}`;
+    if(knownAiAnalyses[key]?.aiAnalysis)detail.aiAnalysis=knownAiAnalyses[key].aiAnalysis;
+    else if(!effects.has(key))effects.set(key,{key,kind,text:normalized,name:report.name});
+  }
+  if(aiSettings.endpoint&&effects.size){updateProgress(96,`未知効果をAIで解析 ${effects.size}件`);
+      try{
+        aiResult=await analyzeEffectsWithAi([...effects.values()],aiSettings);
+        const saved=recordAiEffectAnalyses(aiResult.analyses);
+        const byKey=new Map(aiResult.analyses.map(item=>[item.key,item]));
+        for(const report of reports)for(const detail of report.details??[]){
+          const kind=detail.label?.startsWith("特性：")?"ability":detail.label?.startsWith("ワザ：")?"attack":detail.label?.includes("エネルギー")?"energy":detail.label?.includes("ルール")?"rule":["item","supporter","stadium","tool"].includes(detail.label)?detail.label:"card_effect";
+          const key=`${kind}:${detail.text?.replace(/\s+/gu," ").trim()}`;
+          detail.aiAnalysis=byKey.get(key)??loadEffectLibrary().effects[key]?.aiAnalysis;
+        }
+        aiResult.saved=saved.saved;
+      }catch(error){aiResult={status:"error",error:error.message,analyses:[]};}
+  }
+  if(aiSettings.endpoint||Object.values(knownAiAnalyses).some(effect=>effect.aiAnalysis)){
+    el.analysisList.replaceChildren();
+    for(const report of reports)addAnalysisCard(report,combined.get(report.officialCardId).counts);
+  }
   const totalCopies=decks.reduce((sum,d)=>sum+d.cards.reduce((n,x)=>n+x.count,0),0);
   const supportedCopies=reports.reduce((sum,r)=>sum+combined.get(r.officialCardId).counts.reduce((n,count)=>n+(r.supported?count:0),0),0);
   const totalEffects=reports.reduce((sum,r)=>sum+r.details.length,0),supportedEffects=reports.reduce((sum,r)=>sum+r.details.filter(d=>d.status==="supported").length,0),pct=totalCopies?Math.round(supportedCopies/totalCopies*100):0;
@@ -333,6 +365,7 @@ async function analyzeDecks(decks){
   el.analysisSummary.textContent="カード文の走査："+totalCopies+"/"+totalCopies+"枚（100%）。実戦対応："+supportedCopies+"/"+totalCopies+"枚（"+pct+"%）、対応済み効果："+supportedEffects+"/"+totalEffects+"件。";
   el.analysisSummary.textContent+=learning?.saveError?" 図鑑保存エラー："+learning.saveError:
     ` このブラウザの効果図鑑：新規カード${learning.newCards}種・初見効果${learning.newEffects}件、過去に蓄積した効果を${reused.restoredEffects}件再利用。累計${learning.cardCount}種／${learning.effectCount}効果（学習待ち${learning.unresolvedEffectCount}件）。`;
+  if(aiSettings.endpoint)el.analysisSummary.textContent+=aiResult.status==="analyzed"?` AI効果解析：${aiResult.saved}件を読み取りメモとして図鑑に記録（実行対応とは別）。`:aiResult.status==="error"?` AI効果解析エラー：${aiResult.error}`:" AI効果解析対象の未対応効果はありません。";
   el.strategySummary.textContent=(ruleErrors.length?"構築ルール違反："+ruleErrors.map(x=>(x.side===0?"自分側":"相手側")+"："+x.message).join(" ／ "):"構築ルール：合法")+(unresolved.length?" ／ 未対応カード効果："+unresolved.map(x=>x.name+"（"+x.details.filter(d=>d.status!=="supported").map(d=>d.label).join("、")+"）").join(" ／ "):"");
   for(const profile of profiles)profile.attackerIds.sort((a,b)=>b.damage-a.damage);
   return {profiles,complete,unresolved,ruleErrors,missing};
@@ -416,6 +449,9 @@ el.start.onclick=start;el.pause.onclick=pause;
 for(const [input,slot] of [[el.codeA,"self"],[el.codeB,"opponent"]]){
   try{const saved=JSON.parse(localStorage.getItem(`pokemon-card-simulator-deck-${slot}`)||"null");if(saved?.deckCode)input.value=saved.deckCode;}catch{}
 }
+const savedAiSettings=readEffectAiSettings();el.aiEndpoint.value=savedAiSettings.endpoint;el.aiToken.value=savedAiSettings.token;
+el.aiSave.onclick=()=>{try{const saved=saveEffectAiSettings({endpoint:el.aiEndpoint.value,token:el.aiToken.value});el.aiSettingsStatus.textContent=saved.endpoint?"設定をこのブラウザに保存しました。":"AI解析接続を無効にしました。";}
+  catch(error){el.aiSettingsStatus.textContent=error.message;}};
 </script>
 </body>
 </html>
