@@ -214,13 +214,18 @@ test("the newer Judge text variant is recognized and resolves both hands",()=>{
 });
 
 test("Zero's Great Hole permits eight with Tera and orders bench cleanup by Stadium owner",()=>{
-  const own=player(card("tera-own",45856),[card("replacement",45790)],[],Array.from({length:6},(_,i)=>card(`own-b${i}`,49956)));
+  const own=player(card("tera-own",45856),[card("replacement",45790),card("extra1",49956),card("extra2",49956)],[],Array.from({length:6},(_,i)=>card(`own-b${i}`,49956)));
   const other=player(card("tera-opponent",45856),[],[],Array.from({length:6},(_,i)=>card(`opp-b${i}`,49956)));
   let game=state(own,other,2);
   game.stadium=card("zero",46041);game.stadiumOwner=1;
   assert.equal(engine.isSupportedStadium(game.stadium),true);
   assert.equal(engine.benchLimit(game,0),8);
   assert.equal(engine.benchLimit(game,1),8);
+  for(const id of ["extra1","extra2"]){
+    const bench=engine.getMatchActions(game).find(x=>x.type==="BENCH_BASIC"&&x.sourceInstanceId===id);
+    assert.ok(bench);game=engine.applyMatchAction(game,bench);
+  }
+  assert.equal(game.players[0].bench.length,8);
   assert.equal(engine.getMatchActions(game).some(x=>x.type==="BENCH_BASIC"),false);
   const play=engine.getMatchActions(game).find(x=>x.type==="PLAY_STADIUM"&&x.sourceInstanceId==="replacement");
   assert.ok(play);
@@ -233,7 +238,7 @@ test("Zero's Great Hole permits eight with Tera and orders bench cleanup by Stad
   assert.equal(game.players[0].bench.length,5);
   assert.equal(game.players[1].bench.length,5);
   assert.equal(game.players[1].trash.length,2); // replaced Stadium plus one excess Pokémon
-  assert.equal(game.players[0].trash.length,1);
+  assert.equal(game.players[0].trash.length,3);
 });
 
 test("losing the last Tera Pokémon triggers Zero's Great Hole bench cleanup after prize selection",()=>{
