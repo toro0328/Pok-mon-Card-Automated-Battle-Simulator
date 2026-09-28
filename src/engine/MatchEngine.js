@@ -1106,6 +1106,17 @@ export class MatchEngine extends AttackEngine {
       const pending=next.pendingTrainer;
       const source=player.trash.find(x=>x.instanceId===pending.sourceInstanceId);
       const spec=source?this.trainerSpec(source):TRAINERS[pending.name];
+      if(action.type==="KASUMI_TARGET")pending.selectedTargetId=action.targetInstanceId;
+      else if(action.type==="KASUMI_ENERGY"){
+        const i=player.deck.findIndex(x=>x.instanceId===action.choiceInstanceId);
+        if(i>=0){this.field(player).find(x=>x.instanceId===pending.selectedTargetId).attached.push(player.deck.splice(i,1)[0]);pending.remaining--;}
+      }else if(action.type==="KASUMI_FINISH"){this.shufflePlayer(next,player);delete next.pendingTrainer;next.endTurnAfterTrainer=true;}
+      else if(action.type==="TAIRYOU_SELECT"){
+        const i=player.trash.findIndex(x=>x.instanceId===action.choiceInstanceId);
+        if(i>=0){const chosen=player.trash.splice(i,1)[0],c=this.card(chosen),type=c.name==="基本水エネルギー"?"energy":"pokemon";player.deck.push(chosen);pending.selectedTypes.push(type);pending.selectedNames.push(c.name);}
+        if(pending.selectedTypes.filter(x=>x==="energy").length>=3)pending.selectedTypes.push("energy");
+        if(pending.selectedTypes.filter(x=>x==="pokemon").length>=3)pending.selectedTypes.push("pokemon");
+      }else if(action.type==="TAIRYOU_FINISH"){this.shufflePlayer(next,player);delete next.pendingTrainer;}
       if(action.type === "AKAMATSU_PICK") pending.selected.push(action.choiceInstanceId);
       else if(action.type === "AKAMATSU_HAND"){
         const i=player.deck.findIndex(x=>x.instanceId===action.choiceInstanceId);
