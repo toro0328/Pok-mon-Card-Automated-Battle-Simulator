@@ -68,7 +68,7 @@ button:disabled{opacity:.5;cursor:wait}
 </main>
 <script type="module">
 import { CardRepository } from "./src/card-db/CardRepository.js";
-import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260928-metaeffects2";
+import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260928-fourcardfix1";
 
 const el={
   codeA:document.getElementById("codeA"),codeB:document.getElementById("codeB"),
@@ -177,7 +177,7 @@ function describe(action){
     USE_ABILITY:`${source} の特性を使う`,ATTACK:`${source} のワザを使う`,
     PLAY_TRAINER:`${source} を使う`,PLAY_STADIUM:`${source} を場に出す`,
     TAKE_PRIZE:"サイドを取る",PROMOTE_BENCH:`${source||target} をバトル場へ`,
-    RESOLVE_KNOCKOUT:"きぜつ処理を完了",TRAINER_SELECT:`${choice} を選ぶ`,
+    RESOLVE_KNOCKOUT:"きぜつ処理を完了",BENCH_CLEANUP_FINISH:"ベンチ上限調整を完了",TRAINER_SELECT:`${choice} を選ぶ`,
     TRAINER_DISCARD:`${choice} をトラッシュ`,TRAINER_FINISH:"山札を切って効果を終了",
     ATTACK_SEARCH:`${choice} をワザの効果で選ぶ`,ATTACK_SEARCH_FINISH:"ワザの効果を終了",
     ATTACK_DISCARD_ENERGY:`${choice} をトラッシュ`,ATTACK_PROMOTE:`${target} をバトル場へ`,

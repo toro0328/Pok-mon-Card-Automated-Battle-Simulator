@@ -1,5 +1,5 @@
-import { AbilityEngine } from "./AbilityEngine.js?v=20260928-metaeffects2";
-import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-metaeffects2";
+import { AbilityEngine } from "./AbilityEngine.js?v=20260928-fourcardfix1";
+import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-fourcardfix1";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
 // ordinary numeric damage. Ordinary single knockouts use explicit prize and
@@ -322,6 +322,7 @@ export class AttackEngine extends AbilityEngine {
     state.knockoutThisTurn[owner] = true;
     state.pendingKnockout = { owner, recipient,
       remaining: Math.min(prizeValue, state.players[recipient].prizes.length) };
+    this.scheduleBenchCleanup?.(state, owner);
     return state;
   }
 
@@ -346,6 +347,7 @@ export class AttackEngine extends AbilityEngine {
     if (pending.remaining > 0) return state.players[pending.recipient].prizes.map((_, prizeIndex) => ({
       type: "TAKE_PRIZE", player: pending.recipient, prizeIndex
     }));
+    if(state.pendingBenchCleanup)return this.benchCleanupActions(state);
     if(state.players[pending.owner].active)return [{type:"RESOLVE_KNOCKOUT",player:pending.recipient}];
     return state.players[pending.owner].bench.map(instance => ({
       type: "PROMOTE_BENCH", player: pending.owner, sourceInstanceId: instance.instanceId
@@ -536,7 +538,7 @@ export class AttackEngine extends AbilityEngine {
           sourceInstanceId:own.active.instanceId};
       } else if(effect.type==="SEARCH_TRASH_TO_BENCH"){
         next.pendingAttack={type:"SEARCH_TRASH_TO_BENCH",player:state.turn,name:effect.name,
-          remaining:Math.min(effect.max,5-own.bench.length)};
+          remaining:Math.min(effect.max,this.benchLimit(state,state.turn)-own.bench.length)};
       } else if(effect.type==="ATTACH_BASIC_FIGHTING_FROM_TRASH_TO_BENCH"){
         next.pendingAttack={type:"ATTACH_BASIC_FIGHTING_FROM_TRASH_TO_BENCH",player:state.turn,
           remaining:effect.max,sourceInstanceId:own.active.instanceId};

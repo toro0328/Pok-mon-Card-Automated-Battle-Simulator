@@ -1,4 +1,4 @@
-import { parseAbility } from "../card-db/parse-abilities.js?v=20260928-metaeffects2";
+import { parseAbility } from "../card-db/parse-abilities.js?v=20260928-fourcardfix1";
 
 // Deterministic execution for the explicitly compiled ability subset.
 // This is a restricted ability sandbox, not a complete Pokémon TCG match.
@@ -7,7 +7,8 @@ const SUPPORTED_STADIUM_TEXT = {
   "お祭り会場": FESTIVAL_STADIUM_TEXT,
   "夜のアカデミー": "おたがいのプレイヤーは、自分の番ごとに1回、自分の手札を1枚選び、山札の上にもどしてよい。",
   "Nの城": "おたがいの場の「Nのポケモン」全員のにげるためのエネルギーは、すべてなくなる。",
-  "ロケット団の監視塔": "おたがいの場のColorlessポケモン全員の特性は、すべてなくなる。"
+  "ロケット団の監視塔": "おたがいの場のColorlessポケモン全員の特性は、すべてなくなる。",
+  "ゼロの大空洞": "自分の場に「テラスタル」のポケモンがいるプレイヤーが、ベンチに出せるポケモンの数は8匹になる。\n（このカードがトラッシュされたときか、自分の場に「テラスタル」のポケモンがいなくなったとき、ベンチが5匹になるまでトラッシュする。おたがいにトラッシュするなら、このカードの持ち主から行う。）"
 };
 const CHAIN_MOCHI_TEXT = "このカードをつけているどくのポケモンが使うワザの、相手のバトルポケモンへのダメージは「+40」される。";
 const GROW_GRASS_TEXT = "このカードは、ポケモンについているかぎり、Grassエネルギー1個ぶんとしてはたらく。\nこのカードをつけているGrassポケモンは、最大HPが「＋20」される。";
@@ -51,6 +52,15 @@ export class AbilityEngine {
     return [player.active, ...player.bench].filter(Boolean);
   }
 
+  benchLimit(state,playerIndex){
+    if(!state?.stadium||this.card(state.stadium).name!=="ゼロの大空洞")return 5;
+    return this.field(state.players[playerIndex]).some(p=>this.card(p).raw.tags?.includes("Tera"))?8:5;
+  }
+
+  maxBenchCount(state,playerIndex){return this.benchLimit(state,playerIndex);}
+
+  isTeraPokemon(instance){return (this.card(instance).raw.tags??[]).includes("Tera");}
+
   isSupportedStadium(instance) {
     const card = this.card(instance);
     return card.trainerType === "stadium" && SUPPORTED_STADIUM_TEXT[card.name] === card.raw.effect;
@@ -74,10 +84,12 @@ export class AbilityEngine {
         ![0, 1].includes(state.turn) || state.players?.length !== 2) {
       throw new Error("Unsupported game state for ability sandbox");
     }
-    for (const player of state.players) {
+    for (let playerIndex=0;playerIndex<state.players.length;playerIndex++) {
+      const player=state.players[playerIndex];
       if (!Array.isArray(player.hand) || !Array.isArray(player.deck) ||
           !Array.isArray(player.bench) || !Array.isArray(player.trash) ||
-          player.bench.length > 5) throw new Error("Invalid player zones");
+          player.bench.length > this.benchLimit(state,playerIndex)&&
+            !state.pendingBenchCleanup?.players?.includes(playerIndex)) throw new Error("Invalid player zones");
       for (const pokemon of this.field(player)) {
         if (this.card(pokemon).cardType !== "pokemon" ||
             this.entries(pokemon, state).some(e => e.status !== "supported")) {
@@ -163,7 +175,8 @@ export class AbilityEngine {
           this.entries(pokemon, state).some(active=>active.status === "supported" && active.operations.some(op=>
             op.type === "PREVENT_SELF_KNOCKOUT_ABILITIES"))));
         if(selfKnockoutSuppressed&&entry.operations.some(op=>op.type === "SELF_KO_DAMAGE_COUNTERS"))continue;
-        if (entry.operations.some(op => op.type === "BENCH_SELF") && player.bench.length >= 5) continue;
+        if (entry.operations.some(op => op.type === "BENCH_SELF") &&
+            player.bench.length >= this.benchLimit(state, state.turn)) continue;
         const drawCount = entry.operations.filter(op => op.type === "DRAW").reduce((n, op) => n + op.count, 0);
         if (player.deck.length < drawCount) continue;
         const move=entry.operations.find(op=>op.type === "MOVE_DAMAGE_COUNTERS");

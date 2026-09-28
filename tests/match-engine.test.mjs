@@ -6,6 +6,8 @@ import { MatchEngine } from "../src/engine/MatchEngine.js";
 
 const db = JSON.parse(fs.readFileSync("tests/fixtures/ability-cards.json", "utf8"));
 db.cards.push(...JSON.parse(fs.readFileSync("tests/fixtures/attack-cards.json", "utf8")));
+const loadCards=JSON.parse(fs.readFileSync("tests/fixtures/deck-effect-coverage.json","utf8"));
+db.cards.push(...loadCards.filter(item=>!db.cards.some(card=>card.officialCardId===item.officialCardId)));
 const catalog = JSON.parse(fs.readFileSync("tests/fixtures/ability-effects.json", "utf8"));
 catalog.cardCount = db.cards.length;
 const engine = new MatchEngine(new CardRepository(db), catalog);
@@ -148,4 +150,107 @@ test("empty deck at turn start loses, not when drawing the final card", () => {
   assert.equal(game.winner,1);
   assert.equal(game.winReason,"DECK_OUT");
   assert.deepEqual(engine.getMatchActions(game),[]);
+});
+
+test("Mushitori Set searches only the top seven for up to two Grass Pokémon or Basic Grass Energy",()=>{
+  const own=player(card("active",49956),[card("mushi",45785)],
+    [card("grass-pokemon",50339),...Array.from({length:5},(_,i)=>card(`other-${i}`,50742)),
+      card("grass-energy",50745),
+      card("grass-energy-2",50745)]);
+  const other=player(card("target",50339));let game=state(own,other,2);
+  const play=engine.getMatchActions(game).find(x=>x.type==="PLAY_TRAINER"&&x.sourceInstanceId==="mushi");
+  assert.ok(play);game=engine.applyMatchAction(game,play);
+  assert.deepEqual(game.pendingTrainer.lookedInstanceIds,game.players[0].deck.slice(0,7).map(x=>x.instanceId));
+  const first=engine.getMatchActions(game);
+  assert.equal(first.some(x=>x.type==="TRAINER_SELECT"&&x.choiceInstanceId==="grass-pokemon"),true);
+  assert.equal(first.some(x=>x.type==="TRAINER_SELECT"&&x.choiceInstanceId==="grass-energy-2"),false);
+  game=engine.applyMatchAction(game,first.find(x=>x.type==="TRAINER_SELECT"&&x.choiceInstanceId==="grass-pokemon"));
+  assert.equal(engine.getMatchActions(game).some(x=>x.type==="TRAINER_SELECT"&&x.choiceInstanceId==="other-0"),false);
+  const grassEnergy=game.pendingTrainer.lookedInstanceIds.map(id=>game.players[0].deck.find(x=>x.instanceId===id))
+    .find(x=>x&&engine.card(x).energyType==="basic");
+  assert.ok(grassEnergy);
+  game=engine.applyMatchAction(game,engine.getMatchActions(game).find(x=>x.type==="TRAINER_SELECT"&&
+    x.choiceInstanceId===grassEnergy.instanceId));
+  assert.equal(game.pendingTrainer,undefined);
+  assert.ok(game.players[0].hand.some(x=>x.instanceId==="grass-pokemon"));
+  assert.ok(game.players[0].hand.some(x=>x.instanceId===grassEnergy.instanceId));
+  assert.equal(game.players[0].deck.length,6);
+});
+
+test("Secret Box pays three cards and fetches one card from each printed Trainer category",()=>{
+  const own=player(card("active",49956),[card("box",45783),card("cost1",50745),card("cost2",50339),card("cost3",49956)],
+    [card("item",50742),card("tool",45932),card("supporter",50604),card("stadium",45790)]);
+  let game=state(own,player(card("target",50339)),2);
+  game=engine.applyMatchAction(game,engine.getMatchActions(game).find(x=>x.type==="PLAY_TRAINER"&&x.sourceInstanceId==="box"));
+  for(const id of ["cost1","cost2","cost3"]){
+    const discard=engine.getMatchActions(game).find(x=>x.type==="TRAINER_DISCARD"&&x.choiceInstanceId===id);
+    assert.ok(discard);game=engine.applyMatchAction(game,discard);
+  }
+  const selected=[];
+  for(const type of ["item","tool","supporter","stadium"]){
+    const action=engine.getMatchActions(game).find(x=>x.type==="TRAINER_SELECT"&&engine.card(
+      game.players[0].deck.find(y=>y.instanceId===x.choiceInstanceId)).trainerType===type);
+    assert.ok(action,`missing ${type} selection`);selected.push(action.choiceInstanceId);
+    game=engine.applyMatchAction(game,action);
+  }
+  assert.equal(game.pendingTrainer,undefined);
+  assert.deepEqual(new Set(selected),new Set(["item","tool","supporter","stadium"]));
+  assert.deepEqual(new Set(game.players[0].hand.map(x=>x.instanceId)),new Set(selected));
+  assert.equal(game.players[0].trash.length,4);
+  assert.equal(game.players[0].deck.length,0);
+});
+
+test("the newer Judge text variant is recognized and resolves both hands",()=>{
+  let game=state(player(card("active",49956),[card("judge",50604),card("old-hand",50339)],
+    Array.from({length:6},(_,i)=>card(`own-${i}`,50745))),
+    player(card("target",50339),[card("opponent-hand",49956)],
+      Array.from({length:6},(_,i)=>card(`opp-${i}`,50745))),2);
+  const play=engine.getMatchActions(game).find(x=>x.type==="PLAY_TRAINER"&&x.sourceInstanceId==="judge");
+  assert.ok(play);
+  game=engine.applyMatchAction(game,play);
+  assert.equal(game.players[0].hand.length,4);
+  assert.equal(game.players[1].hand.length,4);
+  assert.ok(game.players[0].trash.some(x=>x.instanceId==="judge"));
+});
+
+test("Zero's Great Hole permits eight with Tera and orders bench cleanup by Stadium owner",()=>{
+  const own=player(card("tera-own",45856),[card("replacement",45790)],[],Array.from({length:6},(_,i)=>card(`own-b${i}`,49956)));
+  const other=player(card("tera-opponent",45856),[],[],Array.from({length:6},(_,i)=>card(`opp-b${i}`,49956)));
+  let game=state(own,other,2);
+  game.stadium=card("zero",46041);game.stadiumOwner=1;
+  assert.equal(engine.isSupportedStadium(game.stadium),true);
+  assert.equal(engine.benchLimit(game,0),8);
+  assert.equal(engine.benchLimit(game,1),8);
+  assert.equal(engine.getMatchActions(game).some(x=>x.type==="BENCH_BASIC"),false);
+  const play=engine.getMatchActions(game).find(x=>x.type==="PLAY_STADIUM"&&x.sourceInstanceId==="replacement");
+  assert.ok(play);
+  game=engine.applyMatchAction(game,play);
+  assert.equal(engine.getMatchActions(game)[0].player,1);
+  while(game.pendingBenchCleanup){
+    const action=engine.getMatchActions(game)[0];
+    game=engine.applyMatchAction(game,action);
+  }
+  assert.equal(game.players[0].bench.length,5);
+  assert.equal(game.players[1].bench.length,5);
+  assert.equal(game.players[1].trash.length,2); // replaced Stadium plus one excess Pokémon
+  assert.equal(game.players[0].trash.length,1);
+});
+
+test("losing the last Tera Pokémon triggers Zero's Great Hole bench cleanup after prize selection",()=>{
+  const own=player(card("tera",45856),[],[],Array.from({length:6},(_,i)=>card(`bench-${i}`,49956)));
+  const other=player(card("target",50339),[],Array.from({length:2},(_,i)=>card(`prize-deck-${i}`,50745)));
+  let game=state(own,other,2);game.stadium=card("zero",46041);game.stadiumOwner=1;
+  game=engine.beginKnockout(game,[0]);
+  assert.equal(game.pendingBenchCleanup.players[0],0);
+  let actions=engine.getMatchActions(game);
+  assert.ok(actions.every(x=>x.type==="TAKE_PRIZE"));
+  while(game.pendingKnockout?.remaining>0){
+    actions=engine.getMatchActions(game);
+    game=engine.applyMatchAction(game,actions[0]);
+  }
+  actions=engine.getMatchActions(game);
+  assert.ok(actions.every(x=>x.type==="DISCARD_EXCESS_BENCH"));
+  while(game.pendingBenchCleanup){game=engine.applyMatchAction(game,engine.getMatchActions(game)[0]);}
+  assert.equal(game.players[0].bench.length,5);
+  assert.equal(game.players[0].trash.filter(x=>x.cardId===49956).length,1);
 });

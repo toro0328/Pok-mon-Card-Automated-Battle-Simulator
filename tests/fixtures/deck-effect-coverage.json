@@ -1570,5 +1570,379 @@
         "Reference data only; printed regulation and effects are unverified."
       ]
     }
+  },
+  {
+    "officialCardId": 45785,
+    "name": "むしとりセット",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "item",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45785",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045785_T_MUSHITORISETTO.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV6/45785.json"
+    },
+    "raw": {
+      "jp_id": 45785,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45785",
+      "name": "むしとりセット",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045785_T_MUSHITORISETTO.jpg",
+      "card_type": "グッズ",
+      "set_name": "SV6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6.gif",
+      "number": "094",
+      "set_total": "101",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "自分の山札を上から7枚見て、その中からGrassポケモンと「基本Grassエネルギー」を合計2枚まで選び、相手に見せて、手札に加える。残りのカードは山札にもどして切る。",
+      "author": [
+        "AYUMI ODASHIMA"
+      ],
+      "sources": [
+        {
+          "name": "拡張パック「変幻の仮面」",
+          "link": "https://www.pokemon-card.com/ex/sv6/"
+        }
+      ],
+      "print_key": "asia:SV6-94"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 46041,
+    "name": "ゼロの大空洞",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "stadium",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46041",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV7/046041_T_ZERONODAIKUUDOU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV7/46041.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/46041",
+      "name": "ゼロの大空洞",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV7/046041_T_ZERONODAIKUUDOU.jpg",
+      "card_type": "スタジアム",
+      "jp_id": 46041,
+      "set_name": "SV7",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV7.gif",
+      "number": "102",
+      "set_total": "102",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "自分の場に「テラスタル」のポケモンがいるプレイヤーが、ベンチに出せるポケモンの数は8匹になる。\n（このカードがトラッシュされたときか、自分の場に「テラスタル」のポケモンがいなくなったとき、ベンチが5匹になるまでトラッシュする。おたがいにトラッシュするなら、このカードの持ち主から行う。）",
+      "author": [
+        "MARINA Chikazawa"
+      ],
+      "sources": [
+        {
+          "name": "拡張パック「ステラミラクル」",
+          "link": "https://www.pokemon-card.com/ex/sv7/"
+        }
+      ],
+      "print_key": "asia:SV7-102"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45783,
+    "name": "シークレットボックス",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "item",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45783",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045783_T_SHIKURETTOBOKKUSU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV6/45783.json"
+    },
+    "raw": {
+      "jp_id": 45783,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45783",
+      "name": "シークレットボックス",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045783_T_SHIKURETTOBOKKUSU.jpg",
+      "card_type": "グッズ",
+      "tags": [
+        "ACE SPEC"
+      ],
+      "set_name": "SV6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6.gif",
+      "number": "092",
+      "set_total": "101",
+      "effect": "このカードは、自分の手札を3枚トラッシュしなければ使えない。\n自分の山札から「グッズ」「ポケモンのどうぐ」「サポート」「スタジアム」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。",
+      "author": [
+        "Toyste Beach"
+      ],
+      "rule_box": "ACE SPECカードは、デッキに1枚しか入れられない。",
+      "sources": [
+        {
+          "name": "拡張パック「変幻の仮面」",
+          "link": "https://www.pokemon-card.com/ex/sv6/"
+        }
+      ],
+      "print_key": "asia:SV6-92"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50604,
+    "name": "ジャッジマン",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "supporter",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50604",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/MF/050604_T_JIXYAJJIMAN.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/MF/50604.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50604",
+      "name": "ジャッジマン",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/MF/050604_T_JIXYAJJIMAN.jpg",
+      "card_type": "サポート",
+      "jp_id": 50604,
+      "set_name": "MF",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/MF.gif",
+      "number": "037",
+      "set_total": "040",
+      "effect": "おたがいのプレイヤーは、それぞれ手札をすべて山札にもどして切る。その後、それぞれ山札を4枚引く。",
+      "author": [
+        "kantaro"
+      ],
+      "sources": [
+        {
+          "name": "30th CELEBRATION プレミアムデッキセット エーフィ・ブラッキー（CL2027 横浜 使用可能カード）",
+          "link": null
+        }
+      ],
+      "print_key": "asia:MF-37"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50742,
+    "name": "ハイパーボール",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "item",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50742",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6a/050742_T_HAIPABORU.jpg",
+      "fetchedAt": "2026-09-24T08:23:17.608446+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M6a/50742.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50742",
+      "name": "ハイパーボール",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6a/050742_T_HAIPABORU.jpg",
+      "card_type": "グッズ",
+      "jp_id": 50742,
+      "set_name": "M6a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6a.gif",
+      "number": "101",
+      "set_total": "103",
+      "effect": "このカードは、自分の手札を2枚トラッシュしなければ使えない。\n自分の山札からポケモンを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
+      "author": [
+        "Yuka Morii"
+      ],
+      "sources": [
+        {
+          "name": "拡張パック 30th CELEBRATION（CL2027 横浜 使用可能カード）",
+          "link": null
+        }
+      ],
+      "print_key": "asia:M6a-101"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45790,
+    "name": "お祭り会場",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "stadium",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45790",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045790_T_OMATSURIKAIJIXYOU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV6/45790.json"
+    },
+    "raw": {
+      "jp_id": 45790,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45790",
+      "name": "お祭り会場",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045790_T_OMATSURIKAIJIXYOU.jpg",
+      "card_type": "スタジアム",
+      "set_name": "SV6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6.gif",
+      "number": "099",
+      "set_total": "101",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "エネルギーがついているおたがいのポケモン全員は、特殊状態にならず、受けている特殊状態は、すべて回復する。",
+      "author": [
+        "MARINA Chikazawa"
+      ],
+      "sources": [
+        {
+          "name": "拡張パック「変幻の仮面」",
+          "link": "https://www.pokemon-card.com/ex/sv6/"
+        }
+      ],
+      "print_key": "asia:SV6-99"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45856,
+    "name": "オーガポン みどりのめんex",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45856",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045856_P_OGAPONMIDORINOMENEX.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV6/45856.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45856",
+      "name": "オーガポン みどりのめんex",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045856_P_OGAPONMIDORINOMENEX.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 45856,
+      "tags": [
+        "Tera",
+        "ex"
+      ],
+      "set_name": "SV6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6.gif",
+      "number": "114",
+      "set_total": "101",
+      "rarity": "rare_sr_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_sr_c.gif",
+      "author": [
+        "5ban Graphics"
+      ],
+      "stage": "たね",
+      "hp": 210,
+      "types": [
+        "Grass"
+      ],
+      "tera_effect": "このポケモンは、ベンチにいるかぎり、ワザのダメージを受けない。",
+      "abilities": [
+        {
+          "name": "みどりのまい",
+          "effect": "自分の番に1回使える。自分の手札から「基本Grassエネルギー」を1枚選び、このポケモンにつける。その後、自分の山札を1枚引く。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Grass",
+            "Grass",
+            "Grass"
+          ],
+          "name": "まんようしぐれ",
+          "damage": {
+            "amount": 30,
+            "suffix": "＋"
+          },
+          "effect": "おたがいのバトルポケモンについているエネルギーの数×30ダメージ追加。"
+        }
+      ],
+      "rule_box": "ポケモンexがきぜつしたとき、相手はサイドを2枚とる。",
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "拡張パック「変幻の仮面」",
+          "link": "https://www.pokemon-card.com/ex/sv6/"
+        }
+      ],
+      "types_en": [
+        "Grass"
+      ],
+      "pokedex_number": 1017,
+      "print_key": "asia:SV6-114",
+      "card_key": "1017|210|1|5ban Graphics|30+|3"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
   }
 ]
