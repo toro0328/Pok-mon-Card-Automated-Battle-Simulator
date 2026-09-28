@@ -1,4 +1,4 @@
-import { AbilityEngine } from "./AbilityEngine.js?v=20260928-tools1";
+import { AbilityEngine } from "./AbilityEngine.js?v=20260928-balloon2";
 import { inspectAttacks } from "../card-db/parse-effects.js?v=20260925-coins1";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
