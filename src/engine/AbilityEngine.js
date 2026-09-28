@@ -81,7 +81,7 @@ export class AbilityEngine {
     for (const player of state.players) {
       if (!Array.isArray(player.hand) || !Array.isArray(player.deck) ||
           !Array.isArray(player.bench) || !Array.isArray(player.trash) ||
-          player.bench.length > (state.stadium&&this.card(state.stadium).name==="ゼロの大空洞"?8:5)) throw new Error("Invalid player zones");
+          player.bench.length > (state.pendingBenchCleanup?.players?.length||state.stadium&&this.card(state.stadium).name==="ゼロの大空洞"?8:5)) throw new Error("Invalid player zones");
       for (const pokemon of this.field(player)) {
         if (this.card(pokemon).cardType !== "pokemon" ||
             this.entries(pokemon).some(e => e.status !== "supported")) {
