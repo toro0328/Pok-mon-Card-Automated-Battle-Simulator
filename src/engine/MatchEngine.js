@@ -376,8 +376,8 @@ export class MatchEngine extends AttackEngine {
       if (spec.effect === "rod") {
         for (const choice of player.trash) if (this.card(choice).cardType === "pokemon" || this.card(choice).energyType === "basic")
           actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId,choiceInstanceId:choice.instanceId});
-      } else if (spec.effect === "boss" || spec.effect === "switch") {
-        const bench = state.players[spec.effect === "boss" ? 1-state.turn : state.turn].bench;
+      } else if (spec.effect === "boss" || spec.effect === "coinBoss" || spec.effect === "switch") {
+        const bench = state.players[spec.effect === "switch" ? state.turn : 1-state.turn].bench;
         for (const choice of bench) actions.push({type:"PLAY_TRAINER",player:state.turn,
           sourceInstanceId:instance.instanceId,choiceInstanceId:choice.instanceId});
       } else if(spec.effect==="nPoint"){
@@ -1141,11 +1141,22 @@ export class MatchEngine extends AttackEngine {
       } else if (spec.effect === "rod") {
         const i=player.trash.findIndex(x=>x.instanceId===action.choiceInstanceId);
         player.hand.push(player.trash.splice(i,1)[0]);
-      } else if (spec.effect === "boss" || spec.effect === "switch") {
-        const target = next.players[spec.effect === "boss" ? 1-action.player : action.player];
+      } else if (spec.effect === "boss" || spec.effect === "coinBoss" || spec.effect === "switch") {
+        const targetIndex=spec.effect === "switch" ? action.player : 1-action.player;
+        const target = next.players[targetIndex];
         const i=target.bench.findIndex(x=>x.instanceId===action.choiceInstanceId);
-        this.clearSwitchStatuses(target.active);
-        [target.active,target.bench[i]]=[target.bench[i],target.active];
+        if(i<0)throw new Error("Selected Pokémon is no longer on the Bench");
+        if(spec.effect === "coinBoss"){
+          const result=this.coinSequence(next.randomState??1,true);
+          next.randomState=result.randomState;
+          if(result.heads){
+            this.clearSwitchStatuses(target.active);
+            [target.active,target.bench[i]]=[target.bench[i],target.active];
+          }
+        }else{
+          this.clearSwitchStatuses(target.active);
+          [target.active,target.bench[i]]=[target.bench[i],target.active];
+        }
       } else if(spec.effect === "transfer"){
         const from=this.field(player).find(x=>(x.attached??[]).some(y=>y.instanceId===action.choiceInstanceId));
         const i=from.attached.findIndex(x=>x.instanceId===action.choiceInstanceId);

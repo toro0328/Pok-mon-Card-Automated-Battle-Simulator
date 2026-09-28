@@ -8,6 +8,11 @@ const db = JSON.parse(fs.readFileSync("tests/fixtures/ability-cards.json", "utf8
 db.cards.push(...JSON.parse(fs.readFileSync("tests/fixtures/attack-cards.json", "utf8")));
 const loadCards=JSON.parse(fs.readFileSync("tests/fixtures/deck-effect-coverage.json","utf8"));
 db.cards.push(...loadCards.filter(item=>!db.cards.some(card=>card.officialCardId===item.officialCardId)));
+const catcher=structuredClone(JSON.parse(fs.readFileSync("tests/fixtures/trainer-cards.json","utf8"))[0]);
+catcher.officialCardId=60003;catcher.name="試験用コインキャッチャー";catcher.raw.jp_id=60003;
+catcher.raw.name=catcher.name;catcher.raw.effect="コインを1回投げオモテなら、相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。";
+catcher.source.detailUrl="https://www.pokemon-card.com/card-search/details.php/card/60003";
+db.cards.push(catcher);
 const catalog = JSON.parse(fs.readFileSync("tests/fixtures/ability-effects.json", "utf8"));
 catalog.cardCount = db.cards.length;
 const engine = new MatchEngine(new CardRepository(db), catalog);
@@ -101,6 +106,19 @@ test("Basic placement, one manual Energy, attack and automatic turn draw", () =>
   assert.equal(game.players[1].deck.length,3);
   assert.equal(engine.getMatchActions(game).some(x=>x.type==="ATTACK"),false); // no Energy
   assert.equal(own.hand.length,2);
+});
+
+test("printed coin-gust Trainer text resolves a deterministic flip and switches only on heads",()=>{
+  const seed=29,flip=engine.coinSequence(seed,true);
+  const own=player(card("own",50339),[card("catcher",60003)],[],[]);
+  const foe=player(card("target",50339),[],[],[card("bench-target",50339)]);
+  const game=state(own,foe,3);game.randomState=seed;
+  const use=engine.getMatchActions(game).find(action=>action.type==="PLAY_TRAINER"&&action.sourceInstanceId==="catcher");
+  assert.ok(use);
+  const next=engine.applyMatchAction(game,use);
+  assert.equal(next.players[1].active.instanceId,flip.heads?"bench-target":"target");
+  assert.equal(next.randomState,flip.randomState);
+  assert.equal(next.players[0].trash.at(-1).instanceId,"catcher");
 });
 
 test("retreat pays from attached Energy once, then a valid attack ends the turn", () => {
