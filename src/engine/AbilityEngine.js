@@ -244,12 +244,12 @@ export class AbilityEngine {
     if (!target) throw new Error("Target is not in this player's field");
     const printed = this.card(target).raw.retreat;
     if (!Number.isInteger(printed) || printed < 0) throw new Error("Printed retreat cost is unknown");
-    if (this.card(target).raw.stage !== "たね") return printed;
+    const toolReduction=(target.attached??[]).some(card=>this.isSupportedTool(card)&&this.card(card).name==="ふうせん")?2:0;
+    if (this.card(target).raw.stage !== "たね") return Math.max(0,printed-toolReduction);
     const freeRetreat = this.field(owner).some(instance => this.entries(instance).some(entry =>
       entry.status === "supported" && entry.trigger === "CONTINUOUS" &&
       entry.operations.some(op => op.type === "SET_RETREAT_COST_ZERO" &&
         op.scope === "OWN_FIELD" && op.stage === "たね")));
-    const toolReduction=(target.attached??[]).some(card=>this.isSupportedTool(card)&&this.card(card).name==="ふうせん")?2:0;
     return Math.max(0,(freeRetreat?0:printed)-toolReduction);
   }
 
