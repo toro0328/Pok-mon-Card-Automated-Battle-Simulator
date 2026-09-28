@@ -17,9 +17,10 @@ input{width:100%;padding:10px;border:1px solid #7899b6;border-radius:8px;backgro
 .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 button{background:#1765a8;color:white;border:1px solid #87add1;border-radius:9px;padding:10px 13px;min-height:42px;font-weight:750;cursor:pointer}
 button:disabled{opacity:.5;cursor:wait}
+#load-progress{display:grid;grid-template-columns:minmax(130px,1fr) auto;gap:4px 10px;align-items:center;margin:9px 0}#load-progress[hidden]{display:none}#progress-bar{width:100%;height:14px;accent-color:#5bd09b}#progress-label{font-weight:800;font-size:.86rem}#elapsed{grid-column:1/-1;color:#aac9e4;font-size:.78rem}.analysis-list{display:grid;grid-template-columns:1fr 1fr;gap:7px}.analysis-card{background:#183856;border:1px solid #496a89;border-radius:8px;padding:8px;font-size:.78rem;line-height:1.4}.analysis-card strong{display:block;color:#e8f4ff}.analysis-card .supported{color:#a4f2be}.analysis-card .review{color:#ffd18c}.analysis-card small{display:block;color:#bdd6ed;margin-top:3px;white-space:pre-wrap}@media(max-width:600px){.analysis-list{grid-template-columns:1fr}}
 #status{border-radius:9px;background:#183856;padding:9px;color:#d9edff;min-height:42px}
 #status.error{background:#552c32;color:#ffe2e4}#status.done{background:#17452f}
-.players{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.players{display:flex;flex-direction:column;gap:10px}
 .player{background:#10263f;border:1px solid #395a79;border-radius:12px;padding:10px;min-width:0}
 .player h2{font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .player.opponent{transform:rotate(180deg)}.opponent h2,.opponent .active,.opponent .bench,.opponent .info,.opponent .hand{transform:rotate(180deg)}
@@ -35,7 +36,7 @@ button:disabled{opacity:.5;cursor:wait}
 .log div{background:#183856;border-radius:6px;padding:5px 8px;font-size:.78rem}
 @media(max-width:600px){
  main{padding:7px}.panel{padding:9px;margin:7px 0}.codes,.players{grid-template-columns:1fr}
- .active{min-height:88px}.slot{min-height:59px}.pokemon{min-height:55px;padding:4px;font-size:.62rem}
+ .players{display:flex;flex-direction:column}.active{min-height:88px}.slot{min-height:59px}.pokemon{min-height:55px;padding:4px;font-size:.62rem}
  .pokemon small{font-size:.55rem}.player h2{font-size:.78rem}.hand span{font-size:.6rem}
 }
 </style>
@@ -45,7 +46,7 @@ button:disabled{opacity:.5;cursor:wait}
 <main>
 <section class="panel">
 <h1>AI同士の自動対戦</h1>
-<p class="help">2つの公式デッキコードを入れると、対応済みの合法手からAIが行動を選びます。対戦を開始すると、4〜6秒ごとに1手ずつ進みます。公式ページのCORS制限時は公開中継サービス経由で読み込みます。</p>
+<p class="help">2つの公式デッキコードを読み込み、カードごとの特性・ワザ・効果を解析してからAI対戦します。手は約1〜1.5秒ごとに進みます。公式ページのCORS制限時は公開中継サービス経由で読み込みます。</p>
 <div class="codes">
 <div><label for="codeA">自分側のデッキコード / URL</label><input id="codeA" placeholder="6文字-6文字-6文字"></div>
 <div><label for="codeB">相手側のデッキコード / URL</label><input id="codeB" placeholder="6文字-6文字-6文字"></div>
@@ -54,14 +55,15 @@ button:disabled{opacity:.5;cursor:wait}
 <button id="load">2デッキを読み込んで対戦準備</button>
 <button id="start" disabled>自動対戦スタート</button>
 <button id="pause" disabled>一時停止</button>
-<button id="restart" disabled>別の試合を準備</button>
 </div>
-<p id="status" role="status">デッキコードを入力してください。前に読み込んだデッキがある場合は自動入力されます。</p>
+<div id="load-progress" hidden><progress id="progress-bar" max="100" value="0"></progress><span id="progress-label">0%</span><small id="elapsed">経過 0秒</small></div>
+<p id="status" role="status">コードを入力してください。以前読み込んだデッキは入力欄に表示されます。</p>
 </section>
 <div class="panel controls"><strong id="turn">対戦準備前</strong><span id="seed"></span></div>
 <section class="players">
-<div id="player0" class="player"></div><div id="player1" class="player opponent"></div>
+<div id="player1" class="player opponent"></div><div id="player0" class="player"></div>
 </section>
+<section id="analysis-panel" class="panel" hidden><h2>デッキ解析</h2><p id="analysis-summary" class="help"></p><div id="analysis-list" class="analysis-list"></div></section>
 <section class="panel"><h2>直近の行動</h2><div id="log" class="log"><div>対戦ログはここに表示されます。</div></div></section>
 </main>
 <script type="module">
@@ -71,14 +73,16 @@ import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260927-spectator1";
 const el={
   codeA:document.getElementById("codeA"),codeB:document.getElementById("codeB"),
   load:document.getElementById("load"),start:document.getElementById("start"),
-  pause:document.getElementById("pause"),restart:document.getElementById("restart"),
-  status:document.getElementById("status"),turn:document.getElementById("turn"),
+  pause:document.getElementById("pause"),status:document.getElementById("status"),
+  progress:document.getElementById("load-progress"),progressBar:document.getElementById("progress-bar"),progressLabel:document.getElementById("progress-label"),elapsed:document.getElementById("elapsed"),
+  analysisPanel:document.getElementById("analysis-panel"),analysisSummary:document.getElementById("analysis-summary"),analysisList:document.getElementById("analysis-list"),turn:document.getElementById("turn"),
   seed:document.getElementById("seed"),p0:document.getElementById("player0"),
   p1:document.getElementById("player1"),log:document.getElementById("log")
 };
-let repository,engine,game,names=["自分側","相手側"],timer=null,running=false,moveCount=0,entries=[];
-const delay=()=>4000+Math.floor(Math.random()*2001);
-function setStatus(message,kind=""){el.status.textContent=message;el.status.className=kind?" "+kind:"";}
+let repository,engine,game,names=["自分側","相手側"],timer=null,running=false,moveCount=0,entries=[],analysisByPlayer=[],loadStarted=0,loadClock=null;
+const delay=()=>1000+Math.floor(Math.random()*501);
+function setStatus(message,kind=""){el.status.textContent=message;el.status.className=kind;}
+function updateProgress(percent,label){el.progress.hidden=false;el.progressBar.value=percent;el.progressLabel.textContent=Math.round(percent)+"%　"+label;const seconds=Math.max(0,Math.floor((Date.now()-loadStarted)/1000));el.elapsed.textContent="経過 "+seconds+"秒"+(percent<55?"・公式ページ取得時間は回線により変わります":"");}
 function parseCode(value){
   const match=value.trim().match(/[A-Za-z0-9]{6}-[A-Za-z0-9]{6}-[A-Za-z0-9]{6}/);
   if(!match)throw new Error("デッキコードは 6文字-6文字-6文字 の形式で入力してください。");
@@ -99,8 +103,10 @@ function parseOfficialDeck(html){
 }
 async function readDeck(input,slot){
   const saved=JSON.parse(localStorage.getItem(`pokemon-card-simulator-deck-${slot}`)||"null");
-  if(!input.trim()&&saved)return saved;
-  const code=parseCode(input),officialUrl=`https://www.pokemon-card.com/deck/confirm.html/deckID/${code}/`;
+  const typed=input.trim()?parseCode(input):null;
+  if(saved&&(!typed||saved.deckCode===typed))return saved;
+  if(!typed)throw new Error("2つのデッキコードを入力してください。");
+  const code=typed,officialUrl=`https://www.pokemon-card.com/deck/confirm.html/deckID/${code}/`;
   let html,lastError;
   for(const url of [officialUrl,`https://api.allorigins.win/raw?url=${encodeURIComponent(officialUrl)}`]){
     try{const response=await fetch(url,{cache:"no-store"});if(!response.ok)throw Error(`HTTP ${response.status}`);
@@ -199,8 +205,8 @@ function score(action,actions){
     PLAY_TRAINER:61,PLAY_STADIUM:45,BENCH_BASIC:42,RETREAT:32,ATTACK:54,END_TURN:0
   }[action.type]??20;
   if(action.type==="ATTACH_ENERGY"){
-    const target=instanceById(action.targetInstanceId);
-    return base+(target?.instanceId===game.players[action.player].active?.instanceId?8:0);
+    const target=instanceById(action.targetInstanceId),energy=instanceById(action.sourceInstanceId),attacks=target?engine.attacks(target).filter(x=>x.status==="supported"):[],after=target?{...target,attached:[...(target.attached??[]),energy].filter(Boolean)}:null,enables=after&&attacks.some(x=>engine.energyPaysCost(after,x.cost)),already=target&&attacks.some(x=>engine.energyPaysCost(target,x.cost)),active=target?.instanceId===game.players[action.player].active?.instanceId,damage=analysisByPlayer[action.player]?.attackerIds.find(x=>x.id===target?.cardId)?.damage??0;
+    return base+(active?8:Math.min(18,damage/18))+(enables&&!already?18:0);
   }
   if(action.type==="ATTACK"){
     let amount=0;
@@ -214,8 +220,50 @@ function score(action,actions){
   if(action.type==="BENCH_BASIC"&&game.players[action.player].bench.length>=4)return base-15;
   return base;
 }
+function roleTags(text){
+  const roles=[];
+  for(const [pattern,label] of [[/山札|引く|手札/,"ドロー・サーチ"],[/エネルギー/,"エネルギー加速"],[/ダメージ|ダメカン|きぜつ/,"ダメージ"],[/ベンチ|場に出す/,"ベンチ展開"],[/入れ替|にげる|バトルポケモン/,"移動・呼び出し"],[/回復|HP/,"回復"],[/トラッシュ/,"トラッシュ操作"]])if(pattern.test(text)&&!roles.includes(label))roles.push(label);
+  return roles;
+}
+function analyzeCard(officialCardId){
+  const data=repository.get(officialCardId),ref={cardId:officialCardId},checks=[],details=[],texts=[];
+  if(data.cardType==="pokemon"){
+    const abilities=engine.entries(ref),attacks=engine.attacks(ref);
+    for(const ability of abilities){checks.push(ability.status==="supported");details.push({label:"特性："+ability.name,status:ability.status,text:ability.text});texts.push(ability.text||"");}
+    for(const attack of attacks){checks.push(attack.status==="supported");details.push({label:"ワザ："+attack.name+"（"+(attack.cost||[]).join("・")+"／"+(attack.printedDamage?.amount??"効果")+"）",status:attack.status,text:attack.text});texts.push(attack.text||"");}
+    if(!checks.length)checks.push(true);
+  }else if(data.cardType==="trainer"){
+    const ok=data.trainerType==="stadium"?engine.isSupportedStadium(ref):!!engine.trainerSpec(ref);checks.push(ok);details.push({label:data.trainerType||"トレーナーズ",status:ok?"supported":"needs_review",text:data.raw.effect||"テキスト登録なし"});texts.push(data.raw.effect||"");
+  }else if(data.cardType==="energy"){
+    const ok=engine.isSupportedEnergy(ref);checks.push(ok);details.push({label:data.energyType==="basic"?"基本エネルギー":"特殊エネルギー",status:ok?"supported":"needs_review",text:data.raw.effect||""});texts.push(data.raw.effect||"");
+  }else{checks.push(data.engine?.status==="supported");details.push({label:data.cardType||"カード",status:data.engine?.status||"needs_review",text:data.raw.effect||""});}
+  const roles=roleTags(texts.join(" "));
+  return {officialCardId,name:data.name,type:data.cardType,details,roles,supported:checks.every(Boolean),bestDamage:Math.max(0,...engine.attacks(ref).filter(x=>x.status==="supported").map(x=>x.printedDamage?.amount??0))};
+}
+function addAnalysisCard(report,counts){
+  const node=document.createElement("div");node.className="analysis-card";const title=document.createElement("strong");title.textContent=report.name+"　自分 "+counts[0]+"枚 / 相手 "+counts[1]+"枚";node.append(title);
+  const state=document.createElement("span");state.className=report.supported?"supported":"review";state.textContent=report.supported?"効果処理：対応済み":"効果処理：要確認（未対応の効果は実行しません）";node.append(state);
+  if(report.roles.length){const roles=document.createElement("small");roles.textContent="役割の目安："+report.roles.join("・");node.append(roles);}
+  for(const detail of report.details){const line=document.createElement("small");line.textContent=(detail.status==="supported"?"✓ ":"△ ")+detail.label+(detail.text?"\n"+detail.text:"");node.append(line);}el.analysisList.append(node);
+}
+async function analyzeDecks(decks){
+  const combined=new Map();for(let side=0;side<decks.length;side++)for(const item of decks[side].cards){const entry=combined.get(item.officialCardId)||{counts:[0,0]};entry.counts[side]+=item.count;combined.set(item.officialCardId,entry);}
+  const ids=[...combined.keys()],reports=[];el.analysisList.replaceChildren();el.analysisPanel.hidden=false;
+  const profiles=[0,1].map(()=>({attackerIds:[],roles:new Set()}));
+  for(let index=0;index<ids.length;index++){
+    const id=ids[index],report=analyzeCard(id),copies=combined.get(id).counts;reports.push(report);addAnalysisCard(report,copies);
+    for(let side=0;side<2;side++)if(copies[side]){for(const role of report.roles)profiles[side].roles.add(role);if(report.type==="pokemon"&&report.bestDamage>0)profiles[side].attackerIds.push({id,damage:report.bestDamage});}
+    const percent=55+40*(index+1)/ids.length;updateProgress(percent,"効果解析 "+(index+1)+"/"+ids.length+"種類");
+    const elapsed=Math.max(0,Date.now()-loadStarted),remaining=index?Math.max(0,Math.ceil((elapsed/(index+1))*(ids.length-index)/1000)):null;el.elapsed.textContent="経過 "+Math.floor(elapsed/1000)+"秒・解析残り目安 "+(remaining===null?"計算中":"約"+remaining+"秒");await new Promise(resolve=>setTimeout(resolve,0));
+  }
+  const totalCopies=decks.reduce((sum,d)=>sum+d.cards.reduce((n,x)=>n+x.count,0),0),supportedCopies=reports.reduce((sum,r)=>sum+combined.get(r.officialCardId).counts.reduce((n,count)=>n+(r.supported?count:0),0),0);
+  const totalEffects=reports.reduce((sum,r)=>sum+r.details.length,0),supportedEffects=reports.reduce((sum,r)=>sum+r.details.filter(d=>d.status==="supported").length,0),pct=totalCopies?Math.round(supportedCopies/totalCopies*100):0;
+  el.analysisSummary.textContent="2デッキ計"+totalCopies+"枚・"+ids.length+"種類を走査。効果まで対応済み "+supportedCopies+"/"+totalCopies+"枚（"+pct+"%）、対応済み効果 "+supportedEffects+"/"+totalEffects+"件。未対応のカードも内容を表示し、効果は推測で実行しません。";
+  for(const profile of profiles)profile.attackerIds.sort((a,b)=>b.damage-a.damage);return profiles;
+}
 function chooseAction(actions){
   if(!actions.length)return null;
+  if(game.phase==="setup"){const player=game.setupReady[0]?1:0,firstSide=actions.filter(action=>action.player===player);if(firstSide.length)actions=firstSide;}
   let ranked=actions.map(action=>({action,value:score(action,actions)+Math.random()*0.15}));
   ranked.sort((a,b)=>b.value-a.value);
   return ranked[0].action;
@@ -227,9 +275,9 @@ function logAction(text){
 function render(){
   if(!game)return;
   playerView(0);playerView(1);
-  if(game.winner!=null){el.turn.textContent=`${names[game.winner]}の勝ち${game.winReason?`（${game.winReason}）`:""}`;running=false;clearTimeout(timer);timer=null;el.start.disabled=true;el.pause.disabled=true;el.restart.disabled=false;setStatus(`対戦終了：${names[game.winner]}の勝ちです。`,"done");}
-  else if(game.pendingKnockout?.reason){el.turn.textContent="同時きぜつ：この状態は未対応";running=false;clearTimeout(timer);timer=null;el.start.disabled=true;el.pause.disabled=true;setStatus("同時きぜつが発生しました。安全のため自動進行を止めました。","error");}
-  else if(game.phase==="setup")el.turn.textContent="初期配置を自動進行中";
+  if(game.winner!=null){el.turn.textContent=`${names[game.winner]}の勝ち${game.winReason?`（${game.winReason}）`:""}`;running=false;clearTimeout(timer);timer=null;el.start.disabled=true;el.pause.disabled=true;el.load.disabled=false;setStatus(`対戦終了：${names[game.winner]}の勝ちです。`,"done");}
+  else if(game.pendingKnockout?.reason){el.turn.textContent="同時きぜつ：この状態は未対応";running=false;clearTimeout(timer);timer=null;el.start.disabled=true;el.pause.disabled=true;el.load.disabled=false;setStatus("同時きぜつが発生しました。安全のため自動進行を止めました。","error");}
+  else if(game.phase==="setup")el.turn.textContent=`${game.setupReady[0]?"後攻側":"先行側"}が初期配置中`;
   else el.turn.textContent=`${game.turnNo}番目の番：${names[game.turn]}${game.pendingKnockout?" ／ きぜつ処理":game.pendingAttack?" ／ ワザ効果":game.pendingAbility?" ／ 特性効果":game.pendingTrainer?" ／ トレーナーズ効果":""}`;
   el.seed.textContent=game.seed?`シード値：${game.seed}`:"";
 }
@@ -256,31 +304,29 @@ function schedule(){
 }
 function start(){if(!game||game.winner!=null)return;running=true;el.start.disabled=true;el.pause.disabled=false;setStatus("自動対戦中… 1手ごとに4〜6秒待ちます。");schedule();}
 function pause(){running=false;clearTimeout(timer);timer=null;el.start.disabled=false;el.pause.disabled=true;setStatus("一時停止中です。再開できます。");}
-function startMatch(decks){
-  names=decks.map(deck=>deck.name);moveCount=0;entries=[];el.log.replaceChildren();
+function startMatch(decks,profiles){
+  analysisByPlayer=profiles??analysisByPlayer;names=decks.map(deck=>deck.name);moveCount=0;entries=[];el.log.replaceChildren();
   const seed=globalThis.crypto?.getRandomValues?globalThis.crypto.getRandomValues(new Uint32Array(1))[0]||1:Math.floor(Math.random()*0xffffffff)+1;
   game=engine.createMatch(decks.map(deck=>deck.cards.flatMap(entry=>Array(entry.count).fill(entry.officialCardId))),seed);
-  el.start.disabled=false;el.pause.disabled=true;el.restart.disabled=false;
-  setStatus("デッキ2つを確認しました。スタートを押すと自動対戦します。");
+  el.start.disabled=false;el.pause.disabled=true;el.load.disabled=false;updateProgress(100,"解析完了");setStatus("2デッキの解析が終わりました。スタートを押すと自動対戦します。");
   logAction("対戦を準備しました");render();
 }
 el.load.onclick=async()=>{
-  el.load.disabled=true;setStatus("カードDBと公式デッキを読み込んでいます…");
+  pause();el.load.disabled=true;el.analysisPanel.hidden=true;el.progress.hidden=false;loadStarted=Date.now();
+  updateProgress(2,"読み込みを開始");setStatus("カードDBと公式デッキを確認しています…");
+  clearInterval(loadClock);loadClock=setInterval(()=>{const current=Number(el.progressBar.value||0);const label=el.progressLabel.textContent.replace(/^\\d+%　/,"");updateProgress(current,label);},1000);
   try{
-    repository=repository??await CardRepository.load("./data/cards/cards.json");
-    engine=engine??new MatchEngine(repository,await (await fetch("./data/cards/ability-effects.json")).json());
+    if(!repository){updateProgress(8,"カードDB取得");repository=await CardRepository.load("./data/cards/cards.json");}
+    updateProgress(16,"効果エンジン準備");
+    if(!engine){const response=await fetch("./data/cards/ability-effects.json");if(!response.ok)throw Error("特性カタログを取得できません");engine=new MatchEngine(repository,await response.json());}
+    updateProgress(24,"公式デッキ2件を取得・照合");
     const decks=await Promise.all([readDeck(el.codeA.value,"self"),readDeck(el.codeB.value,"opponent")]);
-    if(decks[0].deckCode)el.codeA.value=decks[0].deckCode;
-    if(decks[1].deckCode)el.codeB.value=decks[1].deckCode;
-    startMatch(decks);
-  }catch(error){setStatus(error.message,"error");}
-  finally{el.load.disabled=false;}
+    if(decks[0].deckCode)el.codeA.value=decks[0].deckCode;if(decks[1].deckCode)el.codeB.value=decks[1].deckCode;
+    updateProgress(55,"カードごとの特性・ワザ・効果を解析");const profiles=await analyzeDecks(decks);startMatch(decks,profiles);
+  }catch(error){setStatus(error.message,"error");el.load.disabled=false;}
+  finally{clearInterval(loadClock);loadClock=null;}
 };
-el.start.onclick=start;el.pause.onclick=pause;el.restart.onclick=()=>{if(!engine||!game)return;pause();el.start.disabled=true;try{
-  const decks=[0,1].map(index=>{const slot=index===0?"self":"opponent";const saved=JSON.parse(localStorage.getItem(`pokemon-card-simulator-deck-${slot}`)||"null");
-    if(!saved)throw Error("読み込み済みデッキが見つかりません");return saved;});
-  startMatch(decks);
-}catch(error){setStatus(error.message,"error");}};
+el.start.onclick=start;el.pause.onclick=pause;
 for(const [input,slot] of [[el.codeA,"self"],[el.codeB,"opponent"]]){
   try{const saved=JSON.parse(localStorage.getItem(`pokemon-card-simulator-deck-${slot}`)||"null");if(saved?.deckCode)input.value=saved.deckCode;}catch{}
 }
