@@ -172,7 +172,7 @@ function describe(action){
   const labels={
     SET_ACTIVE:`バトル場に ${source} を出す`,SET_BENCH:`ベンチに ${source} を出す`,
     READY_SETUP:"初期配置を完了",BENCH_BASIC:`ベンチに ${source} を出す`,
-    ATTACH_ENERGY:`${source} を ${target} につける`,EVOLVE:`${target} を ${source} に進化`,
+    ATTACH_ENERGY:`${source} を ${target} につける`,ATTACH_TOOL:`${source} を ${target} につける`,DISCARD_EXCESS_BENCH:`${source} をベンチ上限調整でトラッシュ`,TRAINER_GLASS_ATTACH:`${choice} を ${target} につける`,EVOLVE:`${target} を ${source} に進化`,
     RETREAT:`${source} がにげる`,END_TURN:"番を終える",
     USE_ABILITY:`${source} の特性を使う`,ATTACK:`${source} のワザを使う`,
     PLAY_TRAINER:`${source} を使う`,PLAY_STADIUM:`${source} を場に出す`,
@@ -217,7 +217,8 @@ function score(action,actions){
     return base+Math.min(amount,300)/20+(ko?40:0);
   }
   if(action.type==="RETREAT")return state.players[action.player].active?.statuses?.length?base+15:base;
-  if(action.type==="BENCH_BASIC"&&game.players[action.player].bench.length>=4)return base-15;
+  if(action.type==="BENCH_BASIC"&&game.players[action.player].bench.length>=engine.maxBenchCount(game,action.player)-1)return base-15;
+  if(action.type==="DISCARD_EXCESS_BENCH"){const card=instanceById(action.sourceInstanceId),raw=card?engine.card(card).raw:{},damage=card?Math.max(0,...engine.attacks(card).filter(x=>x.status==="supported").map(x=>x.printedDamage?.amount??0)):0;return 5-damage/20-(card&&engine.isTeraPokemon(card)?100:0);}
   return base;
 }
 function roleTags(text){
@@ -282,6 +283,7 @@ function render(){
   playerView(0);playerView(1);
   if(game.winner!=null){el.turn.textContent=`${names[game.winner]}の勝ち${game.winReason?`（${game.winReason}）`:""}`;running=false;clearTimeout(timer);timer=null;el.start.disabled=true;el.pause.disabled=true;el.load.disabled=false;setStatus(`対戦終了：${names[game.winner]}の勝ちです。`,"done");}
   else if(game.pendingKnockout?.reason){el.turn.textContent="同時きぜつ：この状態は未対応";running=false;clearTimeout(timer);timer=null;el.start.disabled=true;el.pause.disabled=true;el.load.disabled=false;setStatus("同時きぜつが発生しました。安全のため自動進行を止めました。","error");}
+  else if(game.pendingBenchCleanup)el.turn.textContent="ゼロの大空洞：ベンチ上限を調整中";
   else if(game.phase==="setup")el.turn.textContent=`${game.setupReady[0]?"後攻側":"先行側"}が初期配置中`;
   else el.turn.textContent=`${game.turnNo}番目の番：${names[game.turn]}${game.pendingKnockout?" ／ きぜつ処理":game.pendingAttack?" ／ ワザ効果":game.pendingAbility?" ／ 特性効果":game.pendingTrainer?" ／ トレーナーズ効果":""}`;
   el.seed.textContent=game.seed?`シード値：${game.seed}`:"";
