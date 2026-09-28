@@ -153,6 +153,15 @@ function restoreOfficialCardCache(){
     for(const card of Object.values(cached))if(!repository.get(card.officialCardId)){repository.add(card);applyOfficialCardCompile(engine,card);}}
   catch(error){console.warn("公式カードキャッシュを読み込めませんでした",error);}
 }
+async function loadBundledOfficialCardFallbacks(){
+  const response=await fetch("./data/cards/official-deck-fallbacks.json");
+  if(!response.ok)throw new Error("内蔵公式カードデータを取得できません");
+  const data=await response.json();
+  for(const card of data.cards??[]){
+    if(repository.get(card.officialCardId))continue;
+    repository.add(card);applyOfficialCardCompile(engine,card);
+  }
+}
 function card(id){return repository.get(id);}
 function instanceById(id){
   if(!id)return null;
@@ -386,6 +395,7 @@ el.load.onclick=async()=>{
     if(!repository){updateProgress(8,"カードDB取得");repository=await CardRepository.load("./data/cards/cards.json");}
     updateProgress(16,"効果エンジン準備");
     if(!engine){const response=await fetch("./data/cards/ability-effects.json");if(!response.ok)throw Error("特性カタログを取得できません");engine=new MatchEngine(repository,await response.json());restoreOfficialCardCache();}
+    await loadBundledOfficialCardFallbacks();
     updateProgress(24,"公式デッキ2件を取得・照合");
     const decks=await Promise.all([readDeck(el.codeA.value,"self"),readDeck(el.codeB.value,"opponent")]);
     if(decks[0].deckCode)el.codeA.value=decks[0].deckCode;if(decks[1].deckCode)el.codeB.value=decks[1].deckCode;
