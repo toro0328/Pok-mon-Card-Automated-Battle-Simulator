@@ -823,11 +823,12 @@ export class MatchEngine extends AttackEngine {
         if (state.setupReady[playerIndex]) continue;
         const player = state.players[playerIndex];
         for (const card of player.hand) {
-          if (this.card(card).raw.stage !== BASIC ||
-              this.entries(card).some(e => e.status !== "supported")) continue;
+          const isBasic=this.card(card).raw.stage===BASIC;
+          const setupActive=this.entries(card).some(e=>e.status==="supported"&&e.trigger==="SETUP_ACTIVE_FROM_HAND");
+          if (!isBasic&&!setupActive || this.entries(card).some(e=>e.status!=="supported")) continue;
           if (!player.active) actions.push({ type: "SET_ACTIVE", player: playerIndex,
             sourceInstanceId: card.instanceId });
-          else if (player.bench.length < 5) actions.push({ type: "SET_BENCH", player: playerIndex,
+          else if (isBasic&&player.bench.length < 5) actions.push({ type: "SET_BENCH", player: playerIndex,
             sourceInstanceId: card.instanceId });
         }
         if (player.active) actions.push({ type: "READY_SETUP", player: playerIndex });
