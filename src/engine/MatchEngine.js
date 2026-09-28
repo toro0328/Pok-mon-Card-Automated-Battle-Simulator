@@ -176,7 +176,9 @@ export class MatchEngine extends AttackEngine {
   trainerSpec(instance) {
     const card = this.card(instance), spec = TRAINERS[card.name];
     const normalize=text=>(text??"").replace(/\s+/g," ").trim();
-    return spec && card.trainerType === spec.type && normalize(card.raw.effect) === normalize(spec.text) ? spec : null;
+    const officialCorrection=card.name==="ガラスのラッパ"&&card.trainerType==="item"&&
+      normalize(card.raw.effect)===normalize("このカードは、自分の場に「テラスタル」のポケモンがいるときにしか使えない。\n自分のベンチのColorlessポケモンを2匹まで選び、トラッシュから基本エネルギーを1枚ずつつける。");
+    return spec && card.trainerType === spec.type && (normalize(card.raw.effect) === normalize(spec.text)||officialCorrection) ? spec : null;
   }
 
   searchCandidate(instance, spec, pending, player, state) {
