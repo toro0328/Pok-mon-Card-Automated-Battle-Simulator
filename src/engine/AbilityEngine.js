@@ -1,4 +1,4 @@
-import { parseAbility } from "../card-db/parse-abilities.js?v=20260928-fourcardfix1";
+import { parseAbility } from "../card-db/parse-abilities.js?v=20260928-fourcardfix2";
 
 // Deterministic execution for the explicitly compiled ability subset.
 // This is a restricted ability sandbox, not a complete Pokémon TCG match.
