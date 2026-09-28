@@ -1,4 +1,4 @@
-import { AttackEngine } from "./AttackEngine.js?v=20260928-temporarybonuses1";
+import { AttackEngine } from "./AttackEngine.js?v=20260928-tools1";
 
 const BASIC = "たね";
 const TRAINERS = {
