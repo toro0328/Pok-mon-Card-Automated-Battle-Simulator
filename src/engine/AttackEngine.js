@@ -355,6 +355,13 @@ export class AttackEngine extends AbilityEngine {
     if (pending.remaining > 0) return state.players[pending.recipient].prizes.map((_, prizeIndex) => ({
       type: "TAKE_PRIZE", player: pending.recipient, prizeIndex
     }));
+    if(pending.heavyBaton){
+      const owner=state.players[pending.owner],baton=pending.heavyBaton;
+      const energies=baton.energyIds.filter(id=>owner.trash.some(x=>x.instanceId===id));
+      const actions=baton.selected<baton.max?energies.flatMap(id=>owner.bench.map(target=>
+        ({type:"HEAVY_BATON_SELECT",player:pending.owner,choiceInstanceId:id,targetInstanceId:target.instanceId}))):[];
+      return [...actions,{type:"HEAVY_BATON_FINISH",player:pending.owner}];
+    }
     if(state.pendingBenchCleanup)return this.benchCleanupActions(state);
     if(state.players[pending.owner].active)return [{type:"RESOLVE_KNOCKOUT",player:pending.recipient}];
     return state.players[pending.owner].bench.map(instance => ({
@@ -374,11 +381,31 @@ export class AttackEngine extends AbilityEngine {
       pending.remaining--;
       if (pending.remaining > 0) return next;
       if (!recipient.prizes.length || !this.field(next.players[pending.owner]).length) {
-        next.winner = pending.recipient;
-        next.winReason = recipient.prizes.length ? "NO_POKEMON" : "PRIZES";
-        next.pendingKnockout = null;
-        delete next.pendingAbilityResolution;
+        if(pending.heavyBaton&&!recipient.prizes.length)pending.deferredWinner={player:pending.recipient,reason:"PRIZES"};
+        else {
+          next.winner = pending.recipient;
+          next.winReason = recipient.prizes.length ? "NO_POKEMON" : "PRIZES";
+          next.pendingKnockout = null;
+          delete next.pendingAbilityResolution;
+        }
       }
+      return next;
+    }
+    if(action.type==="HEAVY_BATON_SELECT"){
+      const baton=pending.heavyBaton,owner=next.players[pending.owner];
+      const energyIndex=owner.trash.findIndex(x=>x.instanceId===action.choiceInstanceId);
+      const energy=energyIndex>=0?owner.trash[energyIndex]:null;
+      const target=owner.bench.find(x=>x.instanceId===action.targetInstanceId);
+      if(!baton||baton.selected>=baton.max||!baton.energyIds.includes(action.choiceInstanceId)||
+          !energy||this.card(energy).energyType!=="basic"||!target)throw new Error("Invalid Heavy Baton transfer");
+      target.attached.push(owner.trash.splice(energyIndex,1)[0]);baton.energyIds=baton.energyIds.filter(id=>id!==action.choiceInstanceId);
+      baton.selected++;return next;
+    }
+    if(action.type==="HEAVY_BATON_FINISH"){
+      if(!pending.heavyBaton)throw new Error("Heavy Baton is not pending");
+      delete pending.heavyBaton;
+      if(pending.deferredWinner){next.winner=pending.deferredWinner.player;next.winReason=pending.deferredWinner.reason;
+        next.pendingKnockout=null;delete next.pendingAbilityResolution;}
       return next;
     }
     if(action.type === "RESOLVE_KNOCKOUT"){
