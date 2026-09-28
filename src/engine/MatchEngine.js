@@ -14,7 +14,9 @@ const TRAINERS = {
   "ポケモンいれかえ": { type: "item", effect: "switch", text: "自分のバトルポケモンをベンチポケモンと入れ替える。" },
   "エネルギーつけかえ": { type: "item", effect: "transfer", text: "自分の場のポケモンについている基本エネルギーを1個選び、自分の別のポケモンにつけ替える。" },
   "スペシャルレッドカード": { type: "item", effect: "red", text: "このカードは、相手のサイドの残り枚数が3枚以下のときにしか使えない。\n相手は相手自身の手札をすべてウラにして切り、山札の下にもどす。その後、相手は山札を3枚引く。" },
-  "アカマツ": { type: "supporter", effect: "akamatsu", text: "自分の山札から、それぞれちがうタイプの基本エネルギーを2枚まで選び、相手に見せて、どちらか1枚を手札に加え、残りのエネルギーを自分のポケモンにつける。そして山札を切る。" }
+  "アカマツ": { type: "supporter", effect: "akamatsu", text: "自分の山札から、それぞれちがうタイプの基本エネルギーを2枚まで選び、相手に見せて、どちらか1枚を手札に加え、残りのエネルギーを自分のポケモンにつける。そして山札を切る。" },
+  "せいなるはい": { type: "item", effect: "sacredAsh", text: "自分のトラッシュからポケモンを5枚まで選び、相手に見せて、山札にもどして切る。" },
+  "プライムキャッチャー": { type: "item", effect: "primeCatcher", text: "相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。その後、自分のバトルポケモンをベンチポケモンと入れ替える。" }
 };
 
 // A first playable subset of the normal match. Only verified card actions are
@@ -169,6 +171,12 @@ export class MatchEngine extends AttackEngine {
     const player = state.players[state.turn], actions = [];
     if (state.pendingTrainer) {
       const pending = state.pendingTrainer, spec = TRAINERS[pending.name];
+      if (pending.name === "せいなるはい") {
+        for (const card of player.trash) if (this.card(card).cardType === "pokemon" && (pending.selectedCount ?? 0) < 5)
+          actions.push({type:"TRAINER_SELECT",player:state.turn,sourceInstanceId:pending.sourceInstanceId,choiceInstanceId:card.instanceId});
+        actions.push({type:"TRAINER_FINISH",player:state.turn,sourceInstanceId:pending.sourceInstanceId});
+        return actions;
+      }
       if (pending.name === "アカマツ") {
         const energy=player.deck.filter(x=>this.card(x).energyType === "basic" &&
           !pending.selected.some(id=>this.card(player.deck.find(y=>y.instanceId===id)).name === this.card(x).name));
@@ -210,6 +218,13 @@ export class MatchEngine extends AttackEngine {
         const bench = state.players[spec.effect === "boss" ? 1-state.turn : state.turn].bench;
         for (const choice of bench) actions.push({type:"PLAY_TRAINER",player:state.turn,
           sourceInstanceId:instance.instanceId,choiceInstanceId:choice.instanceId});
+      } else if(spec.effect === "primeCatcher") {
+        const opponentBench=state.players[1-state.turn].bench;
+        for(const opposing of opponentBench){
+          if(player.bench.length)for(const own of player.bench)actions.push({type:"PLAY_TRAINER",player:state.turn,
+            sourceInstanceId:instance.instanceId,choiceInstanceId:opposing.instanceId,targetInstanceId:own.instanceId});
+          else actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId,choiceInstanceId:opposing.instanceId});
+        }
       } else if (spec.effect === "transfer") {
         for (const from of this.field(player)) for (const energy of from.attached??[])
           if (this.card(energy).energyType === "basic") for(const target of this.field(player))
@@ -506,6 +521,11 @@ export class MatchEngine extends AttackEngine {
         const i=target.bench.findIndex(x=>x.instanceId===action.choiceInstanceId);
         this.clearSwitchStatuses(target.active);
         [target.active,target.bench[i]]=[target.bench[i],target.active];
+      } else if(spec.effect === "primeCatcher") {
+        const opponent=next.players[1-action.player],oppIndex=opponent.bench.findIndex(x=>x.instanceId===action.choiceInstanceId);
+        this.clearSwitchStatuses(opponent.active);
+        [opponent.active,opponent.bench[oppIndex]]=[opponent.bench[oppIndex],opponent.active];
+        if(action.targetInstanceId){const ownIndex=player.bench.findIndex(x=>x.instanceId===action.targetInstanceId);this.clearSwitchStatuses(player.active);[player.active,player.bench[ownIndex]]=[player.bench[ownIndex],player.active];}
       } else if(spec.effect === "transfer"){
         const from=this.field(player).find(x=>(x.attached??[]).some(y=>y.instanceId===action.choiceInstanceId));
         const i=from.attached.findIndex(x=>x.instanceId===action.choiceInstanceId);
@@ -540,12 +560,17 @@ export class MatchEngine extends AttackEngine {
         const i=player.hand.findIndex(x=>x.instanceId===action.choiceInstanceId);
         player.trash.push(player.hand.splice(i,1)[0]);pending.costLeft--;
       } else if (action.type === "TRAINER_SELECT") {
+        if(pending.name==="せいなるはい"){
+          const i=player.trash.findIndex(x=>x.instanceId===action.choiceInstanceId),returned=player.trash.splice(i,1)[0];player.deck.push(returned);pending.selectedCount=(pending.selectedCount??0)+1;
+          if(pending.selectedCount>=5||!player.trash.some(x=>this.card(x).cardType==="pokemon")){this.shufflePlayer(next,player);delete next.pendingTrainer;}
+        } else {
         const i=player.deck.findIndex(x=>x.instanceId===action.choiceInstanceId);
         const chosen=player.deck.splice(i,1)[0];pending.selectedNames.push(this.card(chosen).name);
         if (spec.zone === "bench") {chosen.enteredTurn=next.turnNo;player.bench.push(chosen);}
         else player.hand.push(chosen);
         if(pending.selectedNames.length >= spec.max || !player.deck.some(x=>this.searchCandidate(x,spec,pending,player))){
           this.shufflePlayer(next,player);delete next.pendingTrainer;
+        }
         }
       } else if (action.type === "TRAINER_FINISH") {
         this.shufflePlayer(next,player);delete next.pendingTrainer;
