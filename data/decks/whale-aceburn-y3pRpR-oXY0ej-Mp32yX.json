@@ -5,8 +5,8 @@
   "sourceUrl": "https://www.pokemon-card.com/deck/confirm.html/deckID/y3pRpR-oXY0ej-Mp32yX/",
   "totalCards": 60,
   "checkedAt": "2026-09-28",
-  "status": "needs_review",
-  "statusReason": "60枚の公式構成とカード本文を照合。対戦開始に必要なすべての効果・ルールはまだ実装確認中。",
+  "status": "smoke_tested",
+  "statusReason": "公式デッキ20種類・60枚を照合し、24/24件の効果をAI対戦エンジンにコンパイル。公開AI対AIで初期配置から3番目の番までのスモークテストを確認。",
   "cards": [
     {
       "officialCardId": 50233,
@@ -197,15 +197,92 @@
     "ヘビーバトンとバブル水エネルギーでエネルギー維持と状態対策"
   ],
   "unresolved": [
-    "デッキ内全カードの対戦エンジン統合テスト",
-    "なみのりビーチのターン毎入れ替え処理",
-    "ヘビーバトンのきぜつ時誘発処理",
-    "カスミの元気の複数エネルギー選択と番終了処理",
-    "大漁ネットのカード選択・山札戻し処理",
-    "ACE SPECの構築制限確認"
+    "ACE SPECを複数採用した他デッキを拒否する共通構築ルールゲート",
+    "エースバーンのフレアターボをAI対AIの実対戦で使うエンドツーエンド確認",
+    "ヘビーバトンの発動をAI対AIの実対戦で確認",
+    "60枚全体の長時間対戦・例外ケース統合テスト"
   ],
   "references": [
     "https://www.pokemon-card.com/deck/confirm.html/deckID/y3pRpR-oXY0ej-Mp32yX/",
-    "https://www.pokemon-card.com/card-search/details.php/card/50294"
-  ]
+    "https://www.pokemon-card.com/card-search/details.php/card/50294",
+    "https://www.pokemon-card.com/card-search/details.php/card/45783"
+  ],
+  "implementationChecks": [
+    {
+      "card": "エースバーン",
+      "effect": "しゅんぱつりょく",
+      "status": "implemented",
+      "detail": "対戦準備中に手札からバトル場へ出す選択を追加。"
+    },
+    {
+      "card": "エースバーン",
+      "effect": "フレアターボ",
+      "status": "implemented",
+      "detail": "山札から基本エネルギーを最大3枚選び、ベンチに付けて山札を切る。"
+    },
+    {
+      "card": "ホエルオーex",
+      "effect": "フォーリングダウン",
+      "status": "implemented",
+      "detail": "自分にねむりを適用。バブル水エネルギーの状態保護と両立。"
+    },
+    {
+      "card": "カスミの元気",
+      "effect": "エネルギー加速・番終了",
+      "status": "implemented",
+      "detail": "対象を1匹選び、基本水エネルギーを最大4枚付け、番を終了。"
+    },
+    {
+      "card": "スグリ",
+      "effect": "2つの効果から選択",
+      "status": "implemented",
+      "detail": "入れ替え、または相手のバトル場のex/Vへのダメージ+30。"
+    },
+    {
+      "card": "なみのりビーチ",
+      "effect": "水ポケモンの入れ替え",
+      "status": "implemented",
+      "detail": "各プレイヤーの番に1回、水のバトルポケモンと水ベンチを入れ替え。"
+    },
+    {
+      "card": "ヘビーバトン",
+      "effect": "きぜつ時エネルギー移動",
+      "status": "implemented",
+      "detail": "にげるエネルギー4のバトルポケモンが相手ワザできぜつしたとき、基本エネルギー最大3枚をベンチへ。エンジン状態テスト済み。"
+    },
+    {
+      "card": "バブル水エネルギー",
+      "effect": "水エネルギー・状態保護",
+      "status": "implemented",
+      "detail": "水エネルギーとして計算し、水ポケモンへの特殊状態を防ぎ、既存状態を回復。"
+    },
+    {
+      "card": "ポケギア3.0",
+      "effect": "山札上7枚からサポート",
+      "status": "implemented",
+      "detail": "候補選択を合法手として追加。"
+    },
+    {
+      "card": "大漁ネット",
+      "effect": "トラッシュから水ポケモン・基本水エネルギー",
+      "status": "implemented",
+      "detail": "各種類を最大3枚ずつ選択し山札へ戻す。"
+    }
+  ],
+  "deckRuleChecks": {
+    "aceSpec": {
+      "status": "passed_for_this_deck",
+      "count": 1,
+      "max": 1,
+      "cards": [
+        "シークレットボックス"
+      ],
+      "source": "https://www.pokemon-card.com/card-search/details.php/card/45783"
+    },
+    "deckSize": {
+      "status": "passed",
+      "count": 60
+    },
+    "aceSpecEngineEnforcement": "未実装（他デッキで複数ACE SPECを拒否する共通ゲートは未追加）"
+  }
 }
