@@ -5,6 +5,25 @@ const TYPES={grass:"Grass",fire:"Fire",water:"Water",electric:"Electric",psychic
 const STAGES={"たね":"たね","1 進化":"1 進化","2 進化":"2 進化"};
 const TRAINERS={"グッズ":["trainer","item"],"サポート":["trainer","supporter"],"スタジアム":["trainer","stadium"],"ポケモンのどうぐ":["trainer","tool"],"基本エネルギー":["energy",null,"basic"],"特殊エネルギー":["energy",null,"special"],"トレーナー":["trainer","unspecified"]};
 
+// Official card pages represent abilities as a 特性 heading followed by the
+// ability name and its printed text. Keep every such block; a card may have
+// more than one ability, and dropping later blocks makes the analysis appear
+// complete when it is not.
+export function extractOfficialAbilities(headings){
+  return headings.filter(heading=>heading.textContent.trim()==="特性").map(heading=>{
+    const nameNode=heading.nextElementSibling;
+    const name=nameNode?.textContent?.trim()??"";
+    const paragraphs=[];
+    for(let node=nameNode?.nextElementSibling;node&&node.tagName!=="H4"&&node.tagName!=="H2";node=node.nextElementSibling){
+      const text=node.textContent.trim();
+      if(text)paragraphs.push(text);
+    }
+    const effect=paragraphs.join("\n");
+    // Preserve incomplete blocks so the compiler can flag them for review.
+    return {name,effect};
+  });
+}
+
 export function parseOfficialCardDetails(html,expectedId,fetchedAt=new Date().toISOString()){
   const doc=new DOMParser().parseFromString(html,"text/html"),id=Number(expectedId),root=doc.querySelector(".PopupMain");
   const name=root?.querySelector("h1")?.textContent?.trim();
@@ -25,7 +44,7 @@ export function parseOfficialCardDetails(html,expectedId,fetchedAt=new Date().to
     raw.tags=[];
     if(/ex$/u.test(name)){raw.tags.push("ex");raw.rule_box="ポケモンexがきぜつしたとき、相手はサイドを2枚とる。";}
     const headings=[...right.querySelectorAll("h4")];
-    raw.attacks=headings.map(h=>{
+    raw.attacks=headings.filter(h=>h.textContent.trim()!=="特性").map(h=>{
       const damageNode=h.querySelector(".f_right"),damageText=damageNode?.textContent?.trim()??"";
       const damageMatch=damageText.match(/^(\\d+)([×＋+]?)$/u);
       const attackName=[...h.childNodes].filter(n=>n.nodeType===Node.TEXT_NODE).map(n=>n.textContent).join("").trim();
@@ -35,10 +54,7 @@ export function parseOfficialCardDetails(html,expectedId,fetchedAt=new Date().to
       return {name:attackName,cost:cost.length?cost:["Void"],
         damage:damageMatch?{amount:Number(damageMatch[1]),suffix:damageMatch[2]==="＋"?"+":damageMatch[2]}:null,effect};
     }).filter(a=>a.name);
-    raw.abilities=[];
-    const abilityHeading=headings.find(h=>h.textContent.trim()==="特性");
-    if(abilityHeading){const abilityName=abilityHeading.nextElementSibling?.textContent?.trim();const effect=abilityHeading.nextElementSibling?.nextElementSibling?.textContent?.trim();
-      if(abilityName&&effect)raw.abilities.push({name:abilityName,effect});}
+    raw.abilities=extractOfficialAbilities(headings);
     const evolution=root.querySelector(".card")?.textContent?.match(/「([^」]+)」から進化/u);if(evolution)raw.evolve_from=evolution[1];
     raw.retreat=right.querySelectorAll("table .escape .icon").length;
   }else{
