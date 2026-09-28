@@ -734,12 +734,14 @@ export class MatchEngine extends AttackEngine {
       return this.continueCounterAttack(next);
     }else if(action.type === "ATTACK_SEARCH"){
       if(pending.type==="SEARCH_BASIC_ENERGY_ATTACH_BENCH"){
-      const energies=owner.deck.filter(x=>this.card(x).energyType==="basic").slice(0,pending.remaining);
-      return [...energies.flatMap(energy=>owner.bench.map(target=>({type:"ATTACK_SEARCH",player:pending.player,
-        choiceInstanceId:energy.instanceId,targetInstanceId:target.instanceId}))),
-        {type:"ATTACK_SEARCH_FINISH",player:pending.player}];
-    }
-    if(pending.type==="SEARCH_TRASH_TO_HAND"){
+        const i=own.deck.findIndex(x=>x.instanceId===action.choiceInstanceId);
+        const target=own.bench.find(x=>x.instanceId===action.targetInstanceId);
+        if(i<0||this.card(own.deck[i]).energyType!=="basic"||!target||pending.remaining<=0)
+          throw new Error("Invalid Basic Energy bench attachment choice");
+        target.attached.push(own.deck.splice(i,1)[0]);pending.remaining--;
+        return next;
+      }
+      if(pending.type==="SEARCH_TRASH_TO_HAND"){
         const i=own.trash.findIndex(x=>x.instanceId===action.choiceInstanceId);
         if(i<0||this.card(own.trash[i]).cardType!=="pokemon")throw new Error("Invalid discard-pile Pokémon selection");
         own.hand.push(own.trash.splice(i,1)[0]);delete next.pendingAttack;
