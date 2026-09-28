@@ -183,16 +183,7 @@ export class MatchEngine extends AttackEngine {
     const card = this.card(instance), spec = TRAINERS[card.name], effectText=this.trainerEffectText(card);
     const deckProgram=this.deckPrograms.get(instance.cardId);
     if(deckProgram?.trainer)return deckProgram.trainer;
-    if(card.name==="ジャッジマン"&&card.trainerType==="supporter"){
-      const reminder="\nサポーターは、自分の番に1枚だけ使える。使ったら、自分のバトル場の横におき、自分の番の終わりにトラッシュ。";
-      const text=card.raw.effect.endsWith(reminder)?card.raw.effect.slice(0,-reminder.length):card.raw.effect;
-      if([TRAINERS["ジャッジマン"].text,
-        "おたがいのプレイヤーは、それぞれ、手札をすべて山札にもどし、山札を切る。その後、それぞれの山札を4枚引く。",
-        "おたがいのプレイヤーは、それぞれの手札をすべて山札にもどして切る。その後、それぞれの山札を4枚引く。",
-        "おたがいのプレイヤーは、それぞれ手札をすべて山札にもどして切る。その後、それぞれ山札を4枚引く。",
-        "おたがいのプレイヤーは、それぞれ手札をすべて山札にもどして切る。その後、それぞれの山札を4枚引く。"].includes(text))
-        return TRAINERS["ジャッジマン"];
-    }
+    if(card.name==="ジャッジマン"&&card.trainerType==="supporter")return TRAINERS["ジャッジマン"];
     const matched=spec&&card.trainerType===spec.type&&effectText===spec.text?spec:
       Object.values(TRAINERS).find(candidate=>card.trainerType===candidate.type&&effectText===candidate.text);
     return matched??parseTrainerText(card);
