@@ -42,11 +42,11 @@ button:disabled{opacity:.5;cursor:wait}
 </style>
 </head>
 <body>
-<header><strong>ポケカ対戦試験</strong><a href="./index.html">手動対戦へ</a><a href="./deck-import.html">デッキ読み込みページへ</a></header>
+<header><strong>ポケカ対戦試験</strong><a href="./index.html">手動対戦へ</a></header>
 <main>
 <section class="panel">
 <h1>AI同士の自動対戦</h1>
-<p class="help">2つの公式デッキコードを読み込み、カードごとの特性・ワザ・効果を解析してからAI対戦します。手は約1〜1.5秒ごとに進みます。公式ページのCORS制限時は公開中継サービス経由で読み込みます。</p>
+<p class="help">この画面で2つの公式デッキコードを読み込み、特性・ワザ・効果を解析します。解析とルール確認が終わってからAI対戦を開始します。公式ページのCORS制限時は公開中継サービス経由で読み込みます。</p>
 <div class="codes">
 <div><label for="codeA">自分側のデッキコード / URL</label><input id="codeA" placeholder="6文字-6文字-6文字"></div>
 <div><label for="codeB">相手側のデッキコード / URL</label><input id="codeB" placeholder="6文字-6文字-6文字"></div>
@@ -68,7 +68,7 @@ button:disabled{opacity:.5;cursor:wait}
 </main>
 <script type="module">
 import { CardRepository } from "./src/card-db/CardRepository.js";
-import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260928-deckcompile1";
+import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260928-deckcompile2";
 import { createDeckAnalysisRecord, saveDeckAnalysis } from "./src/decks/analysis-store.js";
 
 const el={
@@ -247,7 +247,7 @@ function addAnalysisCard(report,counts){
   const node=document.createElement("div");node.className="analysis-card";const title=document.createElement("strong");title.textContent=report.name+"　自分 "+counts[0]+"枚 / 相手 "+counts[1]+"枚";node.append(title);
   const state=document.createElement("span");state.className=report.supported?"supported":"review";state.textContent=report.supported?"効果処理：対応済み":"効果処理：要確認（未対応の効果は実行しません）";node.append(state);
   if(report.roles.length){const roles=document.createElement("small");roles.textContent="役割の目安："+report.roles.join("・");node.append(roles);}
-  for(const detail of report.details){const line=document.createElement("small");line.textContent=(detail.status==="supported"?"✓ ":"△ ")+detail.label+(detail.text?"\n"+detail.text:"");node.append(line);}el.analysisList.append(node);
+  for(const detail of (report.details??[])){const line=document.createElement("small");line.textContent=(detail.status==="supported"?"✓ ":"△ ")+detail.label+(detail.text?"\n"+detail.text:"");node.append(line);}el.analysisList.append(node);
 }
 async function analyzeDecks(decks){
   const combined=new Map();for(let side=0;side<decks.length;side++)for(const item of decks[side].cards){const entry=combined.get(item.officialCardId)||{counts:[0,0]};entry.counts[side]+=item.count;combined.set(item.officialCardId,entry);}
@@ -366,7 +366,7 @@ el.load.onclick=async()=>{
     const decks=await Promise.all([readDeck(el.codeA.value,"self"),readDeck(el.codeB.value,"opponent")]);
     if(decks[0].deckCode)el.codeA.value=decks[0].deckCode;if(decks[1].deckCode)el.codeB.value=decks[1].deckCode;
     updateProgress(55,"カードごとの特性・ワザ・効果を解析");const analysis=await analyzeDecks(decks);startMatch(decks,analysis);
-  }catch(error){setStatus(error.message,"error");el.load.disabled=false;}
+  }catch(error){setStatus(error.message||"デッキ解析中にエラーが発生しました。","error");el.load.disabled=false;el.start.disabled=true;el.progress.hidden=true;el.turn.textContent="読み込みエラー：コードを確認して再試行してください。";}
   finally{clearInterval(loadClock);loadClock=null;}
 };
 el.start.onclick=start;el.pause.onclick=pause;
