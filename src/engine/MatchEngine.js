@@ -269,6 +269,17 @@ export class MatchEngine extends AttackEngine {
       const pending = state.pendingTrainer;
       const source=player.trash.find(x=>x.instanceId===pending.sourceInstanceId);
       const spec=source?this.trainerSpec(source):TRAINERS[pending.name];
+      if(pending.name==="カスミの元気"){
+        const choices=player.deck.filter(x=>this.card(x).name==="基本水エネルギー");
+        if(!pending.selectedTargetId)for(const target of this.field(player))actions.push({type:"KASUMI_TARGET",player:state.turn,targetInstanceId:target.instanceId});
+        if(pending.selectedTargetId)for(const energy of choices)actions.push({type:"KASUMI_ENERGY",player:state.turn,choiceInstanceId:energy.instanceId});
+        actions.push({type:"KASUMI_FINISH",player:state.turn});return actions;
+      }
+      if(pending.name==="大漁ネット"){
+        const candidates=player.trash.filter(x=>{const c=this.card(x);return c.cardType==="pokemon"&&c.raw.types?.includes("Water")&&!pending.selectedTypes.includes("pokemon")||c.name==="基本水エネルギー"&&!pending.selectedTypes.includes("energy");});
+        if(pending.selectedNames.length<6)for(const candidate of candidates)actions.push({type:"TAIRYOU_SELECT",player:state.turn,choiceInstanceId:candidate.instanceId});
+        actions.push({type:"TAIRYOU_FINISH",player:state.turn});return actions;
+      }
       if (pending.name === "アカマツ") {
         const energy=player.deck.filter(x=>this.card(x).energyType === "basic" &&
           !pending.selected.some(id=>this.card(player.deck.find(y=>y.instanceId===id)).name === this.card(x).name));
