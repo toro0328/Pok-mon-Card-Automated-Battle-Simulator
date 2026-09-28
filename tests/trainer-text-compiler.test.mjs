@@ -1,0 +1,20 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { parseTrainerText } from "../src/card-db/parse-trainers.js";
+
+test("compiles Bug Catching Set text variants from the printed text",()=>{
+  const card={trainerType:"item",raw:{effect:"自分の山札を上から7枚見て、その中から草ポケモンと「基本草エネルギー」を合計2枚まで選び、相手に見せて、手札に加える。残りのカードは山札にもどして切る。"}};
+  assert.deepEqual(parseTrainerText(card),{
+    type:"item",effect:"mushitoriSet",max:2,zone:"hand",filter:"mushitoriSet",text:card.raw.effect,compiledFromText:true
+  });
+});
+
+test("compiles Secret Box only when all four Trainer types and the three card cost are present",()=>{
+  const card={trainerType:"item",raw:{effect:"このカードは、自分の手札を3枚トラッシュしなければ使えない。\n自分の山札から「グッズ」「ポケモンのどうぐ」「サポート」「スタジアム」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。"}};
+  assert.equal(parseTrainerText(card)?.effect,"secretBox");
+  assert.equal(parseTrainerText({...card,raw:{effect:card.raw.effect.replace("スタジアム","ポケモン")}}),null);
+});
+
+test("does not guess unsupported compound Trainer wording",()=>{
+  assert.equal(parseTrainerText({trainerType:"item",raw:{effect:"自分のポケモンを回復し、山札を切る。"}}),null);
+});

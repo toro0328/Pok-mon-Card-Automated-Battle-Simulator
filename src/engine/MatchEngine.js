@@ -1,4 +1,7 @@
-import { AttackEngine } from "./AttackEngine.js?v=20260928-fourcardfix1";
+import { AttackEngine } from "./AttackEngine.js?v=20260928-deckcompile1";
+import { parseTrainerText } from "../card-db/parse-trainers.js?v=20260928-deckcompile1";
+import { parseAbility } from "../card-db/parse-abilities.js?v=20260928-fourcardfix1";
+import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-fourcardfix1";
 
 const BASIC = "たね";
 const TRAINERS = {
@@ -156,6 +159,8 @@ export class MatchEngine extends AttackEngine {
 
   trainerSpec(instance) {
     const card = this.card(instance), spec = TRAINERS[card.name];
+    const deckProgram=this.deckPrograms.get(instance.cardId);
+    if(deckProgram?.trainer)return deckProgram.trainer;
     if(card.name==="ジャッジマン"&&card.trainerType==="supporter"){
       const reminder="\nサポーターは、自分の番に1枚だけ使える。使ったら、自分のバトル場の横におき、自分の番の終わりにトラッシュ。";
       const text=card.raw.effect.endsWith(reminder)?card.raw.effect.slice(0,-reminder.length):card.raw.effect;
@@ -168,7 +173,42 @@ export class MatchEngine extends AttackEngine {
     }
     const matched=spec&&card.trainerType===spec.type&&card.raw.effect===spec.text?spec:
       Object.values(TRAINERS).find(candidate=>card.trainerType===candidate.type&&card.raw.effect===candidate.text);
-    return matched??null;
+    return matched??parseTrainerText(card);
+  }
+
+  async compileDeck(decks,onProgress=()=>{}) {
+    if(!Array.isArray(decks)||decks.length!==2)throw new Error("Two decks are required for effect compilation");
+    const counts=new Map();
+    for(let side=0;side<decks.length;side++)for(const item of decks[side].cards??[]){
+      const id=item.officialCardId??item.cardId??item.id;
+      if(!id||!this.repository.get(id))throw new Error(`Unknown card in deck compilation: ${id??"(missing ID)"}`);
+      const entry=counts.get(id)??{copies:[0,0]};entry.copies[side]+=item.count??1;counts.set(id,entry);
+    }
+    this.deckPrograms.clear();
+    const rows=[...counts],results=[];
+    for(let index=0;index<rows.length;index++){
+      const [id,meta]=rows[index],instance={cardId:id,instanceId:`compile-${id}`,attached:[]},card=this.card(instance);
+      const abilities=(card.raw.abilities??[]).map((ability,abilityIndex)=>({index:abilityIndex,name:ability.name,
+        text:ability.effect,...parseAbility(ability.name,ability.effect)}));
+      const attacks=inspectAttacks(card);
+      let trainer=null;
+      if(card.trainerType){
+        const existing=TRAINERS[card.name];
+        trainer=existing&&card.trainerType===existing.type&&card.raw.effect===existing.text?existing:
+          Object.values(TRAINERS).find(candidate=>card.trainerType===candidate.type&&card.raw.effect===candidate.text)??parseTrainerText(card);
+        if(card.trainerType==="stadium"&&this.isSupportedStadium(instance))trainer={type:"stadium",effect:"stadium",text:card.raw.effect,compiledFromText:true};
+        if(card.trainerType==="tool"&&this.isSupportedTool(instance))trainer={type:"tool",effect:"tool",text:card.raw.effect,compiledFromText:true};
+      }
+      const program={abilities,attacks,trainer,sourceText:{abilities:(card.raw.abilities??[]).map(x=>x.effect),attacks:(card.raw.attacks??[]).map(x=>x.effect??"").concat((card.raw.attacks??[]).map(x=>x.text??"")),trainer:card.raw.effect??""}};
+      this.deckPrograms.set(id,program);
+      const effects=[...abilities,...attacks,...(card.trainerType?[trainer]:[])].filter(Boolean);
+      const supported=effects.every(effect=>effect.status==="supported"||effect.status===undefined)&&
+        (!card.trainerType||trainer!==null);
+      results.push({officialCardId:id,name:card.name,copies:meta.copies,supported,program});
+      onProgress({done:index+1,total:rows.length,card:card.name,result:results.at(-1)});
+      await new Promise(resolve=>setTimeout(resolve,0));
+    }
+    return results;
   }
 
   scheduleBenchCleanup(state,preferredPlayer=null){
@@ -192,6 +232,17 @@ export class MatchEngine extends AttackEngine {
 
   searchCandidate(instance, spec, pending, player, state = null, playerIndex = state?.turn ?? null) {
     const card = this.card(instance);
+    if(spec.filter==="basicEnergy"||spec.filter.startsWith?.("basicEnergy:")){
+      if(card.energyType!=="basic")return false;
+      const wanted=spec.filter.split(":")[1];
+      return !wanted||card.name.endsWith(({Grass:"草",Fire:"炎",Water:"水",Electric:"雷",Psychic:"超",Fighting:"闘",Dark:"悪",Metal:"鋼"})[wanted]+"エネルギー");
+    }
+    if(spec.filter==="energy")return card.cardType==="energy";
+    if(spec.filter==="trainer")return !!card.trainerType;
+    if(spec.filter.startsWith?.("namePrefix:"))return card.name.startsWith(spec.filter.slice(11));
+    if(spec.filter.startsWith?.("name:"))return card.name===spec.filter.slice(5);
+    if(spec.filter==="basicPokemon")return card.cardType==="pokemon"&&card.raw.stage===BASIC&&
+      player.bench.length<(state?this.benchLimit(state,playerIndex):5)&&this.entries(instance).every(x=>x.status==="supported");
     switch (spec.filter) {
       case "pokemon": return card.cardType === "pokemon";
       case "smallBasic": return card.cardType === "pokemon" && card.raw.stage === BASIC && card.raw.hp <= 70 &&
@@ -215,7 +266,9 @@ export class MatchEngine extends AttackEngine {
   trainerActions(state) {
     const player = state.players[state.turn], actions = [];
     if (state.pendingTrainer) {
-      const pending = state.pendingTrainer, spec = TRAINERS[pending.name];
+      const pending = state.pendingTrainer;
+      const source=player.trash.find(x=>x.instanceId===pending.sourceInstanceId);
+      const spec=source?this.trainerSpec(source):TRAINERS[pending.name];
       if (pending.name === "アカマツ") {
         const energy=player.deck.filter(x=>this.card(x).energyType === "basic" &&
           !pending.selected.some(id=>this.card(player.deck.find(y=>y.instanceId===id)).name === this.card(x).name));
@@ -574,7 +627,7 @@ export class MatchEngine extends AttackEngine {
     if(action.type==="ATTACK_OPPONENT_PROMOTE"){
       if(pending.type!=="SWITCH_OPPONENT_CHOICE")throw new Error("Invalid forced-switch selection");
       const opponent=next.players[1-pending.player],index=opponent.bench.findIndex(x=>x.instanceId===action.targetInstanceId);
-      if(index<0)throw new Error("Selected Pokémon is not on the opponent's Bench");
+      if(index<0)throw new Error("Selected Pokémon is not on the opponent'\''s Bench");
       const outgoing=opponent.active;opponent.active=opponent.bench.splice(index,1)[0];opponent.bench.push(outgoing);
       this.clearSwitchStatuses(opponent.active);this.clearSwitchStatuses(outgoing);delete next.pendingAttack;
       return next.pendingSecondAttack?next:this.endTurn(next);
@@ -616,7 +669,7 @@ export class MatchEngine extends AttackEngine {
     }else if(action.type==="ATTACK_BENCH_DAMAGE_TARGET"){
       if(pending.type!=="BENCH_DAMAGE_TARGET")throw new Error("Invalid Bench damage target");
       const opponent=next.players[1-pending.player],target=opponent.bench.find(x=>x.instanceId===action.targetInstanceId);
-      if(!target)throw new Error("Damage target is not on the opponent's Bench");
+      if(!target)throw new Error("Damage target is not on the opponent'\''s Bench");
       const damage=this.incomingAttackDamage(next,target.instanceId,120),before=target.damage??0;
       target.damage=before+damage;
       next.lastAttack.benchDamage={targetInstanceId:target.instanceId,damage,before,hp:this.effectiveHP(target)};
@@ -987,10 +1040,16 @@ export class MatchEngine extends AttackEngine {
       } else if(spec.effect==="secretBox"){
         next.pendingTrainer={name:"シークレットボックス",sourceInstanceId:trainer.instanceId,
           costLeft:3,selectedNames:[],selectedTypes:[]};
+      } else if(spec.effect==="draw") {
+        player.hand.push(...player.deck.splice(0,spec.count));
+      } else if(spec.effect==="shuffleDraw") {
+        player.deck.push(...player.hand.splice(0));this.shufflePlayer(next,player);player.hand.push(...player.deck.splice(0,spec.count));
       } else next.pendingTrainer={name:trainer.cardId?this.card(trainer).name:"",sourceInstanceId:trainer.instanceId,
         costLeft:spec.cost??0,selectedNames:[]};
     } else {
-      const pending=next.pendingTrainer, spec=TRAINERS[pending.name];
+      const pending=next.pendingTrainer;
+      const source=player.trash.find(x=>x.instanceId===pending.sourceInstanceId);
+      const spec=source?this.trainerSpec(source):TRAINERS[pending.name];
       if(action.type === "AKAMATSU_PICK") pending.selected.push(action.choiceInstanceId);
       else if(action.type === "AKAMATSU_HAND"){
         const i=player.deck.findIndex(x=>x.instanceId===action.choiceInstanceId);

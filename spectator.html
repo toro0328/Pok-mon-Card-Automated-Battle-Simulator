@@ -68,7 +68,7 @@ button:disabled{opacity:.5;cursor:wait}
 </main>
 <script type="module">
 import { CardRepository } from "./src/card-db/CardRepository.js";
-import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260928-fourcardfix1";
+import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260928-deckcompile1";
 
 const el={
   codeA:document.getElementById("codeA"),codeB:document.getElementById("codeB"),
@@ -250,6 +250,12 @@ function addAnalysisCard(report,counts){
 async function analyzeDecks(decks){
   const combined=new Map();for(let side=0;side<decks.length;side++)for(const item of decks[side].cards){const entry=combined.get(item.officialCardId)||{counts:[0,0]};entry.counts[side]+=item.count;combined.set(item.officialCardId,entry);}
   const ids=[...combined.keys()],reports=[];el.analysisList.replaceChildren();el.analysisPanel.hidden=false;
+  const compiled=await engine.compileDeck(decks,({done,total,card})=>{
+    const percent=5+50*done/total;updateProgress(percent,`カード文を効果プログラムに変換 ${done}/${total}種類：${card}`);
+    const elapsed=Math.max(0,Date.now()-loadStarted),remaining=done?Math.max(0,Math.ceil((elapsed/done)*(total-done)/1000)):null;
+    el.elapsed.textContent=`経過 ${Math.floor(elapsed/1000)}秒・読込残り目安 ${remaining===null?"計算中":"約"+remaining+"秒"}`;
+  });
+  el.analysisSummary.textContent=`デッキ内${compiled.length}種類のカード本文を読み、特性・ワザ・トレーナーズの効果プログラムを作成しました。盤面解析を続けています。`;
   const profiles=[0,1].map(()=>({attackerIds:[],roles:new Set()}));
   for(let index=0;index<ids.length;index++){
     const id=ids[index],report=analyzeCard(id),copies=combined.get(id).counts;reports.push(report);addAnalysisCard(report,copies);

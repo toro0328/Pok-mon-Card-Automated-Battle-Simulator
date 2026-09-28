@@ -20,6 +20,7 @@ export class AbilityEngine {
     }
     this.repository = repository;
     this.catalog = catalog;
+    this.deckPrograms = new Map();
   }
 
   card(instance) {
@@ -30,9 +31,9 @@ export class AbilityEngine {
 
   entries(instance, state = null) {
     const card = this.card(instance);
-    // Compile from the card's own printed text at runtime. The generated
+    // Compile from the card'\''s own printed text at runtime. The generated
     // catalog remains a revision/checking artifact, not the rules authority.
-    const entries=(card.raw.abilities??[]).map((ability,index)=>({index,name:ability.name,
+    const entries=this.deckPrograms.get(instance.cardId)?.abilities??(card.raw.abilities??[]).map((ability,index)=>({index,name:ability.name,
       text:ability.effect,...parseAbility(ability.name,ability.effect)}));
     if (!state) return entries;
     const ownerIndex = state.players?.findIndex(player => this.field(player).some(p => p.instanceId === instance.instanceId));
@@ -63,7 +64,14 @@ export class AbilityEngine {
 
   isSupportedStadium(instance) {
     const card = this.card(instance);
-    return card.trainerType === "stadium" && SUPPORTED_STADIUM_TEXT[card.name] === card.raw.effect;
+    if(card.trainerType!=="stadium")return false;
+    if(SUPPORTED_STADIUM_TEXT[card.name]===card.raw.effect)return true;
+    if(card.name==="ゼロの大空洞"){
+      const text=String(card.raw.effect??"").replace(/\s/g,"");
+      return /「テラスタル」/u.test(text)&&/ベンチに出せるポケモンの数は8匹/u.test(text)&&
+        /ベンチが5匹になるまでトラッシュ/u.test(text)&&/持ち主から行う/u.test(text);
+    }
+    return false;
   }
 
   isSupportedTool(instance) {
@@ -495,7 +503,7 @@ export class AbilityEngine {
     const owner = state.players[playerIndex];
     if (!owner) throw new Error("Invalid player");
     const target = this.field(owner).find(x => x.instanceId === targetInstanceId);
-    if (!target) throw new Error("Target is not in this player's field");
+    if (!target) throw new Error("Target is not in this player'\''s field");
     const printed = this.card(target).raw.retreat;
     if (!Number.isInteger(printed) || printed < 0) throw new Error("Printed retreat cost is unknown");
     if(state.stadium&&this.card(state.stadium).name==="Nの城"&&this.card(target).name.startsWith("Nの"))return 0;

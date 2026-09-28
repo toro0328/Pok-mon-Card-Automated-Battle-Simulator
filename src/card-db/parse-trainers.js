@@ -1,0 +1,54 @@
+// Compile a deliberately strict subset of Japanese Trainer text into effects
+// the deterministic match engine can execute. Unknown wording is never guessed.
+const number = s => ({"1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"１":1,"２":2,"３":3,"４":4,"５":5,"６":6})[s] ?? null;
+
+function targetFilter(target) {
+  const s=target.trim().replace(/[「」『』]/g,"").replace(/[、。]/g,"");
+  if(s==="ポケモン")return "pokemon";
+  if(s==="たねポケモン")return "basicPokemon";
+  if(s==="基本エネルギー")return "basicEnergy";
+  if(s==="基本草エネルギー")return "basicEnergy:Grass";
+  if(s==="基本炎エネルギー")return "basicEnergy:Fire";
+  if(s==="基本水エネルギー")return "basicEnergy:Water";
+  if(s==="基本雷エネルギー")return "basicEnergy:Electric";
+  if(s==="基本超エネルギー")return "basicEnergy:Psychic";
+  if(s==="基本闘エネルギー")return "basicEnergy:Fighting";
+  if(s==="基本悪エネルギー")return "basicEnergy:Dark";
+  if(s==="基本鋼エネルギー")return "basicEnergy:Metal";
+  if(s==="エネルギー")return "energy";
+  if(s==="トレーナーズ")return "trainer";
+  const named=s.match(/^「?(.+?)」?のポケモン$/);
+  if(named)return `namePrefix:${named[1]}の`;
+  const namedExact=s.match(/^「(.+?)」$/);
+  if(namedExact)return `name:${namedExact[1]}`;
+  return null;
+}
+
+export function parseTrainerText(card) {
+  if(!["item","supporter"].includes(card.trainerType))return null;
+  const raw=String(card.raw?.effect??"").replace(/\n(?:サポーター|グッズ|ポケモンのどうぐ)[^\n]*$/u,"").trim();
+  if(!raw)return null;
+  if(card.trainerType==="item"&&/(自分の)?山札を?上から7枚見て/u.test(raw)&&
+      /(草|Grass)ポケモン/u.test(raw)&&/基本(草|Grass)エネルギー/u.test(raw)&&
+      /合計2枚まで/u.test(raw)&&/手札に加える/u.test(raw)&&/(残り|のこり).*(山札|デッキ).*(切|シャッフル)/u.test(raw))
+    return {type:"item",effect:"mushitoriSet",max:2,zone:"hand",filter:"mushitoriSet",text:raw,compiledFromText:true};
+  if(card.trainerType==="item"&&/手札を3枚トラッシュ/u.test(raw)&&
+      /グッズ/u.test(raw)&&/ポケモンのどうぐ/u.test(raw)&&/サポート/u.test(raw)&&/スタジアム/u.test(raw)&&
+      /1枚ずつ/u.test(raw)&&/手札に加える/u.test(raw)&&/山札を切る/u.test(raw))
+    return {type:"item",effect:"secretBox",cost:3,max:4,zone:"hand",filter:"secretBox",text:raw,compiledFromText:true};
+  let m=raw.match(/^自分の山札を([0-9０-９]+)枚引く。$/u);
+  if(m){const count=number(m[1]);return count?{type:card.trainerType,effect:"draw",count,text:raw,compiledFromText:true}:null;}
+  m=raw.match(/^自分の山札から(.+?)を([0-9０-９]+)枚(まで)?選び、(?:相手に見せて、)?手札に加える。そして山札を切る。$/u);
+  if(!m)m=raw.match(/^自分の山札から(.+?)を([0-9０-９]+)枚(まで)?選び、(?:相手に見せて、)?ベンチに出す。そして山札を切る。$/u);
+  if(!m)m=raw.match(/^自分の山札から(.+?)を([0-9０-９]+)枚(まで)?選び、(?:相手に見せて、)?トラッシュする。そして山札を切る。$/u);
+  if(m){
+    const filter=targetFilter(m[1]),max=number(m[2]);
+    if(!filter||!max)return null;
+    const destination=raw.includes("ベンチに出す")?"bench":raw.includes("トラッシュする")?"trash":"hand";
+    if(destination==="bench"&&!filter.startsWith("basicPokemon")&&!filter.startsWith("name:"))return null;
+    if(destination==="trash")return null;
+    return {type:card.trainerType,effect:"search",filter,max,optional:!!m[3],destination,
+      zone:destination==="bench"?"bench":"hand",text:raw,compiledFromText:true};
+  }
+  return null;
+}

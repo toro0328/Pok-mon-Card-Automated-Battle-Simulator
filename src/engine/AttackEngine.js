@@ -1,11 +1,11 @@
-import { AbilityEngine } from "./AbilityEngine.js?v=20260928-fourcardfix1";
+import { AbilityEngine } from "./AbilityEngine.js?v=20260928-deckcompile1";
 import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-fourcardfix1";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
 // ordinary numeric damage. Ordinary single knockouts use explicit prize and
 // promotion choices; simultaneous knockouts await a separate rule handler.
 export class AttackEngine extends AbilityEngine {
-  attacks(instance) { return inspectAttacks(this.card(instance)); }
+  attacks(instance) { return this.deckPrograms.get(instance?.cardId)?.attacks ?? inspectAttacks(this.card(instance)); }
 
   attackForAction(state,action){
     const active=state.players[action.player]?.active;
@@ -252,7 +252,7 @@ export class AttackEngine extends AbilityEngine {
     const next = structuredClone(state);
     next.itemLocks ??= [false, false];
     next.itemLocks[next.turn] = false;
-    // Keep a protection effect through the opponent's turn, then expire it
+    // Keep a protection effect through the opponent'\''s turn, then expire it
     // when that opponent ends their turn.
     next.attackProtection=(next.attackProtection??[]).filter(x=>x.owner===state.turn);
     next.turn = 1 - next.turn;
