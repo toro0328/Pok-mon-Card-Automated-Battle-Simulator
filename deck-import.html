@@ -42,6 +42,8 @@ table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{text-align:left;
 </main>
 <script type="module">
 import { CardRepository } from "./src/card-db/CardRepository.js";
+import { MatchEngine } from "./src/engine/MatchEngine.js";
+import { createDeckAnalysisRecord, saveDeckAnalysis } from "./src/decks/analysis-store.js";
 const status=document.getElementById("status"),button=document.getElementById("load");
 let repository;
 function setStatus(message,kind=""){status.textContent=message;status.className="status"+(kind?" "+kind:"");}
@@ -73,7 +75,10 @@ function showPreview(deck){
   const root=document.getElementById("preview");root.replaceChildren();
   const total=deck.cards.reduce((sum,entry)=>sum+entry.count,0);
   const heading=document.createElement("p");heading.className="help";
-  heading.textContent=`読み込み結果：${total}枚 / ${deck.cards.length}種類${deck.unknown.length?` / DB未登録 ${deck.unknown.length}種類`:""}`;
+  const unresolved=deck.analysis.filter(card=>!card.supported);
+  heading.textContent=`読み込み・効果解析：${total}枚 / ${deck.cards.length+deck.unknown.length}種類`+
+    `${deck.unknown.length?` / DB未登録 ${deck.unknown.length}種類`:""}`+
+    `${unresolved.length?` / 効果要確認 ${unresolved.length}種類`:" / 全カード効果を確認済み"}`;
   root.append(heading);
   const table=document.createElement("table"),head=document.createElement("tr");
   for(const label of ["カード","枚数"]) {const th=document.createElement("th");th.textContent=label;head.append(th);}
@@ -83,6 +88,8 @@ function showPreview(deck){
     name.textContent=item.name;count.textContent=`${item.count}枚`;row.append(name,count);body.append(row);}
   for(const item of deck.unknown){const row=document.createElement("tr"),name=document.createElement("td"),count=document.createElement("td");
     name.textContent=`DB未登録（ID ${item.officialCardId}）`;count.textContent=`${item.count}枚`;row.append(name,count);body.append(row);}
+  for(const card of unresolved)for(const issue of card.issues??[]){const row=document.createElement("tr"),name=document.createElement("td"),count=document.createElement("td");
+    name.textContent=`要確認：${card.name} — ${issue.kind}`;count.textContent=issue.text||"効果文を確認してください";row.append(name,count);body.append(row);}
   table.append(body);root.append(table);root.hidden=false;
 }
 document.getElementById("open").onclick=()=>{
@@ -107,15 +114,27 @@ button.onclick=async()=>{
     const cards=[],unknown=[];
     for(const item of rawCards){const card=repository.get(item.officialCardId);if(card)cards.push({...item,name:card.name});else unknown.push(item);}
     const total=rawCards.reduce((sum,item)=>sum+item.count,0);
-    const deck={name:`公式デッキ ${code}`,deckCode:code,sourceUrl:officialUrl,importedAt:new Date().toISOString(),cards:cards.map(({name,...item})=>item)};
-    showPreview({cards,unknown});
-    if(total!==60||unknown.length){
-      setStatus(`読み込みはできましたが対戦には設定できません。合計 ${total}枚、DB未登録 ${unknown.length}種類です。カードDBに全IDがあり、合計60枚のデッキが必要です。`,"error");
+    const deck={name:`公式デッキ ${code}`,deckCode:code,sourceUrl:officialUrl,importedAt:new Date().toISOString(),
+      cards:rawCards.map(({officialCardId,count})=>({officialCardId,count}))};
+    const [catalogResponse]=await Promise.all([fetch("./data/cards/ability-effects.json")]);
+    if(!catalogResponse.ok)throw new Error("効果カタログを取得できませんでした。");
+    const engine=new MatchEngine(repository,await catalogResponse.json());
+    const knownDeck={...deck,cards:deck.cards.filter(item=>repository.get(item.officialCardId))};
+    const analysis=await engine.compileDeck([knownDeck,{cards:[]}]);
+    const record=saveDeckAnalysis(createDeckAnalysisRecord(deck,analysis,unknown.map(item=>item.officialCardId)));
+    showPreview({cards,unknown,analysis:analysis.map(item=>({...item,
+      issues:item.issues.map(issue=>({...issue,text:issue.text||"効果文の解釈が必要です"}))}))});
+    if(total!==60){
+      setStatus(`解析結果はコード別に記録しました。読み取った枚数は ${total}枚です。60枚のデッキか公式ページを確認してください。`,"error");
       return;
     }
     const slot=document.getElementById("slot").value;
     localStorage.setItem(`pokemon-card-simulator-deck-${slot}`,JSON.stringify(deck));
-    setStatus(`読み込み成功：60枚を${slot==="self"?"自分":"相手"}のデッキとしてこのブラウザに保存しました。対戦画面へ戻って「ランダムで新しい試合」を押してください。`,"ok");
+    if(unknown.length||record.status!=="complete"){
+      setStatus(`デッキコード ${code} のリストと解析結果を記録しました。DB未登録 ${unknown.length}種類、効果要確認 ${analysis.filter(item=>!item.supported).length}種類です。未対応効果は対戦に使えません。`,"error");
+      return;
+    }
+    setStatus(`読み込み・全効果解析成功：60枚を${slot==="self"?"自分":"相手"}のデッキとして保存しました。解析記録もこのコード用に更新しました。`,"ok");
   }catch(error){setStatus(error.message,"error");}
   finally{button.disabled=false;}
 };
