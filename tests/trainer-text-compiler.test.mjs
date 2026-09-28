@@ -9,6 +9,14 @@ test("compiles Bug Catching Set text variants from the printed text",()=>{
   });
 });
 
+test("compiles Boss-style gust and coin-gated Catcher wording independent of card name",()=>{
+  const supporter={trainerType:"supporter",raw:{effect:"相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。"}};
+  const item={trainerType:"item",raw:{effect:"コインを1回投げオモテなら、相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。"}};
+  assert.equal(parseTrainerText(supporter)?.effect,"boss");
+  assert.equal(parseTrainerText(item)?.effect,"coinBoss");
+  assert.equal(parseTrainerText({...item,raw:{effect:item.raw.effect.replace("オモテなら","ウラなら")}}),null);
+});
+
 test("compiles Secret Box only when all four Trainer types and the three card cost are present",()=>{
   const card={trainerType:"item",raw:{effect:"このカードは、自分の手札を3枚トラッシュしなければ使えない。\n自分の山札から「グッズ」「ポケモンのどうぐ」「サポート」「スタジアム」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。"}};
   assert.equal(parseTrainerText(card)?.effect,"secretBox");
