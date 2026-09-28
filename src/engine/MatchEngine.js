@@ -41,6 +41,7 @@ const TRAINERS = {
 export class MatchEngine extends AttackEngine {
   createMatch(deckLists, seed = 1) {
     if (!Array.isArray(deckLists) || deckLists.length !== 2) throw new Error("Two decks are required");
+    if(deckLists.some(ids=>!Array.isArray(ids)||ids.length!==60))throw new Error("A deck must have 60 cards");
     const legality=this.deckRuleChecks(deckLists.map(ids=>({cards:ids.map(officialCardId=>({officialCardId,count:1}))})));
     if(legality.length)throw new Error(legality.map(issue=>issue.message).join(" "));
     let randomState = (seed >>> 0) || 1;
@@ -242,9 +243,7 @@ export class MatchEngine extends AttackEngine {
       const attacks=inspectAttacks(card);
       let trainer=null;
       if(card.trainerType){
-        const existing=TRAINERS[card.name],effectText=this.trainerEffectText(card);
-        trainer=existing&&card.trainerType===existing.type&&effectText===existing.text?existing:
-          Object.values(TRAINERS).find(candidate=>card.trainerType===candidate.type&&effectText===candidate.text)??parseTrainerText({...card,raw:{...card.raw,effect:effectText}});
+        trainer=this.trainerSpec(instance);
         if(card.trainerType==="stadium"&&this.isSupportedStadium(instance))trainer={type:"stadium",effect:"stadium",text:card.raw.effect,compiledFromText:true};
         if(card.trainerType==="tool"&&this.isSupportedTool(instance))trainer={type:"tool",effect:"tool",text:card.raw.effect,compiledFromText:true};
       }
