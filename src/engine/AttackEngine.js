@@ -301,7 +301,7 @@ export class AttackEngine extends AbilityEngine {
     return 1;
   }
 
-  beginKnockout(state, victims, targetInstanceId=null) {
+  beginKnockout(state, victims, targetInstanceId=null, cause=null) {
     if (victims.length !== 1) {
       state.pendingKnockout = { reason: "SIMULTANEOUS_KNOCKOUT_NEEDS_REVIEW", victims };
       return state;
@@ -460,7 +460,7 @@ export class AttackEngine extends AbilityEngine {
     victim.damage = (victim.damage ?? 0) + damage;
     const targetEffectProtected=this.protectedFromOpponentEffects(next,victim.instanceId,state.turn);
     for (const effect of attack.effects) {
-      if(targetEffectProtected&&["APPLY_STATUS","COIN_APPLY_STATUS","DISCARD_OPPONENT_ENERGY","COIN_DISCARD_ENERGY",
+      if(targetEffectProtected&&effect.target!=="ATTACKING_POKEMON"&&["APPLY_STATUS","COIN_APPLY_STATUS","DISCARD_OPPONENT_ENERGY","COIN_DISCARD_ENERGY",
         "PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN","PLACE_DAMAGE_COUNTERS","SWITCH_OPPONENT_CHOICE"].includes(effect.type))continue;
       if (effect.type === "DRAW" && effect.player === "SELF") {
         own.hand.push(...own.deck.splice(0, effect.count));
@@ -582,7 +582,7 @@ export class AttackEngine extends AbilityEngine {
     else delete next.pendingSecondAttack;
     if(knockedOut.length && next.pendingAttack){next.pendingAttack.delayedVictims=knockedOut;
       next.pendingAttack.targetInstanceId=action.targetInstanceId??null;return next;}
-    if (knockedOut.length) return this.beginKnockout(next, knockedOut,action.targetInstanceId??null);
+    if (knockedOut.length) return this.beginKnockout(next, knockedOut,action.targetInstanceId??null,{source:"opponentAttack",attacker:state.turn});
     if(next.pendingAttack)return next;
     if (firstOfTwo) return next;
     return this.endTurn(next);
