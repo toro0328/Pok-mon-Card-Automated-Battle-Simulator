@@ -33,6 +33,32 @@ test("compiles common coin-search text variants as a Pokémon-only search",()=>{
   assert.equal(parseTrainerText({trainerType:"item",raw:{effect:variants[0].replace("オモテなら","ウラなら")}}),null);
 });
 
+test("compiles Energy Switch reprints from equivalent printed wording",()=>{
+  const variants=[
+    "自分のポケモンの基本エネルギーを1個、自分の別のポケモンにつけ替える。",
+    "自分のポケモンの基本エネルギーを1個選び、自分の別のポケモンにつけ替える。",
+    "自分のポケモンについている基本エネルギーを1個、自分の別のポケモンにつけ替える。",
+    "自分の場のポケモンについている基本エネルギーを1個、自分の別のポケモンにつけ替える。"
+  ];
+  for(const effect of variants)
+    assert.equal(parseTrainerText({trainerType:"item",raw:{effect}})?.effect,"transfer",effect);
+  assert.equal(parseTrainerText({trainerType:"item",raw:{effect:variants[3].replace("基本エネルギー","エネルギー")}}),null);
+});
+
+test("compiles Potion healing and damage-counter removal as exact healing amounts",()=>{
+  const variants=[
+    ["自分のポケモン1匹のHPを「30」回復する。",30],
+    ["自分のポケモンを1匹選び、HPを「30」回復する。",30],
+    ["自分のポケモン1匹から、ダメージカウンターを2個とる。",20]
+  ];
+  for(const [effect,amount] of variants){
+    const result=parseTrainerText({trainerType:"item",raw:{effect}});
+    assert.equal(result?.effect,"heal",effect);
+    assert.equal(result.amount,amount,effect);
+  }
+  assert.equal(parseTrainerText({trainerType:"item",raw:{effect:"自分のポケモン全員のHPを30回復する。"}}),null);
+});
+
 test("compiles Secret Box only when all four Trainer types and the three card cost are present",()=>{
   const card={trainerType:"item",raw:{effect:"このカードは、自分の手札を3枚トラッシュしなければ使えない。\n自分の山札から「グッズ」「ポケモンのどうぐ」「サポート」「スタジアム」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。"}};
   assert.equal(parseTrainerText(card)?.effect,"secretBox");

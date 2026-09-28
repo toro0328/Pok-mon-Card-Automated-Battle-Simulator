@@ -33,6 +33,18 @@ export function parseTrainerText(card) {
   if(raw==="コインを1回投げオモテなら、相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。")
     return {type:card.trainerType,effect:"coinBoss",text:raw,compiledFromText:true};
   if(card.trainerType==="item"){
+    if(/^自分の(?:場の)?ポケモン(?:についている|の)?基本エネルギーを1個(?:選び、|、)?自分の別のポケモンにつけ替える。$/u.test(raw))
+      return {type:"item",effect:"transfer",text:raw,compiledFromText:true};
+    let healing=raw.match(/^自分のポケモン(?:1匹のHPを|を1匹選び、HPを)「?([0-9０-９]+)」?回復する。$/u);
+    if(healing){
+      const amount=number(healing[1])??Number(healing[1]);
+      if(amount>0)return {type:"item",effect:"heal",amount,text:raw,compiledFromText:true};
+    }
+    healing=raw.match(/^自分のポケモン1匹から、ダメージカウンターを([0-9０-９]+)個とる。$/u);
+    if(healing){
+      const amount=number(healing[1])??Number(healing[1]);
+      if(amount>0)return {type:"item",effect:"heal",amount:amount*10,text:raw,compiledFromText:true};
+    }
     const coinPokemonSearch=[
       /^コインを1回投げオモテなら、自分の山札からポケモンを([0-9０-９]+)枚選び、相手(?:プレイヤー)?に見せ(?:てから|て)、手札に加える。(?:そして|その後、)山札を切る。$/u,
       /^コインを1回投げオモテなら、自分の山札(?:にある|の)ポケモンを([0-9０-９]+)枚、相手(?:プレイヤー)?に見せ(?:てから|て)、手札に加える。(?:そして|その後、)山札を切る。$/u
