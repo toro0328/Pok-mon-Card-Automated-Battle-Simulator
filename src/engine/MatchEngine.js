@@ -19,7 +19,8 @@ const TRAINERS = {
   "むしとりセット": { type: "item", effect: "bugCatcher", text: "自分の山札を上から7枚見て、その中からGrassポケモンと「基本Grassエネルギー」を合計2枚まで選び、相手に見せて、手札に加える。残りのカードは山札にもどして切る。" },
   "プライムキャッチャー": { type: "item", effect: "primeCatcher", text: "相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。その後、自分のバトルポケモンをベンチポケモンと入れ替える。" },
   "グラジオの決戦": { type: "supporter", effect: "gladio", text: "このカードは、自分の手札がこのカード1枚だけのときにしか使えない。\nこの番、自分のポケモン（「ルールを持つポケモン」をのぞく）が使うワザの、相手のバトルポケモンへのダメージは「+80」される。" },
-  "スグリ": { type: "supporter", effect: "suguri", text: "このカードは、2つの効果から1つを選んで使う。\n◆自分のバトルポケモンをベンチポケモンと入れ替える。\n◆この番、自分のポケモンが使うワザの、相手のバトル場の「ポケモンex・V」へのダメージは「+30」される。" }
+  "スグリ": { type: "supporter", effect: "suguri", text: "このカードは、2つの効果から1つを選んで使う。\n◆自分のバトルポケモンをベンチポケモンと入れ替える。\n◆この番、自分のポケモンが使うワザの、相手のバトル場の「ポケモンex・V」へのダメージは「+30」される。" },
+  "シークレットボックス": { type: "item", cost: 3, max: 4, zone: "hand", filter: "secretBox", text: "このカードは、自分の手札を3枚トラッシュしなければ使えない。\n自分の山札から「グッズ」「ポケモンのどうぐ」「サポート」「スタジアム」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。" }
 };
 
 // A first playable subset of the normal match. Only verified card actions are
@@ -166,6 +167,9 @@ export class MatchEngine extends AttackEngine {
       case "ex": return card.cardType === "pokemon" && (card.raw.tags ?? []).includes("ex");
       case "lantern": return ["基本炎エネルギー", "基本雷エネルギー"].includes(card.name) &&
         !pending.selectedNames.includes(card.name);
+      case "secretBox": return card.cardType==="trainer" &&
+        ["item","tool","supporter","stadium"].includes(card.trainerType) &&
+        !pending.selectedTypes.includes(card.trainerType);
       default: return false;
     }
   }
@@ -566,7 +570,7 @@ export class MatchEngine extends AttackEngine {
       } else if(spec.effect === "akamatsu"){
         next.pendingTrainer={name:"アカマツ",sourceInstanceId:trainer.instanceId,selected:[]};
       } else next.pendingTrainer={name:trainer.cardId?this.card(trainer).name:"",sourceInstanceId:trainer.instanceId,
-        costLeft:spec.cost??0,selectedNames:[]};
+        costLeft:spec.cost??0,selectedNames:[],selectedTypes:[]};
     } else {
       const pending=next.pendingTrainer, spec=TRAINERS[pending.name];
       if(action.type === "AKAMATSU_PICK") pending.selected.push(action.choiceInstanceId);
@@ -597,6 +601,7 @@ export class MatchEngine extends AttackEngine {
         } else {
         const i=player.deck.findIndex(x=>x.instanceId===action.choiceInstanceId);
         const chosen=player.deck.splice(i,1)[0];pending.selectedNames.push(this.card(chosen).name);
+        if(spec.filter==="secretBox")pending.selectedTypes.push(this.card(chosen).trainerType);
         if (spec.zone === "bench") {chosen.enteredTurn=next.turnNo;player.bench.push(chosen);}
         else player.hand.push(chosen);
         if(pending.selectedNames.length >= spec.max || !player.deck.some(x=>this.searchCandidate(x,spec,pending,player))){
