@@ -964,7 +964,7 @@ export class MatchEngine extends AttackEngine {
       return next;
     }
     if (action.type === "ATTACK") return super.applyAttack(state, action);
-    if (["TAKE_PRIZE", "PROMOTE_BENCH", "RESOLVE_KNOCKOUT"].includes(action.type)) return this.applyKnockoutAction(state, action);
+    if (["TAKE_PRIZE", "PROMOTE_BENCH", "RESOLVE_KNOCKOUT","HEAVY_BATON_SELECT","HEAVY_BATON_FINISH"].includes(action.type)) return this.applyKnockoutAction(state, action);
     if(action.type.startsWith("ATTACK_SEARCH") || ["ATTACK_DISCARD_ENERGY","ATTACK_PROMOTE",
       "ATTACK_COUNTER_PLACE","ATTACK_COUNTERS_FINISH","ATTACK_RETURN_ENERGY","ATTACK_SKIP_ENERGY_RETURN",
       "ATTACK_RETURN_ENERGY_TO_HAND","ATTACK_BENCH_DAMAGE_TARGET","ATTACK_OPPONENT_PROMOTE"].includes(action.type))
