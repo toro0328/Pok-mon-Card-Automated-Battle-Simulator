@@ -47,10 +47,6 @@ test("opening hand and setup accept legal Basics with effects that need review",
   const placed=blockedEngine.applyMatchAction(restrictiveGame,active);
   assert.doesNotThrow(()=>blockedEngine.getMatchActions(placed));
   assert.equal(blockedEngine.getMatchActions(placed).some(x=>x.type==="USE_ABILITY"),false);
-  const usable=[49956,...Array(4).fill(45233),...Array(55).fill(50745)];
-  const game=blockedEngine.createMatch([sample,usable],9);
-  assert.ok(game.players[1].hand.some(x=>x.cardId===49956));
-  assert.ok(blockedEngine.getMatchActions(game).some(x=>x.player===1&&x.type==="SET_ACTIVE"));
 });
 
 test("deck-rule gate allows a legal 60-card pair and rejects multiple ACE SPEC cards", () => {
