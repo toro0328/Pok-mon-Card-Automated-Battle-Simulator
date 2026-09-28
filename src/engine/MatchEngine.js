@@ -21,7 +21,7 @@ const TRAINERS = {
   "グラジオの決戦": { type: "supporter", effect: "gladio", text: "このカードは、自分の手札がこのカード1枚だけのときにしか使えない。\nこの番、自分のポケモン（「ルールを持つポケモン」をのぞく）が使うワザの、相手のバトルポケモンへのダメージは「+80」される。" },
   "スグリ": { type: "supporter", effect: "suguri", text: "このカードは、2つの効果から1つを選んで使う。\n◆自分のバトルポケモンをベンチポケモンと入れ替える。\n◆この番、自分のポケモンが使うワザの、相手のバトル場の「ポケモンex・V」へのダメージは「+30」される。" },
   "シークレットボックス": { type: "item", cost: 3, max: 4, zone: "hand", filter: "secretBox", text: "このカードは、自分の手札を3枚トラッシュしなければ使えない。\n自分の山札から「グッズ」「ポケモンのどうぐ」「サポート」「スタジアム」を1枚ずつ選び、相手に見せて、手札に加える。そして山札を切る。" },
-  "ガラスのラッパ": { type: "item", effect: "glassTrumpet", text: "このカードは、自分の場に「テラスタル」のポケモンがいるときにしか使えない。\n自分のベンチのColorlessポケモンを2匹まで選び、トラッシュから基本エネルギーを1枚ずつつける。" }
+  "ガラスのラッパ": { type: "item", effect: "glassTrumpet", text: "このカードは、自分の場に「テラスタル」のポケモンがいるときにしか使えない。\n自分のベンチのポケモンを2匹まで選び、トラッシュから基本エネルギーを1枚ずつつける。" }
 };
 
 // A first playable subset of the normal match. Only verified card actions are
@@ -183,7 +183,7 @@ export class MatchEngine extends AttackEngine {
       if(pending.name==="ガラスのラッパ") {
         const energies=player.trash.filter(card=>this.card(card).energyType==="basic");
         if((pending.selectedTargets??[]).length<2)for(const target of player.bench){
-          if(!(this.card(target).raw.types??[]).includes("Colorless")||(pending.selectedTargets??[]).includes(target.instanceId))continue;
+          if((pending.selectedTargets??[]).includes(target.instanceId))continue;
           for(const energy of energies)actions.push({type:"TRAINER_GLASS_ATTACH",player:state.turn,sourceInstanceId:pending.sourceInstanceId,targetInstanceId:target.instanceId,choiceInstanceId:energy.instanceId});
         }
         actions.push({type:"TRAINER_FINISH",player:state.turn,sourceInstanceId:pending.sourceInstanceId});return actions;
@@ -234,7 +234,7 @@ export class MatchEngine extends AttackEngine {
           spec.type === "supporter" && (state.supporterUsedThisTurn || state.turnNo === 1)) continue;
       if (spec.cost && player.hand.length - 1 < spec.cost) continue;
       if(spec.effect==="glassTrumpet"&&(!this.field(player).some(x=>(this.card(x).raw.tags??[]).includes("テラスタル"))||
-        !player.bench.some(x=>(this.card(x).raw.types??[]).includes("Colorless"))||!player.trash.some(x=>this.card(x).energyType==="basic")))continue;
+        !player.bench.length||!player.trash.some(x=>this.card(x).energyType==="basic")))continue;
       if (spec.effect === "red" && state.players[1-state.turn].prizes.length > 3) continue;
       if (spec.effect === "gladio" && player.hand.length !== 1) continue;
       if (spec.effect === "rod") {
@@ -604,7 +604,7 @@ export class MatchEngine extends AttackEngine {
       if(action.type==="TRAINER_GLASS_ATTACH"){
         const i=player.trash.findIndex(x=>x.instanceId===action.choiceInstanceId),energy=player.trash.splice(i,1)[0];
         const target=this.field(player).find(x=>x.instanceId===action.targetInstanceId);target.attached.push(energy);pending.selectedTargets.push(target.instanceId);
-        const canContinue=pending.selectedTargets.length<2&&player.bench.some(x=>(this.card(x).raw.types??[]).includes("Colorless")&&!pending.selectedTargets.includes(x.instanceId))&&player.trash.some(x=>this.card(x).energyType==="basic");
+        const canContinue=pending.selectedTargets.length<2&&player.bench.some(x=>!pending.selectedTargets.includes(x.instanceId))&&player.trash.some(x=>this.card(x).energyType==="basic");
         if(!canContinue)delete next.pendingTrainer;
       } else if (action.type === "TRAINER_DISCARD") {
         const i=player.hand.findIndex(x=>x.instanceId===action.choiceInstanceId);
