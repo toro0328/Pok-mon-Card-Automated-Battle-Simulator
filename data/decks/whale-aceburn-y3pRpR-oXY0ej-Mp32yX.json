@@ -6,7 +6,7 @@
   "totalCards": 60,
   "checkedAt": "2026-09-28",
   "status": "smoke_tested",
-  "statusReason": "公式デッキ20種類・60枚を照合し、24/24件の効果をAI対戦エンジンにコンパイル。公開AI対AIで初期配置から3番目の番までのスモークテストを確認。",
+  "statusReason": "公式デッキ20種類・60枚を照合。公開AI対AIで両側120/120枚のカード走査、24/24効果、構築ルール合法を確認。初期配置から2番目の番まで17行動を実行し、実行時エラーなし。",
   "cards": [
     {
       "officialCardId": 50233,
@@ -272,6 +272,12 @@
       "effect": "60枚・たねポケモン・同名4枚・ACE SPEC上限",
       "status": "implemented",
       "detail": "デッキ解析と対戦生成の両方でチェックし、違反内容を具体的に表示。"
+    },
+    {
+      "card": "ジャッジマン",
+      "effect": "ジャッジマンの手札リセット・4枚ドロー",
+      "status": "implemented",
+      "detail": "カード名に基づいて公式効果へ正規化し、両者の手札を山札へ戻して切り、4枚ずつ引く。"
     }
   ],
   "deckRuleChecks": {
@@ -295,5 +301,16 @@
       "基本エネルギーを除き同名4枚まで",
       "ACE SPECは1枚まで"
     ]
+  },
+  "lastVerifiedAt": "2026-09-28T12:54Z",
+  "lastUiVerification": {
+    "scannedCopies": 120,
+    "totalCopies": 120,
+    "supportedCopies": 120,
+    "totalEffects": 24,
+    "supportedEffects": 24,
+    "deckRuleStatus": "legal",
+    "actionsExecuted": 17,
+    "runtimeErrors": 0
   }
 }
