@@ -11,7 +11,7 @@ const SUPPORTED_STADIUM_TEXT = {
   "ゼロの大空洞": "自分の場に「テラスタル」のポケモンがいるプレイヤーが、ベンチに出せるポケモンの数は8匹になる。\n（このカードがトラッシュされたときか、自分の場に「テラスタル」のポケモンがいなくなったとき、ベンチが5匹になるまでトラッシュする。おたがいにトラッシュするなら、このカードの持ち主から行う。）"
 };
 const CHAIN_MOCHI_TEXT = "このカードをつけているどくのポケモンが使うワザの、相手のバトルポケモンへのダメージは「+40」される。";
-const GROW_GRASS_TEXT = "このカードは、ポケモンについているかぎり、Grassエネルギー1個ぶんとしてはたらく。\nこのカードをつけているGrassポケモンは、最大HPが「＋20」される。";
+const GROW_GRASS_TEXT = "このカードは、ポケモンについているかぎり、Grassエネルギー1個ぶんとしてはたらく。\nこのカードをつけているGrassポケモンは、最大HPが「＋20」される。";\nconst BUBBLE_WATER_TEXT = "このカードは、ポケモンについているかぎり、Waterエネルギー1個ぶんとしてはたらく。\nこのカードをつけているWaterポケモンは、特殊状態にならず、受けている特殊状態は、すべて回復する。";
 export class AbilityEngine {
   constructor(repository, catalog) {
     if (catalog?.cardCount !== repository.cards.size ||
@@ -76,7 +76,7 @@ export class AbilityEngine {
 
   isSupportedTool(instance) {
     const card = this.card(instance);
-    return card.trainerType === "tool" && card.name === "くさりもち" && card.raw.effect === CHAIN_MOCHI_TEXT;
+    return card.trainerType === "tool" && ((card.name === "くさりもち" && card.raw.effect === CHAIN_MOCHI_TEXT) ||\n      (card.name === "ヘビーバトン" && card.raw.effect === "このカードをつけているにげるためのエネルギーが4個のポケモンが、バトル場で相手のポケモンからワザのダメージを受けてきぜつしたとき、そのポケモンについている基本エネルギーを3枚まで選び、自分のベンチポケモンに好きなようにつけ替える。"));
   }
 
   isSupportedEnergy(instance) {
