@@ -10,6 +10,7 @@ db.cards.push(...JSON.parse(fs.readFileSync("tests/fixtures/attack-cards.json","
   ...JSON.parse(fs.readFileSync("tests/fixtures/festival-cards.json","utf8")),
   ...JSON.parse(fs.readFileSync("tests/fixtures/trainer-cards.json","utf8")),
   ...JSON.parse(fs.readFileSync("tests/fixtures/rayquaza-cards.json","utf8")),
+  ...JSON.parse(fs.readFileSync("tests/fixtures/meta-cards.json","utf8")),
   JSON.parse(fs.readFileSync("tests/fixtures/water-energy.json","utf8")),
   JSON.parse(fs.readFileSync("tests/fixtures/psychic-energy.json","utf8")),
   JSON.parse(fs.readFileSync("tests/fixtures/grow-grass-energy.json","utf8")));
@@ -210,6 +211,17 @@ test("Rayquaza benches from hand, attaches a Basic Energy from top four and pres
   assert.equal(state.pendingAbility,undefined);
 });
 
+test("Rayquaza ability text compiles and works on a reprinted card ID",()=>{
+  const own=player(card("latias",46248),[],[card("ray-reprint",50536)],
+    [card("fire",47904),card("lillie",49445),card("electric",47906),card("small",45624),card("bottom",50745)]);
+  let state=game(own,player(card("mega",48466)));
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="BENCH_BASIC"));
+  assert.equal(state.pendingAbility.name,"はしゃのほうこう");
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="ABILITY_SELECT"&&x.choiceInstanceId==="fire"));
+  assert.equal(state.players[0].bench[0].attached[0].instanceId,"fire");
+  assert.equal(state.players[0].deck[0].instanceId,"bottom");
+});
+
 test("Rayquaza attack counts Fire and Electric Energy anywhere on own field and records exact damage",()=>{
   const own=player(card("ray",50396,[card("fire",47904),card("electric",47906),card("extra",47904)]),
     [card("latias",46248,[card("benchfire",47904)])]);
@@ -223,13 +235,19 @@ test("Rayquaza attack counts Fire and Electric Energy anywhere on own field and 
 });
 
 test("Meowth searches a Supporter on bench entry once per turn; Akamatsu attaches a distinct second energy",()=>{
-  const own=player(card("latias",46248),[],[card("meowth",49694),card("ak",49412)],
+  const own=player(card("latias",46248),[],[card("meowth",49694),card("meowth-reprint-1",50067),
+    card("meowth-reprint-2",50081),card("ak",49412)],
     [card("lillie",49445),card("fire",47904),card("electric",47906)]);
   let state=game(own,player(card("mega",48466)));
+  for(const id of [49694,50067,50081])assert.equal(engine.entries(card("m"+id,id))[0].status,"supported");
   state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="BENCH_BASIC"&&x.sourceInstanceId==="meowth"));
   assert.equal(state.pendingAbility.name,"おくのてキャッチ");
   state=engine.applyMatchAction(state,find(state,"ABILITY_SELECT"));
   assert.equal(state.players[0].hand.some(x=>x.instanceId==="lillie"),true);
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="BENCH_BASIC"&&x.sourceInstanceId==="meowth-reprint-1"));
+  assert.equal(state.pendingAbility,undefined);
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="BENCH_BASIC"&&x.sourceInstanceId==="meowth-reprint-2"));
+  assert.equal(state.pendingAbility,undefined);
   state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="PLAY_TRAINER"&&x.sourceInstanceId==="ak"));
   state=engine.applyMatchAction(state,find(state,"AKAMATSU_PICK"));
   state=engine.applyMatchAction(state,find(state,"AKAMATSU_PICK"));
@@ -237,6 +255,181 @@ test("Meowth searches a Supporter on bench entry once per turn; Akamatsu attache
   state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="AKAMATSU_ATTACH"&&x.targetInstanceId==="latias"));
   assert.equal(state.players[0].active.attached[0].instanceId,"electric");
   assert.equal(state.players[0].hand.some(x=>x.instanceId==="fire"),true);
+});
+
+test("Munkidori moves up to three damage counters from an own Pokémon to an opposing Pokémon",()=>{
+  let state=game(player(card("munkidori",49074,[card("dark",50483)]),[card("hurt",49956)]),player(card("foe",50339)));
+  state.players[0].bench[0].damage=50;
+  let actions=engine.getMatchActions(state).filter(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="munkidori");
+  assert.deepEqual(actions.map(x=>x.counterCount),[1,2,3]);
+  assert.equal(engine.getMatchActions(game(player(card("no-dark",49074)),player(card("foe",50339))))
+    .some(x=>x.type==="USE_ABILITY"),false);
+  state=engine.applyMatchAction(state,actions.find(x=>x.counterCount===3));
+  assert.equal(state.players[0].bench[0].damage,20);
+  assert.equal(state.players[1].active.damage,30);
+  assert.equal(engine.getMatchActions(state).some(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="munkidori"),false);
+});
+
+test("Munkidori knockout from transferred damage enters prize resolution",()=>{
+  let state=game(player(card("munkidori",49074,[card("dark",50483)]),[card("hurt",50339)]),player(card("foe",49956),[card("reserve",50339)]));
+  state.players[0].bench[0].damage=20;
+  state.players[1].active.damage=10;
+  const action=engine.getMatchActions(state).find(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="munkidori"&&x.targetInstanceId==="foe"&&x.counterCount===2);
+  state=engine.applyMatchAction(state,action);
+  assert.equal(state.pendingKnockout.owner,1);
+  assert.equal(state.players[1].active,null);
+  assert.equal(state.players[0].prizes.length,6);
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="TAKE_PRIZE"));
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="PROMOTE_BENCH"));
+  assert.equal(state.players[1].active.instanceId,"reserve");
+  assert.equal(state.turn,0);
+  assert.equal(state.pendingAbilityResolution,undefined);
+});
+
+test("Drakloak Recon Directive adds one of the top two cards and puts the other on the bottom",()=>{
+  let own=player(card("drakloak",49263),[],[],[card("top1",50745),card("top2",50745),card("tail",50745)]);
+  let state=game(own,player(card("foe",50339)));
+  const actions=engine.getMatchActions(state).filter(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="drakloak");
+  assert.deepEqual(actions.map(x=>x.choiceInstanceId),["top1","top2"]);
+  state=engine.applyMatchAction(state,actions.find(x=>x.choiceInstanceId==="top2"));
+  assert.ok(state.players[0].hand.some(x=>x.instanceId==="top2"));
+  assert.deepEqual(state.players[0].deck.map(x=>x.instanceId),["tail","top1"]);
+});
+
+test("Dudunsparce draws three, returns its stack and attachments, then shuffles",()=>{
+  let own=player(card("active",50339),[card("dudunsparce",45203,[card("attached",50483)])],[],
+    [card("top1",50745),card("top2",50745),card("top3",50745),card("tail1",50745),card("tail2",50745)]);
+  let state=game(own,player(card("foe",50339)));
+  const action=engine.getMatchActions(state).find(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="dudunsparce");
+  state=engine.applyMatchAction(state,action);
+  assert.deepEqual(state.players[0].hand.map(x=>x.instanceId),["top1","top2","top3"]);
+  assert.ok(state.players[0].deck.some(x=>x.instanceId==="dudunsparce"));
+  assert.ok(state.players[0].deck.some(x=>x.instanceId==="attached"));
+  assert.equal(state.players[0].bench.some(x=>x.instanceId==="dudunsparce"),false);
+});
+
+test("Dudunsparce returning from Active forces a Bench promotion before play continues",()=>{
+  let active=card("dudunsparce-active",45203,[card("attached",50483)]);
+  active.stack=[card("dunsparce",45202)];
+  let state=game(player(active,[card("promote",45910)]),player(card("foe",50339)));
+  const action=engine.getMatchActions(state).find(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="dudunsparce-active");
+  state=engine.applyMatchAction(state,action);
+  assert.equal(state.players[0].active,null);
+  assert.equal(state.pendingAbility.name,"にげあしドロー");
+  for(const returned of ["dudunsparce-active","dunsparce","attached"])
+    assert.ok(state.players[0].deck.some(x=>x.instanceId===returned));
+  const promote=engine.getMatchActions(state).find(x=>x.type==="ABILITY_SELECT");
+  state=engine.applyMatchAction(state,promote);
+  assert.equal(state.players[0].active.instanceId,"promote");
+  assert.equal(state.pendingAbility,undefined);
+  assert.equal(state.turn,0);
+});
+
+test("Lillie's Clefairy changes opposing Dragon weakness to Psychic for double damage",()=>{
+  const own=player(card("spectrier",48602,[card("psychic",50749)]),[card("clefairy",49003)]);
+  const foe=player(card("dragapult",45772));
+  let state=game(own,foe);
+  const attack=engine.getLegalAttacks(state).find(x=>x.type==="ATTACK");
+  assert.ok(attack);
+  state=engine.applyMatchAction(state,attack);
+  assert.equal(state.players[1].active.damage,60);
+
+  state=game(player(card("spectrier",48602,[card("psychic",50749)])),player(card("dragapult",45772)));
+  assert.equal(engine.calculateAttackDamage(state,{player:0,attackIndex:0}),30);
+});
+
+test("Chien-Pao discards the in-play Stadium when benched from hand",()=>{
+  const own=player(card("active",50339),[],[card("chien-pao",46372)]);
+  let state=game(own,player(card("foe",49956)));
+  state.stadium=card("stadium",45790);
+  state.stadiumOwner=1;
+  const action=engine.getMatchActions(state).find(x=>x.type==="BENCH_BASIC"&&x.sourceInstanceId==="chien-pao");
+  assert.ok(action);
+  state=engine.applyMatchAction(state,action);
+  assert.equal(state.stadium,null);
+  assert.equal(state.stadiumOwner,null);
+  assert.ok(state.players[1].trash.some(x=>x.instanceId==="stadium"));
+  assert.equal(state.players[0].bench[0].instanceId,"chien-pao");
+});
+
+test("Tatsugiri selects a Supporter from the top six, shuffles the rest, and handles no hit",()=>{
+  const own=player(card("tatsugiri",49265),[],[],[
+    card("supporter",46110),card("e1",50745),card("e2",50745),card("e3",50745),
+    card("e4",50745),card("e5",50745),card("outside",49445),card("tail",50745)]);
+  let state=game(own,player(card("foe",50339)));
+  const actions=engine.getMatchActions(state).filter(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="tatsugiri");
+  assert.deepEqual(actions.map(x=>x.choiceInstanceId),["supporter"]);
+  state=engine.applyMatchAction(state,actions[0]);
+  assert.ok(state.players[0].hand.some(x=>x.instanceId==="supporter"));
+  assert.deepEqual(new Set(state.players[0].deck.map(x=>x.instanceId)),new Set(["e1","e2","e3","e4","e5","outside","tail"]));
+
+  state=game(player(card("tatsugiri2",49265),[],[],[
+    card("e1",50745),card("e2",50745),card("e3",50745),card("e4",50745),
+    card("e5",50745),card("e6",50745),card("outside",49445)]),player(card("foe",50339)));
+  const noHit=engine.getMatchActions(state).find(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="tatsugiri2");
+  assert.equal(noHit.choiceInstanceId,undefined);
+  state=engine.applyMatchAction(state,noHit);
+  assert.ok(state.players[0].deck.some(x=>x.instanceId==="outside"));
+  assert.equal(state.players[0].hand.some(x=>x.instanceId==="outside"),false);
+});
+
+test("Blaziken ex attaches a chosen Basic Energy from the discard pile to a chosen Pokémon",()=>{
+  const own=player(card("blaziken",46470),[card("target",50339)]);
+  own.trash.push(card("discarded-dark",50483),card("discarded-item",49600));
+  const state=game(own,player(card("foe",50339)));
+  const actions=engine.getMatchActions(state).filter(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="blaziken");
+  assert.equal(actions.length,2);
+  assert.ok(actions.every(x=>x.choiceInstanceId==="discarded-dark"));
+  const next=engine.applyMatchAction(state,actions.find(x=>x.targetInstanceId==="target"));
+  assert.equal(next.players[0].bench[0].attached[0].instanceId,"discarded-dark");
+  assert.equal(next.players[0].trash.some(x=>x.instanceId==="discarded-dark"),false);
+  assert.equal(next.energyAttachedThisTurn,false);
+});
+
+test("Bloodmoon Ursaluna reduces Blood Moon's Colorless cost by opponent prizes taken",()=>{
+  const own=player(card("ursaluna",47146,[card("e1",50745),card("e2",50745)]));
+  const foe=player(card("foe",50339));
+  foe.prizes=pile("prize",3);
+  const state=game(own,foe);
+  assert.ok(engine.getLegalAttacks(state).some(x=>x.attackIndex===0));
+
+  const noPrizesTaken=game(player(card("ursaluna2",47146,[card("e1",50745),card("e2",50745)])),player(card("foe2",50339)));
+  assert.equal(engine.getLegalAttacks(noPrizesTaken).some(x=>x.attackIndex===0),false);
+});
+
+test("Pecharunt applies six poison counters only while its ability is Active",()=>{
+  let state=game(player(card("pecharunt",49206)),player(card("poisoned",50339)));
+  state.players[1].active.statuses=[{name:"どく",appliedTurnNo:state.turnNo,ownerPlayer:0}];
+  state=engine.pokemonCheck(state,0).state;
+  assert.equal(state.players[1].active.damage,60);
+
+  state=game(player(card("other-active",50339),[card("pecharunt-bench",49206)]),player(card("poisoned",50339)));
+  state.players[1].active.statuses=[{name:"どく",appliedTurnNo:state.turnNo,ownerPlayer:0}];
+  state=engine.pokemonCheck(state,0).state;
+  assert.equal(state.players[1].active.damage,10);
+});
+
+test("Lunatone discards Basic Fighting Energy, draws three with Solrock, and shares its name limit",()=>{
+  const own=player(card("lunatone",47759),[card("solrock",47760),card("lunatone2",47759)],
+    [card("fighting",50750)],[card("top1",50745),card("top2",50745),card("top3",50745),card("tail",50745)]);
+  const state=game(own,player(card("foe",50339)));
+  const actions=engine.getMatchActions(state).filter(x=>x.type==="USE_ABILITY");
+  assert.equal(actions.length,2);
+  const next=engine.applyMatchAction(state,actions.find(x=>x.sourceInstanceId==="lunatone"));
+  assert.equal(next.players[0].trash[0].instanceId,"fighting");
+  assert.deepEqual(next.players[0].hand.map(x=>x.instanceId),["top1","top2","top3"]);
+  assert.ok(next.usedAbilities.names.includes("ルナサイクル"));
+  assert.equal(engine.getMatchActions(next).some(x=>x.type==="USE_ABILITY"),false);
+});
+
+test("Pecharunt switches in a Benched Dark Pokémon, poisons it, and shares its name limit",()=>{
+  let state=game(player(card("pecharunt",49207),[card("yveltal",45910),card("pecharunt2",49207)]),player(card("foe",50339)));
+  const action=engine.getMatchActions(state).find(x=>x.type==="USE_ABILITY"&&x.targetInstanceId==="yveltal");
+  assert.ok(action);
+  state=engine.applyMatchAction(state,action);
+  assert.equal(state.players[0].active.instanceId,"yveltal");
+  assert.equal(state.players[0].active.statuses[0].name,"どく");
+  assert.equal(engine.getMatchActions(state).some(x=>x.type==="USE_ABILITY"),false);
 });
 
 test("Ho-Oh attaches up to two Fire Energy to benched Hibiki Pokémon and heals 50 with its attack",()=>{
@@ -252,6 +445,94 @@ test("Ho-Oh attaches up to two Fire Energy to benched Hibiki Pokémon and heals 
   state=engine.applyMatchAction(state,find(state,"ATTACK"));
   assert.equal(state.lastAttack.damage,160);
   assert.equal(state.players[0].active.damage,20);
+});
+
+test("Golden Flame ability text compiles for a reprint and keeps the per-card use limit",()=>{
+  const own=player(card("hooh-reprint",47378),[card("hibiki",47310)],
+    [card("first",47904),card("second",47904)]);
+  let state=game(own,player(card("mega",48466)));
+  assert.ok(engine.getMatchActions(state).some(x=>x.type==="USE_HOOH"&&x.sourceInstanceId==="hooh-reprint"));
+  state=engine.applyMatchAction(state,find(state,"USE_HOOH"));
+  state=engine.applyMatchAction(state,find(state,"ABILITY_SELECT"));
+  state=engine.applyMatchAction(state,find(state,"ABILITY_SELECT"));
+  assert.equal(state.players[0].bench[0].attached.length,2);
+  assert.equal(engine.getMatchActions(state).some(x=>x.type==="USE_HOOH"&&x.sourceInstanceId==="hooh-reprint"),false);
+});
+
+test("Metal Signal searches up to two Steel Evolution Pokémon and shuffles the rest",()=>{
+  const own=player(card("genesect",47988),[],[],
+    [card("metang",45264),card("energy",50750),card("metagross",45265),card("basic",45202)]);
+  let state=game(own,player(card("mega",48466)));
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="genesect"));
+  const select=engine.getMatchActions(state).filter(x=>x.type==="ABILITY_SELECT");
+  assert.deepEqual(select.map(x=>x.choiceInstanceId),["metang","metagross"]);
+  state=engine.applyMatchAction(state,select.find(x=>x.choiceInstanceId==="metang"));
+  assert.ok(engine.getMatchActions(state).some(x=>x.type==="ABILITY_SELECT"&&x.choiceInstanceId==="metagross"));
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="ABILITY_SELECT"&&x.choiceInstanceId==="metagross"));
+  assert.deepEqual(state.players[0].hand.map(x=>x.instanceId),["metang","metagross"]);
+  assert.equal(state.players[0].deck.length,2);
+  assert.equal(state.pendingAbility,undefined);
+  assert.equal(engine.getMatchActions(state).some(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="genesect"),false);
+});
+
+test("Metal Maker attaches selected Basic Steel Energy to chosen Pokémon and returns the rest to the bottom",()=>{
+  const own=player(card("metang",49213),[card("bench",45264)],[],
+    [card("steel1",8),card("viewed",50750),card("steel2",8),card("viewed2",45202),card("tail",50745)]);
+  let state=game(own,player(card("mega",48466)));
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="metang"));
+  const actions=engine.getMatchActions(state).filter(x=>x.type==="ABILITY_SELECT");
+  assert.deepEqual(actions.map(x=>[x.choiceInstanceId,x.targetInstanceId]),[
+    ["steel1","metang"],["steel1","bench"],["steel2","metang"],["steel2","bench"]]);
+  state=engine.applyMatchAction(state,actions.find(x=>x.choiceInstanceId==="steel1"&&x.targetInstanceId==="metang"));
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="ABILITY_SELECT"&&
+    x.choiceInstanceId==="steel2"&&x.targetInstanceId==="bench"));
+  assert.deepEqual(state.players[0].active.attached.map(x=>x.instanceId),["steel1"]);
+  assert.deepEqual(state.players[0].bench[0].attached.map(x=>x.instanceId),["steel2"]);
+  assert.equal(state.players[0].deck[0].instanceId,"tail");
+  assert.deepEqual(new Set(state.players[0].deck.slice(1).map(x=>x.instanceId)),new Set(["viewed","viewed2"]));
+  assert.equal(state.pendingAbility,undefined);
+});
+
+test("Rapid Vernier switches itself Active and can move Energy from multiple Pokémon",()=>{
+  const own=player(card("old-active",45202,[card("old-energy",47904)]),
+    [card("other-bench",45202,[card("bench-energy",47906)])],[card("iron-leaves",48793)]);
+  own.active.statuses=["ねむり"];
+  let state=game(own,player(card("mega",48466)));
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="BENCH_BASIC"&&x.sourceInstanceId==="iron-leaves"));
+  assert.equal(state.players[0].active.instanceId,"iron-leaves");
+  assert.equal(state.players[0].active.statuses?.length??0,0);
+  assert.equal(state.players[0].bench.find(x=>x.instanceId==="old-active").statuses.length,0);
+  assert.deepEqual(new Set(engine.getMatchActions(state).filter(x=>x.type==="ABILITY_SELECT").map(x=>x.choiceInstanceId)),
+    new Set(["old-energy","bench-energy"]));
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="ABILITY_SELECT"&&x.choiceInstanceId==="old-energy"));
+  state=engine.applyMatchAction(state,engine.getMatchActions(state).find(x=>x.type==="ABILITY_SELECT"&&x.choiceInstanceId==="bench-energy"));
+  assert.deepEqual(state.players[0].active.attached.map(x=>x.instanceId),["old-energy","bench-energy"]);
+  assert.equal(state.pendingAbility,undefined);
+});
+
+test("Bad Upper searches Basic Darkness Energy, attaches it to a Benched Dark Pokémon, and adds two counters",()=>{
+  const own=player(card("stunfisk",48397),[card("poochyena",45194)],[],[card("dark-energy",7),card("tail",50745)]);
+  let state=game(own,player(card("mega",48466)));
+  const action=engine.getMatchActions(state).find(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="stunfisk"&&
+    x.targetInstanceId==="poochyena"&&x.choiceInstanceId==="dark-energy");
+  assert.ok(action);
+  state=engine.applyMatchAction(state,action);
+  assert.equal(state.players[0].bench[0].attached[0].instanceId,"dark-energy");
+  assert.equal(state.players[0].bench[0].damage,20);
+  assert.equal(state.pendingKnockout,undefined);
+  assert.equal(state.players[0].deck[0].instanceId,"tail");
+});
+
+test("Bad Upper damage resolves a knockout on its own Bench target",()=>{
+  const own=player(card("stunfisk",48397),[card("poochyena",45194)],[],[card("dark-energy",7)]);
+  own.bench[0].damage=50;
+  let state=game(own,player(card("mega",48466)));
+  const action=engine.getMatchActions(state).find(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="stunfisk");
+  state=engine.applyMatchAction(state,action);
+  assert.equal(state.pendingKnockout.owner,0);
+  assert.equal(state.players[0].bench.length,0);
+  assert.ok(state.players[0].trash.some(x=>x.instanceId==="poochyena"));
+  assert.equal(state.players[0].trash.some(x=>x.instanceId==="dark-energy"),true);
 });
 
 test("Energy Switch moves a Basic Energy and Red Card respects prize threshold",()=>{
@@ -380,6 +661,25 @@ test("Festival Grounds enables two same attacks, each using own current Bench si
   assert.equal(current.turn,1);
 });
 
+test("Crown Opal protects Terapagos for the opponent's whole turn, then expires",()=>{
+  const tera=card("tera",46027,[card("grass",50745),card("water",50747),card("electric",47906)]);
+  const hooh=card("hooh",47315,[0,1,2,3].map(i=>card(`fire-${i}`,47904)));
+  let current=game(player(tera),player(hooh));
+  const crown=engine.getMatchActions(current).find(x=>x.type==="ATTACK"&&x.attackIndex===1);
+  assert.ok(crown);
+  current=engine.applyMatchAction(current,crown);
+  assert.equal(current.turn,1);
+  assert.equal(current.players[1].active.damage,180);
+  assert.deepEqual(current.attackProtection,[{owner:0,instanceId:"tera"}]);
+  const counterattack=engine.getMatchActions(current).find(x=>x.type==="ATTACK");
+  assert.ok(counterattack);
+  assert.equal(engine.calculateAttackDamage(current,counterattack),0);
+  current=engine.applyMatchAction(current,counterattack);
+  assert.equal(current.players[0].active.damage,0);
+  assert.equal(current.turn,0);
+  assert.deepEqual(current.attackProtection,[]);
+});
+
 test("when the first festival attack knocks out, second attack waits for prize and promotion",()=>{
   const own=player(card("dip",45703,[card("grass",50745)]),
     [card("thwackey",45700),card("applin",46669)],[card("stadium",45790)]);
@@ -419,4 +719,183 @@ test("Grow Grass Energy pays Grass cost and raises a Grass Pokémon's maximum HP
   current.players[0].active.damage=90;
   assert.equal(current.players[0].active.damage<engine.effectiveHP(current.players[0].active),true);
   assert.equal(engine.effectiveHP(card("mega",48466,[card("grow2",49711)])),300);
+});
+
+test("Cursed Bomb's five counters knock out the source and preserve the opponent target damage",()=>{
+  const own=player(card("own-active",45202),[card("samayoru",45894)]);
+  let current=game(own,player(card("foe-active",45202)));
+  const action=engine.getMatchActions(current).find(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="samayoru"&&x.targetInstanceId==="foe-active");
+  assert.ok(action);
+  current=engine.applyMatchAction(current,action);
+  assert.equal(current.players[1].active.damage,50);
+  assert.equal(current.players[0].bench.length,0);
+  assert.ok(current.players[0].trash.some(x=>x.instanceId==="samayoru"));
+  assert.equal(current.pendingKnockout.owner,0);
+  current=engine.applyMatchAction(current,find(current,"TAKE_PRIZE"));
+  current=engine.applyMatchAction(current,find(current,"RESOLVE_KNOCKOUT"));
+  assert.equal(current.turn,0);
+  assert.equal(current.pendingAbilityResolution,undefined);
+});
+
+test("Cursed Bomb's thirteen counters uses ordinary self-knockout promotion handling",()=>{
+  const own=player(card("dusknoir",45895),[card("own-bench",45202)]);
+  let current=game(own,player(card("foe-active",46027)));
+  current=engine.applyMatchAction(current,engine.getMatchActions(current).find(x=>x.type==="USE_ABILITY"&&
+    x.sourceInstanceId==="dusknoir"&&x.targetInstanceId==="foe-active"));
+  assert.equal(current.players[1].active.damage,130);
+  assert.equal(current.pendingKnockout.owner,0);
+  current=engine.applyMatchAction(current,find(current,"TAKE_PRIZE"));
+  current=engine.applyMatchAction(current,find(current,"PROMOTE_BENCH"));
+  assert.equal(current.players[0].active.instanceId,"own-bench");
+  assert.equal(current.turn,0);
+});
+
+test("Cursed Bomb stops for review when its selected target is also knocked out",()=>{
+  const own=player(card("samayoru",45894));
+  const foe=player(card("foe-active",45202));
+  foe.active.damage=10;
+  let current=game(own,foe);
+  current=engine.applyMatchAction(current,engine.getMatchActions(current).find(x=>x.type==="USE_ABILITY"&&
+    x.sourceInstanceId==="samayoru"&&x.targetInstanceId==="foe-active"));
+  assert.deepEqual(current.pendingKnockout.reason,"SIMULTANEOUS_KNOCKOUT_NEEDS_REVIEW");
+  assert.deepEqual(current.pendingKnockout.victims,[0,1]);
+  assert.equal(current.players[0].active.instanceId,"samayoru");
+  assert.equal(current.players[1].active.damage,60);
+  assert.deepEqual(engine.getMatchActions(current),[]);
+});
+
+test("Damp suppresses Cursed Bomb on either side of the field",()=>{
+  const own=player(card("damp",48554));
+  const foe=player(card("dusknoir",45895));
+  const current=game(own,foe);
+  current.turn=1;
+  assert.equal(engine.getMatchActions(current).some(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="dusknoir"),false);
+});
+
+test("Initialize suppresses field Rule Box abilities while sparing Future and opposing ability-protected Pokémon",()=>{
+  const own=player(card("iron-thorns",45676),[card("future",45253)]);
+  const foe=player(card("protected",49663),[card("ray",50396)]);
+  const current=game(own,foe);
+  assert.equal(engine.entries(own.bench[0],current).length,1);
+  assert.equal(engine.entries(foe.active,current).length,1);
+  assert.equal(engine.entries(foe.bench[0],current).length,0);
+  current.players[0].active=card("iron-thorns-reprint",48998);
+  assert.equal(engine.entries(current.players[0].bench[0],current).length,1);
+});
+
+test("Noctowl Jewel Seeker searches a Trainer after evolving with a Tera Pokémon in play",()=>{
+  const own=player(card("hoothoot",45200),[card("terapagos",46027)],[card("noctowl",46016)],
+    [card("supporter",49445),card("bottom",50745)]);
+  own.active.enteredTurn=2;
+  let current=game(own,player(card("foe",49956)));
+  const evolve=engine.getMatchActions(current).find(x=>x.type==="EVOLVE");
+  assert.ok(evolve);
+  current=engine.applyMatchAction(current,evolve);
+  assert.equal(current.pendingAbility.name,"ほうせきさがし");
+  assert.ok(engine.getMatchActions(current).some(x=>x.type==="ABILITY_SELECT"&&x.choiceInstanceId==="supporter"));
+  current=engine.applyMatchAction(current,engine.getMatchActions(current).find(x=>x.type==="ABILITY_SELECT"));
+  assert.equal(current.pendingAbility,undefined);
+  assert.ok(current.players[0].hand.some(x=>x.instanceId==="supporter"));
+});
+
+test("Cynthia Gabite searches only a Cynthia Pokémon and shuffles the deck",()=>{
+  let state=game(player(card("gabite",47338),[],[],[card("roselia",47300),card("budew",49956)]),
+    player(card("foe",48466)));
+  let actions=engine.getMatchActions(state).filter(x=>x.type==="USE_ABILITY"&&x.sourceInstanceId==="gabite");
+  assert.deepEqual(actions.map(x=>x.choiceInstanceId),["roselia"]);
+  state=engine.applyMatchAction(state,actions[0]);
+  assert.equal(state.players[0].hand.at(-1).instanceId,"roselia");
+  assert.equal(state.players[0].deck.some(x=>x.instanceId==="budew"),true);
+});
+
+test("Yamawalk from discard benches up to three Yamask and finishes automatically",()=>{
+  let state=game(player(card("yamask-attacker",49024,[card("psychic",50749)]),[],[],pile("deck",2)),
+    player(card("foe",48466)));
+  state.players[0].trash=[card("yamask-1",49024),card("yamask-2",49024),card("yamask-3",49024)];
+  let action=engine.getMatchActions(state).find(x=>x.type==="ATTACK");
+  assert.ok(action);
+  state=engine.applyMatchAction(state,action);
+  assert.equal(state.pendingAttack.type,"SEARCH_TRASH_TO_BENCH");
+  for(let i=0;i<3;i++){
+    action=engine.getMatchActions(state).find(x=>x.type==="ATTACK_SEARCH");
+    assert.ok(action);
+    state=engine.applyMatchAction(state,action);
+  }
+  assert.equal(state.players[0].bench.length,3);
+  assert.equal(state.players[0].trash.length,0);
+  assert.equal(state.pendingAttack,undefined);
+  assert.equal(state.turn,1);
+});
+
+test("Wave Strike attaches up to three discarded basic Fighting Energy across own Bench",()=>{
+  let state=game(player(card("mega-lucario",47762,[card("attached",6)]),
+    [card("target-1",48466),card("target-2",45202)],[],pile("deck",2)),player(card("foe",48466)));
+  state.players[0].trash=[card("fighting-1",6),card("fighting-2",6),card("fighting-3",6)];
+  let action=engine.getMatchActions(state).find(x=>x.type==="ATTACK"&&x.attackIndex===0);
+  assert.ok(action);
+  state=engine.applyMatchAction(state,action);
+  for(const targetInstanceId of ["target-1","target-2","target-1"]){
+    action=engine.getMatchActions(state).find(x=>x.type==="ATTACK_SEARCH"&&x.targetInstanceId===targetInstanceId);
+    assert.ok(action);
+    state=engine.applyMatchAction(state,action);
+  }
+  assert.equal(state.players[0].bench[0].attached.length,2);
+  assert.equal(state.players[0].bench[1].attached.length,1);
+  assert.equal(state.players[0].trash.length,0);
+  assert.equal(state.pendingAttack,undefined);
+});
+
+test("Torrent Pump can return three attached Energy and deal 120 to one Benched Pokémon",()=>{
+  let state=game(player(card("ogrepon",45729,[card("water",50747),card("fighting-1",6),card("fighting-2",6)]),[],[],pile("deck",2)),
+    player(card("foe",48466),[card("bench-target",49003)]));
+  let action=engine.getMatchActions(state).find(x=>x.type==="ATTACK"&&x.attackIndex===1);
+  assert.ok(action);
+  state=engine.applyMatchAction(state,action);
+  const returned=engine.getMatchActions(state).find(x=>x.type==="ATTACK_RETURN_ENERGY");
+  assert.ok(returned);
+  state=engine.applyMatchAction(state,returned);
+  assert.equal(state.players[0].active.attached.length,0);
+  assert.equal(state.players[0].deck.length,5);
+  action=engine.getMatchActions(state).find(x=>x.type==="ATTACK_BENCH_DAMAGE_TARGET");
+  assert.equal(action.targetInstanceId,"bench-target");
+  state=engine.applyMatchAction(state,action);
+  assert.equal(state.players[1].bench[0].damage,120);
+  assert.equal(state.players[1].active.damage,100);
+  assert.equal(state.turn,1);
+});
+
+test("Metagross forces the opponent to choose which Benched Pokémon becomes Active",()=>{
+  let state=game(player(card("metagross",50143,[card("steel",8)])),
+    player(card("active",48466),[card("choice-1",49003),card("choice-2",45202)]));
+  const attack=engine.getMatchActions(state).find(x=>x.type==="ATTACK"&&x.attackIndex===0);
+  assert.ok(attack);
+  state=engine.applyMatchAction(state,attack);
+  const choices=engine.getMatchActions(state).filter(x=>x.type==="ATTACK_OPPONENT_PROMOTE");
+  assert.deepEqual(choices.map(x=>x.player),[1,1]);
+  state=engine.applyMatchAction(state,choices[1]);
+  assert.equal(state.players[1].active.instanceId,"choice-2");
+  assert.ok(state.players[1].bench.some(x=>x.instanceId==="active"));
+  assert.equal(state.turn,1);
+});
+
+test("Dragapult Phantom Dive places six selected counters and resolves a Benched knockout",()=>{
+  const own=player(card("dragapult",45772,[card("fire",47904),card("psychic",50749)]));
+  const foe=player(card("foe-active",45772),[card("bench-target",45202)]);
+  let current=game(own,foe);
+  const attack=engine.attacks(own.active).find(x=>x.name==="ファントムダイブ");
+  assert.equal(attack.status,"supported");
+  let action=engine.getMatchActions(current).find(x=>x.type==="ATTACK"&&x.attackIndex===attack.index);
+  current=engine.applyMatchAction(current,action);
+  assert.equal(current.pendingAttack.remaining,6);
+  for(let i=0;i<6;i++){
+    action=engine.getMatchActions(current).find(x=>x.type==="ATTACK_COUNTER_PLACE"&&x.targetInstanceId==="bench-target");
+    assert.ok(action);
+    current=engine.applyMatchAction(current,action);
+  }
+  assert.equal(current.pendingKnockout.owner,1);
+  assert.equal(current.players[1].bench.length,0);
+  current=engine.applyMatchAction(current,engine.getMatchActions(current).find(x=>x.type==="TAKE_PRIZE"));
+  current=engine.applyMatchAction(current,engine.getMatchActions(current).find(x=>x.type==="RESOLVE_KNOCKOUT"));
+  assert.equal(current.turn,1);
+  assert.equal(current.pendingAttack,undefined);
 });

@@ -1,0 +1,473 @@
+[
+  {
+    "officialCardId": 49973,
+    "name": "スピンロトム",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/49973",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M2a/049973_P_SUPINROTOMU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M2a/49973.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/49973",
+      "name": "スピンロトム",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M2a/049973_P_SUPINROTOMU.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 49973,
+      "set_name": "M2a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M2a.gif",
+      "number": "213",
+      "set_total": "193",
+      "rarity": "rare_ar",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_ar.gif",
+      "author": [
+        "Yukihiro Tada"
+      ],
+      "pokedex_number": 479,
+      "pokemon_category": "プラズマポケモン",
+      "height": "0.3 m",
+      "weight": "0.3 kg",
+      "flavor_text": "ロトムが 入れる 家電製品は いくつか あるが いちばん 初めに 開発されたのは 扇風機だ。",
+      "stage": "たね",
+      "hp": 70,
+      "types": [
+        "Colorless"
+      ],
+      "abilities": [
+        {
+          "name": "ファンコール",
+          "effect": "最初の自分の番にだけ1回使える。自分の山札から、HPが「100」以下のColorlessポケモンを3枚まで選び、相手に見せて、手札に加える。そして山札を切る。この番、すでに別の「ファンコール」を使っていたなら、この特性は使えない。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless"
+          ],
+          "name": "とつげきランディング",
+          "damage": {
+            "amount": 70,
+            "suffix": ""
+          },
+          "effect": "場にスタジアムが出ていないなら、このワザは失敗。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Electric"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [
+          "Fighting"
+        ],
+        "value": "－30"
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "ハイクラスパック 「MEGAドリームex」",
+          "link": "https://www.pokemon-card.com/ex/m2a/"
+        }
+      ],
+      "print_key": "asia:M2a-213",
+      "card_key": "479|70|1|Yukihiro Tada|70|1",
+      "types_en": [
+        "Colorless"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50340,
+    "name": "アメタマ",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50340",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050340_P_AMETAMA.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M6/50340.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50340",
+      "name": "アメタマ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050340_P_AMETAMA.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 50340,
+      "set_name": "M6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6.gif",
+      "number": "002",
+      "set_total": "076",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "Gemi"
+      ],
+      "pokedex_number": 283,
+      "pokemon_category": "あめんぼポケモン",
+      "height": "0.5 m",
+      "weight": "1.7 kg",
+      "flavor_text": "頭の 先から 水飴に 似た 甘い 匂いの 液体を 出す。 水草の 多い 池に 棲む。",
+      "stage": "たね",
+      "hp": 50,
+      "types": [
+        "Grass"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless"
+          ],
+          "name": "ふえる",
+          "damage": null,
+          "effect": "自分の山札から「アメタマ」を2枚まで選び、ベンチに出す。そして山札を切る。"
+        },
+        {
+          "cost": [
+            "Grass"
+          ],
+          "name": "むしくい",
+          "damage": {
+            "amount": 10,
+            "suffix": ""
+          },
+          "effect": ""
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "拡張パック「ストームエメラルダ」",
+          "link": "https://www.pokemon-card.com/ex/m6/"
+        }
+      ],
+      "print_key": "asia:M6-2",
+      "card_key": "283|50|1|Gemi|None,10|1,1",
+      "types_en": [
+        "Grass"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50341,
+    "name": "アメモース",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50341",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050341_P_AMEMOSU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M6/50341.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50341",
+      "name": "アメモース",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050341_P_AMEMOSU.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 50341,
+      "set_name": "M6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6.gif",
+      "number": "003",
+      "set_total": "076",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "Kazumasa Yasukuni"
+      ],
+      "pokedex_number": 284,
+      "pokemon_category": "めだまポケモン",
+      "height": "0.8 m",
+      "weight": "3.6 kg",
+      "flavor_text": "雨に 濡れると 特徴的な 目玉模様の 触角が 重くなり 飛べなくなって しまう。",
+      "stage": "1 進化",
+      "hp": 110,
+      "types": [
+        "Grass"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless"
+          ],
+          "name": "こわいもよう",
+          "damage": {
+            "amount": 30,
+            "suffix": ""
+          },
+          "effect": "次の相手の番、このワザを受けたポケモンは、ワザが使えない。"
+        },
+        {
+          "cost": [
+            "Grass"
+          ],
+          "name": "バグパニック",
+          "damage": {
+            "amount": 50,
+            "suffix": "×"
+          },
+          "effect": "自分の山札を下から7枚オモテにして、その中にある、ワザ「バグパニック」を持つポケモンの枚数×50ダメージ。オモテにしたポケモンは山札にもどして切る。残りのカードはトラッシュする。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "evolve_from": "アメタマ",
+      "sources": [
+        {
+          "name": "拡張パック「ストームエメラルダ」",
+          "link": "https://www.pokemon-card.com/ex/m6/"
+        }
+      ],
+      "print_key": "asia:M6-3",
+      "card_key": "284|110|1|Kazumasa Yasukuni|30,50x|1,1",
+      "types_en": [
+        "Grass"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50344,
+    "name": "ミツハニー",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50344",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050344_P_MITSUHANI.jpg",
+      "fetchedAt": "2026-09-24T08:23:17.608446+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M6/50344.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50344",
+      "name": "ミツハニー",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050344_P_MITSUHANI.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 50344,
+      "set_name": "M6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6.gif",
+      "number": "006",
+      "set_total": "076",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "nisimono"
+      ],
+      "pokedex_number": 415,
+      "pokemon_category": "はちのこポケモン",
+      "height": "0.3 m",
+      "weight": "5.5 kg",
+      "flavor_text": "生まれたときから ３匹 一緒。 ビークインに 喜んでもらうため いつも 花の蜜を 集めている。",
+      "stage": "たね",
+      "hp": 50,
+      "types": [
+        "Grass"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Grass"
+          ],
+          "name": "ぱっときえる",
+          "damage": {
+            "amount": 10,
+            "suffix": ""
+          },
+          "effect": "このポケモンと、ついているすべてのカードを、手札にもどす。"
+        },
+        {
+          "cost": [
+            "Colorless",
+            "Colorless",
+            "Colorless"
+          ],
+          "name": "バグパニック",
+          "damage": {
+            "amount": 50,
+            "suffix": "×"
+          },
+          "effect": "自分の山札を下から7枚オモテにして、その中にある、ワザ「バグパニック」を持つポケモンの枚数×50ダメージ。オモテにしたポケモンは山札にもどして切る。残りのカードはトラッシュする。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "拡張パック「ストームエメラルダ」",
+          "link": "https://www.pokemon-card.com/ex/m6/"
+        }
+      ],
+      "print_key": "asia:M6-6",
+      "card_key": "415|50|1|nisimono|10,50x|1,3",
+      "types_en": [
+        "Grass"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50382,
+    "name": "イトマル",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50382",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050382_P_ITOMARU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M6/50382.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50382",
+      "name": "イトマル",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050382_P_ITOMARU.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 50382,
+      "set_name": "M6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6.gif",
+      "number": "044",
+      "set_total": "076",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "Apios"
+      ],
+      "pokedex_number": 167,
+      "pokemon_category": "いとはきポケモン",
+      "height": "0.5 m",
+      "weight": "8.5 kg",
+      "flavor_text": "細くて 丈夫な 糸を 張り巡らして 罠を 仕掛けると 獲物が かかるのを ひたすら待つ。",
+      "stage": "たね",
+      "hp": 60,
+      "types": [
+        "Dark"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Dark"
+          ],
+          "name": "どくばり",
+          "damage": null,
+          "effect": "相手のバトルポケモンをどくにする。"
+        },
+        {
+          "cost": [
+            "Colorless",
+            "Colorless",
+            "Colorless"
+          ],
+          "name": "バグパニック",
+          "damage": {
+            "amount": 50,
+            "suffix": "×"
+          },
+          "effect": "自分の山札を下から7枚オモテにして、その中にある、ワザ「バグパニック」を持つポケモンの枚数×50ダメージ。オモテにしたポケモンは山札にもどして切る。残りのカードはトラッシュする。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fighting"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "拡張パック「ストームエメラルダ」",
+          "link": "https://www.pokemon-card.com/ex/m6/"
+        }
+      ],
+      "print_key": "asia:M6-44",
+      "card_key": "167|60|1|Apios|None,50x|1,3",
+      "types_en": [
+        "Darkness"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  }
+]

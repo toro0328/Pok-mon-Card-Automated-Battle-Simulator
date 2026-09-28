@@ -95,7 +95,11 @@ test("passive reduction affects attack damage only; unknown field ability stops 
   const game = state(player({ active: instance("tank", 45578) }));
   assert.equal(engine.incomingAttackDamage(game, "tank", 20), 0);
   assert.equal(engine.incomingAttackDamage(game, "tank", 100), 70);
-  assert.throws(() => engine.getLegalActions(state(player({ active: instance("unknown", 45233) }))),
+  const unsupportedDb=structuredClone(db),unknown=unsupportedDb.cards.find(x=>x.officialCardId===45233);
+  unknown.raw.abilities[0].effect="未知の特性効果。";
+  const unsupportedCatalog=structuredClone(catalog);unsupportedCatalog.cardCount=unsupportedDb.cards.length;
+  const unsupportedEngine=new AbilityEngine(new CardRepository(unsupportedDb),unsupportedCatalog);
+  assert.throws(() => unsupportedEngine.getLegalActions(state(player({ active: instance("unknown", 45233) }))),
     /Unsupported ability/);
 });
 

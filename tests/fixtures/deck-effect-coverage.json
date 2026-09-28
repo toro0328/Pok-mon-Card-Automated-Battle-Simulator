@@ -1,0 +1,1574 @@
+[
+  {
+    "officialCardId": 50341,
+    "name": "アメモース",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50341",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050341_P_AMEMOSU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M6/50341.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50341",
+      "name": "アメモース",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050341_P_AMEMOSU.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 50341,
+      "set_name": "M6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6.gif",
+      "number": "003",
+      "set_total": "076",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "Kazumasa Yasukuni"
+      ],
+      "pokedex_number": 284,
+      "pokemon_category": "めだまポケモン",
+      "height": "0.8 m",
+      "weight": "3.6 kg",
+      "flavor_text": "雨に 濡れると 特徴的な 目玉模様の 触角が 重くなり 飛べなくなって しまう。",
+      "stage": "1 進化",
+      "hp": 110,
+      "types": [
+        "Grass"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless"
+          ],
+          "name": "こわいもよう",
+          "damage": {
+            "amount": 30,
+            "suffix": ""
+          },
+          "effect": "次の相手の番、このワザを受けたポケモンは、ワザが使えない。"
+        },
+        {
+          "cost": [
+            "Grass"
+          ],
+          "name": "バグパニック",
+          "damage": {
+            "amount": 50,
+            "suffix": "×"
+          },
+          "effect": "自分の山札を下から7枚オモテにして、その中にある、ワザ「バグパニック」を持つポケモンの枚数×50ダメージ。オモテにしたポケモンは山札にもどして切る。残りのカードはトラッシュする。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "evolve_from": "アメタマ",
+      "sources": [
+        {
+          "name": "拡張パック「ストームエメラルダ」",
+          "link": "https://www.pokemon-card.com/ex/m6/"
+        }
+      ],
+      "print_key": "asia:M6-3",
+      "card_key": "284|110|1|Kazumasa Yasukuni|30,50x|1,1",
+      "types_en": [
+        "Grass"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50340,
+    "name": "アメタマ",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50340",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050340_P_AMETAMA.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M6/50340.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50340",
+      "name": "アメタマ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050340_P_AMETAMA.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 50340,
+      "set_name": "M6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6.gif",
+      "number": "002",
+      "set_total": "076",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "Gemi"
+      ],
+      "pokedex_number": 283,
+      "pokemon_category": "あめんぼポケモン",
+      "height": "0.5 m",
+      "weight": "1.7 kg",
+      "flavor_text": "頭の 先から 水飴に 似た 甘い 匂いの 液体を 出す。 水草の 多い 池に 棲む。",
+      "stage": "たね",
+      "hp": 50,
+      "types": [
+        "Grass"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless"
+          ],
+          "name": "ふえる",
+          "damage": null,
+          "effect": "自分の山札から「アメタマ」を2枚まで選び、ベンチに出す。そして山札を切る。"
+        },
+        {
+          "cost": [
+            "Grass"
+          ],
+          "name": "むしくい",
+          "damage": {
+            "amount": 10,
+            "suffix": ""
+          },
+          "effect": ""
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "拡張パック「ストームエメラルダ」",
+          "link": "https://www.pokemon-card.com/ex/m6/"
+        }
+      ],
+      "print_key": "asia:M6-2",
+      "card_key": "283|50|1|Gemi|None,10|1,1",
+      "types_en": [
+        "Grass"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50344,
+    "name": "ミツハニー",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50344",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050344_P_MITSUHANI.jpg",
+      "fetchedAt": "2026-09-24T08:23:17.608446+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M6/50344.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50344",
+      "name": "ミツハニー",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050344_P_MITSUHANI.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 50344,
+      "set_name": "M6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6.gif",
+      "number": "006",
+      "set_total": "076",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "nisimono"
+      ],
+      "pokedex_number": 415,
+      "pokemon_category": "はちのこポケモン",
+      "height": "0.3 m",
+      "weight": "5.5 kg",
+      "flavor_text": "生まれたときから ３匹 一緒。 ビークインに 喜んでもらうため いつも 花の蜜を 集めている。",
+      "stage": "たね",
+      "hp": 50,
+      "types": [
+        "Grass"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Grass"
+          ],
+          "name": "ぱっときえる",
+          "damage": {
+            "amount": 10,
+            "suffix": ""
+          },
+          "effect": "このポケモンと、ついているすべてのカードを、手札にもどす。"
+        },
+        {
+          "cost": [
+            "Colorless",
+            "Colorless",
+            "Colorless"
+          ],
+          "name": "バグパニック",
+          "damage": {
+            "amount": 50,
+            "suffix": "×"
+          },
+          "effect": "自分の山札を下から7枚オモテにして、その中にある、ワザ「バグパニック」を持つポケモンの枚数×50ダメージ。オモテにしたポケモンは山札にもどして切る。残りのカードはトラッシュする。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "拡張パック「ストームエメラルダ」",
+          "link": "https://www.pokemon-card.com/ex/m6/"
+        }
+      ],
+      "print_key": "asia:M6-6",
+      "card_key": "415|50|1|nisimono|10,50x|1,3",
+      "types_en": [
+        "Grass"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45580,
+    "name": "イトマル",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45580",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV5a/045580_P_ITOMARU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV5a/45580.json"
+    },
+    "raw": {
+      "jp_id": 45580,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45580",
+      "name": "イトマル",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV5a/045580_P_ITOMARU.jpg",
+      "card_type": "Pokémon",
+      "set_name": "SV5a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV5a.gif",
+      "number": "004",
+      "set_total": "066",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "Saya Tsuruta"
+      ],
+      "pokedex_number": 167,
+      "pokemon_category": "いとはきポケモン",
+      "height": "0.5 m",
+      "weight": "8.5 kg",
+      "flavor_text": "丈夫な 糸を より合わせ 魚ポケモンを 捕らえる 網を こしらえる 漁師も いるぞ。",
+      "stage": "たね",
+      "hp": 60,
+      "types": [
+        "Grass"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Grass"
+          ],
+          "name": "むしくい",
+          "damage": {
+            "amount": 20,
+            "suffix": ""
+          },
+          "effect": ""
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "強化拡張パック「クリムゾンヘイズ」",
+          "link": "https://www.pokemon-card.com/products/sv/SV5a.html"
+        }
+      ],
+      "print_key": "asia:SV5a-4",
+      "card_key": "167|60|1|Saya Tsuruta|20|1",
+      "types_en": [
+        "Grass"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45201,
+    "name": "ヨルノズク",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45201",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV5K/045201_P_YORUNOZUKU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV5K/45201.json"
+    },
+    "raw": {
+      "jp_id": 45201,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45201",
+      "name": "ヨルノズク",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV5K/045201_P_YORUNOZUKU.jpg",
+      "card_type": "Pokémon",
+      "set_name": "SV5K",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV5K.gif",
+      "number": "055",
+      "set_total": "071",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "toi8"
+      ],
+      "pokedex_number": 164,
+      "pokemon_category": "ふくろうポケモン",
+      "height": "1.6 m",
+      "weight": "40.8 kg",
+      "flavor_text": "特殊な つくりの 両目は  わずかな 光さえ あれば  暗闇でも 昼のように 見える。",
+      "stage": "1 進化",
+      "hp": 110,
+      "types": [
+        "Colorless"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless",
+            "Colorless"
+          ],
+          "name": "かぎづめハント",
+          "damage": {
+            "amount": 70,
+            "suffix": ""
+          },
+          "effect": "のぞむなら、自分の山札から好きなカードを2枚まで選び、手札に加える。そして山札を切る。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Electric"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [
+          "Fighting"
+        ],
+        "value": "－30"
+      },
+      "retreat": 1,
+      "evolve_from": "ホーホー",
+      "sources": [
+        {
+          "name": "拡張パック「ワイルドフォース」",
+          "link": "https://www.pokemon-card.com/products/sv/sv5.html"
+        }
+      ],
+      "print_key": "asia:SV5K-55",
+      "card_key": "164|110|1|toi8|70|2",
+      "types_en": [
+        "Colorless"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 46019,
+    "name": "スピンロトム",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46019",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV7/046019_P_SUPINROTOMU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV7/46019.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/46019",
+      "name": "スピンロトム",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV7/046019_P_SUPINROTOMU.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 46019,
+      "set_name": "SV7",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV7.gif",
+      "number": "080",
+      "set_total": "102",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "Toshinao Aoki"
+      ],
+      "pokedex_number": 479,
+      "pokemon_category": "プラズマポケモン",
+      "height": "0.3 m",
+      "weight": "0.3 kg",
+      "flavor_text": "ロトムが 入れる 家電製品は いくつか あるが いちばん 初めに 開発されたのは 扇風機だ。",
+      "stage": "たね",
+      "hp": 70,
+      "types": [
+        "Colorless"
+      ],
+      "abilities": [
+        {
+          "name": "ファンコール",
+          "effect": "最初の自分の番にだけ1回使える。自分の山札から、HPが「100」以下のColorlessポケモンを3枚まで選び、相手に見せて、手札に加える。そして山札を切る。この番、すでに別の「ファンコール」を使っていたなら、この特性は使えない。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless"
+          ],
+          "name": "とつげきランディング",
+          "damage": {
+            "amount": 70,
+            "suffix": ""
+          },
+          "effect": "場にスタジアムが出ていないなら、このワザは失敗。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Electric"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [
+          "Fighting"
+        ],
+        "value": "－30"
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "拡張パック「ステラミラクル」",
+          "link": "https://www.pokemon-card.com/ex/sv7/"
+        }
+      ],
+      "print_key": "asia:SV7-80",
+      "card_key": "479|70|1|Toshinao Aoki|70|1",
+      "types_en": [
+        "Colorless"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 46197,
+    "name": "パーフェクトミキサー",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "item",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46197",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SVLS/046197_T_PAFUEKUTOMIKISA.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SVLS/46197.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/46197",
+      "name": "パーフェクトミキサー",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SVLS/046197_T_PAFUEKUTOMIKISA.jpg",
+      "card_type": "グッズ",
+      "jp_id": 46197,
+      "tags": [
+        "ACE SPEC"
+      ],
+      "set_name": "SVLS",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SVLS.gif",
+      "number": "014",
+      "set_total": "022",
+      "effect": "自分の山札から好きなカードを5枚まで選び、トラッシュする。そして山札を切る。",
+      "author": [
+        "Toyste Beach"
+      ],
+      "rule_box": "ACE SPECカードは、デッキに1枚しか入れられない。",
+      "sources": [
+        {
+          "name": "スターターセット テラスタイプ：ステラ ソウブレイズex",
+          "link": "https://www.pokemon-card.com/products/sv/svl.html"
+        }
+      ],
+      "print_key": "asia:SVLS-14"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50406,
+    "name": "ギリー",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "supporter",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50406",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050406_T_GIRI.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M6/50406.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50406",
+      "name": "ギリー",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M6/050406_T_GIRI.jpg",
+      "card_type": "サポート",
+      "jp_id": 50406,
+      "set_name": "M6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M6.gif",
+      "number": "068",
+      "set_total": "076",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "自分の山札からサポートとスタジアムを合計3枚まで選び、相手に見せて、手札に加える。そして山札を切る。",
+      "author": [
+        "Sanosuke Sakuma"
+      ],
+      "sources": [
+        {
+          "name": "拡張パック「ストームエメラルダ」",
+          "link": "https://www.pokemon-card.com/ex/m6/"
+        }
+      ],
+      "print_key": "asia:M6-68"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45637,
+    "name": "スイレンのお世話",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "supporter",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45637",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV5a/045637_T_SUIRENNOOSEWA.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV5a/45637.json"
+    },
+    "raw": {
+      "jp_id": 45637,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45637",
+      "name": "スイレンのお世話",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV5a/045637_T_SUIRENNOOSEWA.jpg",
+      "card_type": "サポート",
+      "set_name": "SV5a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV5a.gif",
+      "number": "064",
+      "set_total": "066",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "自分のトラッシュからポケモン（「ルールを持つポケモン」をのぞく）と基本エネルギーを合計3枚まで選び、相手に見せて、手札に加える。",
+      "author": [
+        "Atsushi Furusawa"
+      ],
+      "sources": [
+        {
+          "name": "強化拡張パック「クリムゾンヘイズ」",
+          "link": "https://www.pokemon-card.com/products/sv/SV5a.html"
+        }
+      ],
+      "print_key": "asia:SV5a-64"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45939,
+    "name": "夜のアカデミー",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "stadium",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45939",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6a/045939_T_YORUNOAKADEMI.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV6a/45939.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45939",
+      "name": "夜のアカデミー",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6a/045939_T_YORUNOAKADEMI.jpg",
+      "card_type": "スタジアム",
+      "jp_id": 45939,
+      "set_name": "SV6a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6a.gif",
+      "number": "064",
+      "set_total": "064",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "おたがいのプレイヤーは、自分の番ごとに1回、自分の手札を1枚選び、山札の上にもどしてよい。",
+      "author": [
+        "AYUMI ODASHIMA"
+      ],
+      "sources": [
+        {
+          "name": "強化拡張パック「ナイトワンダラー」",
+          "link": "https://www.pokemon-card.com/products/sv/sv6a.html"
+        }
+      ],
+      "print_key": "asia:SV6a-64"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 47069,
+    "name": "Nのゾロアークex",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47069",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV9/047069_P_NNOZOROAKUEX.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV9/47069.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/47069",
+      "name": "Nのゾロアークex",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV9/047069_P_NNOZOROAKUEX.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 47069,
+      "set_name": "SV9",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV9.gif",
+      "number": "061",
+      "set_total": "100",
+      "rarity": "rare_rr",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_rr.gif",
+      "author": [
+        "takuyoa"
+      ],
+      "stage": "1 進化",
+      "hp": 280,
+      "types": [
+        "Dark"
+      ],
+      "abilities": [
+        {
+          "name": "とりひき",
+          "effect": "自分の番に、自分の手札を1枚トラッシュするなら、1回使える。自分の山札を2枚引く。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Dark",
+            "Dark"
+          ],
+          "name": "ナイトジョーカー",
+          "damage": null,
+          "effect": "自分のベンチの「Nのポケモン」が持つワザを1つ選び、このワザとして使う。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Grass"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 2,
+      "evolve_from": "Nのゾロア",
+      "sources": [
+        {
+          "name": "拡張パック「 バトルパートナーズ」",
+          "link": "https://www.pokemon-card.com/ex/sv9/"
+        }
+      ],
+      "types_en": [
+        "Darkness"
+      ],
+      "pokedex_number": 571,
+      "print_key": "asia:SV9-61",
+      "card_key": "571|280|2|takuyoa|None|2"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 48651,
+    "name": "Nのゼクロム",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/48651",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M2a/048651_P_NNOZEKUROMU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M2a/48651.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/48651",
+      "name": "Nのゼクロム",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M2a/048651_P_NNOZEKUROMU.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 48651,
+      "set_name": "M2a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M2a.gif",
+      "number": "129",
+      "set_total": "193",
+      "author": [
+        "AKIRA EGAWA"
+      ],
+      "pokedex_number": 644,
+      "pokemon_category": "こくいんポケモン",
+      "height": "2.9 m",
+      "weight": "345.0 kg",
+      "flavor_text": "しっぽの 内部が モーターのように 回ると 何本もの 稲妻が 発生して 周囲を つらぬく。",
+      "stage": "たね",
+      "hp": 130,
+      "types": [
+        "Dragon"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless",
+            "Colorless",
+            "Colorless"
+          ],
+          "name": "ひきさく",
+          "damage": {
+            "amount": 70,
+            "suffix": ""
+          },
+          "effect": "このワザのダメージは、相手のバトルポケモンにかかっている効果を計算しない。"
+        },
+        {
+          "cost": [
+            "Fire",
+            "Electric",
+            "Electric",
+            "Colorless"
+          ],
+          "name": "ランページサンダー",
+          "damage": {
+            "amount": 250,
+            "suffix": ""
+          },
+          "effect": "次の自分の番、このポケモンはワザが使えない。"
+        }
+      ],
+      "weakness": {
+        "type": [],
+        "value": null
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 2,
+      "sources": [
+        {
+          "name": "ハイクラスパック 「MEGAドリームex」",
+          "link": "https://www.pokemon-card.com/ex/m2a/"
+        }
+      ],
+      "print_key": "asia:M2a-129",
+      "card_key": "644|130|2|AKIRA EGAWA|70,250|3,4",
+      "types_en": [
+        "Dragon"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 47082,
+    "name": "Nのレシラム",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47082",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV9/047082_P_NNORESHIRAMU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV9/47082.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/47082",
+      "name": "Nのレシラム",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV9/047082_P_NNORESHIRAMU.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 47082,
+      "set_name": "SV9",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV9.gif",
+      "number": "074",
+      "set_total": "100",
+      "rarity": "rare_r_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_r_c.gif",
+      "author": [
+        "rika"
+      ],
+      "pokedex_number": 643,
+      "pokemon_category": "はくようポケモン",
+      "height": "3.2 m",
+      "weight": "330.0 kg",
+      "flavor_text": "人が 真実を 蔑ろにして 欲に まみれると 炎で 国を 焼きつくすと 神話に 描かれた。",
+      "stage": "たね",
+      "hp": 130,
+      "types": [
+        "Dragon"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Fire",
+            "Electric"
+          ],
+          "name": "パワーレイジ",
+          "damage": {
+            "amount": 20,
+            "suffix": "×"
+          },
+          "effect": "このポケモンにのっているダメカンの数×20ダメージ。"
+        },
+        {
+          "cost": [
+            "Fire",
+            "Fire",
+            "Electric",
+            "Colorless"
+          ],
+          "name": "イノセントフレイム",
+          "damage": {
+            "amount": 170,
+            "suffix": ""
+          },
+          "effect": ""
+        }
+      ],
+      "weakness": {
+        "type": [],
+        "value": null
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 2,
+      "sources": [
+        {
+          "name": "拡張パック「 バトルパートナーズ」",
+          "link": "https://www.pokemon-card.com/ex/sv9/"
+        }
+      ],
+      "print_key": "asia:SV9-74",
+      "card_key": "643|130|2|rika|20x,170|2,4",
+      "types_en": [
+        "Dragon"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45746,
+    "name": "マシマシラ",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45746",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045746_P_MASHIMASHIRA.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV6/45746.json"
+    },
+    "raw": {
+      "jp_id": 45746,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45746",
+      "name": "マシマシラ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045746_P_MASHIMASHIRA.jpg",
+      "card_type": "Pokémon",
+      "set_name": "SV6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6.gif",
+      "number": "055",
+      "set_total": "101",
+      "rarity": "rare_r_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_r_c.gif",
+      "author": [
+        "kodama"
+      ],
+      "pokedex_number": 1015,
+      "pokemon_category": "けらいポケモン",
+      "height": "1.0 m",
+      "weight": "12.2 kg",
+      "flavor_text": "安全な 場所から 強烈な めまいを 引き起こす 念力を 放って 敵を 翻弄する。",
+      "stage": "たね",
+      "hp": 110,
+      "types": [
+        "Psychic"
+      ],
+      "abilities": [
+        {
+          "name": "アドレナブレイン",
+          "effect": "このポケモンにDarkエネルギーがついているなら、自分の番に1回使える。自分の場のポケモン1匹にのっているダメカンを3個まで選び、相手の場のポケモン1匹にのせ替える。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Psychic",
+            "Colorless"
+          ],
+          "name": "サイコトリップ",
+          "damage": {
+            "amount": 60,
+            "suffix": ""
+          },
+          "effect": "相手のバトルポケモンをこんらんにする。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Dark"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [
+          "Fighting"
+        ],
+        "value": "－30"
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "拡張パック「変幻の仮面」",
+          "link": "https://www.pokemon-card.com/ex/sv6/"
+        }
+      ],
+      "print_key": "asia:SV6-55",
+      "card_key": "1015|110|1|kodama|60|2",
+      "types_en": [
+        "Psychic"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45773,
+    "name": "シャリタツ",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45773",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045773_P_SHIXYARITATSU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV6/45773.json"
+    },
+    "raw": {
+      "jp_id": 45773,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45773",
+      "name": "シャリタツ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6/045773_P_SHIXYARITATSU.jpg",
+      "card_type": "Pokémon",
+      "set_name": "SV6",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6.gif",
+      "number": "082",
+      "set_total": "101",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "author": [
+        "Jerky"
+      ],
+      "pokedex_number": 978,
+      "pokemon_category": "ぎたいポケモン",
+      "height": "0.3 m",
+      "weight": "8.0 kg",
+      "flavor_text": "非常に 悪賢い ポケモン。 弱ったふりで 獲物を おびき寄せ 仲間の ポケモンに 襲わせる。",
+      "stage": "たね",
+      "hp": 70,
+      "types": [
+        "Dragon"
+      ],
+      "abilities": [
+        {
+          "name": "きゃくよせ",
+          "effect": "このポケモンがバトル場にいるなら、自分の番に1回使える。自分の山札を上から6枚見て、その中からサポートを1枚選び、相手に見せて、手札に加える。残りのカードは山札にもどして切る。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Fire",
+            "Water"
+          ],
+          "name": "なみのり",
+          "damage": {
+            "amount": 50,
+            "suffix": ""
+          },
+          "effect": ""
+        }
+      ],
+      "weakness": {
+        "type": [],
+        "value": null
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "拡張パック「変幻の仮面」",
+          "link": "https://www.pokemon-card.com/ex/sv6/"
+        }
+      ],
+      "print_key": "asia:SV6-82",
+      "card_key": "978|70|1|Jerky|50|2",
+      "types_en": [
+        "Dragon"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45914,
+    "name": "モモワロウex",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45914",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6a/045914_P_MOMOWAROUEX.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV6a/45914.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45914",
+      "name": "モモワロウex",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6a/045914_P_MOMOWAROUEX.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 45914,
+      "tags": [
+        "ex"
+      ],
+      "set_name": "SV6a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6a.gif",
+      "number": "039",
+      "set_total": "064",
+      "rarity": "rare_rr",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_rr.gif",
+      "author": [
+        "aky CG Works"
+      ],
+      "stage": "たね",
+      "hp": 190,
+      "types": [
+        "Dark"
+      ],
+      "abilities": [
+        {
+          "name": "しはいのくさり",
+          "effect": "自分の番に1回使える。自分のベンチのDarkポケモン（「モモワロウex」をのぞく）を1匹選び、バトルポケモンと入れ替える。その後、新しいバトルポケモンをどくにする。この番、すでに別の「しはいのくさり」を使っていたなら、この特性は使えない。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Dark",
+            "Dark"
+          ],
+          "name": "イライラバースト",
+          "damage": {
+            "amount": 60,
+            "suffix": "×"
+          },
+          "effect": "相手がすでにとったサイドの枚数×60ダメージ。"
+        }
+      ],
+      "rule_box": "ポケモンexがきぜつしたとき、相手はサイドを2枚とる。",
+      "weakness": {
+        "type": [
+          "Fighting"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "強化拡張パック「ナイトワンダラー」",
+          "link": "https://www.pokemon-card.com/products/sv/sv6a.html"
+        }
+      ],
+      "types_en": [
+        "Darkness"
+      ],
+      "pokedex_number": 1025,
+      "print_key": "asia:SV6a-39",
+      "card_key": "1025|190|1|aky CG Works|60x|2"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 47097,
+    "name": "Nのポイントアップ",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "item",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47097",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV9/047097_T_NNOPOINTOAPPU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV9/47097.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/47097",
+      "name": "Nのポイントアップ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV9/047097_T_NNOPOINTOAPPU.jpg",
+      "card_type": "グッズ",
+      "jp_id": 47097,
+      "set_name": "SV9",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV9.gif",
+      "number": "089",
+      "set_total": "100",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "自分のトラッシュから基本エネルギーを1枚選び、ベンチの「Nのポケモン」につける。",
+      "author": [
+        "Toyste Beach"
+      ],
+      "sources": [
+        {
+          "name": "拡張パック「 バトルパートナーズ」",
+          "link": "https://www.pokemon-card.com/ex/sv9/"
+        }
+      ],
+      "print_key": "asia:SV9-89"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 45932,
+    "name": "くさりもち",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "tool",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45932",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV6a/045932_T_KUSARIMOCHI.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV6a/45932.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45932",
+      "name": "くさりもち",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV6a/045932_T_KUSARIMOCHI.jpg",
+      "card_type": "ポケモンのどうぐ",
+      "jp_id": 45932,
+      "set_name": "SV6a",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV6a.gif",
+      "number": "057",
+      "set_total": "064",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "このカードをつけているどくのポケモンが使うワザの、相手のバトルポケモンへのダメージは「+40」される。",
+      "author": [
+        "5ban Graphics"
+      ],
+      "sources": [
+        {
+          "name": "強化拡張パック「ナイトワンダラー」",
+          "link": "https://www.pokemon-card.com/products/sv/sv6a.html"
+        }
+      ],
+      "print_key": "asia:SV6a-57"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 25405,
+    "name": "ジャッジマン",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "supporter",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/25405",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/Em/025405_T_JAJJIMAN.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/Em/25405.json"
+    },
+    "raw": {
+      "jp_id": 25405,
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/25405",
+      "name": "ジャッジマン",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/Em/025405_T_JAJJIMAN.jpg",
+      "card_type": "サポート",
+      "set_name": "Em",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/Em.gif",
+      "number": "014",
+      "set_total": "014",
+      "effect": "おたがいのプレイヤーは、それぞれ、手札をすべて山札にもどし、山札を切る。その後、それぞれの山札からカードを4枚引く。\nサポーターは、自分の番に1枚だけ使える。使ったら、自分のバトル場の横におき、自分の番の終わりにトラッシュ。",
+      "author": [
+        "Kouki Saitou"
+      ],
+      "sources": [
+        {
+          "name": "ポケモンカードゲーム エキスパートデッキ リーフィアVSメタグロス ＋Online（メタグロスデッキ）",
+          "link": null
+        }
+      ],
+      "print_key": "asia:Em-14"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 46597,
+    "name": "からておうの稽古",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "supporter",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46597",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SVM/046597_T_KARATEOUNOKEIKO.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SVM/46597.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/46597",
+      "name": "からておうの稽古",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SVM/046597_T_KARATEOUNOKEIKO.jpg",
+      "card_type": "サポート",
+      "jp_id": 46597,
+      "set_name": "SVM",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SVM.gif",
+      "number": "143",
+      "set_total": "175",
+      "effect": "この番、自分のポケモンが使うワザの、相手のバトル場の「ポケモンex」へのダメージは「+40」される。",
+      "author": [
+        "GOSSAN"
+      ],
+      "sources": [
+        {
+          "name": "スタートデッキGenerations ピカチュウex・カビゴンex",
+          "link": "https://www.pokemon-card.com/ex/svm/"
+        },
+        {
+          "name": "スタートデッキ Generations",
+          "link": "https://www.pokemon-card.com/ex/svm"
+        }
+      ],
+      "print_key": "asia:SVM-143"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 47105,
+    "name": "Nの城",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "stadium",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47105",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV9/047105_T_NNOSHIRO.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV9/47105.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/47105",
+      "name": "Nの城",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV9/047105_T_NNOSHIRO.jpg",
+      "card_type": "スタジアム",
+      "jp_id": 47105,
+      "set_name": "SV9",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV9.gif",
+      "number": "097",
+      "set_total": "100",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "おたがいの場の「Nのポケモン」全員のにげるためのエネルギーは、すべてなくなる。",
+      "author": [
+        "AYUMI ODASHIMA"
+      ],
+      "sources": [
+        {
+          "name": "拡張パック「 バトルパートナーズ」",
+          "link": "https://www.pokemon-card.com/ex/sv9/"
+        }
+      ],
+      "print_key": "asia:SV9-97"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 47489,
+    "name": "ロケット団の監視塔",
+    "regulation": null,
+    "cardType": "trainer",
+    "trainerType": "stadium",
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47489",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV10/047489_T_ROKETTODANNOKANSHITOU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV10/47489.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/47489",
+      "name": "ロケット団の監視塔",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV10/047489_T_ROKETTODANNOKANSHITOU.jpg",
+      "card_type": "スタジアム",
+      "jp_id": 47489,
+      "set_name": "SV10",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV10.gif",
+      "number": "096",
+      "set_total": "098",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "effect": "おたがいの場のColorlessポケモン全員の特性は、すべてなくなる。",
+      "author": [
+        "AYUMI ODASHIMA"
+      ],
+      "sources": [
+        {
+          "name": "拡張パック「ロケット団の栄光」",
+          "link": "https://www.pokemon-card.com/ex/sv10/"
+        }
+      ],
+      "print_key": "asia:SV10-96"
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  }
+]

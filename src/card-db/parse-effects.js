@@ -18,6 +18,70 @@ const PATTERNS = [
     convert: match => [{ type: "DAMAGE", target: "ATTACKING_POKEMON", amount: Number(match[1]), source: "ATTACK_EFFECT" }]
   },
   {
+    expression: /^相手の山札を上から([1-9][0-9]*)枚トラッシュする。$/,
+    convert: match => [{type:"MILL_OPPONENT_DECK",count:Number(match[1])}]
+  },
+  {
+    expression: /^自分のトラッシュから「([^」]+)」を([1-9][0-9]*)枚まで選び、ベンチに出す。$/,
+    convert: match => [{type:"SEARCH_TRASH_TO_BENCH",name:match[1],max:Number(match[2])}]
+  },
+  {
+    expression: /^自分のトラッシュからポケモンを1枚選び、相手に見せて、手札に加える。$/,
+    convert: () => [{type:"SEARCH_TRASH_TO_HAND",filter:"pokemon",max:1}]
+  },
+  {
+    expression: /^のぞむなら、自分の山札から好きなカードを1枚選び、手札に加える。そして山札を切る。$/,
+    convert: () => [{type:"SEARCH_DECK",max:1,filter:"any",destination:"HAND",optional:true}]
+  },
+  {
+    expression: /^自分のトラッシュから「基本Fightingエネルギー」を([1-9][0-9]*)枚まで選び、ベンチポケモンに好きなようにつける。$/,
+    convert: match => [{type:"ATTACH_BASIC_FIGHTING_FROM_TRASH_TO_BENCH",max:Number(match[1])}]
+  },
+  {
+    expression: /^のぞむなら、このポケモンについているエネルギーを3個選び、山札にもどして切る。その場合、相手のベンチポケモン1匹にも、120ダメージ。［ベンチは弱点・抵抗力を計算しない。］$/,
+    convert: () => [{type:"OPTIONAL_RETURN_THREE_ENERGY_FOR_BENCH_DAMAGE"},{type:"DAMAGE_CHOSEN_OPPONENT_BENCH",amount:120}]
+  },
+  {
+    expression: /^のぞむなら、このポケモンについているSteelエネルギーを3個トラッシュし、([1-9][0-9]*)ダメージ追加。$/,
+    convert: match => [{type:"OPTIONAL_DISCARD_THREE_STEEL_ENERGY_FOR_DAMAGE",amount:Number(match[1])}]
+  },
+  {
+    expression: /^のぞむなら、自分の手札が([1-9][0-9]*)枚になるように、山札を引く。$/,
+    convert: match => [{type:"DRAW_UNTIL_HAND_SIZE",player:"SELF",size:Number(match[1])}]
+  },
+  {
+    expression: /^相手のバトルポケモンに、ダメカンを([1-9][0-9]*)個のせる。$/,
+    convert: match => [{type:"PLACE_DAMAGE_COUNTERS",target:"DEFENDING_ACTIVE",count:Number(match[1])}]
+  },
+  {
+    expression: /^自分の手札をすべてトラッシュし、山札を([1-9][0-9]*)枚引く。$/,
+    convert: match => [{type:"DISCARD_HAND_DRAW",count:Number(match[1])}]
+  },
+  {
+    expression: /^このポケモンにのっているダメカンの数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{type:"SET_DAMAGE",basis:"OWN_DAMAGE_COUNTERS",perCounter:Number(match[1])}]
+  },
+  {
+    expression: /^相手のトラッシュにある基本エネルギーの枚数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{type:"SET_DAMAGE",basis:"OPPONENT_DISCARD_BASIC_ENERGY_COUNT",perEnergy:Number(match[1])}]
+  },
+  {
+    expression: /^次の相手の番、このポケモンが受けるワザのダメージは「[－-]([1-9][0-9]*)」される。$/,
+    convert: match => [{type:"REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN",amount:Number(match[1])}]
+  },
+  {
+    expression: /^次の自分の番、このポケモンは「([^」]+)」が使えない。$/,
+    convert: match => [{type:"PREVENT_SAME_ATTACK_NEXT_TURN",attackName:match[1]}]
+  },
+  {
+    expression: /^このワザを使うためのエネルギーより、([1-9][0-9]*)個多くエネルギーがついているなら、([1-9][0-9]*)ダメージ追加。$/,
+    convert: match => [{type:"MODIFY_DAMAGE",basis:"ATTACHED_ENERGY_EXCEEDS_ATTACK_COST",extra:Number(match[1]),amount:Number(match[2])}]
+  },
+  {
+    expression: /^自分のベンチに「([^」]+)」がいないなら、このワザは失敗。$/,
+    convert: match => [{type:"REQUIRE_OWN_BENCH_POKEMON",name:match[1]}]
+  },
+  {
     expression: /^次の相手の番、相手は手札からグッズを出して使えない。$/,
     convert: () => [{ type: "LOCK_ITEM_FROM_HAND", target: "OPPONENT", duration: "NEXT_OPPONENT_TURN" }]
   },
@@ -29,6 +93,55 @@ const PATTERNS = [
   {
     expression: /^自分のベンチポケモンの数×([1-9][0-9]*)ダメージ。$/,
     convert: match => [{ type: "SET_DAMAGE", basis: "OWN_BENCH_COUNT", perPokemon: Number(match[1]) }]
+  },
+  {
+    expression: /^おたがいのベンチポケモンの数×([1-9][0-9]*)ダメージ追加。$/,
+    convert: match => [{ type: "MODIFY_DAMAGE", basis: "BOTH_BENCH_COUNT", perPokemon: Number(match[1]) }]
+  },
+  {
+    expression: /^相手の場の「ポケモンex」の数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{ type: "SET_DAMAGE", basis: "OPPONENT_EX_COUNT", perPokemon: Number(match[1]) }]
+  },
+  {
+    expression: /^自分のトラッシュに、特性「([^」]+)」を持つポケモンが([1-9][0-9]*)枚以上あるなら、([1-9][0-9]*)ダメージ追加。$/,
+    convert: match => [{type:"MODIFY_DAMAGE",basis:"TRASH_POKEMON_WITH_ABILITY",abilityName:match[1],count:Number(match[2]),amount:Number(match[3])}]
+  },
+  {
+    expression: /^相手のバトルポケモンが「ポケモンex」なら、([1-9][0-9]*)ダメージ追加。$/,
+    convert: match => [{ type: "MODIFY_DAMAGE", basis: "DEFENDER_IS_EX", amount: Number(match[1]) }]
+  },
+  {
+    expression: /^相手がすでにとったサイドの枚数×([1-9][0-9]*)ダメージ(追加)?。$/,
+    convert: match => [{ type: match[2] ? "MODIFY_DAMAGE" : "SET_DAMAGE",
+      basis: "OPPONENT_PRIZES_TAKEN", perPrize: Number(match[1]) }]
+  },
+  {
+    expression: /^このワザのダメージは、相手のバトルポケモンにかかっている効果を計算しない。$/,
+    convert: () => [{ type: "IGNORE_DEFENDER_ATTACK_EFFECTS" }]
+  },
+  {
+    expression: /^このワザのダメージは弱点・抵抗力を計算しない。$/,
+    convert: () => [{ type: "IGNORE_WEAKNESS_RESISTANCE" }]
+  },
+  {
+    expression: /^このワザのダメージは抵抗力を計算しない。$/,
+    convert: () => [{ type: "IGNORE_RESISTANCE" }]
+  },
+  {
+    expression: /^このワザのダメージは、弱点・抵抗力と、相手のバトルポケモンにかかっている効果を計算しない。$/,
+    convert: () => [{ type: "IGNORE_DEFENDER_ATTACK_EFFECTS", ignoreWeaknessResistance: true }]
+  },
+  {
+    expression: /^このポケモンをベンチポケモンと入れ替える。$/,
+    convert: () => [{ type: "SWITCH_SELF" }]
+  },
+  {
+    expression: /^相手のバトルポケモンをベンチポケモンと入れ替える。［バトル場に出すポケモンは相手が選ぶ。］$/,
+    convert: () => [{type:"SWITCH_OPPONENT_CHOICE"}]
+  },
+  {
+    expression: /^ダメカン([1-9][0-9]*)個を、相手のベンチポケモンに好きなようにのせる。$/,
+    convert: match => [{ type: "PLACE_DAMAGE_COUNTERS_ON_OPPONENT_BENCH", count: Number(match[1]) }]
   },
   {
     expression: /^自分のポケモン全員についているFireとElectricエネルギーの数×([1-9][0-9]*)ダメージ。$/,
@@ -55,8 +168,25 @@ const PATTERNS = [
     convert: match => [{type:"COIN_DAMAGE",count:Number(match[1]),perCoin:Number(match[2])}]
   },
   {
+    expression: /^自分の山札を下から([1-9][0-9]*)枚オモテにして、その中にある、ワザ「([^」]+)」を持つポケモンの枚数×([1-9][0-9]*)ダメージ。オモテにしたポケモンは山札にもどして切る。残りのカードはトラッシュする。$/,
+    convert: match => [{type:"SET_DAMAGE",basis:"DECK_BOTTOM_POKEMON_WITH_ATTACK",attackName:match[2],perPokemon:Number(match[3])},
+      {type:"RESOLVE_DECK_BOTTOM_ATTACK_REVEAL",count:Number(match[1]),attackName:match[2]}]
+  },
+  {
+    expression: /^自分の山札から「([^」]+)」を([1-9][0-9]*)枚まで選び、ベンチに出す。そして山札を切る。$/,
+    convert: match => [{type:"SEARCH_DECK",max:Number(match[2]),filter:"exactName",name:match[1],destination:"BENCH"}]
+  },
+  {
+    expression: /^場にスタジアムが出ていないなら、このワザは失敗。$/,
+    convert: () => [{type:"REQUIRE_STADIUM_IN_PLAY"}]
+  },
+  {
     expression: /^自分の山札から基本エネルギーを([1-9][0-9]*)枚まで選び、相手に見せて、手札に加える。そして山札を切る。$/,
     convert: match => [{type:"SEARCH_DECK",max:Number(match[1]),filter:"basicEnergy",destination:"HAND"}]
+  },
+  {
+    expression: /^自分のベンチの「Nのポケモン」が持つワザを1つ選び、このワザとして使う。$/,
+    convert: () => [{type:"COPY_BENCH_N_ATTACK"}]
   },
   {
     expression: /^自分の山札からたねポケモンを([1-9][0-9]*)枚まで選び、ベンチに出す。そして山札を切る。$/,
@@ -69,6 +199,14 @@ const PATTERNS = [
   {
     expression: /^このポケモンについているエネルギーを([1-9][0-9]*)個選び、トラッシュする。$/,
     convert: match => [{type:"DISCARD_ATTACHED",target:"ATTACKING_POKEMON",count:Number(match[1])}]
+  },
+  {
+    expression: /^このポケモンについているエネルギーを、すべてトラッシュする。$/,
+    convert: () => [{type:"DISCARD_ATTACHED",target:"ATTACKING_POKEMON",count:"ALL"}]
+  },
+  {
+    expression: /^このポケモンについているエネルギーを1個選び、手札にもどす。$/,
+    convert: () => [{type:"RETURN_ATTACHED_ENERGY_TO_HAND",target:"ATTACKING_POKEMON",count:1}]
   },
   {
     expression: /^相手のバトルポケモンについているエネルギーを1個選び、トラッシュする。$/,
@@ -111,7 +249,7 @@ const PATTERNS = [
     convert: () => [{type:"PREVENT_SELF_ATTACK_NEXT_TURN"}]
   },
   {
-    expression: /^相手のポケモン1匹に、([1-9][0-9]*)ダメージ。［ベンチは弱点・抵抗力を計算しない。］$/,
+    expression: /^相手のポケモン1匹に、([1-9][0-9]*)ダメージ。(?:［ベンチは弱点・抵抗力を計算しない。］|ベンチは弱点・抵抗力を計算しない。)?$/,
     convert: match => [{type:"DAMAGE_CHOSEN_OPPONENT",amount:Number(match[1])}]
   }
 ];
@@ -122,8 +260,10 @@ function parseSingle(text) {
   return match?match[0].convert(match[1]):null;
 }
 
-const CHOICE_EFFECTS=new Set(["SEARCH_DECK","COIN_DISCARD_ENERGY","DISCARD_ATTACHED",
-  "DISCARD_OPPONENT_ENERGY","DISCARD_OPPONENT_HAND","SWITCH_SELF","SWITCH_OPPONENT_CHOICE","RETURN_SELF_TO_HAND"]);
+const CHOICE_EFFECTS=new Set(["SEARCH_DECK","SEARCH_TRASH_TO_BENCH","ATTACH_BASIC_FIGHTING_FROM_TRASH_TO_BENCH","OPTIONAL_RETURN_THREE_ENERGY_FOR_BENCH_DAMAGE","SWITCH_OPPONENT_CHOICE","COIN_DISCARD_ENERGY","DISCARD_ATTACHED",
+  "DISCARD_OPPONENT_ENERGY","DISCARD_OPPONENT_HAND","SWITCH_SELF","SWITCH_OPPONENT_CHOICE","RETURN_SELF_TO_HAND",
+  "SEARCH_TRASH_TO_HAND","RETURN_ATTACHED_ENERGY_TO_HAND",
+  "PLACE_DAMAGE_COUNTERS_ON_OPPONENT_BENCH"]);
 
 export function parseEffectText(text) {
   if (text === "") return { recognized: true, effects: [] };
@@ -153,15 +293,18 @@ export function inspectAttacks(card) {
       typeof type === "string" &&
       (type === "Void" ? cost.length === 1 && i === 0 :
         ["Colorless", "Grass", "Fire", "Water", "Electric", "Psychic", "Fighting", "Dark", "Metal", "Steel", "Dragon"].includes(type)));
-    const noDamageTypes=new Set(["SEARCH_DECK","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS","COIN_APPLY_STATUS","HEAL","DRAW","DAMAGE",
-      "DISCARD_ATTACHED","DISCARD_OPPONENT_ENERGY","PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN"]);
+    const noDamageTypes=new Set(["SEARCH_DECK","SEARCH_TRASH_TO_HAND","SEARCH_TRASH_TO_BENCH","ATTACH_BASIC_FIGHTING_FROM_TRASH_TO_BENCH","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS","COIN_APPLY_STATUS","HEAL","DRAW","DRAW_UNTIL_HAND_SIZE","DISCARD_HAND_DRAW","DAMAGE","SET_DAMAGE","IGNORE_RESISTANCE","RETURN_ATTACHED_ENERGY_TO_HAND","COPY_BENCH_N_ATTACK",
+      "DISCARD_ATTACHED","DISCARD_OPPONENT_ENERGY","MILL_OPPONENT_DECK","PLACE_DAMAGE_COUNTERS","PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN","PREVENT_SAME_ATTACK_NEXT_TURN","SWITCH_SELF","REQUIRE_STADIUM_IN_PLAY"]);
     const noPrintedDamage=damage===null&&parsed.effects.length>0&&parsed.effects.every(x=>noDamageTypes.has(x.type));
-    const bonus=parsed.effects.find(x=>x.type==="MODIFY_DAMAGE"||x.type==="COIN_BONUS");
+    const bonus=parsed.effects.find(x=>x.type==="MODIFY_DAMAGE"||x.type==="COIN_BONUS"||
+      x.type==="OPTIONAL_DISCARD_THREE_STEEL_ENERGY_FOR_DAMAGE");
     const multiplier=parsed.effects.find(x=>x.type==="COIN_DAMAGE"||x.type==="SET_DAMAGE");
     const validDamage=noPrintedDamage||Number.isInteger(damage?.amount)&&damage.amount>=0&&
       (damage.suffix===""||damage.suffix==="＋"&&!!bonus||damage.suffix==="×"&&!!multiplier&&
-       (multiplier.type==="COIN_DAMAGE"?multiplier.perCoin===damage.amount:
-        multiplier.perPokemon===damage.amount||multiplier.perEnergy===damage.amount));
+      (multiplier.type==="COIN_DAMAGE"?multiplier.perCoin===damage.amount:
+        multiplier.perPokemon===damage.amount||multiplier.perEnergy===damage.amount||multiplier.perCounter===damage.amount||
+        multiplier.basis==="OPPONENT_PRIZES_TAKEN"&&multiplier.perPrize===damage.amount||
+        multiplier.basis==="DECK_BOTTOM_POKEMON_WITH_ATTACK"&&multiplier.perPokemon===damage.amount));
     return {
       index, name: attack.name, printedDamage: damage, cost, text: attack.effect ?? "",
       status: parsed.recognized && validCost && validDamage ? "supported" : "needs_review",

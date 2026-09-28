@@ -1,11 +1,23 @@
-import { AbilityEngine } from "./AbilityEngine.js?v=20260928-zero1";
-import { inspectAttacks } from "../card-db/parse-effects.js?v=20260925-coins1";
+import { AbilityEngine } from "./AbilityEngine.js?v=20260928-metaeffects2";
+import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-metaeffects2";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
 // ordinary numeric damage. Ordinary single knockouts use explicit prize and
 // promotion choices; simultaneous knockouts await a separate rule handler.
 export class AttackEngine extends AbilityEngine {
   attacks(instance) { return inspectAttacks(this.card(instance)); }
+
+  attackForAction(state,action){
+    const active=state.players[action.player]?.active;
+    const base=this.attacks(active)?.[action.attackIndex];
+    if(!action.copiedAttackInstanceId)return base;
+    if(!base?.effects.some(effect=>effect.type==="COPY_BENCH_N_ATTACK"))return null;
+    const copied=state.players[action.player].bench.find(x=>x.instanceId===action.copiedAttackInstanceId);
+    if(!copied||!this.card(copied).name.startsWith("Nの"))return null;
+    const attack=this.attacks(copied).find(x=>x.index===action.copiedAttackIndex&&x.status==="supported"&&
+      !x.effects.some(effect=>effect.type==="COPY_BENCH_N_ATTACK"));
+    return attack?{...attack,copiedFromInstanceId:copied.instanceId,copiedFromName:this.card(copied).name}:null;
+  }
 
   effectiveHP(instance) {
     const card=this.card(instance);
@@ -19,7 +31,7 @@ export class AttackEngine extends AbilityEngine {
     return state.pendingKnockout || state.winner != null ? [] : super.getLegalActions(state);
   }
 
-  energyPaysCost(active, cost) {
+  energyPaysCost(active, cost, state=null, playerIndex=0, attackName=null) {
     if (cost.length === 1 && cost[0] === "Void") return true;
     const attached = active.attached ?? [];
     const types = attached.map(energy => {
@@ -38,7 +50,15 @@ export class AttackEngine extends AbilityEngine {
       if (index < 0) return false;
       types.splice(index, 1);
     }
-    return types.length >= cost.length - required.length;
+    let colorlessRequired=cost.length-required.length;
+    const reduction=this.entries(active, state).flatMap(entry=>entry.operations??[])
+      .filter(op=>op.type==="REDUCE_COLORLESS_ATTACK_COST_BY_OPPONENT_PRIZES"&&op.attackName===attackName)
+      .reduce((sum,op)=>sum+(op.perPrize??0),0);
+    if(reduction){
+      const prizesTaken=6-(state?.players?.[1-playerIndex]?.prizes?.length??6);
+      colorlessRequired=Math.max(0,colorlessRequired-prizesTaken*reduction);
+    }
+    return types.length >= colorlessRequired;
   }
 
   getLegalAttacks(state) {
@@ -50,17 +70,43 @@ export class AttackEngine extends AbilityEngine {
     if ((active.statuses??[]).some(x=>["マヒ","ねむり"].includes(typeof x==="string"?x:x.name))) return [];
     return this.attacks(active).filter(attack => attack.status === "supported" &&
       !(state.attackLocks??[]).some(lock=>lock.player===state.turn && lock.instanceId===active.instanceId &&
-        state.turnsTaken?.[state.turn]===lock.turnsTakenAt+1) &&
+        state.turnsTaken?.[state.turn]===lock.turnsTakenAt+1 &&
+        (!lock.attackName||lock.attackName===attack.name)) &&
       !(state.temporaryLocks??[]).some(lock=>lock.targetInstanceId===active.instanceId&&lock.type==="PREVENT_ATTACK_NEXT_TURN"&&lock.expiresTurnNo>=state.turnNo) &&
       !(attack.effects.some(x=>x.noFirstSecondTurn) && state.turn===1 && state.turnsTaken?.[1]===0) &&
-      this.energyPaysCost(active, attack.cost) &&
+      attack.effects.filter(x=>x.type==="REQUIRE_OWN_BENCH_POKEMON").every(x=>
+        state.players[state.turn].bench.some(pokemon=>this.card(pokemon).name===x.name)) &&
+      (!attack.effects.some(x=>x.type==="REQUIRE_STADIUM_IN_PLAY")||!!state.stadium) &&
+      !(attack.effects.some(x=>x.type==="SWITCH_SELF") && !state.players[state.turn].bench.length) &&
+      this.energyPaysCost(active,attack.cost,state,state.turn,attack.name) &&
       attack.effects.filter(x => x.type === "DRAW").reduce((sum, x) => sum + x.count, 0) <=
         state.players[state.turn].deck.length).flatMap(attack => {
-      const snipe=attack.effects.find(x=>x.type==="DAMAGE_CHOSEN_OPPONENT");
-      const targets=snipe ? this.field(state.players[1-state.turn]) : [target];
-      return targets.map(victim=>({type:"ATTACK",player:state.turn,sourceInstanceId:active.instanceId,
-        attackIndex:attack.index,...(snipe?{targetInstanceId:victim.instanceId}:{})}))
-        .filter(action=>this.canCompleteAttack(state,attack,action));
+      const copyOptions=attack.effects.some(x=>x.type==="COPY_BENCH_N_ATTACK")
+        ?state.players[state.turn].bench.flatMap(pokemon=>this.card(pokemon).name.startsWith("Nの")
+          ?this.attacks(pokemon).filter(copy=>copy.status==="supported"&&
+            !copy.effects.some(effect=>effect.type==="COPY_BENCH_N_ATTACK")).map(copy=>({pokemon,copy})):[])
+        :[{pokemon:null,copy:attack}];
+      return copyOptions.flatMap(({pokemon,copy})=>{
+        const effective=copy;
+        const snipe=copy.effects.find(x=>x.type==="DAMAGE_CHOSEN_OPPONENT");
+        const targets=snipe ? this.field(state.players[1-state.turn]) : [target];
+        const attacks=targets.map(victim=>({type:"ATTACK",player:state.turn,sourceInstanceId:active.instanceId,
+          attackIndex:attack.index,...(pokemon?{copiedAttackInstanceId:pokemon.instanceId,copiedAttackIndex:copy.index,
+            copiedAttackName:copy.name,copiedFromName:this.card(pokemon).name}:{}),...(snipe?{targetInstanceId:victim.instanceId}:{})}))
+          .flatMap(action=>{
+            const optional=effective.effects.find(x=>x.type==="OPTIONAL_DISCARD_THREE_STEEL_ENERGY_FOR_DAMAGE");
+            if(!optional)return [action];
+            const energies=(active.attached??[]).filter(item=>this.card(item).name==="基本鋼エネルギー");
+            const combos=[];
+            const choose=(from,picked)=>{
+              if(picked.length===3){combos.push([...picked]);return;}
+              for(let i=from;i<energies.length;i++)choose(i+1,[...picked,energies[i].instanceId]);
+            };
+            choose(0,[]);
+            return [action,...combos.map(discardEnergyInstanceIds=>({...action,discardEnergyInstanceIds}))];
+          });
+        return attacks.filter(action=>this.canCompleteAttack(state,this.attackForAction(state,action),action));
+      });
     });
   }
 
@@ -73,9 +119,12 @@ export class AttackEngine extends AbilityEngine {
     } catch { return false; }
     const selfDamage = attack.effects.filter(x => x.type === "DAMAGE" &&
       x.target === "ATTACKING_POKEMON").reduce((sum, x) => sum + x.amount, 0);
+    const protectedTarget=this.protectedFromOpponentEffects(state,foe.instanceId,state.turn);
+    const counterDamage=(protectedTarget?[]:attack.effects.filter(x=>x.type==="PLACE_DAMAGE_COUNTERS"&&x.target==="DEFENDING_ACTIVE"))
+      .reduce((sum,x)=>sum+x.count*10,0);
     const knockedOut = [
       (own.damage ?? 0) + selfDamage >= this.effectiveHP(own) ? state.turn : null,
-      foe && (foe.damage ?? 0) + damage >= this.effectiveHP(foe) ? 1 - state.turn : null
+      foe && (foe.damage ?? 0) + damage + counterDamage >= this.effectiveHP(foe) ? 1 - state.turn : null
     ].filter(x => x !== null);
     if (knockedOut.length !== 1) return true; // Simultaneous KO remains visibly unresolved.
     try {
@@ -91,16 +140,50 @@ export class AttackEngine extends AbilityEngine {
     const opponent=state.players[1-action.player];
     const target=action.targetInstanceId?this.field(opponent).find(x=>x.instanceId===action.targetInstanceId):opponent?.active;
     if (!source || !target) throw new Error("Missing attacking or defending Pokémon");
-    const attack = this.attacks(source)[action.attackIndex];
+    const attack = this.attackForAction(state,action);
     if (attack?.status !== "supported") throw new Error("Unsupported attack");
     const attacker = this.card(source).raw;
     const defender = this.card(target).raw;
+    const ignoreDefenderEffects=attack.effects.some(x=>x.type==="IGNORE_DEFENDER_ATTACK_EFFECTS");
+    const ignoreWeaknessResistance=attack.effects.some(x=>x.type==="IGNORE_WEAKNESS_RESISTANCE"||
+      x.type==="IGNORE_DEFENDER_ATTACK_EFFECTS"&&x.ignoreWeaknessResistance);
+    const ignoreResistance=ignoreWeaknessResistance||attack.effects.some(x=>x.type==="IGNORE_RESISTANCE");
     let damage = attack.printedDamage?.amount??0;
     for (const effect of attack.effects) {
-      if (effect.type === "MODIFY_DAMAGE" && effect.basis === "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT") {
+      if(effect.type==="MODIFY_DAMAGE"&&effect.basis==="ATTACHED_ENERGY_EXCEEDS_ATTACK_COST"&&
+         (source.attached?.length??0)>=attack.cost.length+effect.extra){
+        damage+=effect.amount;
+      } else if (effect.type === "MODIFY_DAMAGE" && effect.basis === "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT") {
         damage += ((source.attached?.length ?? 0) + (target.attached?.length ?? 0)) * effect.perEnergy;
+      } else if (effect.type === "SET_DAMAGE" && effect.basis === "DECK_BOTTOM_POKEMON_WITH_ATTACK") {
+        const deck=state.players[action.player].deck,shown=deck.slice(Math.max(0,deck.length-7));
+        const count=shown.filter(x=>this.card(x).cardType==="pokemon"&&
+          (this.card(x).raw.attacks??[]).some(a=>a.name===effect.attackName)).length;
+        damage=count*effect.perPokemon;
       } else if (effect.type === "SET_DAMAGE" && effect.basis === "OWN_BENCH_COUNT") {
         damage = state.players[action.player].bench.length * effect.perPokemon;
+      } else if (effect.type === "MODIFY_DAMAGE" && effect.basis === "BOTH_BENCH_COUNT") {
+        damage += (state.players[action.player].bench.length+opponent.bench.length)*effect.perPokemon;
+      } else if (effect.type === "SET_DAMAGE" && effect.basis === "OPPONENT_EX_COUNT") {
+        damage = this.field(opponent).filter(p=>this.card(p).raw.tags?.includes("ex")).length*effect.perPokemon;
+      } else if(effect.type==="MODIFY_DAMAGE"&&effect.basis==="TRASH_POKEMON_WITH_ABILITY"){
+        const qualifying=state.players[action.player].trash.filter(instance=>this.card(instance).cardType==="pokemon"&&
+          (this.card(instance).raw.abilities??[]).some(ability=>ability.name===effect.abilityName)).length;
+        if(qualifying>=effect.count)damage+=effect.amount;
+      } else if(effect.type==="OPTIONAL_DISCARD_THREE_STEEL_ENERGY_FOR_DAMAGE"&&
+          action.discardEnergyInstanceIds?.length===3){
+        damage+=effect.amount;
+      } else if(effect.type==="SET_DAMAGE"&&effect.basis==="OWN_DAMAGE_COUNTERS"){
+        damage=Math.floor((source.damage??0)/10)*effect.perCounter;
+      } else if(effect.type==="SET_DAMAGE"&&effect.basis==="OPPONENT_DISCARD_BASIC_ENERGY_COUNT"){
+        const basics=opponent.trash.filter(x=>this.card(x).energyType==="basic").length;
+        damage=basics*effect.perEnergy;
+      } else if (effect.type === "MODIFY_DAMAGE" && effect.basis === "DEFENDER_IS_EX") {
+        if(defender.tags?.includes("ex"))damage+=effect.amount;
+      } else if ((effect.type === "SET_DAMAGE"||effect.type === "MODIFY_DAMAGE") &&
+                 effect.basis === "OPPONENT_PRIZES_TAKEN") {
+        const taken=6-(opponent.prizes?.length??6),amount=taken*effect.perPrize;
+        damage=effect.type==="SET_DAMAGE"?amount:damage+amount;
       } else if (effect.type === "SET_DAMAGE" && effect.basis === "OWN_FIELD_FIRE_ELECTRIC_ENERGY_COUNT") {
         damage = this.field(state.players[action.player]).flatMap(p=>p.attached??[])
           .filter(energy=>["基本炎エネルギー","基本雷エネルギー"].includes(this.card(energy).name))
@@ -117,31 +200,30 @@ export class AttackEngine extends AbilityEngine {
         damage = effect.amount;
       }
     }
-    const isBench=target!==opponent.active;
-    if(!isBench){
-      const attackerTags=attacker.tags??[],defenderTags=defender.tags??[];
-      const attackerHasRule=!!attacker.rule_box||attackerTags.some(tag=>["ex","V","GX","メガシンカ"].includes(tag));
-      const defenderIsExOrV=!!defender.rule_box||defenderTags.some(tag=>["ex","V"].includes(tag));
-      for(const modifier of state.damageBonuses??[]){
-        if(modifier.player!==action.player||modifier.turnNo!==state.turnNo)continue;
-        if(modifier.rulelessAttacker&&!attackerHasRule)damage+=modifier.amount;
-        if(modifier.vsRulePokemon&&defenderIsExOrV)damage+=modifier.amount;
-      }
-      if(!attackerHasRule&&defenderIsExOrV&&(source.attached??[]).some(card=>this.isSupportedTool(card)&&this.card(card).name==="ブレイブバングル"))damage+=30;
+    if(target===opponent.active&&(defender.tags?.includes("ex")||!!defender.rule_box||this.card(target).name.endsWith("ex"))) {
+      damage+=(state.damageBonuses??[]).filter(b=>b.player===action.player&&b.turnNo===state.turnNo&&
+        b.target==="OPPONENT_ACTIVE_EX").reduce((sum,b)=>sum+b.amount,0);
+      if((source.statuses??[]).some(x=>(typeof x==="string"?x:x.name)==="どく"))
+        damage+=(source.attached??[]).filter(x=>this.isSupportedTool(x)&&this.card(x).name==="くさりもち").length*40;
     }
-    if (!isBench && defender.weakness?.type?.includes(attacker.types?.[0])) {
-      if (defender.weakness.value !== "×2") throw new Error("Unsupported weakness");
+    const isBench=target!==opponent.active;
+    const fairyZone=this.field(state.players[action.player]).some(instance=>this.entries(instance, state).some(entry=>
+      entry.status==="supported"&&entry.operations.some(op=>op.type==="SET_OPPONENT_DRAGON_WEAKNESS")));
+    const weakness=fairyZone&&defender.types?.includes("Dragon")
+      ?{type:["Psychic"],value:"×2"}:defender.weakness;
+    if (!ignoreWeaknessResistance && !isBench && weakness?.type?.includes(attacker.types?.[0])) {
+      if (weakness.value !== "×2") throw new Error("Unsupported weakness");
       damage *= 2;
     }
-    if (!isBench && defender.resistance?.type?.includes(attacker.types?.[0])) {
+    if (!ignoreResistance && !isBench && defender.resistance?.type?.includes(attacker.types?.[0])) {
       const match = defender.resistance.value?.match(/^－([0-9]+)$/);
       if (!match) throw new Error("Unsupported resistance");
       damage = Math.max(0, damage - Number(match[1]));
     }
-    if ((state.attackProtection??[]).some(shield=>shield.owner===1-action.player &&
+    if (!ignoreDefenderEffects && (state.attackProtection??[]).some(shield=>shield.owner===1-action.player &&
         shield.instanceId===target.instanceId && this.card(source).raw.stage==="たね" &&
         !attacker.types?.includes("Colorless"))) return 0;
-    return this.incomingAttackDamage(state, target.instanceId, damage);
+    return ignoreDefenderEffects?damage:this.incomingAttackDamage(state,target.instanceId,damage);
   }
 
   coinSequence(seed, single=false,maxFlips=null) {
@@ -170,7 +252,9 @@ export class AttackEngine extends AbilityEngine {
     const next = structuredClone(state);
     next.itemLocks ??= [false, false];
     next.itemLocks[next.turn] = false;
-    next.attackProtection=(next.attackProtection??[]).filter(x=>x.owner===next.turn);
+    // Keep a protection effect through the opponent's turn, then expire it
+    // when that opponent ends their turn.
+    next.attackProtection=(next.attackProtection??[]).filter(x=>x.owner===state.turn);
     next.turn = 1 - next.turn;
     next.usedAbilities = { instances: [], names: [] };
     next.previousOpponentTurnKnockout = [false, false];
@@ -186,7 +270,10 @@ export class AttackEngine extends AbilityEngine {
       if(!active)continue;
       active.statuses=(active.statuses??[]).map(x=>typeof x==="string"?{name:x,appliedTurnNo:0}:x);
       const has=name=>active.statuses.some(x=>x.name===name);
-      if(has("どく"))active.damage=(active.damage??0)+10;
+      const poisonBoost=next.players[1-playerIndex].active&&this.entries(next.players[1-playerIndex].active, next)
+        .flatMap(entry=>entry.operations??[]).reduce((sum,op)=>sum+
+          (op.type==="INCREASE_OPPONENT_POISON_DAMAGE"?op.extraCounters:0),0);
+      if(has("どく"))active.damage=(active.damage??0)+10+poisonBoost*10;
       if(has("やけど")){
         active.damage=(active.damage??0)+20;
         const coin=this.coinSequence(next.randomState??1,true);next.randomState=coin.randomState;
@@ -238,6 +325,20 @@ export class AttackEngine extends AbilityEngine {
     return state;
   }
 
+  continueCounterAttack(state) {
+    const pending=state.pendingAttack;
+    if(!pending?.delayedKnockouts)return state;
+    while(pending.delayedKnockouts.length){
+      const next=pending.delayedKnockouts[0],owner=state.players[next.owner];
+      const target=[owner.active,...owner.bench].find(x=>x?.instanceId===next.instanceId);
+      if(!target||(target.damage??0)<this.effectiveHP(target)){pending.delayedKnockouts.shift();continue;}
+      pending.delayedKnockouts.shift();
+      return this.beginKnockout(state,[next.owner],target.instanceId);
+    }
+    delete state.pendingAttack;
+    return state.pendingSecondAttack?state:this.endTurn(state);
+  }
+
   getKnockoutActions(state) {
     this.assertSandbox(state);
     const pending = state.pendingKnockout;
@@ -245,9 +346,6 @@ export class AttackEngine extends AbilityEngine {
     if (pending.remaining > 0) return state.players[pending.recipient].prizes.map((_, prizeIndex) => ({
       type: "TAKE_PRIZE", player: pending.recipient, prizeIndex
     }));
-    const overfull=state.players[pending.owner];
-    if(overfull.bench.length>this.maxBenchCount(state,pending.owner))
-      return overfull.bench.map(instance=>({type:"DISCARD_EXCESS_BENCH",player:pending.owner,sourceInstanceId:instance.instanceId}));
     if(state.players[pending.owner].active)return [{type:"RESOLVE_KNOCKOUT",player:pending.recipient}];
     return state.players[pending.owner].bench.map(instance => ({
       type: "PROMOTE_BENCH", player: pending.owner, sourceInstanceId: instance.instanceId
@@ -260,10 +358,6 @@ export class AttackEngine extends AbilityEngine {
     }
     const next = structuredClone(state);
     const pending = next.pendingKnockout;
-    if(action.type==="DISCARD_EXCESS_BENCH"){
-      const owner=next.players[pending.owner],i=owner.bench.findIndex(x=>x.instanceId===action.sourceInstanceId),pokemon=owner.bench.splice(i,1)[0];
-      owner.trash.push(...(pokemon.stack??[]),pokemon,...(pokemon.attached??[]));return next;
-    }
     if (action.type === "TAKE_PRIZE") {
       const recipient = next.players[pending.recipient];
       recipient.hand.push(...recipient.prizes.splice(action.prizeIndex, 1));
@@ -273,11 +367,14 @@ export class AttackEngine extends AbilityEngine {
         next.winner = pending.recipient;
         next.winReason = recipient.prizes.length ? "NO_POKEMON" : "PRIZES";
         next.pendingKnockout = null;
+        delete next.pendingAbilityResolution;
       }
       return next;
     }
     if(action.type === "RESOLVE_KNOCKOUT"){
       next.pendingKnockout=null;
+      if(next.pendingAbilityResolution){delete next.pendingAbilityResolution;return next;}
+      if(next.pendingAttack?.delayedKnockouts)return this.continueCounterAttack(next);
       if(next.pendingAttack)return next;
       if(next.pendingTurnAdvance){delete next.pendingTurnAdvance;return this.startTurn(next);}
       return this.endTurn(next);
@@ -286,6 +383,8 @@ export class AttackEngine extends AbilityEngine {
     const index = owner.bench.findIndex(x => x.instanceId === action.sourceInstanceId);
     owner.active = owner.bench.splice(index, 1)[0];
     next.pendingKnockout = null;
+    if(next.pendingAbilityResolution){delete next.pendingAbilityResolution;return next;}
+    if(next.pendingAttack?.delayedKnockouts)return this.continueCounterAttack(next);
     if(next.pendingAttack)return next;
     if (next.pendingSecondAttack && next.pendingSecondAttack.player !== pending.owner &&
         next.players[next.pendingSecondAttack.player].active?.instanceId === next.pendingSecondAttack.sourceInstanceId)
@@ -296,7 +395,7 @@ export class AttackEngine extends AbilityEngine {
   }
 
   applyStatus(state,target,status,ownerPlayer){
-    if(state.stadium&&this.card(state.stadium).name==="お祭り会場"&&(target.attached??[]).length)return;
+    if(state.stadium&&this.isSupportedStadium(state.stadium)&&(target.attached??[]).length)return;
     target.statuses??=[];
     const recover=new Set(["ねむり","マヒ","こんらん"]);
     if(recover.has(status))target.statuses=target.statuses.filter(x=>!recover.has(typeof x==="string"?x:x.name));
@@ -305,7 +404,7 @@ export class AttackEngine extends AbilityEngine {
   }
 
   attacksTwice(state, instance) {
-    return !!state.stadium && this.entries(instance).some(entry=>entry.status === "supported" &&
+    return !!state.stadium && this.entries(instance, state).some(entry=>entry.status === "supported" &&
       entry.operations.some(op=>op.type === "ATTACK_TWICE_IF_STADIUM" &&
         op.stadiumName === this.card(state.stadium).name));
   }
@@ -316,7 +415,7 @@ export class AttackEngine extends AbilityEngine {
     }
     const next = structuredClone(state);
     const own = next.players[next.turn], opponent = next.players[1 - next.turn];
-    const attack = this.attacks(own.active)[action.attackIndex];
+    const attack = this.attackForAction(state,action);
     const confused=(own.active.statuses??[]).some(x=>(typeof x==="string"?x:x.name)==="こんらん");
     let confusion=null;
     if(confused){
@@ -328,6 +427,14 @@ export class AttackEngine extends AbilityEngine {
         if(own.active.damage>=this.effectiveHP(own.active))return this.beginKnockout(next,[state.turn]);
         return this.endTurn(next);
       }
+    }
+    if(action.discardEnergyInstanceIds?.length){
+      const selected=action.discardEnergyInstanceIds.map(id=>own.active.attached.find(x=>x.instanceId===id));
+      if(selected.length!==3||selected.some(x=>!x||this.card(x).name!=="基本鋼エネルギー"))
+        throw new Error("Optional attack cost requires three attached Basic Steel Energy");
+      const ids=new Set(action.discardEnergyInstanceIds);
+      own.active.attached=own.active.attached.filter(x=>!ids.has(x.instanceId));
+      own.trash.push(...selected);
     }
     const damage = this.calculateAttackDamage(next, action);
     const victim=action.targetInstanceId
@@ -341,11 +448,36 @@ export class AttackEngine extends AbilityEngine {
       before:victim.damage??0,hp:this.effectiveHP(victim),
       ...((confusion||coin)?{coin:[confusion?`こんらん判定：オモテ`:null,coin?`${coin.flips}回投げてオモテ${coin.heads}回`:null].filter(Boolean).join(" ／ ")}:{}),
       selfDamage:attack.effects.filter(x=>x.type==="DAMAGE" && x.target==="ATTACKING_POKEMON")
-        .reduce((total,x)=>total+x.amount,0)};
+        .reduce((total,x)=>total+x.amount,0),
+      damageCounters:attack.effects.filter(x=>x.type==="PLACE_DAMAGE_COUNTERS"&&x.target==="DEFENDING_ACTIVE")
+        .reduce((total,x)=>total+x.count,0)};
     victim.damage = (victim.damage ?? 0) + damage;
+    const targetEffectProtected=this.protectedFromOpponentEffects(next,victim.instanceId,state.turn);
     for (const effect of attack.effects) {
+      if(targetEffectProtected&&["APPLY_STATUS","COIN_APPLY_STATUS","DISCARD_OPPONENT_ENERGY","COIN_DISCARD_ENERGY",
+        "PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN","PLACE_DAMAGE_COUNTERS","SWITCH_OPPONENT_CHOICE"].includes(effect.type))continue;
       if (effect.type === "DRAW" && effect.player === "SELF") {
         own.hand.push(...own.deck.splice(0, effect.count));
+      } else if(effect.type==="DRAW_UNTIL_HAND_SIZE"&&effect.player==="SELF"){
+        const count=Math.max(0,effect.size-own.hand.length);
+        own.hand.push(...own.deck.splice(0,count));
+      } else if(effect.type==="DISCARD_HAND_DRAW"){
+        own.trash.push(...own.hand.splice(0));
+        own.hand.push(...own.deck.splice(0,effect.count));
+      } else if(effect.type==="MILL_OPPONENT_DECK"){
+        opponent.trash.push(...opponent.deck.splice(0,effect.count));
+      } else if(effect.type==="PLACE_DAMAGE_COUNTERS"&&effect.target==="DEFENDING_ACTIVE"){
+        victim.damage=(victim.damage??0)+effect.count*10;
+      } else if(effect.type==="RESOLVE_DECK_BOTTOM_ATTACK_REVEAL"){
+        const shown=own.deck.splice(Math.max(0,own.deck.length-effect.count));
+        const returned=shown.filter(x=>this.card(x).cardType==="pokemon"&&
+          (this.card(x).raw.attacks??[]).some(a=>a.name===effect.attackName));
+        const discarded=shown.filter(x=>!returned.includes(x));
+        own.trash.push(...discarded);own.deck.push(...returned);
+        let randomState=next.randomState>>>0||1;
+        for(let i=own.deck.length-1;i>0;i--){randomState^=randomState<<13;randomState^=randomState>>>17;randomState^=randomState<<5;
+          const j=Math.floor((randomState>>>0)/0x100000000*(i+1));[own.deck[i],own.deck[j]]=[own.deck[j],own.deck[i]];}
+        next.randomState=randomState;
       } else if (effect.type === "DAMAGE" && effect.target === "ATTACKING_POKEMON") {
         own.active.damage = (own.active.damage ?? 0) + effect.amount;
       } else if(effect.type === "APPLY_STATUS") {
@@ -374,19 +506,57 @@ export class AttackEngine extends AbilityEngine {
         next.attackLocks??=[];
         next.attackLocks.push({player:state.turn,instanceId:own.active.instanceId,
           turnsTakenAt:state.turnsTaken?.[state.turn]??0});
+      } else if(effect.type==="PREVENT_SAME_ATTACK_NEXT_TURN"){
+        next.attackLocks??=[];
+        next.attackLocks.push({player:state.turn,instanceId:own.active.instanceId,
+          attackName:effect.attackName,turnsTakenAt:state.turnsTaken?.[state.turn]??0});
+      } else if(effect.type==="REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN"){
+        next.attackProtection??=[];
+        next.attackProtection.push({owner:state.turn,instanceId:own.active.instanceId,reduceDamage:effect.amount});
       } else if (effect.type === "RETURN_SELF_TO_HAND") {
         const {attached=[],stack=[],...face}=own.active;
         own.hand.push(face,...attached,...stack);
         own.active=null;
         if(own.bench.length)next.pendingAttack={type:"PROMOTE_SELF",player:state.turn};
         else {next.winner=1-state.turn;next.winReason="NO_POKEMON";}
+      } else if(effect.type === "SWITCH_SELF") {
+        next.pendingAttack={type:"PROMOTE_SELF",player:state.turn,sourceInstanceId:own.active.instanceId};
+      } else if(effect.type==="SWITCH_OPPONENT_CHOICE"){
+        next.pendingAttack={type:"SWITCH_OPPONENT_CHOICE",player:state.turn};
       } else if (effect.type === "SEARCH_DECK") {
         next.pendingAttack={type:"SEARCH_DECK",player:state.turn,
-          sourceInstanceId:own.active.instanceId,max:effect.max,filter:effect.filter,chosen:0};
-      } else if ((effect.type === "MODIFY_DAMAGE" && effect.basis === "BOTH_ACTIVE_ATTACHED_ENERGY_COUNT") ||
-                 (effect.type === "SET_DAMAGE" && ["OWN_BENCH_COUNT","OWN_FIELD_FIRE_ELECTRIC_ENERGY_COUNT"].includes(effect.basis)) ||
-                 (effect.type === "MODIFY_DAMAGE" && ["DEFENDING_ATTACHED_ENERGY_COUNT","COIN_UNTIL_TAILS"].includes(effect.basis)) ||
-                 ["DAMAGE_CHOSEN_OPPONENT","COIN_BONUS","COIN_DAMAGE"].includes(effect.type)) {
+          sourceInstanceId:own.active.instanceId,max:effect.max,filter:effect.filter,name:effect.name,destination:effect.destination,chosen:0,optional:!!effect.optional};
+      } else if(effect.type==="SEARCH_TRASH_TO_HAND"){
+        next.pendingAttack={type:"SEARCH_TRASH_TO_HAND",player:state.turn,filter:effect.filter,max:effect.max};
+      } else if(effect.type==="RETURN_ATTACHED_ENERGY_TO_HAND"){
+        next.pendingAttack={type:"RETURN_ATTACHED_ENERGY_TO_HAND",player:state.turn,
+          sourceInstanceId:own.active.instanceId,count:effect.count};
+      } else if(effect.type === "PLACE_DAMAGE_COUNTERS_ON_OPPONENT_BENCH") {
+        next.pendingAttack={type:"PLACE_DAMAGE_COUNTERS",player:state.turn,remaining:effect.count,
+          sourceInstanceId:own.active.instanceId};
+      } else if(effect.type==="SEARCH_TRASH_TO_BENCH"){
+        next.pendingAttack={type:"SEARCH_TRASH_TO_BENCH",player:state.turn,name:effect.name,
+          remaining:Math.min(effect.max,5-own.bench.length)};
+      } else if(effect.type==="ATTACH_BASIC_FIGHTING_FROM_TRASH_TO_BENCH"){
+        next.pendingAttack={type:"ATTACH_BASIC_FIGHTING_FROM_TRASH_TO_BENCH",player:state.turn,
+          remaining:effect.max,sourceInstanceId:own.active.instanceId};
+      } else if(effect.type==="OPTIONAL_RETURN_THREE_ENERGY_FOR_BENCH_DAMAGE"){
+        next.pendingAttack={type:"OPTIONAL_RETURN_THREE_ENERGY_FOR_BENCH_DAMAGE",player:state.turn,
+          sourceInstanceId:own.active.instanceId};
+      } else if ((effect.type === "MODIFY_DAMAGE" && ["BOTH_ACTIVE_ATTACHED_ENERGY_COUNT","BOTH_BENCH_COUNT",
+                   "DEFENDING_ATTACHED_ENERGY_COUNT","COIN_UNTIL_TAILS","DEFENDER_IS_EX","OPPONENT_PRIZES_TAKEN"].includes(effect.basis)) ||
+                 (effect.type === "SET_DAMAGE" && ["OWN_BENCH_COUNT","OWN_FIELD_FIRE_ELECTRIC_ENERGY_COUNT",
+                   "OPPONENT_EX_COUNT","OPPONENT_PRIZES_TAKEN","OWN_DAMAGE_COUNTERS","OPPONENT_DISCARD_BASIC_ENERGY_COUNT",
+                   "DECK_BOTTOM_POKEMON_WITH_ATTACK"].includes(effect.basis)) ||
+                 (effect.type==="MODIFY_DAMAGE"&&effect.basis==="TRASH_POKEMON_WITH_ABILITY") ||
+                 effect.type==="OPTIONAL_DISCARD_THREE_STEEL_ENERGY_FOR_DAMAGE" ||
+                 effect.type === "IGNORE_DEFENDER_ATTACK_EFFECTS" || effect.type === "IGNORE_WEAKNESS_RESISTANCE" ||
+                 effect.type === "IGNORE_RESISTANCE" || effect.type === "REQUIRE_OWN_BENCH_POKEMON" ||
+                 effect.type === "MODIFY_DAMAGE"&&effect.basis==="ATTACHED_ENERGY_EXCEEDS_ATTACK_COST" ||
+                 effect.type === "REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN" || effect.type === "DISCARD_HAND_DRAW" ||
+                 ["DAMAGE_CHOSEN_OPPONENT","DAMAGE_CHOSEN_OPPONENT_BENCH","COIN_BONUS","COIN_DAMAGE","MILL_OPPONENT_DECK","DRAW_UNTIL_HAND_SIZE",
+                   "PLACE_DAMAGE_COUNTERS","PREVENT_SAME_ATTACK_NEXT_TURN","RESOLVE_DECK_BOTTOM_ATTACK_REVEAL",
+                   "REQUIRE_STADIUM_IN_PLAY"].includes(effect.type)) {
         // The bonus was already included in calculateAttackDamage.
       } else if (effect.type === "LOCK_ITEM_FROM_HAND" && effect.target === "OPPONENT") {
         next.itemLocks ??= [false, false];
@@ -397,6 +567,7 @@ export class AttackEngine extends AbilityEngine {
       const subject=i===state.turn?own.active:victim;
       return subject && subject.damage >= this.effectiveHP(subject);
     });
+    if(knockedOut.includes(1-state.turn)&&next.pendingAttack?.type==="SWITCH_OPPONENT_CHOICE")delete next.pendingAttack;
     const firstOfTwo = !state.pendingSecondAttack && !!own.active && this.attacksTwice(state, own.active);
     if (firstOfTwo) next.pendingSecondAttack = { player: state.turn,
       sourceInstanceId: own.active.instanceId, attackIndex: action.attackIndex };

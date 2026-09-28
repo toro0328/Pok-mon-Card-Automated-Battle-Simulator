@@ -1,0 +1,553 @@
+[
+  {
+    "officialCardId": 45977,
+    "name": "ヤドン",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/45977",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV7/045977_P_YADON.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV7/45977.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/45977",
+      "name": "ヤドン",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV7/045977_P_YADON.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 45977,
+      "set_name": "SV7",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV7.gif",
+      "number": "038",
+      "set_total": "102",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "Teeziro"
+      ],
+      "pokedex_number": 79,
+      "pokemon_category": "まぬけポケモン",
+      "height": "1.2 m",
+      "weight": "36.0 kg",
+      "flavor_text": "いつも ボーッとしていて なにを 考えているか わからない。 尻尾で エサを 釣るのが 得意。",
+      "stage": "たね",
+      "hp": 80,
+      "types": [
+        "Psychic"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Colorless"
+          ],
+          "name": "しっぽをたらす",
+          "damage": null,
+          "effect": "自分のトラッシュからポケモンを1枚選び、相手に見せて、手札に加える。"
+        },
+        {
+          "cost": [
+            "Psychic",
+            "Colorless"
+          ],
+          "name": "たいあたり",
+          "damage": {
+            "amount": 30,
+            "suffix": ""
+          },
+          "effect": ""
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Dark"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [
+          "Fighting"
+        ],
+        "value": "－30"
+      },
+      "retreat": 2,
+      "sources": [
+        {
+          "name": "拡張パック「ステラミラクル」",
+          "link": "https://www.pokemon-card.com/ex/sv7/"
+        }
+      ],
+      "print_key": "asia:SV7-38",
+      "card_key": "79|80|2|Teeziro|None,30|1,2",
+      "types_en": [
+        "Psychic"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 46372,
+    "name": "パオジアン",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/46372",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV8/046372_P_PAOJIAN.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV8/46372.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/46372",
+      "name": "パオジアン",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV8/046372_P_PAOJIAN.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 46372,
+      "set_name": "SV8",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV8.gif",
+      "number": "032",
+      "set_total": "106",
+      "rarity": "rare_r_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_r_c.gif",
+      "author": [
+        "Yuya Oka"
+      ],
+      "pokedex_number": 1002,
+      "pokemon_category": "さいやくポケモン",
+      "height": "1.9 m",
+      "weight": "152.2 kg",
+      "flavor_text": "大昔に 剣によって 露と消えた 者たちの 憎しみが 雪を まとい ポケモンになった。",
+      "stage": "たね",
+      "hp": 120,
+      "types": [
+        "Water"
+      ],
+      "abilities": [
+        {
+          "name": "ゆきにしずめる",
+          "effect": "自分の番に、このカードを手札からベンチに出したとき、1回使える。場に出ているスタジアムをトラッシュする。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Water",
+            "Water",
+            "Colorless"
+          ],
+          "name": "アイシクルループ",
+          "damage": {
+            "amount": 120,
+            "suffix": ""
+          },
+          "effect": "このポケモンについているエネルギーを1個選び、手札にもどす。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Steel"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "拡張パック「超電ブレイカー」",
+          "link": "https://www.pokemon-card.com/ex/sv8/"
+        }
+      ],
+      "print_key": "asia:SV8-32",
+      "card_key": "1002|120|1|Yuya Oka|120|3",
+      "types_en": [
+        "Water"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 47068,
+    "name": "Nのゾロア",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/47068",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV9/047068_P_NNOZOROA.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/SV9/47068.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/47068",
+      "name": "Nのゾロア",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV9/047068_P_NNOZOROA.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 47068,
+      "set_name": "SV9",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/SV9.gif",
+      "number": "060",
+      "set_total": "100",
+      "rarity": "rare_c_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_c_c.gif",
+      "author": [
+        "Jiro Sasumo"
+      ],
+      "pokedex_number": 570,
+      "pokemon_category": "わるぎつねポケモン",
+      "height": "0.7 m",
+      "weight": "12.5 kg",
+      "flavor_text": "相手の 姿に 化けてみせて 驚かせる。 無口な 子どもに 化けていることが 多いらしい。",
+      "stage": "たね",
+      "hp": 70,
+      "types": [
+        "Dark"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Dark"
+          ],
+          "name": "ひっかく",
+          "damage": {
+            "amount": 20,
+            "suffix": ""
+          },
+          "effect": ""
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Grass"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [],
+        "value": null
+      },
+      "retreat": 1,
+      "sources": [
+        {
+          "name": "拡張パック「 バトルパートナーズ」",
+          "link": "https://www.pokemon-card.com/ex/sv9/"
+        }
+      ],
+      "print_key": "asia:SV9-60",
+      "card_key": "570|70|1|Jiro Sasumo|20|1",
+      "types_en": [
+        "Darkness"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50143,
+    "name": "メタグロス",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50143",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M4/050143_P_METAGUROSU.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M4/50143.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50143",
+      "name": "メタグロス",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M4/050143_P_METAGUROSU.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 50143,
+      "set_name": "M4",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M4.gif",
+      "number": "059",
+      "set_total": "083",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "author": [
+        "Bun Toujo"
+      ],
+      "pokedex_number": 376,
+      "pokemon_category": "てつあしポケモン",
+      "height": "1.6 m",
+      "weight": "550.0 kg",
+      "flavor_text": "メタングが 合体して 生まれた。 ４つの 脳を 持つ メタグロスは スーパーコンピュータ並みの 知能。",
+      "stage": "2 進化",
+      "hp": 180,
+      "types": [
+        "Steel"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Steel"
+          ],
+          "name": "はねかえす",
+          "damage": {
+            "amount": 60,
+            "suffix": ""
+          },
+          "effect": "相手のバトルポケモンをベンチポケモンと入れ替える。［バトル場に出すポケモンは相手が選ぶ。］"
+        },
+        {
+          "cost": [
+            "Steel",
+            "Steel",
+            "Steel",
+            "Colorless"
+          ],
+          "name": "メタリックハンマー",
+          "damage": {
+            "amount": 150,
+            "suffix": "＋"
+          },
+          "effect": "のぞむなら、このポケモンについているSteelエネルギーを3個トラッシュし、150ダメージ追加。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Fire"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [
+          "Grass"
+        ],
+        "value": "－30"
+      },
+      "retreat": 3,
+      "evolve_from": "メタング",
+      "sources": [
+        {
+          "name": "拡張パック「ニンジャスピナー」",
+          "link": "https://www.pokemon-card.com/ex/m4/"
+        }
+      ],
+      "print_key": "asia:M4-59",
+      "card_key": "376|180|3|Bun Toujo|60,150+|1,4",
+      "types_en": [
+        "Metal"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50251,
+    "name": "ジュペッタ",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50251",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M5/050251_P_JIXYUPETTA.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M5/50251.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50251",
+      "name": "ジュペッタ",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M5/050251_P_JIXYUPETTA.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 50251,
+      "set_name": "M5",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M5.gif",
+      "number": "032",
+      "set_total": "081",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "author": [
+        "Mugi Hamada"
+      ],
+      "pokedex_number": 354,
+      "pokemon_category": "ぬいぐるみポケモン",
+      "height": "1.1 m",
+      "weight": "12.5 kg",
+      "flavor_text": "捨てられた ぬいぐるみに おんねんが 宿り ポケモンになった。 自分を 捨てた 子供を 捜している。",
+      "stage": "1 進化",
+      "hp": 80,
+      "types": [
+        "Psychic"
+      ],
+      "abilities": [
+        {
+          "name": "ばけがくれ",
+          "effect": "このポケモンは、相手のワザや特性の効果を受けない。"
+        }
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Psychic"
+          ],
+          "name": "にんぎょうキャッチ",
+          "damage": {
+            "amount": 80,
+            "suffix": ""
+          },
+          "effect": "のぞむなら、自分の山札から好きなカードを1枚選び、手札に加える。そして山札を切る。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Dark"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [
+          "Fighting"
+        ],
+        "value": "－30"
+      },
+      "retreat": 1,
+      "evolve_from": "カゲボウズ",
+      "sources": [
+        {
+          "name": "拡張パック「アビスアイ」",
+          "link": "https://www.pokemon-card.com/ex/m5/"
+        }
+      ],
+      "print_key": "asia:M5-32",
+      "card_key": "354|80|1|Mugi Hamada|80|1",
+      "types_en": [
+        "Psychic"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  },
+  {
+    "officialCardId": 50256,
+    "name": "ダダリン",
+    "regulation": null,
+    "cardType": "pokemon",
+    "trainerType": null,
+    "energyType": null,
+    "source": {
+      "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/50256",
+      "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M5/050256_P_DADARIN.jpg",
+      "fetchedAt": "2026-09-24T08:41:29.255624+00:00",
+      "fallbackDataset": "type-null/PTCG-database",
+      "fallbackPath": "data_jp/M5/50256.json"
+    },
+    "raw": {
+      "url": "https://www.pokemon-card.com/card-search/details.php/card/50256",
+      "name": "ダダリン",
+      "img": "https://www.pokemon-card.com/assets/images/card_images/large/M5/050256_P_DADARIN.jpg",
+      "card_type": "Pokémon",
+      "jp_id": 50256,
+      "set_name": "M5",
+      "set_img": "https://www.pokemon-card.com/assets/images/card/regulation_logo_1/M5.gif",
+      "number": "037",
+      "set_total": "081",
+      "rarity": "rare_u_c",
+      "rarity_img": "https://www.pokemon-card.com/assets/images/card/rarity/ic_rare_u_c.gif",
+      "author": [
+        "Oku"
+      ],
+      "pokedex_number": 781,
+      "pokemon_category": "もくずポケモン",
+      "height": "3.9 m",
+      "weight": "210.0 kg",
+      "flavor_text": "海底を 漂う 藻屑が  沈没船の 部品を 取りこんで  ゴーストポケモンに 生まれ変わった。",
+      "stage": "たね",
+      "hp": 140,
+      "types": [
+        "Psychic"
+      ],
+      "attacks": [
+        {
+          "cost": [
+            "Psychic"
+          ],
+          "name": "むねんのイカリ",
+          "damage": {
+            "amount": 30,
+            "suffix": "＋"
+          },
+          "effect": "自分のトラッシュに、特性「ばけがくれ」を持つポケモンが4枚以上あるなら、140ダメージ追加。"
+        }
+      ],
+      "weakness": {
+        "type": [
+          "Dark"
+        ],
+        "value": "×2"
+      },
+      "resistance": {
+        "type": [
+          "Fighting"
+        ],
+        "value": "－30"
+      },
+      "retreat": 3,
+      "sources": [
+        {
+          "name": "拡張パック「アビスアイ」",
+          "link": "https://www.pokemon-card.com/ex/m5/"
+        }
+      ],
+      "print_key": "asia:M5-37",
+      "card_key": "781|140|3|Oku|30+|1",
+      "types_en": [
+        "Psychic"
+      ]
+    },
+    "engine": {
+      "status": "unparsed",
+      "effects": [],
+      "handler": null,
+      "notes": [
+        "Reference data only; printed regulation and effects are unverified."
+      ]
+    }
+  }
+]

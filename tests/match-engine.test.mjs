@@ -35,11 +35,15 @@ test("official festival deck retains its exact 60-card counts, including evoluti
 
 test("opening hand always includes a Basic with an executable ability state", () => {
   const restrictive=[...Array(4).fill(45233),...Array(56).fill(50745)];
-  assert.throws(()=>engine.createMatch([sample,restrictive],9),/supported Basic/);
+  const blockedDb=structuredClone(db),blockedCard=blockedDb.cards.find(x=>x.officialCardId===45233);
+  blockedCard.raw.abilities[0].effect="未知の特性効果。";
+  const blockedCatalog=structuredClone(catalog);blockedCatalog.cardCount=blockedDb.cards.length;
+  const blockedEngine=new MatchEngine(new CardRepository(blockedDb),blockedCatalog);
+  assert.throws(()=>blockedEngine.createMatch([sample,restrictive],9),/supported Basic/);
   const usable=[49956,...Array(4).fill(45233),...Array(55).fill(50745)];
-  const game=engine.createMatch([sample,usable],9);
+  const game=blockedEngine.createMatch([sample,usable],9);
   assert.ok(game.players[1].hand.some(x=>x.cardId===49956));
-  assert.ok(engine.getMatchActions(game).some(x=>x.player===1&&x.type==="SET_ACTIVE"));
+  assert.ok(blockedEngine.getMatchActions(game).some(x=>x.player===1&&x.type==="SET_ACTIVE"));
 });
 
 test("seeded 60-card setup deals 7 and 6, requires both Basics, then draws the first turn", () => {
