@@ -1026,6 +1026,25 @@ export class MatchEngine extends AttackEngine {
         player.deck.push(...player.hand.splice(0));
         this.shufflePlayer(next,player);
         player.hand.push(...player.deck.splice(0,player.prizes.length===6?8:6));
+      } else if(spec.effect==="suguri"){
+        if(action.mode==="switch"){
+          const i=player.bench.findIndex(x=>x.instanceId===action.choiceInstanceId);
+          this.clearSwitchStatuses(player.active);
+          [player.active,player.bench[i]]=[player.bench[i],player.active];
+        }else{
+          next.damageBonuses??=[];
+          next.damageBonuses.push({player:action.player,turnNo:state.turnNo,amount:30,target:"OPPONENT_ACTIVE_EX_V"});
+        }
+      } else if(spec.effect==="jumbice"){
+        player.active.damage=Math.max(0,(player.active.damage??0)-80);
+      } else if(spec.effect==="pokegear"){
+        const looked=player.deck.splice(0,7),choiceIndex=action.choiceInstanceId?looked.findIndex(x=>x.instanceId===action.choiceInstanceId):-1;
+        if(choiceIndex>=0&&this.card(looked[choiceIndex]).trainerType==="supporter")player.hand.push(looked.splice(choiceIndex,1)[0]);
+        player.deck.unshift(...looked);this.shufflePlayer(next,player);
+      } else if(spec.effect==="kasumi"){
+        next.pendingTrainer={name:"カスミの元気",sourceInstanceId:trainer.instanceId,remaining:4,selectedTargetId:null};
+      } else if(spec.effect==="tairyounet"){
+        next.pendingTrainer={name:"大漁ネット",sourceInstanceId:trainer.instanceId,selectedNames:[],selectedTypes:[],max:6};
       } else if (spec.effect === "rod") {
         const i=player.trash.findIndex(x=>x.instanceId===action.choiceInstanceId);
         player.hand.push(player.trash.splice(i,1)[0]);
