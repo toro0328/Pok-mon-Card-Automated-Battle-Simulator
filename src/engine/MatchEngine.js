@@ -1,5 +1,5 @@
 import { AttackEngine } from "./AttackEngine.js?v=20260928-deckcompile5";
-import { parseTrainerText } from "../card-db/parse-trainers.js?v=20260928-coinsearch1";
+import { parseTrainerText } from "../card-db/parse-trainers.js?v=20260929-trainerprimitives1";
 import { parseAbility } from "../card-db/parse-abilities.js?v=20260928-fourcardfix2";
 import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-fourcardfix1";
 
@@ -424,6 +424,10 @@ export class MatchEngine extends AttackEngine {
             if(target !== from)actions.push({type:"PLAY_TRAINER",player:state.turn,
               sourceInstanceId:instance.instanceId,choiceInstanceId:energy.instanceId,
               targetInstanceId:target.instanceId});
+      } else if(spec.effect==="heal"){
+        for(const target of this.field(player))if((target.damage??0)>0)
+          actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId,
+            targetInstanceId:target.instanceId});
       } else actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId});
     }
     return actions;
@@ -1161,6 +1165,9 @@ export class MatchEngine extends AttackEngine {
         const from=this.field(player).find(x=>(x.attached??[]).some(y=>y.instanceId===action.choiceInstanceId));
         const i=from.attached.findIndex(x=>x.instanceId===action.choiceInstanceId);
         this.field(player).find(x=>x.instanceId===action.targetInstanceId).attached.push(from.attached.splice(i,1)[0]);
+      } else if(spec.effect==="heal"){
+        const target=this.field(player).find(x=>x.instanceId===action.targetInstanceId);
+        target.damage=Math.max(0,(target.damage??0)-spec.amount);
       } else if(spec.effect === "red"){
         const opponent=next.players[1-action.player];
         const returned=opponent.hand.splice(0);
