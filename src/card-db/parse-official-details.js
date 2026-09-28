@@ -1,66 +1,59 @@
 import { parseAbility } from "./parse-abilities.js";
 import { inspectAttacks } from "./parse-effects.js";
 
-const TYPE_MAP=[["草","Grass"],["炎","Fire"],["水","Water"],["雷","Electric"],["超","Psychic"],["闘","Fighting"],["悪","Dark"],["鋼","Metal"],["ドラゴン","Dragon"],["無","Colorless"]];
-const ENERGY_MAP={草:"Grass",炎:"Fire",水:"Water",雷:"Electric",超:"Psychic",闘:"Fighting",悪:"Dark",鋼:"Metal",無:"Colorless"};
+const TYPES={grass:"Grass",fire:"Fire",water:"Water",electric:"Electric",psychic:"Psychic",fighting:"Fighting",dark:"Dark",metal:"Metal",steel:"Metal",dragon:"Dragon",none:"Colorless"};
+const STAGES={"たね":"たね","1 進化":"1 進化","2 進化":"2 進化"};
+const TRAINERS={"グッズ":["trainer","item"],"サポート":["trainer","supporter"],"スタジアム":["trainer","stadium"],"ポケモンのどうぐ":["trainer","tool"],"基本エネルギー":["energy",null,"basic"],"特殊エネルギー":["energy",null,"special"],"トレーナー":["trainer","unspecified"]};
 
 export function parseOfficialCardDetails(html,expectedId,fetchedAt=new Date().toISOString()){
-  const doc=new DOMParser().parseFromString(html,"text/html"),id=Number(expectedId);
-  const name=doc.querySelector("h1")?.textContent?.trim();
-  if(!Number.isInteger(id)||id<=0||!name)throw new Error(`公式カードID ${expectedId} のカード情報を読み取れませんでした。`);
-  const detailUrl=`https://www.pokemon-card.com/card-search/details.php/card/${id}`;
-  const bodyText=doc.body?.innerText??doc.body?.textContent??"";
-  const text=bodyText.replaceAll("　"," ").replace(/[ \\t]+/g," ").replace(/\\n+/g,"\\n").trim();
-  const imageUrl=doc.querySelector('meta[property="og:image"]')?.content??doc.querySelector(`img[alt="${name}"]`)?.src??null;
-  const hpMatch=text.match(/HP\\s*(\\d+)/i);
-  let cardType=hpMatch?"pokemon":"trainer",trainerType=null,energyType=null;
-  const raw={jp_id:id,url:detailUrl,name,img:imageUrl};
-  if(hpMatch){
-    raw.card_type="Pokémon";raw.hp=Number(hpMatch[1]);
-    raw.stage=text.match(/(?:^|\\n)(たね|1\\s*進化|2\\s*進化)(?:\\n|$)/)?.[1]?.replace(/\\s/g,"")??null;
-    raw.types=TYPE_MAP.filter(([jp])=>text.includes(`タイプ\\n${jp}`)||new RegExp(`タイプ.{0,12}${jp}`).test(text)).map(([,en])=>en);
-    raw.attacks=[];
-    const root=doc.querySelector(".RightContent")??doc.body;
-    const headings=[...root.querySelectorAll("h4")];
-    for(let i=0;i<headings.length;i++){
-      const value=headings[i].textContent.trim(),m=value.match(/^(.+?)\\s*(\\d+)?([×＋+]?)$/u);
-      if(!m)continue;
-      const next=headings[i+1];
-      const section=headings[i].parentElement?.parentElement;
-      const effect=section?.innerText?.split(value).slice(1).join(value).split(/弱点|抵抗力|にげる/)[0].trim()??"";
-      const images=[...(headings[i].parentElement?.querySelectorAll("img")??[])];
-      const cost=images.flatMap(img=>Object.entries(ENERGY_MAP).filter(([jp])=>(img.alt+" "+img.src).includes(jp)).map(([,en])=>en));
-      raw.attacks.push({name:m[1].trim(),cost:cost.length?cost:["Void"],damage:m[2]?{amount:Number(m[2]),suffix:m[3]==="＋"?"+":m[3]}:null,effect});
-    }
-    raw.retreat=Number(text.match(/にげる[^0-9]{0,30}([0-4])(?:個)?/u)?.[1]??0);
-    const from=text.match(/「([^」]+)」から進化/u);if(from)raw.evolve_from=from[1];
-    const abilityName=text.match(/特性\\n([^\\n]+)\\n/);
-    if(abilityName){
-      const at=text.indexOf(abilityName[0]),tail=text.slice(at+abilityName[0].length);
-      const effect=tail.split(/\\n(?:ワザ|弱点|抵抗力|にげる)/)[0].trim();
-      if(effect)raw.abilities=[{name:abilityName[1].trim(),effect}];
-    }
+  const doc=new DOMParser().parseFromString(html,"text/html"),id=Number(expectedId),root=doc.querySelector(".PopupMain");
+  const name=root?.querySelector("h1")?.textContent?.trim();
+  if(!Number.isInteger(id)||id<=0||!name||!root)throw new Error(`公式カードID ${expectedId} のカード詳細を読み取れませんでした。`);
+  const url=`https://www.pokemon-card.com/card-search/details.php/card/${id}`;
+  const right=root.querySelector(".RightBox-inner"),heading=right?.querySelector("h2")?.textContent?.trim()??"";
+  const image=root.querySelector(".LeftBox img.fit")?.getAttribute("src");
+  const imageUrl=image?new URL(image,"https://www.pokemon-card.com").href:null;
+  const typeText=right?.querySelector(".TopInfo .type")?.textContent?.trim();
+  const hp=Number(right?.querySelector(".TopInfo .hp-num")?.textContent?.trim());
+  const isPokemon=!!typeText&&Number.isFinite(hp)&&hp>0;
+  const raw={jp_id:id,url,name,img:imageUrl};
+  let cardType,trainerType=null,energyType=null;
+
+  if(isPokemon){
+    cardType="pokemon";raw.card_type="Pokémon";raw.stage=STAGES[typeText]??typeText;raw.hp=hp;
+    raw.types=[...new Set([...right.querySelectorAll(".TopInfo .icon")].map(el=>el.className.match(/icon-([a-z]+)/)?.[1]).map(x=>TYPES[x]).filter(Boolean))];
+    raw.tags=[];
+    if(/ex$/u.test(name)){raw.tags.push("ex");raw.rule_box="ポケモンexがきぜつしたとき、相手はサイドを2枚とる。";}
+    const headings=[...right.querySelectorAll("h4")];
+    raw.attacks=headings.map(h=>{
+      const damageNode=h.querySelector(".f_right"),damageText=damageNode?.textContent?.trim()??"";
+      const damageMatch=damageText.match(/^(\\d+)([×＋+]?)$/u);
+      const attackName=[...h.childNodes].filter(n=>n.nodeType===Node.TEXT_NODE).map(n=>n.textContent).join("").trim();
+      const cost=[...h.querySelectorAll(".icon")].map(el=>TYPES[el.className.match(/icon-([a-z]+)/)?.[1]]).filter(Boolean);
+      let effect="",next=h.nextElementSibling;
+      while(next&&next.tagName!=="H4"&&next.tagName!=="H2"){if(next.tagName==="P")effect+=(effect?"\\n":"")+next.textContent.trim();next=next.nextElementSibling;}
+      return {name:attackName,cost:cost.length?cost:["Void"],
+        damage:damageMatch?{amount:Number(damageMatch[1]),suffix:damageMatch[2]==="＋"?"+":damageMatch[2]}:null,effect};
+    }).filter(a=>a.name);
+    raw.abilities=[];
+    const abilityHeading=headings.find(h=>h.textContent.trim()==="特性");
+    if(abilityHeading){const abilityName=abilityHeading.nextElementSibling?.textContent?.trim();const effect=abilityHeading.nextElementSibling?.nextElementSibling?.textContent?.trim();
+      if(abilityName&&effect)raw.abilities.push({name:abilityName,effect});}
+    const evolution=root.querySelector(".card")?.textContent?.match(/「([^」]+)」から進化/u);if(evolution)raw.evolve_from=evolution[1];
+    raw.retreat=right.querySelectorAll("table .escape .icon").length;
   }else{
-    const kind=text.match(/(基本エネルギー|特殊エネルギー|グッズ|サポート|スタジアム|ポケモンのどうぐ|トレーナー)/u)?.[1];
-    if(kind==="基本エネルギー"||kind==="特殊エネルギー"){
-      cardType="energy";energyType=kind==="基本エネルギー"?"basic":"special";raw.card_type=kind;
-    }else{
-      const types={"グッズ":"item","サポート":"supporter","スタジアム":"stadium","ポケモンのどうぐ":"tool","トレーナー":"unspecified"};
-      trainerType=types[kind]??"unspecified";raw.card_type=kind??"トレーナー";
-      const section=doc.querySelector(".RightContent")??doc.body;
-      const lines=(section.innerText??text).split("\\n").map(x=>x.trim()).filter(Boolean);
-      const at=lines.indexOf(name);
-      raw.effect=lines.slice(at+1).filter(x=>!["グッズ","サポート","スタジアム","ポケモンのどうぐ","トレーナー"].includes(x))
-        .filter(x=>!/^サポーターは|^グッズは|^スタジアムは|^ポケモンのどうぐは/u.test(x)).join("\\n").trim();
-    }
+    const mapped=TRAINERS[heading];
+    if(!mapped)throw new Error(`ID ${id} のカード種別「${heading||"不明"}」は未対応です。`);
+    [cardType,trainerType,energyType]=mapped;raw.card_type=heading;
+    const paragraphs=[...right.querySelectorAll(":scope > p")].map(p=>p.textContent.trim()).filter(Boolean);
+    raw.effect=paragraphs.filter(text=>!/^サポート(?:は|ーターは)|^(?:グッズ|スタジアム|ポケモンのどうぐ)は/u.test(text)).join("\\n");
+    if(heading==="基本エネルギー")raw.energy_type="basic";
+    if(heading==="特殊エネルギー")raw.energy_type="special";
   }
   const card={officialCardId:id,name,regulation:null,cardType,trainerType,energyType,
-    source:{detailUrl,imageUrl,fetchedAt,source:"official-card-detail"},raw,
-    engine:{status:"unparsed",effects:[],handler:null,notes:["Fetched from official Japanese detail page while importing this deck."]}};
-  card.compiled={
-    abilities:(raw.abilities??[]).map(x=>({name:x.name,text:x.effect,...parseAbility(x.name,x.effect)})),
-    attacks:inspectAttacks(card)
-  };
+    source:{detailUrl:url,imageUrl,fetchedAt,source:"official-card-detail"},raw,
+    engine:{status:"unparsed",effects:[],handler:null,notes:["Imported from the official Japanese card detail page during deck-code loading."]}};
+  card.compiled={abilities:(raw.abilities??[]).map(x=>({name:x.name,text:x.effect,...parseAbility(x.name,x.effect)})),attacks:inspectAttacks(card)};
   return card;
 }
 
