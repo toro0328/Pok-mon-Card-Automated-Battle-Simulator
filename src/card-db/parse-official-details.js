@@ -58,8 +58,14 @@ export function parseOfficialCardDetails(html,expectedId,fetchedAt=new Date().to
 }
 
 export function applyOfficialCardCompile(engine,card){
-  if(card.cardType==="pokemon")engine.deckPrograms.set(card.officialCardId,{
-    abilities:card.compiled?.abilities??[],attacks:card.compiled?.attacks??[],trainer:null,
+  if(card.cardType!=="pokemon")return;
+  const compiled=card.compiled??{
+    abilities:(card.raw.abilities??[]).map(x=>({name:x.name,text:x.effect,...parseAbility(x.name,x.effect)})),
+    attacks:inspectAttacks(card)
+  };
+  card.compiled=compiled;
+  engine.deckPrograms.set(card.officialCardId,{
+    abilities:compiled.abilities,attacks:compiled.attacks,trainer:null,
     sourceText:{abilities:(card.raw.abilities??[]).map(x=>x.effect),attacks:(card.raw.attacks??[]).map(x=>x.effect??""),trainer:""}
   });
 }
