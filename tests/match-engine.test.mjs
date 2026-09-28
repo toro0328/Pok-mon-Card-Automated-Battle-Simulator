@@ -48,6 +48,16 @@ test("opening hand always includes a Basic with an executable ability state", ()
   assert.ok(blockedEngine.getMatchActions(game).some(x=>x.player===1&&x.type==="SET_ACTIVE"));
 });
 
+test("deck-rule gate allows a legal 60-card pair and rejects multiple ACE SPEC cards", () => {
+  assert.deepEqual(engine.deckRuleChecks([{cards:sample.map(officialCardId=>({officialCardId,count:1}))},
+    {cards:sample.map(officialCardId=>({officialCardId,count:1}))}]),[]);
+  const illegal=[...sample.slice(0,58),45783,45783];
+  const issues=engine.deckRuleChecks([{cards:sample.map(officialCardId=>({officialCardId,count:1}))},
+    {cards:illegal.map(officialCardId=>({officialCardId,count:1}))}]);
+  assert.ok(issues.some(issue=>issue.side===1&&issue.rule==="ace_spec_limit"));
+  assert.throws(()=>engine.createMatch([sample,illegal],23),/ACE SPECは1デッキ1枚まで/);
+});
+
 test("seeded 60-card setup deals 7 and 6, requires both Basics, then draws the first turn", () => {
   const first = engine.createMatch([sample,sample],17);
   assert.deepEqual(first,engine.createMatch([sample,sample],17));
