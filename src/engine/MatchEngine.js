@@ -165,8 +165,19 @@ export class MatchEngine extends AttackEngine {
     }
   }
 
+  trainerEffectText(card){
+    let text=String(card.raw.effect??"");
+    const reminders=[
+      "\nサポートは、自分の番に1枚しか使えない。",
+      "\nサポーターは、自分の番に1枚だけ使える。使ったら、自分のバトル場の横におき、自分の番の終わりにトラッシュ。",
+      "\nサポートは自分の番に1枚しか使えない。"
+    ];
+    for(const reminder of reminders)if(text.endsWith(reminder))text=text.slice(0,-reminder.length);
+    return text;
+  }
+
   trainerSpec(instance) {
-    const card = this.card(instance), spec = TRAINERS[card.name];
+    const card = this.card(instance), spec = TRAINERS[card.name], effectText=this.trainerEffectText(card);
     const deckProgram=this.deckPrograms.get(instance.cardId);
     if(deckProgram?.trainer)return deckProgram.trainer;
     if(card.name==="ジャッジマン"&&card.trainerType==="supporter"){
@@ -179,8 +190,8 @@ export class MatchEngine extends AttackEngine {
         "おたがいのプレイヤーは、それぞれ手札をすべて山札にもどして切る。その後、それぞれの山札を4枚引く。"].includes(text))
         return TRAINERS["ジャッジマン"];
     }
-    const matched=spec&&card.trainerType===spec.type&&card.raw.effect===spec.text?spec:
-      Object.values(TRAINERS).find(candidate=>card.trainerType===candidate.type&&card.raw.effect===candidate.text);
+    const matched=spec&&card.trainerType===spec.type&&effectText===spec.text?spec:
+      Object.values(TRAINERS).find(candidate=>card.trainerType===candidate.type&&effectText===candidate.text);
     return matched??parseTrainerText(card);
   }
 
@@ -201,9 +212,9 @@ export class MatchEngine extends AttackEngine {
       const attacks=inspectAttacks(card);
       let trainer=null;
       if(card.trainerType){
-        const existing=TRAINERS[card.name];
-        trainer=existing&&card.trainerType===existing.type&&card.raw.effect===existing.text?existing:
-          Object.values(TRAINERS).find(candidate=>card.trainerType===candidate.type&&card.raw.effect===candidate.text)??parseTrainerText(card);
+        const existing=TRAINERS[card.name],effectText=this.trainerEffectText(card);
+        trainer=existing&&card.trainerType===existing.type&&effectText===existing.text?existing:
+          Object.values(TRAINERS).find(candidate=>card.trainerType===candidate.type&&effectText===candidate.text)??parseTrainerText({...card,raw:{...card.raw,effect:effectText}});
         if(card.trainerType==="stadium"&&this.isSupportedStadium(instance))trainer={type:"stadium",effect:"stadium",text:card.raw.effect,compiledFromText:true};
         if(card.trainerType==="tool"&&this.isSupportedTool(instance))trainer={type:"tool",effect:"tool",text:card.raw.effect,compiledFromText:true};
       }
