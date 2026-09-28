@@ -233,7 +233,7 @@ function analyzeCard(officialCardId){
     for(const attack of attacks){checks.push(attack.status==="supported");details.push({label:"ワザ："+attack.name+"（"+(attack.cost||[]).join("・")+"／"+(attack.printedDamage?.amount??"効果")+"）",status:attack.status,text:attack.text});texts.push(attack.text||"");}
     if(!checks.length)checks.push(true);
   }else if(data.cardType==="trainer"){
-    const ok=data.trainerType==="stadium"?engine.isSupportedStadium(ref):!!engine.trainerSpec(ref);checks.push(ok);details.push({label:data.trainerType||"トレーナーズ",status:ok?"supported":"needs_review",text:data.raw.effect||"テキスト登録なし"});texts.push(data.raw.effect||"");
+    const ok=data.trainerType==="stadium"?engine.isSupportedStadium(ref):data.trainerType==="tool"?engine.isSupportedTool(ref):!!engine.trainerSpec(ref);checks.push(ok);details.push({label:data.trainerType||"トレーナーズ",status:ok?"supported":"needs_review",text:data.raw.effect||"テキスト登録なし"});texts.push(data.raw.effect||"");
   }else if(data.cardType==="energy"){
     const ok=engine.isSupportedEnergy(ref);checks.push(ok);details.push({label:data.energyType==="basic"?"基本エネルギー":"特殊エネルギー",status:ok?"supported":"needs_review",text:data.raw.effect||""});texts.push(data.raw.effect||"");
   }else{checks.push(data.engine?.status==="supported");details.push({label:data.cardType||"カード",status:data.engine?.status||"needs_review",text:data.raw.effect||""});}
