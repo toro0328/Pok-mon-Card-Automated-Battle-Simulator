@@ -1,4 +1,4 @@
-import { AttackEngine } from "./AttackEngine.js?v=20260928-deckcompile2";
+import { AttackEngine } from "./AttackEngine.js?v=20260928-deckcompile3";
 import { parseTrainerText } from "../card-db/parse-trainers.js?v=20260928-deckcompile1";
 import { parseAbility } from "../card-db/parse-abilities.js?v=20260928-fourcardfix1";
 import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-fourcardfix1";
@@ -619,6 +619,12 @@ export class MatchEngine extends AttackEngine {
 
   attackEffectActions(state) {
     const pending=state.pendingAttack,owner=state.players[pending.player];
+    if(pending.type==="SEARCH_BASIC_ENERGY_ATTACH_BENCH"){
+      const energies=owner.deck.filter(x=>this.card(x).energyType==="basic").slice(0,pending.remaining);
+      return [...energies.flatMap(energy=>owner.bench.map(target=>({type:"ATTACK_SEARCH",player:pending.player,
+        choiceInstanceId:energy.instanceId,targetInstanceId:target.instanceId}))),
+        {type:"ATTACK_SEARCH_FINISH",player:pending.player}];
+    }
     if(pending.type==="SEARCH_TRASH_TO_HAND"){
       const choices=owner.trash.filter(x=>this.card(x).cardType==="pokemon");
       return [...choices.map(x=>({type:"ATTACK_SEARCH",player:pending.player,choiceInstanceId:x.instanceId})),
@@ -727,7 +733,13 @@ export class MatchEngine extends AttackEngine {
       pending.delayedKnockouts=damage>0&&target.damage>=this.effectiveHP(target)?[{owner:1-pending.player,instanceId:target.instanceId}]:[];
       return this.continueCounterAttack(next);
     }else if(action.type === "ATTACK_SEARCH"){
-      if(pending.type==="SEARCH_TRASH_TO_HAND"){
+      if(pending.type==="SEARCH_BASIC_ENERGY_ATTACH_BENCH"){
+      const energies=owner.deck.filter(x=>this.card(x).energyType==="basic").slice(0,pending.remaining);
+      return [...energies.flatMap(energy=>owner.bench.map(target=>({type:"ATTACK_SEARCH",player:pending.player,
+        choiceInstanceId:energy.instanceId,targetInstanceId:target.instanceId}))),
+        {type:"ATTACK_SEARCH_FINISH",player:pending.player}];
+    }
+    if(pending.type==="SEARCH_TRASH_TO_HAND"){
         const i=own.trash.findIndex(x=>x.instanceId===action.choiceInstanceId);
         if(i<0||this.card(own.trash[i]).cardType!=="pokemon")throw new Error("Invalid discard-pile Pokémon selection");
         own.hand.push(own.trash.splice(i,1)[0]);delete next.pendingAttack;
@@ -770,6 +782,10 @@ export class MatchEngine extends AttackEngine {
       }
       if(pending.type==="ATTACH_BASIC_FIGHTING_FROM_TRASH_TO_BENCH"){
         delete next.pendingAttack;return next.pendingSecondAttack?next:this.endTurn(next);
+      }
+      if(pending.type==="SEARCH_BASIC_ENERGY_ATTACH_BENCH"){
+        this.shufflePlayer(next,own);delete next.pendingAttack;
+        return next.pendingSecondAttack?next:this.endTurn(next);
       }
       this.shufflePlayer(next,own);
     }
