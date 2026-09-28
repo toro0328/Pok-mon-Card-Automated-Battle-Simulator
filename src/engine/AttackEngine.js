@@ -487,7 +487,8 @@ export class AttackEngine extends AbilityEngine {
       } else if (effect.type === "DAMAGE" && effect.target === "ATTACKING_POKEMON") {
         own.active.damage = (own.active.damage ?? 0) + effect.amount;
       } else if(effect.type === "APPLY_STATUS") {
-        this.applyStatus(next,victim,effect.status,1-state.turn);
+        const statusTarget=effect.target==="ATTACKING_POKEMON"?own.active:victim;
+        this.applyStatus(next,statusTarget,effect.status,effect.target==="ATTACKING_POKEMON"?state.turn:1-state.turn);
       } else if(effect.type === "COIN_APPLY_STATUS") {
         if(coin?.heads)this.applyStatus(next,victim,effect.status,1-state.turn);
       } else if (effect.type === "HEAL_OWN_FIELD") {
