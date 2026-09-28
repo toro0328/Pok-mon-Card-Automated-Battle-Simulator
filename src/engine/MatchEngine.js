@@ -998,7 +998,9 @@ export class MatchEngine extends AttackEngine {
       next.stadiumEffectUsedTurns??=[-1,-1];next.stadiumEffectUsedTurns[action.player]=state.turnNo;
       return next;
     }
-    if (action.type.startsWith("TRAINER_") || action.type.startsWith("AKAMATSU_") || action.type === "PLAY_TRAINER") return this.applyTrainer(state, action);
+    if (action.type.startsWith("TRAINER_") || action.type.startsWith("AKAMATSU_") ||
+        action.type.startsWith("KASUMI_") || action.type.startsWith("TAIRYOU_") ||
+        action.type === "PLAY_TRAINER") return this.applyTrainer(state, action);
     if (["ABILITY_SELECT","ABILITY_SKIP"].includes(action.type)) return this.applyBenchAbility(state,action);
     if (action.type === "USE_HOOH") {
       const next=structuredClone(state);
