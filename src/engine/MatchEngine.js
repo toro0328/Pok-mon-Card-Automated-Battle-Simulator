@@ -432,8 +432,8 @@ export class MatchEngine extends AttackEngine {
       const retreatLock=(state.temporaryLocks??[]).some(lock=>lock.targetInstanceId===player.active.instanceId&&
         lock.type==="PREVENT_RETREAT_NEXT_TURN"&&lock.expiresTurnNo>=state.turnNo);
       const count = this.retreatCost(state, state.turn, player.active.instanceId);
-      const attached = player.active.attached ?? [];
-      if (!blockedStatus && !retreatLock && count <= attached.length && attached.every(x => this.isSupportedEnergy(x))) {
+      const attached = (player.active.attached ?? []).filter(x=>this.isSupportedEnergy(x));
+      if (!blockedStatus && !retreatLock && count <= attached.length) {
         const subsets = (start, chosen) => {
           if (chosen.length === count) return [chosen];
           const result = [];
