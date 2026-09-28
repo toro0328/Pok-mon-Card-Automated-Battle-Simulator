@@ -236,7 +236,7 @@ function analyzeCard(officialCardId){
     for(const attack of attacks){checks.push(attack.status==="supported");details.push({label:"ワザ："+attack.name+"（"+(attack.cost||[]).join("・")+"／"+(attack.printedDamage?.amount??"効果")+"）",status:attack.status,text:attack.text});texts.push(attack.text||"");}
     if(!checks.length)checks.push(true);
   }else if(data.cardType==="trainer"){
-    const ok=data.trainerType==="stadium"?engine.isSupportedStadium(ref):data.trainerType==="tool"?engine.isSupportedTool(ref):!!engine.trainerSpec(ref);checks.push(ok);const text=data.name==="ガラスのラッパ"&&ok?"公式カード文（DB記載を補正）：\\n"+engine.trainerSpec(ref).text+"\\nDB原文（Colorless限定の誤記）：\\n"+(data.raw.effect||""):data.raw.effect||"テキスト登録なし";details.push({label:data.trainerType||"トレーナーズ",status:ok?"supported":"needs_review",text});texts.push(text);
+    const ok=data.trainerType==="stadium"?engine.isSupportedStadium(ref):data.trainerType==="tool"?engine.isSupportedTool(ref):!!engine.trainerSpec(ref);checks.push(ok);const text=data.name==="ガラスのラッパ"&&ok?"公式カード文（DB記載を補正）：\n"+engine.trainerSpec(ref).text+"\nDB原文（Colorless限定の誤記）：\n"+(data.raw.effect||""):data.raw.effect||"テキスト登録なし";details.push({label:data.trainerType||"トレーナーズ",status:ok?"supported":"needs_review",text});texts.push(text);
   }else if(data.cardType==="energy"){
     const ok=engine.isSupportedEnergy(ref);checks.push(ok);details.push({label:data.energyType==="basic"?"基本エネルギー":"特殊エネルギー",status:ok?"supported":"needs_review",text:data.raw.effect||""});texts.push(data.raw.effect||"");
   }else{checks.push(data.engine?.status==="supported");details.push({label:data.cardType||"カード",status:data.engine?.status||"needs_review",text:data.raw.effect||""});}
@@ -249,7 +249,7 @@ function addAnalysisCard(report,counts){
   if(report.roles.length){const roles=document.createElement("small");roles.textContent="役割の目安："+report.roles.join("・");node.append(roles);}
   for(const detail of (report.details??[])){const line=document.createElement("small");line.textContent=(detail.status==="supported"?"✓ ":"△ ")+detail.label+(detail.text?"\\n"+detail.text:"");node.append(line);}el.analysisList.append(node);
 }
-function analyzeDecks(decks){
+async function analyzeDecks(decks){
   const combined=new Map();for(let side=0;side<decks.length;side++)for(const item of decks[side].cards){const entry=combined.get(item.officialCardId)||{counts:[0,0]};entry.counts[side]+=item.count;combined.set(item.officialCardId,entry);}
   const ids=[...combined.keys()],reports=[];el.analysisList.replaceChildren();el.analysisPanel.hidden=false;
   const knownDecks=decks.map(deck=>({...deck,cards:deck.cards.filter(item=>repository.get(item.officialCardId))}));
@@ -264,33 +264,33 @@ function analyzeDecks(decks){
       const existing=compiledById.get(item.officialCardId);
       return existing?{...existing,copies:[item.count,0]}:{officialCardId:item.officialCardId,
         name:`カードDB未登録（ID ${item.officialCardId}）`,copies:[item.count,0],supported:false,
-        issues:[{kind:"missing_card",name:`カードID ${item.officialCardId}`,
-          text:"この公式カードIDのカード情報がDBにありません。カード情報を確認して追加してください。"}]};
+        issues:[{kind:"missing_card",name:`カードID ${item.officialCardId}`,text:"この公式カードIDのカード情報をDBに追加してください。"}]};
     });
     saveDeckAnalysis(createDeckAnalysisRecord(deck,analysis,deck.missingCardIds??[]));
   }
-  const compiledSupported=compiled.filter(x=>x.supported).length;
-  el.analysisSummary.textContent=`デッキ内${compiled.length}種類のカード本文を走査し、${compiledSupported}/${compiled.length}種類の効果を対戦エンジンへ接続しました。残りも文章解析を続けています。`;
   const profiles=[0,1].map(()=>({attackerIds:[],roles:new Set()}));
   for(let index=0;index<ids.length;index++){
-    const id=ids[index],copies=combined.get(id).counts;
+    const id=ids[index],copies=combined.get(id).counts,compiledCard=compiledById.get(id);
     const report=repository.get(id)?analyzeCard(id):{officialCardId:id,name:`カードDB未登録（ID ${id}）`,
-      type:"unknown",details:[{label:"カード情報",status:"needs_review",text:"公式カードIDの情報がDBにありません。"}],
-      roles:[],supported:false,bestDamage:0};
+      type:"unknown",details:[{label:"カード情報",status:"needs_review",text:"公式カードIDの情報がDBにありません。"}],roles:[],supported:false,bestDamage:0};
+    if(compiledCard?.unsupported?.length)for(const effect of compiledCard.unsupported)report.details.push({
+      label:"未対応効果"+(effect.name?"："+effect.name:""),status:"needs_review",text:effect.text||"効果文を実行する処理が未接続です。"});
+    report.supported=report.supported&&!!compiledCard?.supported;
     reports.push(report);addAnalysisCard(report,copies);
     for(let side=0;side<2;side++)if(copies[side]){for(const role of report.roles)profiles[side].roles.add(role);if(report.type==="pokemon"&&report.bestDamage>0)profiles[side].attackerIds.push({id,damage:report.bestDamage});}
-    const percent=55+40*(index+1)/ids.length;updateProgress(percent,"効果解析 "+(index+1)+"/"+ids.length+"種類");
-    const elapsed=Math.max(0,Date.now()-loadStarted),remaining=index?Math.max(0,Math.ceil((elapsed/(index+1))*(ids.length-index)/1000)):null;el.elapsed.textContent="経過 "+Math.floor(elapsed/1000)+"秒・解析残り目安 "+(remaining===null?"計算中":"約"+remaining+"秒");await new Promise(resolve=>setTimeout(resolve,0));
+    updateProgress(55+40*(index+1)/ids.length,"カード解析 "+(index+1)+"/"+ids.length+"種類");
+    const elapsed=Math.max(0,Date.now()-loadStarted),remaining=index?Math.max(0,Math.ceil((elapsed/(index+1))*(ids.length-index)/1000)):null;
+    el.elapsed.textContent="経過 "+Math.floor(elapsed/1000)+"秒・解析残り目安 "+(remaining===null?"計算中":"約"+remaining+"秒");await new Promise(resolve=>setTimeout(resolve,0));
   }
-  const totalCopies=decks.reduce((sum,d)=>sum+d.cards.reduce((n,x)=>n+x.count,0),0),supportedCopies=reports.reduce((sum,r)=>sum+combined.get(r.officialCardId).counts.reduce((n,count)=>n+(r.supported?count:0),0),0);
+  const totalCopies=decks.reduce((sum,d)=>sum+d.cards.reduce((n,x)=>n+x.count,0),0);
+  const supportedCopies=reports.reduce((sum,r)=>sum+combined.get(r.officialCardId).counts.reduce((n,count)=>n+(r.supported?count:0),0),0);
   const totalEffects=reports.reduce((sum,r)=>sum+r.details.length,0),supportedEffects=reports.reduce((sum,r)=>sum+r.details.filter(d=>d.status==="supported").length,0),pct=totalCopies?Math.round(supportedCopies/totalCopies*100):0;
-  const unresolved=reports.filter(report=>!report.supported);el.analysisSummary.textContent="カード文・効果の走査："+totalCopies+"/"+totalCopies+"枚完了（100%）。実戦対応率："+supportedCopies+"/"+totalCopies+"枚（"+pct+"%）、対応済み効果 "+supportedEffects+"/"+totalEffects+"件。未対応効果は推測で処理しません。";
-  const deckNames=new Set(reports.map(report=>report.name)),plans=[];
-  if(deckNames.has("メガレックウザex"))plans.push("メガレックウザex：はしゃのほうこうやヒビキのホウオウexで基本炎・雷エネルギーを場に増やし、ストームエメラルダの打点につなげる。テラパゴスexがいる場合はゼロの大空洞・ガラスのラッパも展開候補。参考：公式デッキ解説（https://www.pokemon-card.com/info/005568.html）");
-  if(deckNames.has("バチンキー")&&deckNames.has("カミッチュ"))plans.push("おまつりおんど：バチンキーのドンドンだいこで必要札を探し、お祭り会場を維持。カミッチュなどのおまつりおんど持ちを育て、ワザを2回使う。参考：晴れる屋2の回し方解説（https://www.hareruya2.com/blogs/news/just-nowv4）");
-  el.strategySummary.textContent=plans.length?"デッキの基本プラン（カード構成から判定）："+plans.join(" ／ "):"デッキ固有の回し方資料は未登録です。カード文と合法手に基づく基本判断で進めます。";
+  const unresolved=reports.filter(report=>!report.supported),ruleErrors=engine.deckRuleChecks(knownDecks),missing=decks.flatMap(deck=>deck.missingCardIds??[]);
+  const complete=unresolved.length===0&&ruleErrors.length===0&&missing.length===0&&decks.every(deck=>deck.cards.reduce((n,x)=>n+x.count,0)===60);
+  el.analysisSummary.textContent="カード文の走査："+totalCopies+"/"+totalCopies+"枚（100%）。実戦対応："+supportedCopies+"/"+totalCopies+"枚（"+pct+"%）、対応済み効果："+supportedEffects+"/"+totalEffects+"件。";
+  el.strategySummary.textContent=(ruleErrors.length?"構築ルール違反："+ruleErrors.map(x=>(x.side===0?"自分側":"相手側")+"："+x.message).join(" ／ "):"構築ルール：合法")+(unresolved.length?" ／ 未対応カード効果："+unresolved.map(x=>x.name+"（"+x.details.filter(d=>d.status!=="supported").map(d=>d.label).join("、")+"）").join(" ／ "):"");
   for(const profile of profiles)profile.attackerIds.sort((a,b)=>b.damage-a.damage);
-  return {profiles,complete:unresolved.length===0,unresolved};
+  return {profiles,complete,unresolved,ruleErrors,missing};
 }
 function chooseAction(actions){
   if(!actions.length)return null;
@@ -345,136 +345,8 @@ function startMatch(decks,analysis){
   catch(error){game=null;el.start.disabled=true;setStatus("構築ルール確認エラー："+error.message,"error");return;}
   updateProgress(100,analysis.complete?"読み込み・効果・構築ルール確認完了":"カード走査完了・未対応効果を記録");
   if(analysis.complete)setStatus("カード効果・構築ルールを確認しました。自動対戦を開始できます。","done");
-  else setStatus("読み込みを完了し、対応済み効果で対戦準備しました。未対応項目は解析記録に残しています："+[...blocker,...analysis.ruleErrors.map(x=>x.message),...(analysis.missing.length?["未登録カードID "+analysis.missing.join(",")]:[])].join(" ／ "),"");
+  else setStatus("読み込みを完了し、対応済み効果で対戦準備しました。未対応項目は解析記録に残しています："+[...blocker,...analysis.ruleErrors.map(x=>x.message),...(analysis.missing.length?["未登録カードID "+analysis.missing.join(",")]:[])].join(" ／ "));
   logAction(analysis.complete?"カード解析・構築ルール確認完了":"読み込み完了・未対応効果を個別記録");render();
-}
-el.load.onclick=async()=>{
-  pause();analysisAllowsMatch=false;game=null;el.start.disabled=true;el.pause.disabled=true;
-  el.p0.replaceChildren();el.p1.replaceChildren();el.turn.textContent="カード効果を事前確認中…";el.seed.textContent="";
-  el.load.disabled=true;el.analysisPanel.hidden=true;el.progress.hidden=false;loadStarted=Date.now();
-  updateProgress(2,"読み込みを開始");setStatus("カードDBと公式デッキを確認しています…");
-  clearInterval(loadClock);loadClock=setInterval(()=>{const current=Number(el.progressBar.value||0);const label=el.progressLabel.textContent.replace(/^\\d+%　/,"");updateProgress(current,label);},1000);
-  try{
-    if(!repository){updateProgress(8,"カードDB取得");repository=await CardRepository.load("./data/cards/cards.json");}
-    updateProgress(16,"効果エンジン準備");
-    if(!engine){const response=await fetch("./data/cards/ability-effects.json");if(!response.ok)throw Error("特性カタログを取得できません");engine=new MatchEngine(repository,await response.json());}
-    updateProgress(24,"公式デッキ2件を取得・照合");
-    const decks=await Promise.all([readDeck(el.codeA.value,"self"),readDeck(el.codeB.value,"opponent")]);
-    if(decks[0].deckCode)el.codeA.value=decks[0].deckCode;if(decks[1].deckCode)el.codeB.value=decks[1].deckCode;
-    updateProgress(55,"カードごとの特性・ワザ・効果を解析");const analysis=await analyzeDecks(decks);startMatch(decks,analysis);
-  }catch(error){setStatus(error.message||"デッキ解析中にエラーが発生しました。","error");el.load.disabled=false;el.start.disabled=true;el.progress.hidden=true;el.turn.textContent="読み込みエラー：コードを確認して再試行してください。";}
-  finally{clearInterval(loadClock);loadClock=null;}
-};
-el.start.onclick=start;el.pause.onclick=pause;
-for(const [input,slot] of [[el.codeA,"self"],[el.codeB,"opponent"]]){
-  try{const saved=JSON.parse(localStorage.getItem(`pokemon-card-simulator-deck-${slot}`)||"null");if(saved?.deckCode)input.value=saved.deckCode;}catch{}
-}
-</script>
-</body>
-</html>async function analyzeDecks(decks){
-  const combined=new Map();for(let side=0;side<decks.length;side++)for(const item of decks[side].cards){const entry=combined.get(item.officialCardId)||{counts:[0,0]};entry.counts[side]+=item.count;combined.set(item.officialCardId,entry);}
-  const ids=[...combined.keys()],reports=[];el.analysisList.replaceChildren();el.analysisPanel.hidden=false;
-  const knownDecks=decks.map(deck=>({...deck,cards:deck.cards.filter(item=>repository.get(item.officialCardId))}));
-  const compiled=await engine.compileDeck(knownDecks,({done,total,card})=>{
-    const percent=5+50*done/total;updateProgress(percent,`カード文を効果プログラムに変換 ${done}/${total}種類：${card}`);
-    const elapsed=Math.max(0,Date.now()-loadStarted),remaining=done?Math.max(0,Math.ceil((elapsed/done)*(total-done)/1000)):null;
-    el.elapsed.textContent=`経過 ${Math.floor(elapsed/1000)}秒・読込残り目安 ${remaining===null?"計算中":"約"+remaining+"秒"}`;
-  });
-  const compiledById=new Map(compiled.map(card=>[card.officialCardId,card]));
-  for(const deck of decks){
-    const analysis=deck.cards.map(item=>{
-      const existing=compiledById.get(item.officialCardId);
-      return existing?{...existing,copies:[item.count,0]}:{officialCardId:item.officialCardId,
-        name:`カードDB未登録（ID ${item.officialCardId}）`,copies:[item.count,0],supported:false,
-        issues:[{kind:"missing_card",name:`カードID ${item.officialCardId}`,text:"この公式カードIDのカード情報がDBにありません。カード情報を確認して追加してください。"}]};
-    });
-    saveDeckAnalysis(createDeckAnalysisRecord(deck,analysis,deck.missingCardIds??[]));
-  }
-  const profiles=[0,1].map(()=>({attackerIds:[],roles:new Set()}));
-  for(let index=0;index<ids.length;index++){
-    const id=ids[index],copies=combined.get(id).counts,compiledCard=compiledById.get(id);
-    const report=repository.get(id)?analyzeCard(id):{officialCardId:id,name:`カードDB未登録（ID ${id}）`,
-      type:"unknown",details:[{label:"カード情報",status:"needs_review",text:"公式カードIDの情報がDBにありません。"}],
-      roles:[],supported:false,bestDamage:0};
-    if(compiledCard?.unsupported?.length)for(const effect of compiledCard.unsupported)report.details.push({
-      label:"未対応効果"+(effect.name? "："+effect.name:""),
-      status:"needs_review",text:effect.text||"効果文を実行する処理が未接続です。"});
-    report.supported=report.supported&&!!compiledCard?.supported;
-    reports.push(report);addAnalysisCard(report,copies);
-    for(let side=0;side<2;side++)if(copies[side]){for(const role of report.roles)profiles[side].roles.add(role);if(report.type==="pokemon"&&report.bestDamage>0)profiles[side].attackerIds.push({id,damage:report.bestDamage});}
-    updateProgress(55+40*(index+1)/ids.length,"カード解析 "+(index+1)+"/"+ids.length+"種類");
-    const elapsed=Math.max(0,Date.now()-loadStarted),remaining=index?Math.max(0,Math.ceil((elapsed/(index+1))*(ids.length-index)/1000)):null;el.elapsed.textContent="経過 "+Math.floor(elapsed/1000)+"秒・解析残り目安 "+(remaining===null?"計算中":"約"+remaining+"秒");await new Promise(resolve=>setTimeout(resolve,0));
-  }
-  const totalCopies=decks.reduce((sum,d)=>sum+d.cards.reduce((n,x)=>n+x.count,0),0);
-  const supportedCopies=reports.reduce((sum,r)=>sum+combined.get(r.officialCardId).counts.reduce((n,count)=>n+(r.supported?count:0),0),0);
-  const totalEffects=reports.reduce((sum,r)=>sum+r.details.length,0),supportedEffects=reports.reduce((sum,r)=>sum+r.details.filter(d=>d.status==="supported").length,0),pct=totalCopies?Math.round(supportedCopies/totalCopies*100):0;
-  const unresolved=reports.filter(report=>!report.supported),ruleErrors=engine.deckRuleChecks(knownDecks);
-  const missing=decks.flatMap(deck=>deck.missingCardIds??[]);
-  const complete=unresolved.length===0&&ruleErrors.length===0&&missing.length===0&&decks.every(deck=>deck.cards.reduce((n,x)=>n+x.count,0)===60);
-  el.analysisSummary.textContent="カード文の走査："+totalCopies+"/"+totalCopies+"枚（100%）。実戦対応："+supportedCopies+"/"+totalCopies+"枚（"+pct+"%）、対応済み効果："+supportedEffects+"/"+totalEffects+"件。";
-  el.strategySummary.textContent=(ruleErrors.length?"構築ルール違反："+ruleErrors.map(x=>`${x.side===0?"自分側":"相手側"}：${x.message}`).join(" ／ "):"構築ルール：合法")+ (unresolved.length?" ／ 未対応カード効果："+unresolved.map(x=>x.name+"（"+x.details.filter(d=>d.status!=="supported").map(d=>d.label).join("、")+"）").join(" ／ "):"");
-  for(const profile of profiles)profile.attackerIds.sort((a,b)=>b.damage-a.damage);
-  return {profiles,complete,unresolved,ruleErrors,missing};
-}
-function chooseAction(actions){
-  if(!actions.length)return null;
-  if(game.phase==="setup"){const player=game.setupReady[0]?1:0,firstSide=actions.filter(action=>action.player===player);if(firstSide.length)actions=firstSide;}
-  let ranked=actions.map(action=>({action,value:score(action,actions)+Math.random()*0.15}));
-  ranked.sort((a,b)=>b.value-a.value);
-  return ranked[0].action;
-}
-function logAction(text){
-  entries.unshift(`#${++moveCount} ${text}`);entries=entries.slice(0,12);
-  el.log.replaceChildren(...entries.map(message=>{const row=document.createElement("div");row.textContent=message;return row;}));
-}
-function render(){
-  if(!game)return;
-  playerView(0);playerView(1);
-  if(game.winner!=null){el.turn.textContent=`${names[game.winner]}の勝ち${game.winReason?`（${game.winReason}）`:""}`;running=false;clearTimeout(timer);timer=null;el.start.disabled=true;el.pause.disabled=true;el.load.disabled=false;setStatus(`対戦終了：${names[game.winner]}の勝ちです。`,"done");}
-  else if(game.pendingKnockout?.reason){el.turn.textContent="同時きぜつ：この状態は未対応";running=false;clearTimeout(timer);timer=null;el.start.disabled=true;el.pause.disabled=true;el.load.disabled=false;setStatus("同時きぜつが発生しました。安全のため自動進行を止めました。","error");}
-  else if(game.pendingBenchCleanup)el.turn.textContent="ゼロの大空洞：ベンチ上限を調整中";
-  else if(game.phase==="setup")el.turn.textContent=`${game.setupReady[0]?"後攻側":"先行側"}が初期配置中`;
-  else el.turn.textContent=`${game.turnNo}番目の番：${names[game.turn]}${game.pendingKnockout?" ／ きぜつ処理":game.pendingAttack?" ／ ワザ効果":game.pendingAbility?" ／ 特性効果":game.pendingTrainer?" ／ トレーナーズ効果":""}`;
-  el.seed.textContent=game.seed?`シード値：${game.seed}`:"";
-}
-function schedule(){
-  if(!running||!game)return;
-  timer=setTimeout(()=>{
-    timer=null;
-    try{
-      if(game.winner!=null){render();return;}
-      const actions=engine.getMatchActions(game),action=chooseAction(actions);
-      if(!action){
-        running=false;el.start.disabled=true;el.pause.disabled=true;
-        setStatus("エンジンから合法手がありません。未対応状態のため自動進行を停止しました。","error");render();return;
-      }
-      const label=describe(action);
-      game=engine.applyMatchAction(game,action);
-      logAction(label);render();
-      if(running)schedule();
-    }catch(error){
-      running=false;el.start.disabled=true;el.pause.disabled=true;
-      setStatus(`自動対戦を停止しました：${error.message}`,"error");render();
-    }
-  },delay());
-}
-function start(){if(!game||game.winner!=null||!analysisAllowsMatch)return;running=true;el.start.disabled=true;el.pause.disabled=false;setStatus("自動対戦中… 1手ごとに約1〜1.5秒待ちます。");schedule();}
-function pause(){running=false;clearTimeout(timer);timer=null;el.start.disabled=false;el.pause.disabled=true;setStatus("一時停止中です。再開できます。");}
-function startMatch(decks,analysis){
-  analysisByPlayer=analysis.profiles??analysisByPlayer;analysisAllowsMatch=analysis.complete;names=decks.map(deck=>deck.name);moveCount=0;entries=[];el.log.replaceChildren();
-  el.start.disabled=!analysisAllowsMatch;el.pause.disabled=true;el.load.disabled=false;
-  const blocker=analysis.unresolved.map(report=>report.name).filter((name,index,array)=>array.indexOf(name)===index);
-  if(!analysisAllowsMatch){
-    game=null;el.p0.replaceChildren();el.p1.replaceChildren();el.turn.textContent="効果の未対応が残っているため、対戦準備を保留しています。";el.seed.textContent="";
-    updateProgress(100,"効果の走査完了・未対応あり");
-    setStatus("カードの効果確認は終わりましたが、"+blocker.length+"種類に未対応の効果があります。すべて対応するまで対戦を開始できません："+blocker.join("、"),"error");
-    logAction("事前確認完了・未対応効果のため対戦開始を保留");return;
-  }
-  const seed=globalThis.crypto?.getRandomValues?globalThis.crypto.getRandomValues(new Uint32Array(1))[0]||1:Math.floor(Math.random()*0xffffffff)+1;
-  game=engine.createMatch(decks.map(deck=>deck.cards.flatMap(entry=>Array(entry.count).fill(entry.officialCardId))),seed);
-  updateProgress(100,"効果確認完了・対戦準備完了");
-  setStatus("全カードの特性・ワザ・トレーナーズ効果がエンジン対応済みです。スタートを押すと自動対戦します。");logAction("事前効果確認完了・対戦を準備しました");
-  render();
 }
 el.load.onclick=async()=>{
   pause();analysisAllowsMatch=false;game=null;el.start.disabled=true;el.pause.disabled=true;
