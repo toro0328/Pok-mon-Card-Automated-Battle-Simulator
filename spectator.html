@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI対AI 観戦 | ポケカ対戦試験</title>
+<style>
+:root{font-family:system-ui,-apple-system,sans-serif;color:#edf5ff;background:#09182b}
+*{box-sizing:border-box}body{margin:0}button,input{font:inherit}
+header{background:#102741;border-bottom:1px solid #405f7b;padding:10px 14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+a{color:#b9e3ff}main{max-width:1000px;margin:auto;padding:12px}
+.panel{background:#10263f;border:1px solid #395a79;border-radius:12px;padding:12px;margin:10px 0}
+h1{font-size:1.2rem;margin:2px 0 8px}h2{font-size:.95rem;margin:0 0 8px}
+p{margin:6px 0}.help{color:#c7e3fd;font-size:.88rem;line-height:1.45}
+.codes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:block;font-weight:700;margin:7px 0 4px}
+input{width:100%;padding:10px;border:1px solid #7899b6;border-radius:8px;background:#f0f7ff;color:#132641}
+.controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button{background:#1765a8;color:white;border:1px solid #87add1;border-radius:9px;padding:10px 13px;min-height:42px;font-weight:750;cursor:pointer}
+button:disabled{opacity:.5;cursor:wait}
+#status{border-radius:9px;background:#183856;padding:9px;color:#d9edff;min-height:42px}
+#status.error{background:#552c32;color:#ffe2e4}#status.done{background:#17452f}
+.players{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.player{background:#10263f;border:1px solid #395a79;border-radius:12px;padding:10px;min-width:0}
+.player h2{font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player.opponent{transform:rotate(180deg)}
+.active{min-height:125px;display:flex;justify-content:center;align-items:center;gap:8px;border:1px solid #355674;border-radius:9px;padding:8px}
+.bench{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-top:6px}
+.slot{min-width:0;min-height:75px;border:1px dashed #567a9a;border-radius:7px;display:flex;justify-content:center;align-items:center}
+.pokemon{color:#16304b;background:#d4effc;border:2px solid #e2f2ff;border-radius:8px;width:min(100%,120px);min-height:74px;padding:6px;font-size:.72rem;line-height:1.25;font-weight:750;text-align:center;overflow-wrap:anywhere}
+.pokemon small{display:block;font-size:.62rem;font-weight:500;margin-top:3px}
+.empty{font-size:.72rem;color:#a9c8e3}.info{font-size:.75rem;color:#c7e3fd;line-height:1.45;margin-top:6px}
+.hand{display:flex;gap:4px;overflow-x:auto;margin-top:6px;padding:3px 1px}
+.hand span{background:#234361;border:1px solid #607d98;border-radius:5px;padding:3px 6px;white-space:nowrap;font-size:.66rem}
+.log{max-height:180px;overflow:auto;display:flex;flex-direction:column-reverse;gap:4px}
+.log div{background:#183856;border-radius:6px;padding:5px 8px;font-size:.78rem}
+@media(max-width:600px){
+ main{padding:7px}.panel{padding:9px;margin:7px 0}.codes,.players{grid-template-columns:1fr}
+ .active{min-height:88px}.slot{min-height:59px}.pokemon{min-height:55px;padding:4px;font-size:.62rem}
+ .pokemon small{font-size:.55rem}.player h2{font-size:.78rem}.hand span{font-size:.6rem}
+}
+</style>
+</head>
+<body>
+<header><strong>ポケカ対戦試験</strong><a href="./index.html">手動対戦へ</a><a href="./deck-import.html">デッキ読み込みページへ</a></header>
+<main>
+<section class="panel">
+<h1>AI同士の自動対戦</h1>
+<p class="help">2つの公式デッキコードを入れると、対応済みの合法手からAIが行動を選びます。対戦を開始すると、4〜6秒ごとに1手ずつ進みます。</p>
+<div class="codes">
+<div><label for="codeA">自分側のデッキコード / URL</label><input id="codeA" placeholder="6文字-6文字-6文字"></div>
+<div><label for="codeB">相手側のデッキコード / URL</label><input id="codeB" placeholder="6文字-6文字-6文字"></div>
+</div>
+<div class="controls" style="margin-top:10px">
+<button id="load">2デッキを読み込んで対戦準備</button>
+<button id="start" disabled>自動対戦スタート</button>
+<button id="pause" disabled>一時停止</button>
+<button id="restart" disabled>別の試合を準備</button>
+</div>
+<p id="status" role="status">デッキコードを入力してください。前に読み込んだデッキがある場合は自動入力されます。</p>
+</section>
+<div class="panel controls"><strong id="turn">対戦準備前</strong><span id="seed"></span></div>
+<section class="players">
+<div id="player0" class="player"></div><div id="player1" class="player opponent"></div>
+</section>
+<section class="panel"><h2>直近の行動</h2><div id="log" class="log"><div>対戦ログはここに表示されます。</div></div></section>
+</main>
+<script type="module">
+import { CardRepository } from "./src/card-db/CardRepository.js";
+import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260927-spectator1";
+
+const el={
+  codeA:document.getElementById("codeA"),codeB:document.getElementById("codeB"),
+  load:document.getElementById("load"),start:document.getElementById("start"),
+  pause:document.getElementById("pause"),restart:document.getElementById("restart"),
+  status:document.getElementById("status"),turn:document.getElementById("turn"),
+  seed:document.getElementById("seed"),p0:document.getElementById("player0"),
+  p1:document.getElementById("player1"),log:document.getElementById("log")
+};
+let repository,engine,game,names=["自分側","相手側"],timer=null,running=false,moveCount=0,entries=[];
+const delay=()=>4000+Math.floor(Math.random()*2001);
+function setStatus(message,kind=""){el.status.textContent=message;el.status.className=kind?" "+kind:"";}
+function parseCode(value){
+  const match=value.trim().match(/[A-Za-z0-9]{6}-[A-Za-z0-9]{6}-[A-Za-z0-9]{6}/);
+  if(!match)throw new Error("デッキコードは 6文字-6文字-6文字 の形式で入力してください。");
+  return match[0];
+}
+function parseOfficialDeck(html){
+  const doc=new DOMParser().parseFromString(html,"text/html"),cards=new Map();
+  for(const field of ["deck_pke","deck_gds","deck_tool","deck_sup","deck_sta","deck_ene"]){
+    const input=doc.getElementById(field);if(!input)continue;
+    const value=input.value||input.getAttribute("value")||"";
+    for(const m of value.matchAll(/(\d{5})_(\d+)_([19])/g)){
+      const id=Number(m[1]),count=Number(m[2]);
+      if(!count||count>60)continue;
+      cards.set(id,(cards.get(id)??0)+count);
+    }
+  }
+  return [...cards].map(([officialCardId,count])=>({officialCardId,count}));
+}
+async function readDeck(input,slot){
+  const saved=JSON.parse(localStorage.getItem(`pokemon-card-simulator-deck-${slot}`)||"null");
+  if(!input.trim()&&saved)return saved;
+  const code=parseCode(input),officialUrl=`https://www.pokemon-card.com/deck/confirm.html/deckID/${code}/`;
+  let html,lastError;
+  for(const url of [officialUrl,`https://api.allorigins.win/raw?url=${encodeURIComponent(officialUrl)}`]){
+    try{const response=await fetch(url,{cache:"no-store"});if(!response.ok)throw Error(`HTTP ${response.status}`);
+      html=await response.text();if(html.length<300)throw Error("応答が短すぎます");break;
+    }catch(error){lastError=error;}
+  }
+  if(!html)throw new Error(`${code} を公式サイトから取得できませんでした（${lastError?.message??"接続エラー"}）。公式ページの公開設定やCORS制限を確認してください。`);
+  const cards=parseOfficialDeck(html),total=cards.reduce((sum,x)=>sum+x.count,0);
+  if(!cards.length)throw new Error(`${code} のカード一覧を読み取れません。公式ページの形式変更または非公開デッキの可能性があります。`);
+  if(total!==60)throw new Error(`${code} は${total}枚として読み取られました。60枚デッキを指定してください。`);
+  const missing=cards.filter(x=>!repository.get(x.officialCardId));
+  if(missing.length)throw new Error(`${code} は読み込めましたが、カードDB未登録IDがあります：${missing.map(x=>x.officialCardId).join("、")}`);
+  const deck={name:`公式デッキ ${code}`,deckCode:code,sourceUrl:officialUrl,cards};
+  localStorage.setItem(`pokemon-card-simulator-deck-${slot}`,JSON.stringify(deck));
+  return deck;
+}
+function card(id){return repository.get(id);}
+function instanceById(id){
+  if(!id)return null;
+  for(const p of game.players){
+    const piles=[p.hand,p.deck,p.prizes,p.trash,p.bench,p.active?[p.active]:[]];
+    for(const pile of piles)for(const x of pile??[]){
+      if(x.instanceId===id)return x;
+      for(const nested of [...(x.attached??[]),...(x.stack??[])])if(nested.instanceId===id)return nested;
+    }
+  }
+  return null;
+}
+function energyText(pokemon){
+  return (pokemon.attached??[]).map(x=>card(x.cardId).name).join("・")||"なし";
+}
+function cardView(pokemon){
+  if(!pokemon)return Object.assign(document.createElement("span"),{className:"empty",textContent:"空き"});
+  const node=document.createElement("div");node.className="pokemon";
+  node.append(document.createTextNode(card(pokemon.cardId).name));
+  const small=document.createElement("small");
+  small.textContent=`HP ${engine.effectiveHP(pokemon)} / ダメージ ${pokemon.damage??0}・エネ ${energyText(pokemon)}`;
+  node.append(small);return node;
+}
+function playerView(index){
+  const p=game.players[index],root=index===0?el.p0:el.p1;root.replaceChildren();
+  const title=document.createElement("h2");title.textContent=`${names[index]}：${names[index]===p.deckName?"":""}${p.deck.length}枚`;
+  title.textContent=`${names[index]}　山札${p.deck.length}・手札${p.hand.length}・サイド${p.prizes.length}・トラッシュ${p.trash.length}`;
+  root.append(title);
+  const active=document.createElement("div");active.className="active";active.append(cardView(p.active));root.append(active);
+  const bench=document.createElement("div");bench.className="bench";
+  for(let i=0;i<5;i++){const slot=document.createElement("div");slot.className="slot";slot.append(cardView(p.bench[i]));bench.append(slot);}
+  root.append(bench);
+  const info=document.createElement("div");info.className="info";
+  info.textContent=`バトル場：${p.active?card(p.active.cardId).name:"なし"}${p.active?.statuses?.length?` ／ 状態 ${p.active.statuses.map(x=>typeof x==="string"?x:x.name).join("・")}`:""}`;
+  root.append(info);
+  const hand=document.createElement("div");hand.className="hand";
+  for(const x of p.hand){const chip=document.createElement("span");chip.textContent=card(x.cardId).name;hand.append(chip);}
+  if(!p.hand.length){const chip=document.createElement("span");chip.textContent="手札なし";hand.append(chip);}
+  root.append(hand);
+}
+function actionCard(id){const x=instanceById(id);return x?card(x.cardId).name:"";}
+function describe(action){
+  const who=names[action.player??game.turn]??"AI";
+  const source=action.sourceInstanceId?actionCard(action.sourceInstanceId):"";
+  const choice=action.choiceInstanceId?actionCard(action.choiceInstanceId):"";
+  const target=action.targetInstanceId?actionCard(action.targetInstanceId):"";
+  const labels={
+    SET_ACTIVE:`バトル場に ${source} を出す`,SET_BENCH:`ベンチに ${source} を出す`,
+    READY_SETUP:"初期配置を完了",BENCH_BASIC:`ベンチに ${source} を出す`,
+    ATTACH_ENERGY:`${source} を ${target} につける`,EVOLVE:`${target} を ${source} に進化`,
+    RETREAT:`${source} がにげる`,END_TURN:"番を終える",
+    USE_ABILITY:`${source} の特性を使う`,ATTACK:`${source} のワザを使う`,
+    PLAY_TRAINER:`${source} を使う`,PLAY_STADIUM:`${source} を場に出す`,
+    TAKE_PRIZE:"サイドを取る",PROMOTE_BENCH:`${source||target} をバトル場へ`,
+    RESOLVE_KNOCKOUT:"きぜつ処理を完了",TRAINER_SELECT:`${choice} を選ぶ`,
+    TRAINER_DISCARD:`${choice} をトラッシュ`,TRAINER_FINISH:"山札を切って効果を終了",
+    ATTACK_SEARCH:`${choice} をワザの効果で選ぶ`,ATTACK_SEARCH_FINISH:"ワザの効果を終了",
+    ATTACK_DISCARD_ENERGY:`${choice} をトラッシュ`,ATTACK_PROMOTE:`${target} をバトル場へ`,
+    ABILITY_SELECT:`${choice} を特性で選ぶ`,ABILITY_SKIP:"特性の選択を終了",
+    AKAMATSU_PICK:`${choice} をアカマツで選ぶ`,AKAMATSU_HAND:`${choice} を手札に加える`,
+    AKAMATSU_ATTACH:`${target} にエネルギーをつける`,AKAMATSU_FINISH:"アカマツを終了"
+  };
+  return `${who}：${labels[action.type]??action.type}`;
+}
+function score(action,actions){
+  const state=game;
+  if(state.phase==="setup"){
+    const player=state.players[action.player];
+    const hasBench=actions.some(x=>x.player===action.player&&x.type==="SET_BENCH");
+    if(action.type==="SET_ACTIVE")return 120;
+    if(action.type==="SET_BENCH")return player.bench.length<2?100:15;
+    if(action.type==="READY_SETUP")return hasBench?10:80;
+  }
+  const base={
+    TAKE_PRIZE:120,PROMOTE_BENCH:118,RESOLVE_KNOCKOUT:117,
+    TRAINER_DISCARD:116,TRAINER_SELECT:112,AKAMATSU_PICK:112,AKAMATSU_HAND:111,
+    AKAMATSU_ATTACH:110,ATTACK_SEARCH:110,ATTACK_DISCARD_ENERGY:110,ATTACK_PROMOTE:110,
+    ABILITY_SELECT:109,ABILITY_SKIP:30,TRAINER_FINISH:25,AKAMATSU_FINISH:25,ATTACK_SEARCH_FINISH:25,
+    EVOLVE:80,USE_ABILITY:72,USE_HOOH:75,ATTACH_ENERGY:65,
+    PLAY_TRAINER:58,PLAY_STADIUM:45,BENCH_BASIC:40,RETREAT:30,ATTACK:90,END_TURN:0
+  }[action.type]??20;
+  if(action.type==="ATTACH_ENERGY"){
+    const target=instanceById(action.targetInstanceId);
+    return base+(target?.instanceId===game.players[action.player].active?.instanceId?8:0);
+  }
+  if(action.type==="ATTACK"){
+    let amount=0;
+    try{amount=engine.calculateAttackDamage(state,action);}catch{}
+    const opponent=state.players[1-action.player];
+    const target=action.targetInstanceId?[...opponent.bench,opponent.active].find(x=>x?.instanceId===action.targetInstanceId):opponent.active;
+    const ko=target&&amount+(target.damage??0)>=engine.effectiveHP(target);
+    return base+Math.min(amount,300)/20+(ko?40:0);
+  }
+  if(action.type==="RETREAT")return state.players[action.player].active?.statuses?.length?base+15:base;
+  if(action.type==="BENCH_BASIC"&&game.players[action.player].bench.length>=4)return base-15;
+  return base;
+}
+function chooseAction(actions){
+  if(!actions.length)return null;
+  let ranked=actions.map(action=>({action,value:score(action,actions)+Math.random()*0.15}));
+  ranked.sort((a,b)=>b.value-a.value);
+  return ranked[0].action;
+}
+function logAction(text){
+  entries.unshift(`#${++moveCount} ${text}`);entries=entries.slice(0,12);
+  el.log.replaceChildren(...entries.map(message=>{const row=document.createElement("div");row.textContent=message;return row;}));
+}
+function render(){
+  if(!game)return;
+  playerView(0);playerView(1);
+  if(game.winner!=null){el.turn.textContent=`${names[game.winner]}の勝ち${game.winReason?`（${game.winReason}）`:""}`;running=false;clearTimeout(timer);timer=null;el.start.disabled=true;el.pause.disabled=true;el.restart.disabled=false;setStatus(`対戦終了：${names[game.winner]}の勝ちです。`,"done");}
+  else if(game.pendingKnockout?.reason){el.turn.textContent="同時きぜつ：この状態は未対応";running=false;clearTimeout(timer);timer=null;el.start.disabled=true;el.pause.disabled=true;setStatus("同時きぜつが発生しました。安全のため自動進行を止めました。","error");}
+  else if(game.phase==="setup")el.turn.textContent="初期配置を自動進行中";
+  else el.turn.textContent=`${game.turnNo}番目の番：${names[game.turn]}${game.pendingKnockout?" ／ きぜつ処理":game.pendingAttack?" ／ ワザ効果":game.pendingAbility?" ／ 特性効果":game.pendingTrainer?" ／ トレーナーズ効果":""}`;
+  el.seed.textContent=game.seed?`シード値：${game.seed}`:"";
+}
+function schedule(){
+  if(!running||!game)return;
+  timer=setTimeout(()=>{
+    timer=null;
+    try{
+      if(game.winner!=null){render();return;}
+      const actions=engine.getMatchActions(game),action=chooseAction(actions);
+      if(!action){
+        running=false;el.start.disabled=true;el.pause.disabled=true;
+        setStatus("エンジンから合法手がありません。未対応状態のため自動進行を停止しました。","error");render();return;
+      }
+      const label=describe(action);
+      game=engine.applyMatchAction(game,action);
+      logAction(label);render();
+      if(running)schedule();
+    }catch(error){
+      running=false;el.start.disabled=true;el.pause.disabled=true;
+      setStatus(`自動対戦を停止しました：${error.message}`,"error");render();
+    }
+  },delay());
+}
+function start(){if(!game||game.winner!=null)return;running=true;el.start.disabled=true;el.pause.disabled=false;setStatus("自動対戦中… 1手ごとに4〜6秒待ちます。");schedule();}
+function pause(){running=false;clearTimeout(timer);timer=null;el.start.disabled=false;el.pause.disabled=true;setStatus("一時停止中です。再開できます。");}
+function startMatch(decks){
+  names=decks.map(deck=>deck.name);moveCount=0;entries=[];el.log.replaceChildren();
+  const seed=crypto?.getRandomValues?crypto.getRandomValues(new Uint32Array(1))[0]||1:Math.floor(Math.random()*0xffffffff)+1;
+  game=engine.createMatch(decks.map(deck=>deck.cards.flatMap(entry=>Array(entry.count).fill(entry.officialCardId))),seed);
+  el.start.disabled=false;el.pause.disabled=true;el.restart.disabled=false;
+  setStatus("デッキ2つを確認しました。スタートを押すと自動対戦します。");
+  logAction("対戦を準備しました");render();
+}
+el.load.onclick=async()=>{
+  el.load.disabled=true;setStatus("カードDBと公式デッキを読み込んでいます…");
+  try{
+    repository=repository??await CardRepository.load("./data/cards/cards.json");
+    engine=engine??new MatchEngine(repository,await (await fetch("./data/cards/ability-effects.json")).json());
+    const decks=await Promise.all([readDeck(el.codeA.value,"self"),readDeck(el.codeB.value,"opponent")]);
+    if(decks[0].deckCode)el.codeA.value=decks[0].deckCode;
+    if(decks[1].deckCode)el.codeB.value=decks[1].deckCode;
+    startMatch(decks);
+  }catch(error){setStatus(error.message,"error");}
+  finally{el.load.disabled=false;}
+};
+el.start.onclick=start;el.pause.onclick=pause;el.restart.onclick=()=>{if(!engine||!game)return;pause();el.start.disabled=true;try{
+  const decks=[0,1].map(index=>{const slot=index===0?"self":"opponent";const saved=JSON.parse(localStorage.getItem(`pokemon-card-simulator-deck-${slot}`)||"null");
+    if(!saved)throw Error("読み込み済みデッキが見つかりません");return saved;});
+  startMatch(decks);
+}catch(error){setStatus(error.message,"error");}};
+for(const [input,slot] of [[el.codeA,"self"],[el.codeB,"opponent"]]){
+  try{const saved=JSON.parse(localStorage.getItem(`pokemon-card-simulator-deck-${slot}`)||"null");if(saved?.deckCode)input.value=saved.deckCode;}catch{}
+}
+</script>
+</body>
+</html>
