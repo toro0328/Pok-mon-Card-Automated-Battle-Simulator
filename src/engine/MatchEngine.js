@@ -75,9 +75,8 @@ export class MatchEngine extends AttackEngine {
       for (let mulligans = 0; mulligans < 100; mulligans++) {
         deck = shuffle([...all]);
         hand = deck.splice(0, 7);
-        if (hand.some(card => this.card(card).raw.stage === BASIC &&
-            this.entries(card).every(entry => entry.status === "supported"))) break;
-        if (mulligans === 99) throw new Error("Could not draw a supported Basic Pokémon");
+        if (hand.some(card => this.card(card).raw.stage === BASIC)) break;
+        if (mulligans === 99) throw new Error("Could not draw a Basic Pokémon");
       }
       const prizes = deck.splice(0, 6);
       return { active: null, bench: [], hand, deck, prizes, trash: [] };
@@ -857,7 +856,7 @@ export class MatchEngine extends AttackEngine {
         for (const card of player.hand) {
           const isBasic=this.card(card).raw.stage===BASIC;
           const setupActive=this.entries(card).some(e=>e.status==="supported"&&e.trigger==="SETUP_ACTIVE_FROM_HAND");
-          if (!isBasic&&!setupActive || this.entries(card).some(e=>e.status!=="supported")) continue;
+          if (!isBasic&&!setupActive) continue;
           if (!player.active) actions.push({ type: "SET_ACTIVE", player: playerIndex,
             sourceInstanceId: card.instanceId });
           else if (isBasic&&player.bench.length < 5) actions.push({ type: "SET_BENCH", player: playerIndex,
@@ -896,8 +895,7 @@ export class MatchEngine extends AttackEngine {
           actions.push({type:"USE_HOOH",player:state.turn,sourceInstanceId:source.instanceId,
             targetInstanceId:target.instanceId});
     for (const card of player.hand) {
-      if (this.card(card).raw.stage === BASIC && player.bench.length < this.benchLimit(state,state.turn) &&
-          this.entries(card).every(entry => entry.status === "supported")) {
+      if (this.card(card).raw.stage === BASIC && player.bench.length < this.benchLimit(state,state.turn)) {
         actions.push({ type: "BENCH_BASIC", player: state.turn, sourceInstanceId: card.instanceId });
       }
       if (!state.energyAttachedThisTurn && this.card(card).cardType === "energy" && this.isSupportedEnergy(card)) {

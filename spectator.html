@@ -70,6 +70,7 @@ button:disabled{opacity:.5;cursor:wait}
 import { CardRepository } from "./src/card-db/CardRepository.js";
 import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260928-deckcompile12";
 import { createDeckAnalysisRecord, saveDeckAnalysis } from "./src/decks/analysis-store.js";
+import { parseOfficialCardDetails, applyOfficialCardCompile } from "./src/card-db/parse-official-details.js";
 
 const el={
   codeA:document.getElementById("codeA"),codeB:document.getElementById("codeB"),
@@ -124,6 +125,33 @@ async function readDeck(input,slot){
     missingCardIds:missing.map(x=>x.officialCardId)};
   localStorage.setItem(`pokemon-card-simulator-deck-${slot}`,JSON.stringify(deck));
   return deck;
+}
+async function loadMissingOfficialCards(decks){
+  const ids=[...new Set(decks.flatMap(deck=>deck.cards.map(item=>item.officialCardId)).filter(id=>!repository.get(id)))];
+  const failures=[];
+  for(let index=0;index<ids.length;index++){
+    const id=ids[index],url=`https://www.pokemon-card.com/card-search/details.php/card/${id}/regu/all`;
+    let html,lastError;
+    for(const candidate of [url,`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`]){
+      try{const response=await fetch(candidate,{cache:"no-store"});if(!response.ok)throw Error(`HTTP ${response.status}`);
+        html=await response.text();if(html.length<300)throw Error("応答が短すぎます");break;
+      }catch(error){lastError=error;}
+    }
+    if(!html){failures.push(`ID ${id}（${lastError?.message??"取得失敗"}）`);continue;}
+    try{
+      const card=parseOfficialCardDetails(html,id);repository.add(card);applyOfficialCardCompile(engine,card);
+      const cached=JSON.parse(localStorage.getItem("pokemon-card-simulator-official-card-cache")||"{}");
+      cached[id]=card;localStorage.setItem("pokemon-card-simulator-official-card-cache",JSON.stringify(cached));
+      updateProgress(24+20*(index+1)/ids.length,`未登録カードを公式ページから追加 ${index+1}/${ids.length}`);
+    }catch(error){failures.push(`ID ${id}（${error.message}）`);}
+  }
+  if(failures.length)throw new Error("公式ページからカード情報を取得できませんでした："+failures.join("、"));
+  for(const deck of decks)deck.missingCardIds=deck.cards.filter(item=>!repository.get(item.officialCardId)).map(item=>item.officialCardId);
+}
+function restoreOfficialCardCache(){
+  try{const cached=JSON.parse(localStorage.getItem("pokemon-card-simulator-official-card-cache")||"{}");
+    for(const card of Object.values(cached))if(!repository.get(card.officialCardId)){repository.add(card);applyOfficialCardCompile(engine,card);}}
+  catch(error){console.warn("公式カードキャッシュを読み込めませんでした",error);}
 }
 function card(id){return repository.get(id);}
 function instanceById(id){
@@ -252,7 +280,7 @@ function addAnalysisCard(report,counts){
 async function analyzeDecks(decks){
   const combined=new Map();for(let side=0;side<decks.length;side++)for(const item of decks[side].cards){const entry=combined.get(item.officialCardId)||{counts:[0,0]};entry.counts[side]+=item.count;combined.set(item.officialCardId,entry);}
   const ids=[...combined.keys()],reports=[];el.analysisList.replaceChildren();el.analysisPanel.hidden=false;
-  const knownDecks=decks.map(deck=>({...deck,cards:deck.cards.filter(item=>repository.get(item.officialCardId))}));
+  const knownDecks=decks;
   const compiled=await engine.compileDeck(knownDecks,({done,total,card})=>{
     const percent=5+50*done/total;updateProgress(percent,`カード文を効果プログラムに変換 ${done}/${total}種類：${card}`);
     const elapsed=Math.max(0,Date.now()-loadStarted),remaining=done?Math.max(0,Math.ceil((elapsed/done)*(total-done)/1000)):null;
@@ -341,7 +369,7 @@ function startMatch(decks,analysis){
   el.start.disabled=false;el.pause.disabled=true;el.load.disabled=false;
   const blocker=analysis.unresolved.map(report=>report.name+"："+report.details.filter(d=>d.status!=="supported").map(d=>d.label).join("、"));
   const seed=globalThis.crypto?.getRandomValues?globalThis.crypto.getRandomValues(new Uint32Array(1))[0]||1:Math.floor(Math.random()*0xffffffff)+1;
-  try{game=engine.createMatch(decks.map(deck=>deck.cards.filter(entry=>repository.get(entry.officialCardId)).flatMap(entry=>Array(entry.count).fill(entry.officialCardId))),seed);}
+  try{game=engine.createMatch(decks.map(deck=>deck.cards.flatMap(entry=>Array(entry.count).fill(entry.officialCardId))),seed);}
   catch(error){game=null;el.start.disabled=true;setStatus("構築ルール確認エラー："+error.message,"error");return;}
   updateProgress(100,analysis.complete?"読み込み・効果・構築ルール確認完了":"カード走査完了・未対応効果を記録");
   if(analysis.complete)setStatus("カード効果・構築ルールを確認しました。自動対戦を開始できます。","done");
@@ -357,10 +385,11 @@ el.load.onclick=async()=>{
   try{
     if(!repository){updateProgress(8,"カードDB取得");repository=await CardRepository.load("./data/cards/cards.json");}
     updateProgress(16,"効果エンジン準備");
-    if(!engine){const response=await fetch("./data/cards/ability-effects.json");if(!response.ok)throw Error("特性カタログを取得できません");engine=new MatchEngine(repository,await response.json());}
+    if(!engine){const response=await fetch("./data/cards/ability-effects.json");if(!response.ok)throw Error("特性カタログを取得できません");engine=new MatchEngine(repository,await response.json());restoreOfficialCardCache();}
     updateProgress(24,"公式デッキ2件を取得・照合");
     const decks=await Promise.all([readDeck(el.codeA.value,"self"),readDeck(el.codeB.value,"opponent")]);
     if(decks[0].deckCode)el.codeA.value=decks[0].deckCode;if(decks[1].deckCode)el.codeB.value=decks[1].deckCode;
+    await loadMissingOfficialCards(decks);
     updateProgress(55,"カードごとの特性・ワザ・効果を解析");const analysis=await analyzeDecks(decks);startMatch(decks,analysis);
   }catch(error){setStatus(error.message||"デッキ解析中にエラーが発生しました。","error");el.load.disabled=false;el.start.disabled=true;el.progress.hidden=true;el.turn.textContent="読み込みエラー：コードを確認して再試行してください。";}
   finally{clearInterval(loadClock);loadClock=null;}

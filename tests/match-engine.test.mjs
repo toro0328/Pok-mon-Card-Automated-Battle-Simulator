@@ -35,17 +35,18 @@ test("official festival deck retains its exact 60-card counts, including evoluti
   assert.equal(new Set(opponentDeck.cards.map(x=>x.officialCardId)).size,opponentDeck.cards.length);
 });
 
-test("opening hand always includes a Basic with an executable ability state", () => {
+test("opening hand and setup accept legal Basics with effects that need review", () => {
   const restrictive=[...Array(4).fill(45233),...Array(56).fill(50745)];
   const blockedDb=structuredClone(db),blockedCard=blockedDb.cards.find(x=>x.officialCardId===45233);
   blockedCard.raw.abilities[0].effect="未知の特性効果。";
   const blockedCatalog=structuredClone(catalog);blockedCatalog.cardCount=blockedDb.cards.length;
   const blockedEngine=new MatchEngine(new CardRepository(blockedDb),blockedCatalog);
-  assert.throws(()=>blockedEngine.createMatch([sample,restrictive],9),/supported Basic/);
-  const usable=[49956,...Array(4).fill(45233),...Array(55).fill(50745)];
-  const game=blockedEngine.createMatch([sample,usable],9);
-  assert.ok(game.players[1].hand.some(x=>x.cardId===49956));
-  assert.ok(blockedEngine.getMatchActions(game).some(x=>x.player===1&&x.type==="SET_ACTIVE"));
+  const restrictiveGame=blockedEngine.createMatch([sample,restrictive],9);
+  const active=blockedEngine.getMatchActions(restrictiveGame).find(x=>x.player===1&&x.type==="SET_ACTIVE");
+  assert.ok(active);
+  const placed=blockedEngine.applyMatchAction(restrictiveGame,active);
+  assert.doesNotThrow(()=>blockedEngine.getMatchActions(placed));
+  assert.equal(blockedEngine.getMatchActions(placed).some(x=>x.type==="USE_ABILITY"),false);
 });
 
 test("deck-rule gate allows a legal 60-card pair and rejects multiple ACE SPEC cards", () => {

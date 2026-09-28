@@ -79,6 +79,7 @@ export class AbilityEngine {
   isSupportedTool(instance) {
     const card = this.card(instance);
     return card.trainerType === "tool" && ((card.name === "くさりもち" && card.raw.effect === CHAIN_MOCHI_TEXT) ||
+      (card.name === "ふうせん" && card.raw.effect === "このカードをつけているポケモンは、にげるためのエネルギーが2個ぶん少なくなる。") ||
       (card.name === "ヘビーバトン" && card.raw.effect === "このカードをつけているにげるためのエネルギーが4個のポケモンが、バトル場で相手のポケモンからワザのダメージを受けてきぜつしたとき、そのポケモンについている基本エネルギーを3枚まで選び、自分のベンチポケモンに好きなようにつけ替える。"));
   }
 
@@ -103,9 +104,8 @@ export class AbilityEngine {
           player.bench.length > this.benchLimit(state,playerIndex)&&
             !state.pendingBenchCleanup?.players?.includes(playerIndex)) throw new Error("Invalid player zones");
       for (const pokemon of this.field(player)) {
-        if (this.card(pokemon).cardType !== "pokemon" ||
-            this.entries(pokemon, state).some(e => e.status !== "supported")) {
-          throw new Error("Unsupported ability or card on the field");
+        if (this.card(pokemon).cardType !== "pokemon") {
+          throw new Error("Unsupported card type on the field");
         }
         if ((pokemon.attached ?? []).some(x =>
           this.card(x).cardType !== "energy" && !this.isSupportedTool(x) ||
@@ -512,6 +512,9 @@ export class AbilityEngine {
     if (!Number.isInteger(printed) || printed < 0) throw new Error("Printed retreat cost is unknown");
     if(state.stadium&&this.card(state.stadium).name==="Nの城"&&this.card(target).name.startsWith("Nの"))return 0;
     if (this.card(target).raw.stage !== "たね") return printed;
+    const attachedToolReduction=(target.attached??[]).filter(instance=>this.isSupportedTool(instance)&&
+      this.card(instance).name==="ふうせん").length*2;
+    if(attachedToolReduction)return Math.max(0,printed-attachedToolReduction);
     const freeRetreat = this.field(owner).some(instance => this.entries(instance, state).some(entry =>
       entry.status === "supported" && entry.trigger === "CONTINUOUS" &&
       entry.operations.some(op => op.type === "SET_RETREAT_COST_ZERO" &&
