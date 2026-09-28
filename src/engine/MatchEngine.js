@@ -17,7 +17,9 @@ const TRAINERS = {
   "アカマツ": { type: "supporter", effect: "akamatsu", text: "自分の山札から、それぞれちがうタイプの基本エネルギーを2枚まで選び、相手に見せて、どちらか1枚を手札に加え、残りのエネルギーを自分のポケモンにつける。そして山札を切る。" },
   "せいなるはい": { type: "item", effect: "sacredAsh", text: "自分のトラッシュからポケモンを5枚まで選び、相手に見せて、山札にもどして切る。" },
   "むしとりセット": { type: "item", effect: "bugCatcher", text: "自分の山札を上から7枚見て、その中からGrassポケモンと「基本Grassエネルギー」を合計2枚まで選び、相手に見せて、手札に加える。残りのカードは山札にもどして切る。" },
-  "プライムキャッチャー": { type: "item", effect: "primeCatcher", text: "相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。その後、自分のバトルポケモンをベンチポケモンと入れ替える。" }
+  "プライムキャッチャー": { type: "item", effect: "primeCatcher", text: "相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。その後、自分のバトルポケモンをベンチポケモンと入れ替える。" },
+  "グラジオの決戦": { type: "supporter", effect: "gladio", text: "このカードは、自分の手札がこのカード1枚だけのときにしか使えない。\nこの番、自分のポケモン（「ルールを持つポケモン」をのぞく）が使うワザの、相手のバトルポケモンへのダメージは「+80」される。" },
+  "スグリ": { type: "supporter", effect: "suguri", text: "このカードは、2つの効果から1つを選んで使う。\n◆自分のバトルポケモンをベンチポケモンと入れ替える。\n◆この番、自分のポケモンが使うワザの、相手のバトル場の「ポケモンex・V」へのダメージは「+30」される。" }
 };
 
 // A first playable subset of the normal match. Only verified card actions are
@@ -218,6 +220,7 @@ export class MatchEngine extends AttackEngine {
           spec.type === "supporter" && (state.supporterUsedThisTurn || state.turnNo === 1)) continue;
       if (spec.cost && player.hand.length - 1 < spec.cost) continue;
       if (spec.effect === "red" && state.players[1-state.turn].prizes.length > 3) continue;
+      if (spec.effect === "gladio" && player.hand.length !== 1) continue;
       if (spec.effect === "rod") {
         for (const choice of player.trash) if (this.card(choice).cardType === "pokemon" || this.card(choice).energyType === "basic")
           actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId,choiceInstanceId:choice.instanceId});
@@ -225,6 +228,9 @@ export class MatchEngine extends AttackEngine {
         const bench = state.players[spec.effect === "boss" ? 1-state.turn : state.turn].bench;
         for (const choice of bench) actions.push({type:"PLAY_TRAINER",player:state.turn,
           sourceInstanceId:instance.instanceId,choiceInstanceId:choice.instanceId});
+      } else if(spec.effect === "suguri") {
+        actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId,mode:"damage"});
+        for(const choice of player.bench)actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId,choiceInstanceId:choice.instanceId,mode:"switch"});
       } else if(spec.effect === "primeCatcher") {
         const opponentBench=state.players[1-state.turn].bench;
         for(const opposing of opponentBench){
@@ -535,6 +541,11 @@ export class MatchEngine extends AttackEngine {
         this.clearSwitchStatuses(opponent.active);
         [opponent.active,opponent.bench[oppIndex]]=[opponent.bench[oppIndex],opponent.active];
         if(action.targetInstanceId){const ownIndex=player.bench.findIndex(x=>x.instanceId===action.targetInstanceId);this.clearSwitchStatuses(player.active);[player.active,player.bench[ownIndex]]=[player.bench[ownIndex],player.active];}
+      } else if(spec.effect==="gladio") {
+        next.damageBonuses=[...(next.damageBonuses??[]),{player:action.player,amount:80,rulelessAttacker:true,turnNo:next.turnNo}];
+      } else if(spec.effect==="suguri") {
+        if(action.mode==="damage")next.damageBonuses=[...(next.damageBonuses??[]),{player:action.player,amount:30,vsRulePokemon:true,turnNo:next.turnNo}];
+        else {const i=player.bench.findIndex(x=>x.instanceId===action.choiceInstanceId);this.clearSwitchStatuses(player.active);[player.active,player.bench[i]]=[player.bench[i],player.active];}
       } else if(spec.effect === "transfer"){
         const from=this.field(player).find(x=>(x.attached??[]).some(y=>y.instanceId===action.choiceInstanceId));
         const i=from.attached.findIndex(x=>x.instanceId===action.choiceInstanceId);
