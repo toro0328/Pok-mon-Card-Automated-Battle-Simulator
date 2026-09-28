@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-09-28T13:45:00.000Z",
+  "cards": [
+    {
+      "officialCardId": 49821,
+      "name": "Nのゼクロム",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/49821",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M2a/049821_P_NNOZEKUROMU.jpg",
+        "fetchedAt": "2026-09-28T13:45:00.000Z",
+        "source": "official-card-detail"
+      },
+      "raw": {
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/49821",
+        "name": "Nのゼクロム",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/M2a/049821_P_NNOZEKUROMU.jpg",
+        "card_type": "Pokémon",
+        "jp_id": 49821,
+        "set_name": "M2a",
+        "number": "129",
+        "stage": "たね",
+        "hp": 130,
+        "types": ["Dragon"],
+        "attacks": [
+          {
+            "cost": ["Colorless", "Colorless", "Colorless"],
+            "name": "ひきさく",
+            "damage": {"amount": 70, "suffix": ""},
+            "effect": "このワザのダメージは、相手のバトルポケモンにかかっている効果を計算しない。"
+          },
+          {
+            "cost": ["Fire", "Electric", "Electric", "Colorless"],
+            "name": "ランページサンダー",
+            "damage": {"amount": 250, "suffix": ""},
+            "effect": "次の自分の番、このポケモンはワザが使えない。"
+          }
+        ],
+        "weakness": {"type": [], "value": null},
+        "resistance": {"type": [], "value": null},
+        "retreat": 2
+      },
+      "engine": {"status": "unparsed", "effects": [], "handler": null, "notes": ["公式カードページを確認して登録。"]}
+    },
+    {
+      "officialCardId": 49820,
+      "name": "Nのレシラム",
+      "regulation": null,
+      "cardType": "pokemon",
+      "trainerType": null,
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/49820",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/M2a/049820_P_NNORESHIRAMU.jpg",
+        "fetchedAt": "2026-09-28T13:45:00.000Z",
+        "source": "official-card-detail"
+      },
+      "raw": {
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/49820",
+        "name": "Nのレシラム",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/M2a/049820_P_NNORESHIRAMU.jpg",
+        "card_type": "Pokémon",
+        "jp_id": 49820,
+        "set_name": "M2a",
+        "number": "128",
+        "stage": "たね",
+        "hp": 130,
+        "types": ["Fire"],
+        "attacks": [
+          {
+            "cost": ["Fire", "Electric"],
+            "name": "パワーレイジ",
+            "damage": {"amount": 20, "suffix": "×"},
+            "effect": "このポケモンにのっているダメカンの数×20ダメージ。"
+          },
+          {
+            "cost": ["Fire", "Fire", "Electric", "Colorless"],
+            "name": "イノセントフレイム",
+            "damage": {"amount": 170, "suffix": ""},
+            "effect": ""
+          }
+        ],
+        "weakness": {"type": [], "value": null},
+        "resistance": {"type": [], "value": null},
+        "retreat": 2
+      },
+      "engine": {"status": "unparsed", "effects": [], "handler": null, "notes": ["公式カードページを確認して登録。"]}
+    },
+    {
+      "officialCardId": 48162,
+      "name": "ふうせん",
+      "regulation": null,
+      "cardType": "trainer",
+      "trainerType": "tool",
+      "energyType": null,
+      "source": {
+        "detailUrl": "https://www.pokemon-card.com/card-search/details.php/card/48162",
+        "imageUrl": "https://www.pokemon-card.com/assets/images/card_images/large/SV11B/048162_T_FUUSEN.jpg",
+        "fetchedAt": "2026-09-28T13:45:00.000Z",
+        "source": "official-card-detail"
+      },
+      "raw": {
+        "url": "https://www.pokemon-card.com/card-search/details.php/card/48162",
+        "name": "ふうせん",
+        "img": "https://www.pokemon-card.com/assets/images/card_images/large/SV11B/048162_T_FUUSEN.jpg",
+        "card_type": "ポケモンのどうぐ",
+        "jp_id": 48162,
+        "set_name": "SV11B",
+        "number": "082",
+        "effect": "このカードをつけているポケモンは、にげるためのエネルギーが2個ぶん少なくなる。"
+      },
+      "engine": {"status": "unparsed", "effects": [], "handler": null, "notes": ["公式カードページを確認して登録。"]}
+    }
+  ]
+}
