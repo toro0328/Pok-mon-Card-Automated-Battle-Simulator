@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "abilityCount": 772,
   "counts": {
-    "supported": 212,
-    "needs_review": 560
+    "supported": 213,
+    "needs_review": 559
   },
   "abilities": {
     "45147": [
@@ -5272,11 +5272,16 @@
         "index": 0,
         "name": "しゅんぱつりょく",
         "text": "対戦準備でポケモンをバトル場に出すとき、このカードが手札にあるなら、ウラにしてバトル場に出してよい。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "SETUP_ACTIVE_FROM_HAND",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "SETUP_ACTIVE_FROM_HAND"
+          }
+        ],
+        "limit": null
       }
     ],
     "47758": [
