@@ -5,13 +5,15 @@ import { parseAbility } from "../card-db/parse-abilities.js?v=20260928-fourcardf
 const FESTIVAL_STADIUM_TEXT = "エネルギーがついているおたがいのポケモン全員は、特殊状態にならず、受けている特殊状態は、すべて回復する。";
 const SUPPORTED_STADIUM_TEXT = {
   "お祭り会場": FESTIVAL_STADIUM_TEXT,
+  "なみのりビーチ": "おたがいのプレイヤーは、自分の番ごとに1回、自分のバトル場のWaterポケモンを、ベンチのWaterポケモンと入れ替えてよい。",
   "夜のアカデミー": "おたがいのプレイヤーは、自分の番ごとに1回、自分の手札を1枚選び、山札の上にもどしてよい。",
   "Nの城": "おたがいの場の「Nのポケモン」全員のにげるためのエネルギーは、すべてなくなる。",
   "ロケット団の監視塔": "おたがいの場のColorlessポケモン全員の特性は、すべてなくなる。",
   "ゼロの大空洞": "自分の場に「テラスタル」のポケモンがいるプレイヤーが、ベンチに出せるポケモンの数は8匹になる。\n（このカードがトラッシュされたときか、自分の場に「テラスタル」のポケモンがいなくなったとき、ベンチが5匹になるまでトラッシュする。おたがいにトラッシュするなら、このカードの持ち主から行う。）"
 };
 const CHAIN_MOCHI_TEXT = "このカードをつけているどくのポケモンが使うワザの、相手のバトルポケモンへのダメージは「+40」される。";
-const GROW_GRASS_TEXT = "このカードは、ポケモンについているかぎり、Grassエネルギー1個ぶんとしてはたらく。\nこのカードをつけているGrassポケモンは、最大HPが「＋20」される。";\nconst BUBBLE_WATER_TEXT = "このカードは、ポケモンについているかぎり、Waterエネルギー1個ぶんとしてはたらく。\nこのカードをつけているWaterポケモンは、特殊状態にならず、受けている特殊状態は、すべて回復する。";
+const GROW_GRASS_TEXT = "このカードは、ポケモンについているかぎり、Grassエネルギー1個ぶんとしてはたらく。\nこのカードをつけているGrassポケモンは、最大HPが「＋20」される。";
+const BUBBLE_WATER_TEXT = "このカードは、ポケモンについているかぎり、Waterエネルギー1個ぶんとしてはたらく。\nこのカードをつけているWaterポケモンは、特殊状態にならず、受けている特殊状態は、すべて回復する。";
 export class AbilityEngine {
   constructor(repository, catalog) {
     if (catalog?.cardCount !== repository.cards.size ||
@@ -76,14 +78,16 @@ export class AbilityEngine {
 
   isSupportedTool(instance) {
     const card = this.card(instance);
-    return card.trainerType === "tool" && ((card.name === "くさりもち" && card.raw.effect === CHAIN_MOCHI_TEXT) ||\n      (card.name === "ヘビーバトン" && card.raw.effect === "このカードをつけているにげるためのエネルギーが4個のポケモンが、バトル場で相手のポケモンからワザのダメージを受けてきぜつしたとき、そのポケモンについている基本エネルギーを3枚まで選び、自分のベンチポケモンに好きなようにつけ替える。"));
+    return card.trainerType === "tool" && ((card.name === "くさりもち" && card.raw.effect === CHAIN_MOCHI_TEXT) ||
+      (card.name === "ヘビーバトン" && card.raw.effect === "このカードをつけているにげるためのエネルギーが4個のポケモンが、バトル場で相手のポケモンからワザのダメージを受けてきぜつしたとき、そのポケモンについている基本エネルギーを3枚まで選び、自分のベンチポケモンに好きなようにつけ替える。"));
   }
 
   isSupportedEnergy(instance) {
     const card = this.card(instance);
     return card.energyType === "basic" ||
-      (card.energyType === "special" && card.name === "グロウ草エネルギー" &&
-        card.raw.effect === GROW_GRASS_TEXT);
+      (card.energyType === "special" && ((card.name === "グロウ草エネルギー" &&
+        card.raw.effect === GROW_GRASS_TEXT) || (card.name === "バブル水エネルギー" &&
+        card.raw.effect === BUBBLE_WATER_TEXT)));
   }
 
   assertSandbox(state) {
