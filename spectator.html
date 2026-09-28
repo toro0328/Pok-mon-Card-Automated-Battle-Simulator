@@ -46,7 +46,7 @@ button:disabled{opacity:.5;cursor:wait}
 <main>
 <section class="panel">
 <h1>AI同士の自動対戦</h1>
-<p class="help">この画面で2つの公式デッキコードを読み込み、特性・ワザ・効果を解析します。解析とルール確認が終わってからAI対戦を開始します。公式ページのCORS制限時は公開中継サービス経由で読み込みます。</p>
+<p class="help">この画面で2つの公式デッキコードを読み込み、カードの特性・ワザ・効果を解析します。読み込んだカードと効果文はこのブラウザの図鑑に蓄積し、以後同じ効果文が別カードにあっても処理を再利用します。公式ページのCORS制限時は公開中継サービス経由で読み込みます。</p>
 <div class="codes">
 <div><label for="codeA">自分側のデッキコード / URL</label><input id="codeA" placeholder="6文字-6文字-6文字"></div>
 <div><label for="codeB">相手側のデッキコード / URL</label><input id="codeB" placeholder="6文字-6文字-6文字"></div>
@@ -70,6 +70,7 @@ button:disabled{opacity:.5;cursor:wait}
 import { CardRepository } from "./src/card-db/CardRepository.js";
 import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260929-trainerprimitives1";
 import { createDeckAnalysisRecord, saveDeckAnalysis } from "./src/decks/analysis-store.js";
+import { recordDeckLearning, restoreLearnedPrograms } from "./src/decks/effect-library.js?v=20260929-decklearning2";
 import { parseOfficialCardDetails, applyOfficialCardCompile } from "./src/card-db/parse-official-details.js";
 
 const el={
@@ -295,6 +296,7 @@ async function analyzeDecks(decks){
     const elapsed=Math.max(0,Date.now()-loadStarted),remaining=done?Math.max(0,Math.ceil((elapsed/done)*(total-done)/1000)):null;
     el.elapsed.textContent=`経過 ${Math.floor(elapsed/1000)}秒・読込残り目安 ${remaining===null?"計算中":"約"+remaining+"秒"}`;
   });
+  const reused=restoreLearnedPrograms(compiled,repository,engine);
   const compiledById=new Map(compiled.map(card=>[card.officialCardId,card]));
   for(const deck of decks){
     const analysis=deck.cards.map(item=>{
@@ -319,12 +321,18 @@ async function analyzeDecks(decks){
     const elapsed=Math.max(0,Date.now()-loadStarted),remaining=index?Math.max(0,Math.ceil((elapsed/(index+1))*(ids.length-index)/1000)):null;
     el.elapsed.textContent="経過 "+Math.floor(elapsed/1000)+"秒・解析残り目安 "+(remaining===null?"計算中":"約"+remaining+"秒");await new Promise(resolve=>setTimeout(resolve,0));
   }
+  let learning;
+  try{learning=recordDeckLearning(decks,reports,compiled);}catch(error){
+    learning={saveError:error?.message??"保存に失敗しました"};
+  }
   const totalCopies=decks.reduce((sum,d)=>sum+d.cards.reduce((n,x)=>n+x.count,0),0);
   const supportedCopies=reports.reduce((sum,r)=>sum+combined.get(r.officialCardId).counts.reduce((n,count)=>n+(r.supported?count:0),0),0);
   const totalEffects=reports.reduce((sum,r)=>sum+r.details.length,0),supportedEffects=reports.reduce((sum,r)=>sum+r.details.filter(d=>d.status==="supported").length,0),pct=totalCopies?Math.round(supportedCopies/totalCopies*100):0;
   const unresolved=reports.filter(report=>!report.supported),ruleErrors=engine.deckRuleChecks(knownDecks),missing=decks.flatMap(deck=>deck.missingCardIds??[]);
   const complete=unresolved.length===0&&ruleErrors.length===0&&missing.length===0&&decks.every(deck=>deck.cards.reduce((n,x)=>n+x.count,0)===60);
   el.analysisSummary.textContent="カード文の走査："+totalCopies+"/"+totalCopies+"枚（100%）。実戦対応："+supportedCopies+"/"+totalCopies+"枚（"+pct+"%）、対応済み効果："+supportedEffects+"/"+totalEffects+"件。";
+  el.analysisSummary.textContent+=learning?.saveError?" 図鑑保存エラー："+learning.saveError:
+    ` このブラウザの効果図鑑：新規カード${learning.newCards}種・初見効果${learning.newEffects}件、過去に蓄積した効果を${reused.restoredEffects}件再利用。累計${learning.cardCount}種／${learning.effectCount}効果（学習待ち${learning.unresolvedEffectCount}件）。`;
   el.strategySummary.textContent=(ruleErrors.length?"構築ルール違反："+ruleErrors.map(x=>(x.side===0?"自分側":"相手側")+"："+x.message).join(" ／ "):"構築ルール：合法")+(unresolved.length?" ／ 未対応カード効果："+unresolved.map(x=>x.name+"（"+x.details.filter(d=>d.status!=="supported").map(d=>d.label).join("、")+"）").join(" ／ "):"");
   for(const profile of profiles)profile.attackerIds.sort((a,b)=>b.damage-a.damage);
   return {profiles,complete,unresolved,ruleErrors,missing};
