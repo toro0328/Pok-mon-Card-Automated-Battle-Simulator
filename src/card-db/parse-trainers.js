@@ -33,6 +33,8 @@ export function parseTrainerText(card) {
   if(raw==="コインを1回投げオモテなら、相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。")
     return {type:card.trainerType,effect:"coinBoss",text:raw,compiledFromText:true};
   if(card.trainerType==="item"){
+    const hyperBall=raw.match(/^このカードは、自分の手札を2枚トラッシュしなければ使えない。\s*自分の山札(?:からポケモンを1枚選び、|にあるポケモンを1枚、)相手に見せ(?:てから)?、手札に加える。そして山札を切る。$/u);
+    if(hyperBall)return {type:"item",effect:"search",filter:"pokemon",max:1,cost:2,zone:"hand",destination:"hand",text:raw,compiledFromText:true};
     if(/^自分の(?:場の)?ポケモン(?:についている|の)?基本エネルギーを1個(?:選び、|、)?自分の別のポケモンにつけ替える。$/u.test(raw))
       return {type:"item",effect:"transfer",text:raw,compiledFromText:true};
     let healing=raw.match(/^自分のポケモン(?:1匹のHPを|を1匹選び、HPを)「?([0-9０-９]+)」?回復する。$/u);
