@@ -1,5 +1,5 @@
 import { AttackEngine } from "./AttackEngine.js?v=20260929-typed-reduction1";
-import { parseTrainerText } from "../card-db/parse-trainers.js?v=20260929-rarecandy1";
+import { parseTrainerText } from "../card-db/parse-trainers.js?v=20260929-energyrecovery1";
 import { parseAbility } from "../card-db/parse-abilities.js?v=20260928-fourcardfix2";
 import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-fourcardfix1";
 
@@ -346,6 +346,13 @@ export class MatchEngine extends AttackEngine {
       const pending = state.pendingTrainer;
       const source=player.trash.find(x=>x.instanceId===pending.sourceInstanceId);
       const spec=source?this.trainerSpec(source):TRAINERS[pending.name];
+      if(spec?.effect==="recoverEnergy"){
+        if(pending.selectedNames.length<spec.max)for(const energy of player.trash)
+          if(this.card(energy).energyType==="basic")actions.push({type:"ENERGY_RECOVERY_SELECT",player:state.turn,
+            sourceInstanceId:pending.sourceInstanceId,choiceInstanceId:energy.instanceId});
+        actions.push({type:"ENERGY_RECOVERY_FINISH",player:state.turn,sourceInstanceId:pending.sourceInstanceId});
+        return actions;
+      }
       if(pending.name==="カスミの元気"){
         const choices=player.deck.filter(x=>this.card(x).name==="基本水エネルギー");
         if(!pending.selectedTargetId)for(const target of this.field(player))actions.push({type:"KASUMI_TARGET",player:state.turn,targetInstanceId:target.instanceId});
@@ -1065,6 +1072,7 @@ export class MatchEngine extends AttackEngine {
     }
     if (action.type.startsWith("TRAINER_") || action.type.startsWith("AKAMATSU_") ||
         action.type.startsWith("KASUMI_") || action.type.startsWith("TAIRYOU_") ||
+        action.type.startsWith("ENERGY_RECOVERY_") ||
         action.type === "PLAY_TRAINER") return this.applyTrainer(state, action);
     if (["ABILITY_SELECT","ABILITY_SKIP"].includes(action.type)) return this.applyBenchAbility(state,action);
     if (action.type === "USE_HOOH") {
@@ -1159,6 +1167,8 @@ export class MatchEngine extends AttackEngine {
         const evolution=player.hand.splice(evolutionIndex,1)[0];
         const target=this.field(player).find(x=>x.instanceId===pair.target.instanceId);
         this.finishEvolution(next,player,evolution,target);
+      } else if(spec.effect==="recoverEnergy"){
+        next.pendingTrainer={name:this.card(trainer).name,sourceInstanceId:trainer.instanceId,selectedNames:[]};
       } else if (spec.effect === "lillie") {
         player.deck.push(...player.hand.splice(0));
         this.shufflePlayer(next,player);
@@ -1251,6 +1261,17 @@ export class MatchEngine extends AttackEngine {
       const pending=next.pendingTrainer;
       const source=player.trash.find(x=>x.instanceId===pending.sourceInstanceId);
       const spec=source?this.trainerSpec(source):TRAINERS[pending.name];
+      if(spec?.effect==="recoverEnergy"){
+        if(action.type==="ENERGY_RECOVERY_SELECT"){
+          const i=player.trash.findIndex(x=>x.instanceId===action.choiceInstanceId);
+          if(i<0||this.card(player.trash[i]).energyType!=="basic")throw new Error("基本エネルギーを選んでください");
+          const chosen=player.trash.splice(i,1)[0];player.hand.push(chosen);
+          pending.selectedNames.push(this.card(chosen).name);
+          if(pending.selectedNames.length>=spec.max||
+            !player.trash.some(x=>this.card(x).energyType==="basic"))delete next.pendingTrainer;
+        }else if(action.type==="ENERGY_RECOVERY_FINISH")delete next.pendingTrainer;
+        return next;
+      }
       if(action.type==="KASUMI_TARGET")pending.selectedTargetId=action.targetInstanceId;
       else if(action.type==="KASUMI_ENERGY"){
         const i=player.deck.findIndex(x=>x.instanceId===action.choiceInstanceId);
