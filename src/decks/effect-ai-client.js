@@ -48,9 +48,11 @@ export async function analyzeEffectsWithAi(effects, settings, fetcher = globalTh
     if (!Array.isArray(data.analyses)) throw new Error("AI効果解析サービスの応答形式が正しくありません。");
     const allowed = new Set(batch.map(item => item.key));
     for (const analysis of data.analyses) {
-      if (!allowed.has(analysis.key) || typeof analysis.summary !== "string" || !Array.isArray(analysis.steps))
+      if (!allowed.has(analysis.key) || typeof analysis.summary !== "string" || !Array.isArray(analysis.steps) ||
+          analysis.executableText != null && typeof analysis.executableText !== "string")
         throw new Error("AI効果解析サービスから不正な効果データが返りました。");
-      analyses.push({ ...analysis, status: "ai_review", officialRulesVerified: false, analyzedAt: new Date().toISOString() });
+      analyses.push({ ...analysis, executableText: analysis.executableText ?? null,
+        status: "ai_review", officialRulesVerified: false, analyzedAt: new Date().toISOString() });
     }
   }
   return { status: "analyzed", analyses };
