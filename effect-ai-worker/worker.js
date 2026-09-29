@@ -2,10 +2,10 @@ const SCHEMA = {
   type: "object", additionalProperties: false,
   properties: {
     analyses: { type: "array", items: { type: "object", additionalProperties: false, properties: {
-      key: { type: "string" }, summary: { type: "string" }, steps: { type: "array", items: { type: "string" } },
+      key: { type: "string" }, summary: { type: "string" }, executableText: { type: ["string", "null"] }, steps: { type: "array", items: { type: "string" } },
       timing: { type: "string" }, conditions: { type: "array", items: { type: "string" } },
       questions: { type: "array", items: { type: "string" } }, confidence: { type: "string", enum: ["high", "medium", "low"] },
-    }, required: ["key", "summary", "steps", "timing", "conditions", "questions", "confidence"] } },
+    }, required: ["key", "summary", "executableText", "steps", "timing", "conditions", "questions", "confidence"] } },
   }, required: ["analyses"],
 };
 
@@ -67,7 +67,7 @@ export async function handleRequest(request, env, fetcher = fetch) {
         method: "POST",
         headers: { authorization: `Bearer ${env.OPENAI_API_KEY}`, "content-type": "application/json" },
         body: JSON.stringify({ model: env.OPENAI_MODEL ?? "gpt-6-luna", store: false,
-          instructions: "あなたはポケモンカードゲームのカード効果文を構造化して読み解く補助者です。入力された日本語の効果文だけを根拠に、処理の意味・順序・条件・タイミングを簡潔に整理してください。カード文に明記されていないルールを補わないでください。公式ルールや裁定を検索・照合したと主張してはいけません。曖昧な点はquestionsに残し、推測はconfidenceをlowまたはmediumにします。返答は指定JSONのみです。",
+          instructions: "あなたはポケモンカードの効果文を構造化する補助者です。入力文だけを根拠に意味を説明し、書かれていない条件やルールを補ってはいけません。executableTextは、kindがattackの場合に限り、入力の意味を一切変えず、このシミュレーターの厳密な攻撃文パーサーで扱える日本語文へ正規化できるときだけ設定してください。扱える基本形は「自分の山札をN枚引く。」「相手のバトルポケモンをどく／やけど／ねむり／マヒ／こんらんにする。」「コインを1回投げオモテなら、相手のバトルポケモンを（状態）にする。」「このポケモンにもNダメージ。」「相手のバトルポケモンに、ダメカンをN個のせる。」「このポケモンのHPを『N』回復する。」と、これらの完全一致する文を「。」で連結した形です。Nは入力に明記された数だけ使います。条件、対象、回数、任意性などが完全一致しない、または意味を変えずにこの形にできない場合はnullにしてください。他のkindでは必ずnullです。推測がある場合はexecutableTextをnullにし、confidenceをlowまたはmediumにします。これは公式ルール確認ではありません。返答は指定JSONのみです。",
           input: JSON.stringify(missing.map(({ key, name, kind, text }) => ({ key, name, kind, effect_text: text }))),
           text: { format: { type: "json_schema", name: "pokemon_card_effect_analysis", strict: true, schema: SCHEMA } },
         }),
