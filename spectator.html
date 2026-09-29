@@ -356,7 +356,8 @@ async function analyzeDecks(decks){
         for(const report of reports){
           const card=repository.get(report.officialCardId),program=refreshed.get(report.officialCardId)?.program;
           if(card?.cardType==="pokemon"&&program){
-            report.details=report.details.filter(detail=>!detail.label?.startsWith("未対応効果"));
+            if(refreshed.get(report.officialCardId)?.supported)
+              report.details=report.details.filter(detail=>!detail.label?.startsWith("未対応効果"));
             for(const detail of report.details){
               if(detail.label?.startsWith("特性：")){
                 const effect=program.abilities?.find(item=>item.name===detail.label.slice(3));
