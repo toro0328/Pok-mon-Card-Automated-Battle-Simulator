@@ -474,7 +474,7 @@ export class AbilityEngine {
     return next;
   }
 
-  incomingAttackDamage(state, targetInstanceId, damage) {
+  incomingAttackDamage(state, targetInstanceId, damage, attackerTypes = null) {
     this.assertSandbox(state);
     if (!Number.isInteger(damage) || damage < 0) throw new Error("Invalid damage");
     const target = state.players.flatMap(p => this.field(p)).find(x => x.instanceId === targetInstanceId);
@@ -490,7 +490,8 @@ export class AbilityEngine {
     const reduction = this.entries(target, state)
       .filter(e => e.status === "supported" && e.trigger === "INCOMING_ATTACK_DAMAGE")
       .flatMap(e => e.operations)
-      .reduce((total, op) => total + (op.type === "REDUCE_DAMAGE" ? op.amount : 0), 0);
+      .reduce((total, op) => total + (op.type === "REDUCE_DAMAGE" &&
+        (!op.attackerTypes || op.attackerTypes.some(type => attackerTypes?.includes(type))) ? op.amount : 0), 0);
     return Math.max(0, damage - reduction-temporaryReduction);
   }
 
