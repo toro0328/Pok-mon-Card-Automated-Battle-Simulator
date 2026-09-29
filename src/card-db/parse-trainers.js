@@ -40,6 +40,10 @@ export function parseTrainerText(card) {
       "自分の山札を上から7枚見て、その中からサポートを1枚選び、相手に見せて、手札に加える。残りのカードは山札にもどして切る。"
     ]);
     if(pokegearVariants.has(raw))return {type:"item",effect:"pokegear",max:1,filter:"supporter",text:raw,compiledFromText:true};
+    if(raw==="自分のバトルポケモン1匹を、自分のベンチポケモンと入れ替える。")
+      return {type:"item",effect:"switch",text:raw,compiledFromText:true};
+    if(raw==="自分の山札の基本エネルギーを1枚、相手プレイヤーに見せてから、手札に加える。その後、山札を切る。")
+      return {type:"item",effect:"search",filter:"basicEnergy",max:1,optional:false,destination:"hand",zone:"hand",text:raw,compiledFromText:true};
     const hyperBall=raw.match(/^このカードは、自分の手札を2枚トラッシュしなければ使えない。\s*自分の山札(?:からポケモンを1枚選び、|にあるポケモンを1枚、)相手に見せ(?:てから)?、手札に加える。そして山札を切る。$/u);
     if(hyperBall)return {type:"item",effect:"search",filter:"pokemon",max:1,cost:2,zone:"hand",destination:"hand",text:raw,compiledFromText:true};
     if(/^自分の(?:場の)?ポケモン(?:についている|の)?基本エネルギーを1個(?:選び、|、)?自分の別のポケモンにつけ替える。$/u.test(raw))
@@ -74,9 +78,9 @@ export function parseTrainerText(card) {
     return {type:"item",effect:"secretBox",cost:3,max:4,zone:"hand",filter:"secretBox",text:raw,compiledFromText:true};
   let m=raw.match(/^自分の山札を([0-9０-９]+)枚引く。$/u);
   if(m){const count=number(m[1]);return count?{type:card.trainerType,effect:"draw",count,text:raw,compiledFromText:true}:null;}
-  m=raw.match(/^自分の山札から(.+?)を([0-9０-９]+)枚(まで)?選び、(?:相手に見せて、)?手札に加える。そして山札を切る。$/u);
-  if(!m)m=raw.match(/^自分の山札から(.+?)を([0-9０-９]+)枚(まで)?選び、(?:相手に見せて、)?ベンチに出す。そして山札を切る。$/u);
-  if(!m)m=raw.match(/^自分の山札から(.+?)を([0-9０-９]+)枚(まで)?選び、(?:相手に見せて、)?トラッシュする。そして山札を切る。$/u);
+  m=raw.match(/^自分の山札から(.+?)を([0-9０-９]+)枚(まで)?選び、(?:相手(?:プレイヤー)?に見せ(?:てから|て)、)?手札に加える。(?:そして|その後、)山札を切る。$/u);
+  if(!m)m=raw.match(/^自分の山札から(.+?)を([0-9０-９]+)枚(まで)?選び、(?:相手(?:プレイヤー)?に見せ(?:てから|て)、)?ベンチに出す。(?:そして|その後、)山札を切る。$/u);
+  if(!m)m=raw.match(/^自分の山札から(.+?)を([0-9０-９]+)枚(まで)?選び、(?:相手(?:プレイヤー)?に見せ(?:てから|て)、)?トラッシュする。(?:そして|その後、)山札を切る。$/u);
   if(m){
     const filter=targetFilter(m[1]),max=number(m[2]);
     if(!filter||!max)return null;
