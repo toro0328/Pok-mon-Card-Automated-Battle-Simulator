@@ -33,6 +33,13 @@ export function parseTrainerText(card) {
   if(raw==="コインを1回投げオモテなら、相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。")
     return {type:card.trainerType,effect:"coinBoss",text:raw,compiledFromText:true};
   if(card.trainerType==="item"){
+    const energyRecoveryVariants=new Set([
+      "自分のトラッシュから基本エネルギーを2枚まで選び、相手に見せて、手札に加える。",
+      "自分のトラッシュから基本エネルギーを2枚選び、相手に見せてから、手札に加える。",
+      "自分のトラッシュにある基本エネルギーを2枚、相手に見せてから、手札に加える。"
+    ]);
+    if(energyRecoveryVariants.has(raw))return {type:"item",effect:"recoverEnergy",filter:"basicEnergy",max:2,
+      text:raw,compiledFromText:true};
     const rareCandyVariants=new Set([
       "自分の手札から2進化ポケモンを1枚選び、そのポケモンへと進化する自分の場のたねポケモンにのせ、1進化をとばして進化させる。（最初の自分の番と、この番出したばかりのポケモンには使えない。）",
       "自分の手札から2進化ポケモンを1枚選び、そのポケモンへと進化する自分の場のたねポケモンにのせ、1進化をとばして進化させる。（最初の自分の番や、出したばかりのポケモンには使えない。）",
