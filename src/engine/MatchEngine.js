@@ -1,5 +1,5 @@
 import { AttackEngine } from "./AttackEngine.js?v=20260929-typed-reduction1";
-import { parseTrainerText } from "../card-db/parse-trainers.js?v=20260929-trainerprimitives4";
+import { parseTrainerText } from "../card-db/parse-trainers.js?v=20260929-rarecandy1";
 import { parseAbility } from "../card-db/parse-abilities.js?v=20260928-fourcardfix2";
 import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-fourcardfix1";
 
@@ -154,6 +154,44 @@ export class MatchEngine extends AttackEngine {
       }
     }
     return actions;
+  }
+
+  rareCandyPairs(state, playerIndex=state.turn) {
+    const player=state.players[playerIndex];
+    if(state.turnsTaken?.[playerIndex]===0)return [];
+    const pairs=[];
+    for(const evolution of player.hand){
+      const evolvedCard=this.card(evolution);
+      if(evolvedCard.raw.stage!=="2 進化")continue;
+      const stageOne=this.repository.findByName(evolvedCard.raw.evolve_from)
+        .find(card=>card.cardType==="pokemon"&&card.raw.stage==="1 進化");
+      if(!stageOne)continue;
+      const basicName=stageOne.raw.evolve_from;
+      for(const target of this.field(player)){
+        const base=this.card(target);
+        if(base.raw.stage!==BASIC||base.name!==basicName||target.enteredTurn===state.turnNo)continue;
+        if((target.damage??0)>=evolvedCard.raw.hp+
+          (evolvedCard.raw.types?.includes("Grass")?(target.attached??[]).filter(x=>
+            this.card(x).name==="グロウ草エネルギー"&&this.isSupportedEnergy(x)).length*20:0))continue;
+        pairs.push({evolution,target});
+      }
+    }
+    return pairs;
+  }
+
+  finishEvolution(state, player, evolution, target) {
+    this.clearSwitchStatuses(target,true);
+    const {attached=[],stack=[],damage=0,...face}=target;
+    const evolved={...evolution,attached,stack:[...stack,face],damage,enteredTurn:state.turnNo};
+    if(player.active?.instanceId===target.instanceId)player.active=evolved;
+    else player.bench[player.bench.findIndex(x=>x.instanceId===target.instanceId)]=evolved;
+    const entry=this.entries(evolved,state).find(x=>x.trigger==="ON_EVOLVE"&&
+      x.operations.some(op=>op.type==="SEARCH_UP_TO_N_DECK_TRAINERS")&&
+      x.conditions.every(condition=>this.conditionHolds(condition,state,state.turn,evolved,
+        player.active?.instanceId===evolved.instanceId?"active":"bench")));
+    if(entry)state.pendingAbility={name:entry.name,sourceInstanceId:evolved.instanceId,
+      remaining:entry.operations.find(op=>op.type==="SEARCH_UP_TO_N_DECK_TRAINERS").count};
+    return evolved;
   }
 
   shufflePlayer(state, player) {
@@ -416,6 +454,10 @@ export class MatchEngine extends AttackEngine {
         for(const target of player.bench)actions.push({type:"PLAY_TRAINER",player:state.turn,
           sourceInstanceId:instance.instanceId,choiceInstanceId:target.instanceId,mode:"switch"});
         actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId,mode:"damage"});
+      } else if(spec.effect==="rareCandy"){
+        for(const {evolution,target} of this.rareCandyPairs(state,state.turn))
+          actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId,
+            choiceInstanceId:evolution.instanceId,targetInstanceId:target.instanceId});
       } else if(spec.effect==="secretBox"){
         if(player.hand.length>=4)actions.push({type:"PLAY_TRAINER",player:state.turn,sourceInstanceId:instance.instanceId});
       } else if (spec.effect === "transfer") {
@@ -1079,18 +1121,7 @@ export class MatchEngine extends AttackEngine {
     } else if (action.type === "EVOLVE") {
       const evolution = player.hand.splice(handIndex, 1)[0];
       const before = this.field(player).find(x => x.instanceId === action.targetInstanceId);
-      this.clearSwitchStatuses(before,true);
-      const { attached = [], stack = [], damage = 0, ...face } = before;
-      const evolved = { ...evolution, attached, stack: [...stack, face], damage,
-        enteredTurn: next.turnNo };
-      if (player.active?.instanceId === action.targetInstanceId) player.active = evolved;
-      else player.bench[player.bench.findIndex(x => x.instanceId === action.targetInstanceId)] = evolved;
-      const entry=this.entries(evolved,next).find(x=>x.trigger==="ON_EVOLVE"&&
-        x.operations.some(op=>op.type==="SEARCH_UP_TO_N_DECK_TRAINERS")&&
-        x.conditions.every(condition=>this.conditionHolds(condition,next,action.player,evolved,
-          player.active?.instanceId===evolved.instanceId?"active":"bench")));
-      if(entry)next.pendingAbility={name:entry.name,sourceInstanceId:evolved.instanceId,
-        remaining:entry.operations.find(op=>op.type==="SEARCH_UP_TO_N_DECK_TRAINERS").count};
+      this.finishEvolution(next,player,evolution,before);
     } else throw new Error(`Unsupported match action: ${action.type}`);
     return next;
   }
@@ -1119,7 +1150,16 @@ export class MatchEngine extends AttackEngine {
       const trainer = player.hand.splice(index, 1)[0], spec = this.trainerSpec(trainer);
       player.trash.push(trainer);
       if (spec.type === "supporter") next.supporterUsedThisTurn = true;
-      if (spec.effect === "lillie") {
+      if(spec.effect==="rareCandy"){
+        const pair=this.rareCandyPairs(state,action.player).find(({evolution,target})=>
+          evolution.instanceId===action.choiceInstanceId&&target.instanceId===action.targetInstanceId);
+        if(!pair)throw new Error("ふしぎなアメの進化先が現在の状態では不正です");
+        const evolutionIndex=player.hand.findIndex(x=>x.instanceId===pair.evolution.instanceId);
+        if(evolutionIndex<0)throw new Error("進化ポケモンが手札にありません");
+        const evolution=player.hand.splice(evolutionIndex,1)[0];
+        const target=this.field(player).find(x=>x.instanceId===pair.target.instanceId);
+        this.finishEvolution(next,player,evolution,target);
+      } else if (spec.effect === "lillie") {
         player.deck.push(...player.hand.splice(0));
         this.shufflePlayer(next,player);
         player.hand.push(...player.deck.splice(0,player.prizes.length===6?8:6));
