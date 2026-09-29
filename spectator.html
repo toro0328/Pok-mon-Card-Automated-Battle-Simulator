@@ -72,8 +72,8 @@ button:disabled{opacity:.5;cursor:wait}
 import { CardRepository } from "./src/card-db/CardRepository.js";
 import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260929-trainerprimitives1";
 import { createDeckAnalysisRecord, saveDeckAnalysis } from "./src/decks/analysis-store.js";
-import { loadEffectLibrary, recordAiEffectAnalyses, recordDeckLearning, restoreLearnedPrograms } from "./src/decks/effect-library.js?v=20260929-ai-connection1";
-import { analyzeEffectsWithAi, readEffectAiSettings, saveEffectAiSettings } from "./src/decks/effect-ai-client.js?v=20260929-ai-connection1";
+import { loadEffectLibrary, recordAiEffectAnalyses, recordDeckLearning, restoreLearnedPrograms } from "./src/decks/effect-library.js?v=20260929-ai-execution1";
+import { analyzeEffectsWithAi, readEffectAiSettings, saveEffectAiSettings } from "./src/decks/effect-ai-client.js?v=20260929-ai-execution1";
 import { parseOfficialCardDetails, applyOfficialCardCompile } from "./src/card-db/parse-official-details.js";
 
 const el={
@@ -289,7 +289,7 @@ function addAnalysisCard(report,counts){
   const node=document.createElement("div");node.className="analysis-card";const title=document.createElement("strong");title.textContent=report.name+"　自分 "+counts[0]+"枚 / 相手 "+counts[1]+"枚";node.append(title);
   const state=document.createElement("span");state.className=report.supported?"supported":"review";state.textContent=report.supported?"効果処理：対応済み":"効果処理：未対応箇所を確認中";node.append(state);
   if(report.roles.length){const roles=document.createElement("small");roles.textContent="役割の目安："+report.roles.join("・");node.append(roles);}
-  for(const detail of (report.details??[])){const line=document.createElement("small");line.textContent=(detail.status==="supported"?"✓ ":"△ ")+detail.label+(detail.text?"\\n"+detail.text:"");node.append(line);
+  for(const detail of (report.details??[])){const line=document.createElement("small");line.textContent=(detail.status==="supported"?"✓ ":"△ ")+detail.label+(detail.aiDerived?"（AI変換・公式未照合）":"")+(detail.text?"\\n"+detail.text:"");node.append(line);
     if(detail.aiAnalysis){const memo=document.createElement("small");memo.textContent=`AI読み取りメモ（公式ルール照合なし・実行未対応）：${detail.aiAnalysis.summary}${detail.aiAnalysis.steps.length?"\n"+detail.aiAnalysis.steps.map((step,index)=>`${index+1}. ${step}`).join("\n"):""}${detail.aiAnalysis.questions.length?"\n確認事項："+detail.aiAnalysis.questions.join("、"):""}`;node.append(memo);}
   }el.analysisList.append(node);
 }
@@ -351,6 +351,26 @@ async function analyzeDecks(decks){
           detail.aiAnalysis=byKey.get(key)??loadEffectLibrary().effects[key]?.aiAnalysis;
         }
         aiResult.saved=saved.saved;
+        const aiRestore=restoreLearnedPrograms(compiled,repository,engine);
+        const refreshed=new Map(compiled.map(item=>[item.officialCardId,item]));
+        for(const report of reports){
+          const card=repository.get(report.officialCardId),program=refreshed.get(report.officialCardId)?.program;
+          if(card?.cardType==="pokemon"&&program){
+            report.details=report.details.filter(detail=>!detail.label?.startsWith("未対応効果"));
+            for(const detail of report.details){
+              if(detail.label?.startsWith("特性：")){
+                const effect=program.abilities?.find(item=>item.name===detail.label.slice(3));
+                if(effect){detail.status=effect.status;detail.aiDerived=!!effect.aiDerived;}
+              }else if(detail.label?.startsWith("ワザ：")){
+                const name=detail.label.slice(3).split("（")[0],effect=program.attacks?.find(item=>item.name===name);
+                if(effect){detail.status=effect.status;detail.aiDerived=!!effect.aiDerived;}
+              }
+            }
+          }
+          report.supported=!!refreshed.get(report.officialCardId)?.supported&&
+            report.details.every(detail=>detail.status==="supported");
+        }
+        aiResult.applied=aiRestore.restoredEffects;
       }catch(error){aiResult={status:"error",error:error.message,analyses:[]};}
   }
   if(aiSettings.endpoint||Object.values(knownAiAnalyses).some(effect=>effect.aiAnalysis)){
@@ -365,7 +385,7 @@ async function analyzeDecks(decks){
   el.analysisSummary.textContent="カード文の走査："+totalCopies+"/"+totalCopies+"枚（100%）。実戦対応："+supportedCopies+"/"+totalCopies+"枚（"+pct+"%）、対応済み効果："+supportedEffects+"/"+totalEffects+"件。";
   el.analysisSummary.textContent+=learning?.saveError?" 図鑑保存エラー："+learning.saveError:
     ` このブラウザの効果図鑑：新規カード${learning.newCards}種・初見効果${learning.newEffects}件、過去に蓄積した効果を${reused.restoredEffects}件再利用。累計${learning.cardCount}種／${learning.effectCount}効果（学習待ち${learning.unresolvedEffectCount}件）。`;
-  if(aiSettings.endpoint)el.analysisSummary.textContent+=aiResult.status==="analyzed"?` AI効果解析：${aiResult.saved}件を読み取りメモとして図鑑に記録（実行対応とは別）。`:aiResult.status==="error"?` AI効果解析エラー：${aiResult.error}`:" AI効果解析対象の未対応効果はありません。";
+  if(aiSettings.endpoint)el.analysisSummary.textContent+=aiResult.status==="analyzed"?` AI解析：${aiResult.saved}件を記録し、既存の安全な攻撃効果処理へ${aiResult.applied??0}件を接続（AI変換・公式未照合）。`:aiResult.status==="error"?` AI効果解析エラー：${aiResult.error}`:" AI効果解析対象の未対応効果はありません。";
   el.strategySummary.textContent=(ruleErrors.length?"構築ルール違反："+ruleErrors.map(x=>(x.side===0?"自分側":"相手側")+"："+x.message).join(" ／ "):"構築ルール：合法")+(unresolved.length?" ／ 未対応カード効果："+unresolved.map(x=>x.name+"（"+x.details.filter(d=>d.status!=="supported").map(d=>d.label).join("、")+"）").join(" ／ "):"");
   for(const profile of profiles)profile.attackerIds.sort((a,b)=>b.damage-a.damage);
   return {profiles,complete,unresolved,ruleErrors,missing};
