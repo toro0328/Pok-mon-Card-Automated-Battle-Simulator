@@ -213,6 +213,14 @@ export function parseAbility(name, text) {
       limit: null
     };
   }
+  if ((match = text.match(/^このポケモンが、相手の(Fire|Water|Grass|Electric|Psychic|Fighting|Dark|Metal|Dragon|Colorless)(?:または(Fire|Water|Grass|Electric|Psychic|Fighting|Dark|Metal|Dragon|Colorless))ポケモンから受けるワザのダメージは「-([1-9][0-9]*)」される。$/))) {
+    return {
+      status: "supported", trigger: "INCOMING_ATTACK_DAMAGE", conditions: [], costs: [],
+      operations: [{ type: "REDUCE_DAMAGE", amount: Number(match[3]),
+        attackerTypes: [match[1],match[2]].filter(Boolean) }],
+      limit: null
+    };
+  }
   if (text === "このポケモンがいるかぎり、自分のたねポケモン全員のにげるためのエネルギーは、すべてなくなる。") {
     return {
       status: "supported", trigger: "CONTINUOUS", conditions: [], costs: [],
