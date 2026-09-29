@@ -16,6 +16,12 @@ database.cards.push({...structuredClone(source),officialCardId:60002,name:"試�
 database.cards.push({...structuredClone(source),officialCardId:60003,name:"試験用回復グッズ",cardType:"trainer",
   trainerType:"item",energyType:null,raw:{...structuredClone(source.raw),jp_id:60003,name:"試験用回復グッズ",
     card_type:"Trainer",abilities:[],attacks:[],effect:"自分のポケモンを1匹選び、HPを「30」回復する。"}});
+database.cards.push({...structuredClone(source),officialCardId:60004,name:"試験用ポケギア",cardType:"trainer",
+  trainerType:"item",energyType:null,raw:{...structuredClone(source.raw),jp_id:60004,name:"試験用ポケギア",
+    card_type:"Trainer",abilities:[],attacks:[],effect:"自分の山札を上から7枚見る。その中からサポートを1枚選び、相手に見せて、手札に加える。残りのカードは山札にもどして切る。"}});
+database.cards.push({...structuredClone(source),officialCardId:60005,name:"試験用サポート",cardType:"trainer",
+  trainerType:"supporter",energyType:null,raw:{...structuredClone(source.raw),jp_id:60005,name:"試験用サポート",
+    card_type:"Trainer",abilities:[],attacks:[],effect:"自分の山札を1枚引く。"}});
 effects.cardCount=database.cards.length;
 
 test("deck load compiles an unregistered Trainer from its printed text for match use",async()=>{
@@ -84,4 +90,23 @@ test("deck compilation connects generic healing text to the selected damaged Pok
   const next=engine.applyMatchAction(state,actions.find(x=>x.targetInstanceId==="active"));
   assert.equal(next.players[0].active.damage,20);
   assert.equal(next.players[0].bench[0].damage,20);
+});
+
+test("deck compilation executes a Pokégear print variant against the top seven cards",async()=>{
+  const engine=new MatchEngine(new CardRepository(database),effects);
+  const compiled=await engine.compileDeck([{cards:[{officialCardId:60004,count:1}]},{cards:[]}]);
+  assert.equal(compiled[0].supported,true);
+  assert.equal(engine.trainerSpec({cardId:60004}).effect,"pokegear");
+  const cards=Array.from({length:7},(_,i)=>({instanceId:`top-${i}`,cardId:50745}));
+  cards[4]={instanceId:"supporter",cardId:60005};
+  const state={ruleset:"supported_abilities_v1",phase:"playing",turn:0,turnNo:2,turnsTaken:[1,1],
+    energyAttachedThisTurn:false,retreatedThisTurn:false,stadium:null,randomState:7,
+    players:[{active:null,bench:[],hand:[{instanceId:"gear",cardId:60004}],deck:cards,trash:[],prizes:[]},
+      {active:null,bench:[],hand:[],deck:[],trash:[],prizes:[]}],usedAbilities:{instances:[],names:[]}};
+  const play=engine.getMatchActions(state).find(action=>action.type==="PLAY_TRAINER"&&action.sourceInstanceId==="gear"&&action.choiceInstanceId==="supporter");
+  assert.ok(play);
+  const next=engine.applyMatchAction(state,play);
+  assert.ok(next.players[0].hand.some(card=>card.instanceId==="supporter"));
+  assert.equal(next.players[0].deck.length,6);
+  assert.equal(next.players[0].trash[0].instanceId,"gear");
 });
