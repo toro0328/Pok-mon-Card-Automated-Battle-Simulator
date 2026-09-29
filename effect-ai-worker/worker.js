@@ -54,7 +54,7 @@ export async function handleRequest(request, env, fetcher = fetch) {
   const result = new Map();
   const missing = [];
   for (const effect of effects) {
-    const cacheKey = `v1:${await hashKey(`${effect.kind}:${effect.text}`)}`;
+    const cacheKey = `v2:${await hashKey(`${effect.kind}:${effect.text}`)}`;
     let cached;
     try { cached = await env.EFFECTS?.get(cacheKey, "json"); } catch { cached = null; }
     if (cached && cached.key === effect.key) result.set(effect.key, cached);
@@ -67,7 +67,7 @@ export async function handleRequest(request, env, fetcher = fetch) {
         method: "POST",
         headers: { authorization: `Bearer ${env.OPENAI_API_KEY}`, "content-type": "application/json" },
         body: JSON.stringify({ model: env.OPENAI_MODEL ?? "gpt-6-luna", store: false,
-          instructions: "あなたはポケモンカードの効果文を構造化する補助者です。入力文だけを根拠に意味を説明し、書かれていない条件やルールを補ってはいけません。executableTextは、kindがattackの場合に限り、入力の意味を一切変えず、このシミュレーターの厳密な攻撃文パーサーで扱える日本語文へ正規化できるときだけ設定してください。扱える基本形は「自分の山札をN枚引く。」「相手のバトルポケモンをどく／やけど／ねむり／マヒ／こんらんにする。」「コインを1回投げオモテなら、相手のバトルポケモンを（状態）にする。」「このポケモンにもNダメージ。」「相手のバトルポケモンに、ダメカンをN個のせる。」「このポケモンのHPを『N』回復する。」と、これらの完全一致する文を「。」で連結した形です。Nは入力に明記された数だけ使います。条件、対象、回数、任意性などが完全一致しない、または意味を変えずにこの形にできない場合はnullにしてください。他のkindでは必ずnullです。推測がある場合はexecutableTextをnullにし、confidenceをlowまたはmediumにします。これは公式ルール確認ではありません。返答は指定JSONのみです。",
+          instructions: "あなたはポケモンカードの効果文を構造化する補助者です。入力文だけを根拠に意味を説明し、書かれていない条件やルールを補ってはいけません。executableTextは、入力の意味・対象・順番・条件・コストを一切変えず、kindごとの次の既存パーサー対応文へ厳密に正規化できる場合だけ設定します。attackの対応文：自分の山札をN枚引く。／相手のバトルポケモンをどく・やけど・ねむり・マヒ・こんらんにする。／コインを1回投げオモテなら、相手のバトルポケモンを（状態）にする。／このポケモンにもNダメージ。／相手のバトルポケモンに、ダメカンをN個のせる。／このポケモンのHPを「N」回復する。完全一致文を「。」で連結できます。abilityの対応文：自分の番に1回使える。自分の山札をN枚引く。／自分の番に、自分の手札を1枚トラッシュするなら、1回使える。自分の山札をN枚引く。／自分の番に1回使える。自分の山札から基本エネルギーを1枚選び、手札に加える。そして山札を切る。／自分の番に1回使える。自分の山札からサポートを1枚選び、相手に見せて、手札に加える。そして山札を切る。itemとsupporterの対応文：自分の山札をN枚引く。／自分の山札から（入力に実在する対象）をN枚まで選び、相手に見せて、手札に加える。そして山札を切る。トレーナーズの対象語は入力から文字どおり抜き出し、別の対象に置き換えないでください。Nは入力にある数字と全て同じにしてください。説明文を正規化した結果が完全一致しない場合、条件や任意性、選べる枚数、対象に曖昧さがあればnullにします。その他kindは必ずnullです。曖昧ならquestionsへ記録しconfidenceをmediumまたはlowにします。これは公式ルール確認ではありません。返答は指定JSONのみです。",
           input: JSON.stringify(missing.map(({ key, name, kind, text }) => ({ key, name, kind, effect_text: text }))),
           text: { format: { type: "json_schema", name: "pokemon_card_effect_analysis", strict: true, schema: SCHEMA } },
         }),
@@ -84,7 +84,7 @@ export async function handleRequest(request, env, fetcher = fetch) {
     for (const analysis of parsed.analyses) {
       const record = { ...analysis, kind: missing.find(effect => effect.key === analysis.key).kind, status: "ai_review", officialRulesVerified: false };
       result.set(analysis.key, record);
-      const cacheKey = `v1:${await hashKey(`${record.kind}:${missing.find(effect => effect.key === analysis.key).text}`)}`;
+    const cacheKey = `v2:${await hashKey(`${record.kind}:${missing.find(effect => effect.key === analysis.key).text}`)}`;
       try { await env.EFFECTS?.put(cacheKey, JSON.stringify(record), { expirationTtl: 60 * 60 * 24 * 365 }); } catch { /* KV is optional; browser library still records the response. */ }
     }
   }
