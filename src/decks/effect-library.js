@@ -1,5 +1,8 @@
-const KEY="pokemon-card-simulator-effect-library-v1";
+import { parseAbility } from "../card-db/parse-abilities.js";
 import { inspectAttacks } from "../card-db/parse-effects.js";
+import { parseTrainerText } from "../card-db/parse-trainers.js";
+
+const KEY="pokemon-card-simulator-effect-library-v1";
 
 function emptyLibrary(){return {schemaVersion:1,cards:{},effects:{},deckCodes:[]};}
 function readLibrary(storage){
@@ -11,15 +14,31 @@ function readLibrary(storage){
   return parsed;
 }
 function normalize(text){return String(text??"").replace(/\s+/gu," ").trim();}
+function samePrintedNumbers(original,candidate){
+  const digits=value=>(String(value??"").match(/[0-9]+/gu)??[]).join(",");
+  const before=digits(original),after=digits(candidate);
+  return !!before&&before===after;
+}
 function safeAiAttackText(original,candidate){
   if(typeof candidate!=="string"||!candidate.endsWith("。"))return false;
   const clauses=candidate.match(/[^。]+。/gu)??[];
   if(!clauses.length||clauses.join("")!==candidate)return false;
   const safeClause=/^(?:自分の山札を[1-9][0-9]*枚引く|相手のバトルポケモンを(?:どく|やけど|ねむり|マヒ|こんらん)にする|コインを1回投げオモテなら、相手のバトルポケモンを(?:どく|やけど|ねむり|マヒ|こんらん)にする|このポケモンにも[1-9][0-9]*ダメージ|相手のバトルポケモンに、ダメカンを[1-9][0-9]*個のせる|このポケモンのHPを「[1-9][0-9]*」回復する)。$/u;
   if(!clauses.every(clause=>safeClause.test(clause)))return false;
-  const digits=value=>(value.match(/[0-9]+/gu)??[]).join(",");
-  const originalDigits=digits(original),candidateDigits=digits(candidate);
-  return !!originalDigits&&originalDigits===candidateDigits;
+  return samePrintedNumbers(original,candidate);
+}
+function safeAiAbilityText(original,candidate){
+  if(typeof candidate!=="string"||!samePrintedNumbers(original,candidate))return false;
+  return /^(?:自分の番に1回使える。自分の山札を[1-9][0-9]*枚引く。|自分の番に、自分の手札を1枚トラッシュするなら、1回使える。自分の山札を[1-9][0-9]*枚引く。|自分の番に1回使える。自分の山札から基本エネルギーを1枚選び、手札に加える。そして山札を切る。|自分の番に1回使える。自分の山札からサポートを1枚選び、相手に見せて、手札に加える。そして山札を切る。)$/u.test(candidate);
+}
+function safeAiTrainerText(original,candidate){
+  if(typeof candidate!=="string"||!samePrintedNumbers(original,candidate))return false;
+  if(/^自分の山札を[1-6]枚引く。$/u.test(candidate))return true;
+  const search=candidate.match(/^自分の山札から(.+?)を([1-6])枚(まで)?選び、相手に見せて、手札に加える。そして山札を切る。$/u);
+  if(!search)return false;
+  const target=search[1].replace(/[「」『』]/gu,"");
+  const printed=String(original??"").replace(/[「」『』]/gu,"");
+  return target.length>0&&printed.includes(target);
 }
 function kindFor(label=""){
   if(label.startsWith("特性："))return "ability";
@@ -65,7 +84,18 @@ export function restoreLearnedPrograms(compiled,repository,engine,storage=global
     program.abilities=(program.abilities??[]).map(current=>{
       if(current.status==="supported")return current;
       const learned=library.effects[`ability:${normalize(current.text)}`];
-      if(learned?.status!=="supported"||!learned.program)return current;
+      if(learned?.status!=="supported"||!learned.program){
+        const candidate=learned?.aiAnalysis;
+        if(candidate?.confidence!=="high"||candidate.questions?.length||
+          !safeAiAbilityText(current.text,candidate.executableText))return current;
+        const parsed=parseAbility(current.name,candidate.executableText);
+        if(parsed.status!=="supported")return current;
+        changed=true;restoredEffects++;
+        const learnedProgram={...parsed,name:current.name,index:current.index,text:current.text,
+          aiDerived:true,officialRulesVerified:false};
+        if(learned){learned.status="supported";learned.program=learnedProgram;}
+        return {...current,...learnedProgram};
+      }
       changed=true;restoredEffects++;
       return {...current,...learned.program,name:current.name,index:current.index,text:current.text,status:"supported"};
     });
@@ -93,11 +123,22 @@ export function restoreLearnedPrograms(compiled,repository,engine,storage=global
     if(!program.trainer&&card.trainerType&&normalize(card.raw?.effect)){
       const learned=library.effects[`${card.trainerType}:${normalize(card.raw.effect)}`];
       if(learned?.status==="supported"&&learned.program){program.trainer=learned.program;changed=true;restoredEffects++;}
+      else if(["item","supporter"].includes(card.trainerType)){
+        const candidate=learned?.aiAnalysis;
+        if(candidate?.confidence==="high"&&!candidate.questions?.length&&
+          safeAiTrainerText(card.raw.effect,candidate.executableText)){
+          const parsed=parseTrainerText({...card,raw:{...card.raw,effect:candidate.executableText}});
+          if(parsed){program.trainer={...parsed,text:card.raw.effect,aiDerived:true,officialRulesVerified:false};
+            if(learned){learned.status="supported";learned.program=program.trainer;}
+            changed=true;restoredEffects++;}
+        }
+      }
     }
     if(!changed)continue;
     const unsupported=[...(program.abilities??[]),...(program.attacks??[])].filter(effect=>effect.status!=="supported");
     if(card.trainerType&&!program.trainer)unsupported.push({name:card.name,text:card.raw?.effect??"",status:"needs_review"});
     item.unsupported=unsupported;item.supported=unsupported.length===0;
+    if(library.cards[item.officialCardId])library.cards[item.officialCardId].supported=item.supported;
     engine.deckPrograms.set(item.officialCardId,program);restoredCards++;
   }
   storage?.setItem(KEY,JSON.stringify(library));
