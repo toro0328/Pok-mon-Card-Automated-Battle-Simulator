@@ -65,6 +65,21 @@ test("compiles Secret Box only when all four Trainer types and the three card co
   assert.equal(parseTrainerText({...card,raw:{effect:card.raw.effect.replace("スタジアム","ポケモン")}}),null);
 });
 
+test("compiles Hyper Ball print variants with the exact two-card cost and Pokémon search",()=>{
+  const variants=[
+    "このカードは、自分の手札を2枚トラッシュしなければ使えない。\n自分の山札からポケモンを1枚選び、相手に見せてから、手札に加える。そして山札を切る。",
+    "このカードは、自分の手札を2枚トラッシュしなければ使えない。\n自分の山札にあるポケモンを1枚、相手に見せてから、手札に加える。そして山札を切る。"
+  ];
+  for(const effect of variants){
+    const result=parseTrainerText({trainerType:"item",raw:{effect}});
+    assert.equal(result?.effect,"search",effect);
+    assert.equal(result.filter,"pokemon",effect);
+    assert.equal(result.max,1,effect);
+    assert.equal(result.cost,2,effect);
+  }
+  assert.equal(parseTrainerText({trainerType:"item",raw:{effect:variants[0].replace("2枚トラッシュ","1枚トラッシュ")}}),null);
+});
+
 test("does not guess unsupported compound Trainer wording",()=>{
   assert.equal(parseTrainerText({trainerType:"item",raw:{effect:"自分のポケモンを回復し、山札を切る。"}}),null);
 });
