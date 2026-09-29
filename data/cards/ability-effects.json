@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "abilityCount": 772,
   "counts": {
-    "supported": 213,
-    "needs_review": 559
+    "supported": 215,
+    "needs_review": 557
   },
   "abilities": {
     "45147": [
@@ -6169,11 +6169,21 @@
         "index": 0,
         "name": "あついしぼう",
         "text": "このポケモンが、相手のFireまたはWaterポケモンから受けるワザのダメージは「-30」される。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "INCOMING_ATTACK_DAMAGE",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "REDUCE_DAMAGE",
+            "amount": 30,
+            "attackerTypes": [
+              "Fire",
+              "Water"
+            ]
+          }
+        ],
+        "limit": null
       }
     ],
     "48369": [
@@ -6478,11 +6488,21 @@
         "index": 0,
         "name": "あついしぼう",
         "text": "このポケモンが、相手のFireまたはWaterポケモンから受けるワザのダメージは「-30」される。",
-        "status": "needs_review",
-        "trigger": null,
+        "status": "supported",
+        "trigger": "INCOMING_ATTACK_DAMAGE",
         "conditions": [],
         "costs": [],
-        "operations": []
+        "operations": [
+          {
+            "type": "REDUCE_DAMAGE",
+            "amount": 30,
+            "attackerTypes": [
+              "Fire",
+              "Water"
+            ]
+          }
+        ],
+        "limit": null
       }
     ],
     "48494": [
