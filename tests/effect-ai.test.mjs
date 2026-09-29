@@ -1,12 +1,12 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { analyzeEffectsWithAi, readEffectAiSettings, saveEffectAiSettings } from "../src/decks/effect-ai-client.js";
-import { recordAiEffectAnalyses, loadEffectLibrary, recordDeckLearning } from "../src/decks/effect-library.js";
+import { recordAiEffectAnalyses, loadEffectLibrary, recordDeckLearning, restoreLearnedPrograms } from "../src/decks/effect-library.js";
 import { handleRequest } from "../effect-ai-worker/worker.js";
 
 const memory = () => { const values = new Map(); return { getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) }; };
 const input = [{ key: "ability:自分の番に1回使える。", kind: "ability", name: "テスト特性", text: "自分の番に1回使える。" }];
-const output = { key: input[0].key, summary: "自分の番に1回使えます。", steps: ["使用を宣言する"], timing: "自分の番", conditions: [], questions: [], confidence: "high" };
+const output = { key: input[0].key, summary: "自分の番に1回使えます。", executableText: null, steps: ["使用を宣言する"], timing: "自分の番", conditions: [], questions: [], confidence: "high" };
 
 test("AI settings require HTTPS and persist the endpoint and app token", () => {
   const storage = memory();
@@ -38,6 +38,37 @@ test("AI notes are written to existing encyclopedia entries without upgrading su
   assert.equal(effect.aiAnalysis.summary, output.summary);
   assert.equal(effect.aiAnalysis.officialRulesVerified, false);
   assert.equal(effect.status, "needs_learning");
+});
+
+test("high-confidence AI attack normalization is recompiled by the strict engine parser before reuse",()=>{
+  const storage=memory(),card={officialCardId:101,name:"テストドロー",cardType:"pokemon",raw:{attacks:[
+    {name:"ドロー",effect:"山札を2枚引く。",cost:["Colorless"],damage:{amount:10,suffix:""}}
+  ]}};
+  const deck={deckCode:"ABCDEF-GHIJKL-MNOPQR",cards:[{officialCardId:101,count:1}]};
+  const report={officialCardId:101,name:card.name,type:"pokemon",supported:false,
+    details:[{label:"ワザ：ドロー",status:"needs_review",text:"山札を2枚引く。"}]};
+  const original={index:0,name:"ドロー",text:"山札を2枚引く。",cost:["Colorless"],printedDamage:{amount:10,suffix:""},effects:[],status:"needs_review"};
+  const program={abilities:[],attacks:[original],trainer:null};
+  const compiled=[{officialCardId:101,name:card.name,supported:false,unsupported:[original],program}];
+  recordDeckLearning([deck],[report],compiled,storage);
+  const key="attack:山札を2枚引く。";
+  recordAiEffectAnalyses([{key,summary:"2枚引く。",executableText:"自分の山札を2枚引く。",steps:[],questions:[],confidence:"high"}],storage);
+  const engine={deckPrograms:new Map()};
+  const restored=restoreLearnedPrograms(compiled,{get:id=>id===101?card:null},engine,storage);
+  assert.equal(restored.restoredEffects,1);
+  assert.equal(program.attacks[0].status,"supported");
+  assert.equal(program.attacks[0].aiDerived,true);
+  assert.equal(program.attacks[0].officialRulesVerified,false);
+  assert.equal(engine.deckPrograms.get(101).attacks[0].effects[0].type,"DRAW");
+  assert.equal(loadEffectLibrary(storage).effects[key].status,"supported");
+
+  const rejectedStorage=memory(),rejectedProgram={abilities:[],attacks:[{...original,status:"needs_review"}],trainer:null};
+  const rejectedCompiled=[{officialCardId:101,name:card.name,supported:false,unsupported:rejectedProgram.attacks,program:rejectedProgram}];
+  recordDeckLearning([deck],[report],rejectedCompiled,rejectedStorage);
+  recordAiEffectAnalyses([{key,summary:"2枚引く。",executableText:"自分の山札を3枚引く。",steps:[],questions:[],confidence:"high"}],rejectedStorage);
+  const rejected=restoreLearnedPrograms(rejectedCompiled,{get:id=>id===101?card:null},{deckPrograms:new Map()},rejectedStorage);
+  assert.equal(rejected.restoredEffects,0);
+  assert.equal(rejectedProgram.attacks[0].status,"needs_review");
 });
 
 test("worker enforces origin, bearer token, and effect-count limits", async () => {
