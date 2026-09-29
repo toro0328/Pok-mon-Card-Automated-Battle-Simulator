@@ -40,6 +40,9 @@ database.cards.push({...structuredClone(source),officialCardId:60010,name:"試�
 database.cards.push({...structuredClone(source),officialCardId:60011,name:"試験用ふしぎなアメ",cardType:"trainer",
   trainerType:"item",energyType:null,raw:{...structuredClone(source.raw),jp_id:60011,name:"試験用ふしぎなアメ",
     card_type:"Trainer",abilities:[],attacks:[],effect:"自分の手札から2進化ポケモンを1枚選び、そのポケモンへと進化する自分の場のたねポケモンにのせ、1進化をとばして進化させる。（最初の自分の番と、この番出したばかりのポケモンには使えない。）"}});
+database.cards.push({...structuredClone(source),officialCardId:60012,name:"試験用エネルギー回収",cardType:"trainer",
+  trainerType:"item",energyType:null,raw:{...structuredClone(source.raw),jp_id:60012,name:"試験用エネルギー回収",
+    card_type:"Trainer",abilities:[],attacks:[],effect:"自分のトラッシュから基本エネルギーを2枚まで選び、相手に見せて、手札に加える。"}});
 effects.cardCount=database.cards.length;
 
 test("deck load compiles an unregistered Trainer from its printed text for match use",async()=>{
@@ -187,4 +190,27 @@ test("Rare Candy skips exactly one evolution stage and enforces timing and linea
   assert.equal(noAction(firstTurn),false);
   const wrongLine=structuredClone(state);wrongLine.players[0].active.cardId=60009;
   assert.equal(noAction(wrongLine),false);
+});
+
+test("Energy Retrieval returns at most two Basic Energy from the discard pile",async()=>{
+  const engine=new MatchEngine(new CardRepository(database),effects);
+  const compiled=await engine.compileDeck([{cards:[{officialCardId:60012,count:1}]},{cards:[]}]);
+  assert.equal(compiled[0].supported,true);
+  assert.equal(engine.trainerSpec({cardId:60012}).effect,"recoverEnergy");
+  const card=(instanceId,cardId)=>({instanceId,cardId,attached:[]});
+  const state={ruleset:"supported_abilities_v1",phase:"playing",turn:0,turnNo:2,turnsTaken:[1,1],
+    energyAttachedThisTurn:false,retreatedThisTurn:false,stadium:null,
+    players:[{active:null,bench:[],hand:[card("retrieval",60012)],deck:[],
+      trash:[card("basic-a",50745),card("not-energy",50400),card("basic-b",50745),card("basic-c",50745)],prizes:[]},
+      {active:null,bench:[],hand:[],deck:[],trash:[],prizes:[]}],
+    usedAbilities:{instances:[],names:[]},knockoutThisTurn:[false,false],previousOpponentTurnKnockout:[false,false]};
+  const play=engine.getMatchActions(state).find(action=>action.type==="PLAY_TRAINER"&&action.sourceInstanceId==="retrieval");
+  let next=engine.applyMatchAction(state,play);
+  assert.deepEqual(engine.getMatchActions(next).filter(action=>action.type==="ENERGY_RECOVERY_SELECT")
+    .map(action=>action.choiceInstanceId),["basic-a","basic-b","basic-c"]);
+  next=engine.applyMatchAction(next,engine.getMatchActions(next).find(action=>action.choiceInstanceId==="basic-a"));
+  next=engine.applyMatchAction(next,engine.getMatchActions(next).find(action=>action.choiceInstanceId==="basic-b"));
+  assert.equal(next.pendingTrainer,undefined);
+  assert.deepEqual(next.players[0].hand.map(item=>item.instanceId),["basic-a","basic-b"]);
+  assert.deepEqual(next.players[0].trash.map(item=>item.instanceId),["not-energy","basic-c","retrieval"]);
 });
