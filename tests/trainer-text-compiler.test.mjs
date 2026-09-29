@@ -96,6 +96,22 @@ test("compiles known Pokégear text variants only when they search a revealed Su
   assert.equal(parseTrainerText({trainerType:"item",raw:{effect:variants[0].replace("7枚","6枚")}}),null);
 });
 
+test("compiles Pokémon Switch and Energy Search wording variants into their existing actions",()=>{
+  const switched=parseTrainerText({trainerType:"item",raw:{effect:"自分のバトルポケモン1匹を、自分のベンチポケモンと入れ替える。"}});
+  assert.equal(switched?.effect,"switch");
+  const energyVariants=[
+    "自分の山札の基本エネルギーを1枚、相手プレイヤーに見せてから、手札に加える。その後、山札を切る。",
+    "自分の山札から基本エネルギーを1枚選び、相手に見せてから、手札に加える。そして山札を切る。"
+  ];
+  for(const effect of energyVariants){
+    const result=parseTrainerText({trainerType:"item",raw:{effect}});
+    assert.equal(result?.effect,"search",effect);
+    assert.equal(result.filter,"basicEnergy",effect);
+    assert.equal(result.max,1,effect);
+  }
+  assert.equal(parseTrainerText({trainerType:"item",raw:{effect:energyVariants[0].replace("基本エネルギー","特殊エネルギー")}}),null);
+});
+
 test("does not guess unsupported compound Trainer wording",()=>{
   assert.equal(parseTrainerText({trainerType:"item",raw:{effect:"自分のポケモンを回復し、山札を切る。"}}),null);
 });
