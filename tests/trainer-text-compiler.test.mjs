@@ -22,6 +22,20 @@ test("compiles only explicit modern Rare Candy skip-evolution wording",()=>{
   assert.equal(parseTrainerText({trainerType:"supporter",raw:{effect:variants[0]}}),null);
 });
 
+test("compiles exact Energy Retrieval variants with a two-basic-Energy limit",()=>{
+  const variants=[
+    "自分のトラッシュから基本エネルギーを2枚まで選び、相手に見せて、手札に加える。",
+    "自分のトラッシュから基本エネルギーを2枚選び、相手に見せてから、手札に加える。",
+    "自分のトラッシュにある基本エネルギーを2枚、相手に見せてから、手札に加える。"
+  ];
+  for(const effect of variants){
+    const result=parseTrainerText({trainerType:"item",raw:{effect}});
+    assert.equal(result?.effect,"recoverEnergy",effect);
+    assert.equal(result.max,2,effect);
+  }
+  assert.equal(parseTrainerText({trainerType:"item",raw:{effect:variants[0].replace("基本エネルギー","エネルギー")}}),null);
+});
+
 test("compiles Boss-style gust and coin-gated Catcher wording independent of card name",()=>{
   const supporter={trainerType:"supporter",raw:{effect:"相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。"}};
   const item={trainerType:"item",raw:{effect:"コインを1回投げオモテなら、相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。"}};
