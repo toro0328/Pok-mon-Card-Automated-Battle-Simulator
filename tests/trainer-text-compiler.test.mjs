@@ -9,6 +9,19 @@ test("compiles Bug Catching Set text variants from the printed text",()=>{
   });
 });
 
+test("compiles only explicit modern Rare Candy skip-evolution wording",()=>{
+  const variants=[
+    "自分の手札から2進化ポケモンを1枚選び、そのポケモンへと進化する自分の場のたねポケモンにのせ、1進化をとばして進化させる。（最初の自分の番と、この番出したばかりのポケモンには使えない。）",
+    "自分の手札から2進化ポケモンを1枚選び、そのポケモンへと進化する自分の場のたねポケモンにのせ、1進化をとばして進化させる。（最初の自分の番や、出したばかりのポケモンには使えない。）",
+    "自分の手札にある2進化ポケモンを1枚、そのポケモンへと進化する自分の場のたねポケモンにのせて進化させる。（最初の自分の番と、この番出したばかりのたねポケモンには使えない。）",
+    "自分の手札から2進化ポケモンを1枚選び、そのポケモンへと進化する自分の場のたねポケモンにのせて進化させる。（最初の自分の番と、この番出したばかりのたねポケモンには使えない。）"
+  ];
+  for(const effect of variants)
+    assert.equal(parseTrainerText({trainerType:"item",raw:{effect}})?.effect,"rareCandy",effect);
+  assert.equal(parseTrainerText({trainerType:"item",raw:{effect:variants[0].replace("1進化をとばして","")}}),null);
+  assert.equal(parseTrainerText({trainerType:"supporter",raw:{effect:variants[0]}}),null);
+});
+
 test("compiles Boss-style gust and coin-gated Catcher wording independent of card name",()=>{
   const supporter={trainerType:"supporter",raw:{effect:"相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。"}};
   const item={trainerType:"item",raw:{effect:"コインを1回投げオモテなら、相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。"}};
