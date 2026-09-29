@@ -71,6 +71,37 @@ test("high-confidence AI attack normalization is recompiled by the strict engine
   assert.equal(rejectedProgram.attacks[0].status,"needs_review");
 });
 
+test("AI ability and Trainer text is connected only after the existing parsers accept the exact normalized program",()=>{
+  const storage=memory();
+  const abilityText="自分の番に1回使える。山札を2枚引く。";
+  const trainerText="自分の山札を2枚ひく。";
+  const abilityCard={officialCardId:201,name:"テストポケモン",cardType:"pokemon",raw:{abilities:[{name:"ドロー",effect:abilityText}],attacks:[]}};
+  const trainerCard={officialCardId:202,name:"テストグッズ",cardType:"trainer",trainerType:"item",raw:{effect:trainerText}};
+  const decks=[{deckCode:"AAAAAA-BBBBBB-CCCCCC",cards:[{officialCardId:201,count:1}]},
+    {deckCode:"DDDDDD-EEEEEE-FFFFFF",cards:[{officialCardId:202,count:1}]}];
+  const reports=[
+    {officialCardId:201,name:abilityCard.name,type:"pokemon",supported:false,details:[{label:"特性：ドロー",status:"needs_review",text:abilityText}]},
+    {officialCardId:202,name:trainerCard.name,type:"trainer",supported:false,details:[{label:"item",status:"needs_review",text:trainerText}]}
+  ];
+  const ability={index:0,name:"ドロー",text:abilityText,status:"needs_review",trigger:null,conditions:[],costs:[],operations:[]};
+  const compiled=[
+    {officialCardId:201,name:abilityCard.name,supported:false,unsupported:[ability],program:{abilities:[ability],attacks:[],trainer:null}},
+    {officialCardId:202,name:trainerCard.name,supported:false,unsupported:[{name:trainerCard.name,text:trainerText,status:"needs_review"}],program:{abilities:[],attacks:[],trainer:null}}
+  ];
+  recordDeckLearning(decks,reports,compiled,storage);
+  recordAiEffectAnalyses([
+    {key:`ability:${abilityText}`,summary:"1回使って2枚引きます。",executableText:"自分の番に1回使える。自分の山札を2枚引く。",steps:[],questions:[],confidence:"high"},
+    {key:`item:${trainerText}`,summary:"山札から2枚引きます。",executableText:"自分の山札を2枚引く。",steps:[],questions:[],confidence:"high"}
+  ],storage);
+  const engine={deckPrograms:new Map()};
+  const result=restoreLearnedPrograms(compiled,{get:id=>({201:abilityCard,202:trainerCard})[id]},engine,storage);
+  assert.equal(result.restoredEffects,2);
+  assert.equal(engine.deckPrograms.get(201).abilities[0].status,"supported");
+  assert.equal(engine.deckPrograms.get(201).abilities[0].aiDerived,true);
+  assert.equal(engine.deckPrograms.get(202).trainer.effect,"draw");
+  assert.equal(loadEffectLibrary(storage).effects[`item:${trainerText}`].status,"supported");
+});
+
 test("worker enforces origin, bearer token, and effect-count limits", async () => {
   const env = { ALLOWED_ORIGIN: "https://site.example", CLIENT_TOKEN: "app-token", OPENAI_API_KEY: "unused" };
   const otherOrigin = await handleRequest(new Request("https://worker.example/analyze", { method: "POST", headers: { origin: "https://bad.example" }, body: "{}" }), env);
