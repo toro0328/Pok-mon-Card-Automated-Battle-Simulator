@@ -22,6 +22,12 @@ database.cards.push({...structuredClone(source),officialCardId:60004,name:"試�
 database.cards.push({...structuredClone(source),officialCardId:60005,name:"試験用サポート",cardType:"trainer",
   trainerType:"supporter",energyType:null,raw:{...structuredClone(source.raw),jp_id:60005,name:"試験用サポート",
     card_type:"Trainer",abilities:[],attacks:[],effect:"自分の山札を1枚引く。"}});
+database.cards.push({...structuredClone(source),officialCardId:60006,name:"試験用入れ替え",cardType:"trainer",
+  trainerType:"item",energyType:null,raw:{...structuredClone(source.raw),jp_id:60006,name:"試験用入れ替え",
+    card_type:"Trainer",abilities:[],attacks:[],effect:"自分のバトルポケモン1匹を、自分のベンチポケモンと入れ替える。"}});
+database.cards.push({...structuredClone(source),officialCardId:60007,name:"試験用エネルギー転送",cardType:"trainer",
+  trainerType:"item",energyType:null,raw:{...structuredClone(source.raw),jp_id:60007,name:"試験用エネルギー転送",
+    card_type:"Trainer",abilities:[],attacks:[],effect:"自分の山札の基本エネルギーを1枚、相手プレイヤーに見せてから、手札に加える。その後、山札を切る。"}});
 effects.cardCount=database.cards.length;
 
 test("deck load compiles an unregistered Trainer from its printed text for match use",async()=>{
@@ -109,4 +115,32 @@ test("deck compilation executes a Pokégear print variant against the top seven 
   assert.ok(next.players[0].hand.some(card=>card.instanceId==="supporter"));
   assert.equal(next.players[0].deck.length,6);
   assert.equal(next.players[0].trash[0].instanceId,"gear");
+});
+
+test("deck compilation executes Switch and searches only Basic Energy from the deck",async()=>{
+  const engine=new MatchEngine(new CardRepository(database),effects);
+  const compiled=await engine.compileDeck([{cards:[{officialCardId:60006,count:1},{officialCardId:60007,count:1}]},{cards:[]}]);
+  assert.ok(compiled.every(card=>card.supported));
+  assert.equal(engine.trainerSpec({cardId:60006}).effect,"switch");
+  assert.equal(engine.trainerSpec({cardId:60007}).filter,"basicEnergy");
+  const card=(instanceId,cardId,attached=[])=>({instanceId,cardId,attached});
+  const state={ruleset:"supported_abilities_v1",phase:"playing",turn:0,turnNo:2,turnsTaken:[1,1],
+    energyAttachedThisTurn:false,retreatedThisTurn:false,stadium:null,randomState:13,
+    players:[{active:card("active",50400),bench:[card("bench",50400)],hand:[card("switch",60006)],
+      deck:[],trash:[],prizes:[]},{active:card("foe",50400),bench:[],hand:[],deck:[],trash:[],prizes:[]}],
+    usedAbilities:{instances:[],names:[]}};
+  const switchAction=engine.getMatchActions(state).find(action=>action.type==="PLAY_TRAINER"&&action.sourceInstanceId==="switch");
+  assert.equal(switchAction.choiceInstanceId,"bench");
+  const switched=engine.applyMatchAction(state,switchAction);
+  assert.equal(switched.players[0].active.instanceId,"bench");
+
+  state.players[0].hand=[card("energy-search",60007)];
+  state.players[0].deck=[card("pokemon",50400),card("basic-energy",50745)];
+  const playSearch=engine.getMatchActions(state).find(action=>action.type==="PLAY_TRAINER"&&action.sourceInstanceId==="energy-search");
+  const pending=engine.applyMatchAction(state,playSearch);
+  const selectEnergy=engine.getMatchActions(pending).find(action=>action.type==="TRAINER_SELECT");
+  assert.equal(selectEnergy.choiceInstanceId,"basic-energy");
+  const searched=engine.applyMatchAction(pending,selectEnergy);
+  assert.ok(searched.players[0].hand.some(item=>item.instanceId==="basic-energy"));
+  assert.equal(searched.players[0].deck.length,1);
 });
