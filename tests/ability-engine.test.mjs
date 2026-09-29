@@ -104,6 +104,21 @@ test("passive reduction affects attack damage only; unknown field ability stays 
     .some(action => action.type === "USE_ABILITY"), false);
 });
 
+test("conditional damage reduction only applies against the printed opponent Pokémon types",()=>{
+  const text="このポケモンが、相手のFireまたはWaterポケモンから受けるワザのダメージは「-30」される。";
+  const parsed=parseAbility("あついしぼう",text);
+  assert.equal(parsed.status,"supported");
+  const guardedRepository=new CardRepository(db),guardedEngine=new AbilityEngine(guardedRepository,catalog);
+  guardedRepository.add({officialCardId:59999,name:"あついしぼうテスト",regulation:null,cardType:"pokemon",
+    trainerType:null,energyType:null,source:{detailUrl:"https://example.test/card/59999"},
+    engine:{status:"supported",effects:[]},raw:{types:["Colorless"],hp:100,stage:"たね",abilities:[{name:"あついしぼう",effect:text}]}});
+  const guarded=instance("guarded",59999), game=state(player({active:guarded}));
+  assert.equal(guardedEngine.incomingAttackDamage(game,"guarded",100,["Fire"]),70);
+  assert.equal(guardedEngine.incomingAttackDamage(game,"guarded",100,["Water"]),70);
+  assert.equal(guardedEngine.incomingAttackDamage(game,"guarded",100,["Psychic"]),100);
+  assert.equal(guardedEngine.incomingAttackDamage(game,"guarded",100),100);
+});
+
 test("Kichikigisu draws only after own KO in previous opponent turn and shares name limit", () => {
   const own = player({ active: instance("first", 45913), bench: [instance("second", 45913)],
     deck: Array.from({ length: 6 }, (_, i) => instance(`energy-${i}`, 50745)) });
