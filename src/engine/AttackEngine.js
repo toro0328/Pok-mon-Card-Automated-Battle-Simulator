@@ -1,4 +1,4 @@
-import { AbilityEngine } from "./AbilityEngine.js?v=20260928-deckcompile3";
+import { AbilityEngine } from "./AbilityEngine.js?v=20260929-typed-reduction1";
 import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-fourcardfix1";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
@@ -224,7 +224,7 @@ export class AttackEngine extends AbilityEngine {
     if (!ignoreDefenderEffects && (state.attackProtection??[]).some(shield=>shield.owner===1-action.player &&
         shield.instanceId===target.instanceId && this.card(source).raw.stage==="たね" &&
         !attacker.types?.includes("Colorless"))) return 0;
-    return ignoreDefenderEffects?damage:this.incomingAttackDamage(state,target.instanceId,damage);
+    return ignoreDefenderEffects?damage:this.incomingAttackDamage(state,target.instanceId,damage,attacker.types??[]);
   }
 
   coinSequence(seed, single=false,maxFlips=null) {
