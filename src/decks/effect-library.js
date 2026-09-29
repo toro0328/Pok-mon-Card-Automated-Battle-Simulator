@@ -1,4 +1,5 @@
 const KEY="pokemon-card-simulator-effect-library-v1";
+import { inspectAttacks } from "../card-db/parse-effects.js";
 
 function emptyLibrary(){return {schemaVersion:1,cards:{},effects:{},deckCodes:[]};}
 function readLibrary(storage){
@@ -10,6 +11,16 @@ function readLibrary(storage){
   return parsed;
 }
 function normalize(text){return String(text??"").replace(/\s+/gu," ").trim();}
+function safeAiAttackText(original,candidate){
+  if(typeof candidate!=="string"||!candidate.endsWith("。"))return false;
+  const clauses=candidate.match(/[^。]+。/gu)??[];
+  if(!clauses.length||clauses.join("")!==candidate)return false;
+  const safeClause=/^(?:自分の山札を[1-9][0-9]*枚引く|相手のバトルポケモンを(?:どく|やけど|ねむり|マヒ|こんらん)にする|コインを1回投げオモテなら、相手のバトルポケモンを(?:どく|やけど|ねむり|マヒ|こんらん)にする|このポケモンにも[1-9][0-9]*ダメージ|相手のバトルポケモンに、ダメカンを[1-9][0-9]*個のせる|このポケモンのHPを「[1-9][0-9]*」回復する)。$/u;
+  if(!clauses.every(clause=>safeClause.test(clause)))return false;
+  const digits=value=>(value.match(/[0-9]+/gu)??[]).join(",");
+  const originalDigits=digits(original),candidateDigits=digits(candidate);
+  return !!originalDigits&&originalDigits===candidateDigits;
+}
 function kindFor(label=""){
   if(label.startsWith("特性："))return "ability";
   if(label.startsWith("ワザ："))return "attack";
@@ -35,6 +46,7 @@ export function recordAiEffectAnalyses(analyses,storage=globalThis.localStorage)
     const effect=library.effects[analysis?.key];
     if(!effect||typeof analysis.summary!=="string")continue;
     effect.aiAnalysis={summary:analysis.summary,steps:Array.isArray(analysis.steps)?analysis.steps:[],
+      executableText:typeof analysis.executableText==="string"?analysis.executableText:null,
       timing:analysis.timing??"不明",conditions:Array.isArray(analysis.conditions)?analysis.conditions:[],
       questions:Array.isArray(analysis.questions)?analysis.questions:[],confidence:analysis.confidence??"low",
       officialRulesVerified:false,analyzedAt:analysis.analyzedAt??new Date().toISOString()};
@@ -60,7 +72,20 @@ export function restoreLearnedPrograms(compiled,repository,engine,storage=global
     program.attacks=(program.attacks??[]).map(current=>{
       if(current.status==="supported")return current;
       const learned=library.effects[`attack:${normalize(current.text)}`];
-      if(learned?.status!=="supported"||!learned.program)return current;
+      if(learned?.status!=="supported"||!learned.program){
+        const candidate=learned?.aiAnalysis;
+        if(candidate?.confidence!=="high"||candidate.questions?.length||
+          !safeAiAttackText(current.text,candidate.executableText))return current;
+        const cardWithCandidate={...card,raw:{...card.raw,attacks:(card.raw.attacks??[]).map((attack,index)=>
+          index===current.index?{...attack,effect:candidate.executableText}:attack)}};
+        const parsed=inspectAttacks(cardWithCandidate)[current.index];
+        if(parsed?.status!=="supported"||parsed.name!==current.name||
+          JSON.stringify(parsed.cost)!==JSON.stringify(current.cost)||
+          JSON.stringify(parsed.printedDamage)!==JSON.stringify(current.printedDamage))return current;
+        changed=true;restoredEffects++;
+        if(learned){learned.status="supported";learned.program={...parsed,text:current.text,aiDerived:true,officialRulesVerified:false};}
+        return {...current,...parsed,text:current.text,aiDerived:true,officialRulesVerified:false};
+      }
       changed=true;restoredEffects++;
       return {...current,...learned.program,name:current.name,index:current.index,cost:current.cost,
         printedDamage:current.printedDamage,text:current.text,status:"supported"};
@@ -75,6 +100,7 @@ export function restoreLearnedPrograms(compiled,repository,engine,storage=global
     item.unsupported=unsupported;item.supported=unsupported.length===0;
     engine.deckPrograms.set(item.officialCardId,program);restoredCards++;
   }
+  storage?.setItem(KEY,JSON.stringify(library));
   return {restoredCards,restoredEffects};
 }
 
