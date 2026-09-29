@@ -80,6 +80,22 @@ test("compiles Hyper Ball print variants with the exact two-card cost and Pokém
   assert.equal(parseTrainerText({trainerType:"item",raw:{effect:variants[0].replace("2枚トラッシュ","1枚トラッシュ")}}),null);
 });
 
+test("compiles known Pokégear text variants only when they search a revealed Supporter from the top seven",()=>{
+  const variants=[
+    "自分の山札を上から7枚見て、その中の「サポーター」を1枚、相手に見せてから、手札に加える。残りのカードは山札にもどし、山札を切る。",
+    "自分の山札を上から7枚見る。その中にあるサポートを1枚、相手に見せてから、手札に加えてよい。残りのカードは山札にもどして切る。",
+    "自分の山札を上から7枚見る。その中からサポートを1枚選び、相手に見せて、手札に加える。残りのカードは山札にもどして切る。",
+    "自分の山札を上から7枚見て、その中からサポートを1枚選び、相手に見せて、手札に加える。残りのカードは山札にもどして切る。"
+  ];
+  for(const effect of variants){
+    const result=parseTrainerText({trainerType:"item",raw:{effect}});
+    assert.equal(result?.effect,"pokegear",effect);
+    assert.equal(result.filter,"supporter",effect);
+    assert.equal(result.max,1,effect);
+  }
+  assert.equal(parseTrainerText({trainerType:"item",raw:{effect:variants[0].replace("7枚","6枚")}}),null);
+});
+
 test("does not guess unsupported compound Trainer wording",()=>{
   assert.equal(parseTrainerText({trainerType:"item",raw:{effect:"自分のポケモンを回復し、山札を切る。"}}),null);
 });
