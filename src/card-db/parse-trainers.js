@@ -33,6 +33,13 @@ export function parseTrainerText(card) {
   if(raw==="コインを1回投げオモテなら、相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。")
     return {type:card.trainerType,effect:"coinBoss",text:raw,compiledFromText:true};
   if(card.trainerType==="item"){
+    const pokegearVariants=new Set([
+      "自分の山札を上から7枚見て、その中の「サポーター」を1枚、相手に見せてから、手札に加える。残りのカードは山札にもどし、山札を切る。",
+      "自分の山札を上から7枚見る。その中にあるサポートを1枚、相手に見せてから、手札に加えてよい。残りのカードは山札にもどして切る。",
+      "自分の山札を上から7枚見る。その中からサポートを1枚選び、相手に見せて、手札に加える。残りのカードは山札にもどして切る。",
+      "自分の山札を上から7枚見て、その中からサポートを1枚選び、相手に見せて、手札に加える。残りのカードは山札にもどして切る。"
+    ]);
+    if(pokegearVariants.has(raw))return {type:"item",effect:"pokegear",max:1,filter:"supporter",text:raw,compiledFromText:true};
     const hyperBall=raw.match(/^このカードは、自分の手札を2枚トラッシュしなければ使えない。\s*自分の山札(?:からポケモンを1枚選び、|にあるポケモンを1枚、)相手に見せ(?:てから)?、手札に加える。そして山札を切る。$/u);
     if(hyperBall)return {type:"item",effect:"search",filter:"pokemon",max:1,cost:2,zone:"hand",destination:"hand",text:raw,compiledFromText:true};
     if(/^自分の(?:場の)?ポケモン(?:についている|の)?基本エネルギーを1個(?:選び、|、)?自分の別のポケモンにつけ替える。$/u.test(raw))
