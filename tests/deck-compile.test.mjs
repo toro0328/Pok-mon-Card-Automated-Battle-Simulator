@@ -28,6 +28,18 @@ database.cards.push({...structuredClone(source),officialCardId:60006,name:"試�
 database.cards.push({...structuredClone(source),officialCardId:60007,name:"試験用エネルギー転送",cardType:"trainer",
   trainerType:"item",energyType:null,raw:{...structuredClone(source.raw),jp_id:60007,name:"試験用エネルギー転送",
     card_type:"Trainer",abilities:[],attacks:[],effect:"自分の山札の基本エネルギーを1枚、相手プレイヤーに見せてから、手札に加える。その後、山札を切る。"}});
+database.cards.push({...structuredClone(source),officialCardId:60008,name:"試験たね",cardType:"pokemon",trainerType:null,
+  energyType:null,raw:{...structuredClone(source.raw),jp_id:60008,name:"試験たね",card_type:"Pokemon",stage:"たね",
+    evolve_from:null,hp:60,types:["Grass"],abilities:[],attacks:[]}});
+database.cards.push({...structuredClone(source),officialCardId:60009,name:"試験進化1",cardType:"pokemon",trainerType:null,
+  energyType:null,raw:{...structuredClone(source.raw),jp_id:60009,name:"試験進化1",card_type:"Pokemon",stage:"1 進化",
+    evolve_from:"試験たね",hp:100,types:["Grass"],abilities:[],attacks:[]}});
+database.cards.push({...structuredClone(source),officialCardId:60010,name:"試験進化2",cardType:"pokemon",trainerType:null,
+  energyType:null,raw:{...structuredClone(source.raw),jp_id:60010,name:"試験進化2",card_type:"Pokemon",stage:"2 進化",
+    evolve_from:"試験進化1",hp:150,types:["Grass"],abilities:[],attacks:[]}});
+database.cards.push({...structuredClone(source),officialCardId:60011,name:"試験用ふしぎなアメ",cardType:"trainer",
+  trainerType:"item",energyType:null,raw:{...structuredClone(source.raw),jp_id:60011,name:"試験用ふしぎなアメ",
+    card_type:"Trainer",abilities:[],attacks:[],effect:"自分の手札から2進化ポケモンを1枚選び、そのポケモンへと進化する自分の場のたねポケモンにのせ、1進化をとばして進化させる。（最初の自分の番と、この番出したばかりのポケモンには使えない。）"}});
 effects.cardCount=database.cards.length;
 
 test("deck load compiles an unregistered Trainer from its printed text for match use",async()=>{
@@ -143,4 +155,36 @@ test("deck compilation executes Switch and searches only Basic Energy from the d
   const searched=engine.applyMatchAction(pending,selectEnergy);
   assert.ok(searched.players[0].hand.some(item=>item.instanceId==="basic-energy"));
   assert.equal(searched.players[0].deck.length,1);
+});
+
+test("Rare Candy skips exactly one evolution stage and enforces timing and lineage",async()=>{
+  const engine=new MatchEngine(new CardRepository(database),effects);
+  const compiled=await engine.compileDeck([{cards:[{officialCardId:60011,count:1}]},{cards:[]}]);
+  assert.equal(compiled[0].supported,true);
+  assert.equal(engine.trainerSpec({cardId:60011}).effect,"rareCandy");
+  const card=(instanceId,cardId,extra={})=>({instanceId,cardId,attached:[],...extra});
+  const state={ruleset:"supported_abilities_v1",phase:"playing",turn:0,turnNo:2,turnsTaken:[1,1],
+    energyAttachedThisTurn:false,retreatedThisTurn:false,stadium:null,
+    players:[{active:card("basic",60008,{enteredTurn:1,damage:20,attached:[card("energy",50745)]}),bench:[],
+      hand:[card("candy",60011),card("stage2",60010)],deck:[],trash:[],prizes:[]},
+      {active:card("foe",60008),bench:[],hand:[],deck:[],trash:[],prizes:[]}],
+    usedAbilities:{instances:[],names:[]},knockoutThisTurn:[false,false],previousOpponentTurnKnockout:[false,false]};
+  const action=engine.getMatchActions(state).find(item=>item.type==="PLAY_TRAINER"&&item.sourceInstanceId==="candy");
+  assert.equal(action?.choiceInstanceId,"stage2");
+  assert.equal(action?.targetInstanceId,"basic");
+  const next=engine.applyMatchAction(state,action);
+  assert.equal(next.players[0].active.cardId,60010);
+  assert.equal(next.players[0].active.damage,20);
+  assert.equal(next.players[0].active.attached[0].instanceId,"energy");
+  assert.equal(next.players[0].active.stack.at(-1).instanceId,"basic");
+  assert.equal(next.players[0].hand.length,0);
+  assert.equal(next.players[0].trash[0].instanceId,"candy");
+
+  const noAction=copy=>engine.getMatchActions(copy).some(item=>item.type==="PLAY_TRAINER"&&item.sourceInstanceId==="candy");
+  const playedThisTurn=structuredClone(state);playedThisTurn.players[0].active.enteredTurn=2;
+  assert.equal(noAction(playedThisTurn),false);
+  const firstTurn=structuredClone(state);firstTurn.turnsTaken[0]=0;
+  assert.equal(noAction(firstTurn),false);
+  const wrongLine=structuredClone(state);wrongLine.players[0].active.cardId=60009;
+  assert.equal(noAction(wrongLine),false);
 });
