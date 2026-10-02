@@ -166,6 +166,9 @@ export function recordDeckLearning(decks,reports,compiled,storage=globalThis.loc
         newEffects++;
       }
       const effect=library.effects[key];
+      // Preserve imported AI notes for instant review; they do not grant executable support.
+      if(detail.aiAnalysis&&typeof detail.aiAnalysis.summary==="string")
+        effect.aiAnalysis={...detail.aiAnalysis,status:"ai_review",officialRulesVerified:false};
       if(supported){
         if(effect.status!=="supported")resolvedEffects++;
         effect.status="supported";
