@@ -64,3 +64,19 @@ test("a later deck reuses a previously compiled program for the same printed eff
   assert.deepEqual(current.program.abilities[0].operations,[operation]);
   assert.equal(engine.deckPrograms.get(102),current.program);
 });
+
+test("bundled AI notes are saved on first deck read but never count as executable support",()=>{
+  const storage=memory(),input=deck("PPPPPP-QQQQQQ-RRRRRR",101),memo={summary:"手札を1枚戻して5枚になるまで引く。",
+    steps:["手札を1枚山札の下に戻す","5枚になるまで引く"],timing:"自分の番",conditions:[],questions:[],
+    confidence:"high",status:"ai_review",officialRulesVerified:false};
+  const aiReport={...report(101),details:[{...report(101).details[0],aiAnalysis:memo}]};
+  recordDeckLearning([input],[aiReport],[card(101)],storage);
+  const effect=loadEffectLibrary(storage).effects["ability:自分の番に1回使える。"];
+  assert.deepEqual(effect.aiAnalysis,memo);
+  assert.equal(effect.status,"needs_learning");
+  assert.equal(effect.program,null);
+  const current=card(101),engine={deckPrograms:new Map()};
+  assert.deepEqual(restoreLearnedPrograms([current],{get:()=>({cardType:"pokemon",raw:{}})},engine,storage),
+    {restoredCards:0,restoredEffects:0});
+  assert.equal(current.program.abilities[0].status,"needs_review");
+});
