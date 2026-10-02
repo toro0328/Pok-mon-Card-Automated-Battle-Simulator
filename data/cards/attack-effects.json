@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 3351,
-    "needs_review": 1811
+    "supported": 3381,
+    "needs_review": 1781
   },
   "attacks": {
     "45147": [
@@ -812,8 +812,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "45177": [
@@ -3662,8 +3666,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "45346": [
@@ -9091,8 +9099,12 @@
           "Grass"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "45705": [
@@ -10327,8 +10339,12 @@
           "Fighting"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "45751": [
@@ -11218,8 +11234,12 @@
           "Dark"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "45797": [
@@ -11496,8 +11516,12 @@
           "Fighting"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "45852": [
@@ -21835,8 +21859,12 @@
           "Void"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "46417": [
@@ -29397,8 +29425,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "47059": [
@@ -36035,8 +36067,12 @@
           "Fighting"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "47439": [
@@ -36326,8 +36362,12 @@
           "Dark"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "47452": [
@@ -39039,8 +39079,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "47582": [
@@ -40692,8 +40736,12 @@
           "Electric"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "47653": [
@@ -41765,8 +41813,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "47694": [
@@ -42409,8 +42461,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "47749": [
@@ -43973,8 +44029,12 @@
           "Water"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "47818": [
@@ -46089,8 +46149,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "47953": [
@@ -47949,8 +48013,12 @@
           "Electric"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "48026": [
@@ -48973,8 +49041,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "48065": [
@@ -51988,8 +52060,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "48410": [
@@ -59416,8 +59492,12 @@
           "Grass"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "48795": [
@@ -64632,8 +64712,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "48985": [
@@ -68082,8 +68166,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "49116": [
@@ -68976,8 +69064,12 @@
           "Dark"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "49149": [
@@ -74577,8 +74669,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "49595": [
@@ -76204,8 +76300,12 @@
           "Dark"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "49681": [
@@ -79222,8 +79322,12 @@
           "Grass"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "50086": [
@@ -81894,8 +81998,12 @@
           "Fire"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "50230": [
@@ -85663,8 +85771,12 @@
           "Colorless"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "50399": [
@@ -87732,8 +87844,12 @@
           "Fire"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "50568": [
@@ -88785,8 +88901,12 @@
           "Water"
         ],
         "text": "コインを1回投げウラなら、このワザは失敗。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_FAIL_IF_TAILS"
+          }
+        ]
       }
     ],
     "50629": [
