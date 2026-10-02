@@ -338,7 +338,7 @@ async function analyzeDecks(decks){
     for(const detail of report.details??[]){
       if(detail.status==="supported"||!detail.text?.trim())continue;
       const kind=detail.label?.startsWith("特性：")?"ability":detail.label?.startsWith("ワザ：")?"attack":detail.label?.includes("エネルギー")?"energy":detail.label?.includes("ルール")?"rule":["item","supporter","stadium","tool"].includes(detail.label)?detail.label:"card_effect";
-      const key=`${kind}:${detail.text.replace(/\\s+/gu," ").trim()}`;
+      const key=`${kind}:${detail.text.replace(/\s+/gu," ").trim()}`;
       const memo=aiReviewCatalog?.get(key);
       if(memo)detail.aiAnalysis=memo;
     }
