@@ -68,7 +68,7 @@ async function analyzeBatch(batch,{apiKey,model,fetcher=fetch,maxRetries=4}){
       const expected=new Set(batch.map(effect=>effect.key));
       if(parsed.analyses.length!==batch.length||parsed.analyses.some(item=>!expected.has(item.key))||
         new Set(parsed.analyses.map(item=>item.key)).size!==parsed.analyses.length)
-        throw new Error("Worker response did not match the requested batch");
+        throw new Error("OpenAI response did not match the requested batch");
       return parsed.analyses;
     }
     if(response){
@@ -82,6 +82,18 @@ async function analyzeBatch(batch,{apiKey,model,fetcher=fetch,maxRetries=4}){
     if(attempt<maxRetries)await new Promise(resolve=>setTimeout(resolve,Math.min(1000*2**attempt,15_000)));
   }
   throw lastError??new Error("Worker request failed");
+}
+
+async function analyzeBatchWithSplit(batch,options){
+  try{return await analyzeBatch(batch,options);}
+  catch(error){
+    const recoverableOutput=/structured output|analyses array|did not match the requested batch/iu.test(error.message);
+    if(batch.length<2||!recoverableOutput)throw error;
+    const middle=Math.ceil(batch.length/2);
+    const first=await analyzeBatchWithSplit(batch.slice(0,middle),options);
+    const second=await analyzeBatchWithSplit(batch.slice(middle),options);
+    return [...first,...second];
+  }
 }
 
 export async function runEffectBatch({auditPath=DEFAULT_AUDIT,outputPath=DEFAULT_OUTPUT,
@@ -100,7 +112,7 @@ export async function runEffectBatch({auditPath=DEFAULT_AUDIT,outputPath=DEFAULT
   for(let offset=0;offset<pending.length;offset+=12){
     const batch=pending.slice(offset,offset+12);
     try{
-      const results=await analyzeBatch(batch,{apiKey,model,fetcher});
+      const results=await analyzeBatchWithSplit(batch,{apiKey,model,fetcher});
       const sourceByKey=new Map(batch.map(item=>[item.key,item]));
       for(const result of results){
         const source=sourceByKey.get(result.key);
