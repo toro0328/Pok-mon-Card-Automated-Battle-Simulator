@@ -169,6 +169,10 @@ const PATTERNS = [
     convert: () => [{type:"SEARCH_DECK",max:2,filter:"any"}]
   },
   {
+    expression: /^コインを1回投げウラなら、このワザは失敗。$/,
+    convert: () => [{type:"COIN_FAIL_IF_TAILS"}]
+  },
+  {
     expression: /^コインを1回投げオモテなら、([1-9][0-9]*)ダメージ追加。$/,
     convert: match => [{type:"COIN_BONUS",perCoin:Number(match[1])}]
   },
@@ -289,6 +293,9 @@ export function parseEffectText(text) {
   }
   if(effects.filter(effect=>CHOICE_EFFECTS.has(effect.type)).length>1)
     return {recognized:false,effects:[]};
+  // This failure instruction must be the only operation; its timing is before damage/effects.
+  if(effects.some(effect=>effect.type==="COIN_FAIL_IF_TAILS")&&effects.length!==1)
+    return {recognized:false,effects:[]};
   return {recognized:true,effects};
 }
 
@@ -302,7 +309,7 @@ export function inspectAttacks(card) {
       typeof type === "string" &&
       (type === "Void" ? cost.length === 1 && i === 0 :
         ["Colorless", "Grass", "Fire", "Water", "Electric", "Psychic", "Fighting", "Dark", "Metal", "Steel", "Dragon"].includes(type)));
-    const noDamageTypes=new Set(["SEARCH_DECK","SEARCH_TRASH_TO_HAND","SEARCH_TRASH_TO_BENCH","ATTACH_BASIC_FIGHTING_FROM_TRASH_TO_BENCH","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS","COIN_APPLY_STATUS","HEAL","DRAW","DRAW_UNTIL_HAND_SIZE","DISCARD_HAND_DRAW","DAMAGE","SET_DAMAGE","IGNORE_RESISTANCE","RETURN_ATTACHED_ENERGY_TO_HAND","COPY_BENCH_N_ATTACK",
+    const noDamageTypes=new Set(["SEARCH_DECK","SEARCH_TRASH_TO_HAND","SEARCH_TRASH_TO_BENCH","ATTACH_BASIC_FIGHTING_FROM_TRASH_TO_BENCH","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS","COIN_APPLY_STATUS","HEAL","DRAW","DRAW_UNTIL_HAND_SIZE","DISCARD_HAND_DRAW","DAMAGE","SET_DAMAGE","COIN_FAIL_IF_TAILS","IGNORE_RESISTANCE","RETURN_ATTACHED_ENERGY_TO_HAND","COPY_BENCH_N_ATTACK",
       "DISCARD_ATTACHED","DISCARD_OPPONENT_ENERGY","MILL_OPPONENT_DECK","PLACE_DAMAGE_COUNTERS","SEARCH_BASIC_ENERGY_ATTACH_BENCH","PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN","PREVENT_SAME_ATTACK_NEXT_TURN","SWITCH_SELF","REQUIRE_STADIUM_IN_PLAY"]);
     const noPrintedDamage=damage===null&&parsed.effects.length>0&&parsed.effects.every(x=>noDamageTypes.has(x.type));
     const bonus=parsed.effects.find(x=>x.type==="MODIFY_DAMAGE"||x.type==="COIN_BONUS"||

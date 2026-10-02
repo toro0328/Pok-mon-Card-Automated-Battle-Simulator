@@ -1,7 +1,7 @@
-import { AttackEngine } from "./AttackEngine.js?v=20260929-typed-reduction1";
+import { AttackEngine } from "./AttackEngine.js?v=20261002-coinfail1";
 import { parseTrainerText } from "../card-db/parse-trainers.js?v=20260929-energyrecovery1";
 import { parseAbility } from "../card-db/parse-abilities.js?v=20260928-fourcardfix2";
-import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-fourcardfix1";
+import { inspectAttacks } from "../card-db/parse-effects.js?v=20261002-coinfail1";
 
 const BASIC = "たね";
 const TRAINERS = {
