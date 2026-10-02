@@ -43,3 +43,23 @@ test("batch review checkpoints in groups of twelve and resumes without duplicate
     assert.equal(resumed.totals.completed,14);
   }finally{fs.rmSync(directory,{recursive:true,force:true});}
 });
+
+test("splits a malformed model batch and recovers all effects in smaller requests",async()=>{
+  const directory=fs.mkdtempSync(path.join(os.tmpdir(),"effect-review-split-"));
+  try{
+    const auditPath=path.join(directory,"audit.json"),outputPath=path.join(directory,"review.json");
+    fs.writeFileSync(auditPath,JSON.stringify({unresolved:Array.from({length:12},(_,index)=>({
+      kind:"item",name:`effect ${index}`,text:`effect text ${index}`,officialCardIds:[index+1]}))}));
+    const batchSizes=[];
+    const fetcher=async(_url,request)=>{
+      const body=JSON.parse(request.body),effects=JSON.parse(body.input);batchSizes.push(effects.length);
+      const analyses=effects.map(effect=>({key:effect.key,summary:"read",steps:[],timing:"",conditions:[],questions:[],confidence:"high"}));
+      if(effects.length===12)analyses.pop();
+      return new Response(JSON.stringify({output:[{type:"message",content:[{type:"output_text",text:JSON.stringify({analyses})}]}]}),{status:200});
+    };
+    const result=await runEffectBatch({auditPath,outputPath,apiKey:"test-key",fetcher,delayMs:0});
+    assert.deepEqual(batchSizes,[12,6,6]);
+    assert.equal(result.totals.completed,12);
+    assert.equal(result.failures.length,0);
+  }finally{fs.rmSync(directory,{recursive:true,force:true});}
+});
