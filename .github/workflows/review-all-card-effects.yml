@@ -1,0 +1,34 @@
+name: Review all unresolved card effects
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENAI_MODEL: gpt-6-luna
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Build unresolved effect inventory
+        run: npm run audit:cards
+      - name: Analyze every unique unresolved effect
+        run: npm run analyze:all-effects
+      - name: Save review report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: card-effect-ai-review
+          path: |
+            reports/card-effect-audit.json
+            reports/effect-ai-review.json
+          if-no-files-found: warn
+          retention-days: 90
