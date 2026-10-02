@@ -70,10 +70,10 @@ button:disabled{opacity:.5;cursor:wait}
 </main>
 <script type="module">
 import { CardRepository } from "./src/card-db/CardRepository.js";
-import { MatchEngine } from "./src/engine/MatchEngine.js?v=20260929-energyrecovery1";
+import { MatchEngine } from "./src/engine/MatchEngine.js?v=20261002-reviewcatalog1";
 import { createDeckAnalysisRecord, saveDeckAnalysis } from "./src/decks/analysis-store.js";
-import { loadEffectLibrary, recordAiEffectAnalyses, recordDeckLearning, restoreLearnedPrograms } from "./src/decks/effect-library.js?v=20260929-ai-execution2";
-import { analyzeEffectsWithAi, readEffectAiSettings, saveEffectAiSettings } from "./src/decks/effect-ai-client.js?v=20260929-ai-execution2";
+import { loadEffectLibrary, recordAiEffectAnalyses, recordDeckLearning, restoreLearnedPrograms } from "./src/decks/effect-library.js?v=20261002-reviewcatalog1";
+import { analyzeEffectsWithAi, readEffectAiSettings, saveEffectAiSettings } from "./src/decks/effect-ai-client.js?v=20261002-reviewcatalog1";
 import { parseOfficialCardDetails, applyOfficialCardCompile } from "./src/card-db/parse-official-details.js";
 
 const el={
@@ -86,9 +86,23 @@ const el={
   seed:document.getElementById("seed"),p0:document.getElementById("player0"),
   p1:document.getElementById("player1"),log:document.getElementById("log")
 };
-let repository,engine,game,names=["自分側","相手側"],timer=null,running=false,moveCount=0,entries=[],analysisByPlayer=[],analysisAllowsMatch=false,loadStarted=0,loadClock=null;
+let repository,engine,game,names=["自分側","相手側"],timer=null,running=false,moveCount=0,entries=[],analysisByPlayer=[],analysisAllowsMatch=false,loadStarted=0,loadClock=null,aiReviewCatalog=null;
 const delay=()=>1000+Math.floor(Math.random()*501);
 function setStatus(message,kind=""){el.status.textContent=message;el.status.className=kind;}
+async function loadBundledAiReviewCatalog(){
+  if(aiReviewCatalog)return;
+  aiReviewCatalog=new Map();
+  try{
+    const response=await fetch("./data/effect-ai-review.json.gz.b64");
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    const encoded=(await response.text()).trim(),compressed=Uint8Array.from(atob(encoded),character=>character.charCodeAt(0));
+    const stream=new Blob([compressed]).stream().pipeThrough(new DecompressionStream("gzip"));
+    const catalog=await new Response(stream).json();
+    if(catalog.schemaVersion!==1||catalog.sourceTotals?.remaining!==0)throw new Error("AIメモ集が未完了か形式不正です");
+    for(const entry of catalog.analyses??[])if(entry.aiAnalysis?.status==="ai_review"&&entry.aiAnalysis.officialRulesVerified===false)
+      aiReviewCatalog.set(entry.key,entry.aiAnalysis);
+  }catch(error){console.warn("保存済みAI読み取りメモを読み込めませんでした",error);}
+}
 function updateProgress(percent,label){el.progress.hidden=false;el.progressBar.value=percent;el.progressLabel.textContent=Math.round(percent)+"%　"+label;const seconds=Math.max(0,Math.floor((Date.now()-loadStarted)/1000));el.elapsed.textContent="経過 "+seconds+"秒"+(percent<55?"・公式ページ取得時間は回線により変わります":"");}
 function parseCode(value){
   const match=value.trim().match(/[A-Za-z0-9]{6}-[A-Za-z0-9]{6}-[A-Za-z0-9]{6}/);
@@ -321,6 +335,13 @@ async function analyzeDecks(decks){
     if(compiledCard?.unsupported?.length)for(const effect of compiledCard.unsupported)report.details.push({
       label:"未対応効果"+(effect.name?"："+effect.name:""),status:"needs_review",text:effect.text||"効果文を実行する処理が未接続です。"});
     report.supported=report.supported&&!!compiledCard?.supported;
+    for(const detail of report.details??[]){
+      if(detail.status==="supported"||!detail.text?.trim())continue;
+      const kind=detail.label?.startsWith("特性：")?"ability":detail.label?.startsWith("ワザ：")?"attack":detail.label?.includes("エネルギー")?"energy":detail.label?.includes("ルール")?"rule":["item","supporter","stadium","tool"].includes(detail.label)?detail.label:"card_effect";
+      const key=`${kind}:${detail.text.replace(/\\s+/gu," ").trim()}`;
+      const memo=aiReviewCatalog?.get(key);
+      if(memo)detail.aiAnalysis=memo;
+    }
     reports.push(report);
     for(let side=0;side<2;side++)if(copies[side]){for(const role of report.roles)profiles[side].roles.add(role);if(report.type==="pokemon"&&report.bestDamage>0)profiles[side].attackerIds.push({id,damage:report.bestDamage});}
     updateProgress(55+40*(index+1)/ids.length,"カード解析 "+(index+1)+"/"+ids.length+"種類");
@@ -468,6 +489,7 @@ el.load.onclick=async()=>{
     const decks=await Promise.all([readDeck(el.codeA.value,"self"),readDeck(el.codeB.value,"opponent")]);
     if(decks[0].deckCode)el.codeA.value=decks[0].deckCode;if(decks[1].deckCode)el.codeB.value=decks[1].deckCode;
     await loadMissingOfficialCards(decks);
+    updateProgress(53,"既存のAI読み取りメモを準備");await loadBundledAiReviewCatalog();
     updateProgress(55,"カードごとの特性・ワザ・効果を解析");const analysis=await analyzeDecks(decks);startMatch(decks,analysis);
   }catch(error){setStatus(error.message||"デッキ解析中にエラーが発生しました。","error");el.load.disabled=false;el.start.disabled=true;el.progress.hidden=true;el.turn.textContent="読み込みエラー：コードを確認して再試行してください。";}
   finally{clearInterval(loadClock);loadClock=null;}
