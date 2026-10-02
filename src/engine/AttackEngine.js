@@ -1,5 +1,5 @@
 import { AbilityEngine } from "./AbilityEngine.js?v=20260929-typed-reduction1";
-import { inspectAttacks } from "../card-db/parse-effects.js?v=20260928-fourcardfix1";
+import { inspectAttacks } from "../card-db/parse-effects.js?v=20261002-coinfail1";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
 // ordinary numeric damage. Ordinary single knockouts use explicit prize and
@@ -476,6 +476,17 @@ export class AttackEngine extends AbilityEngine {
       own.active.attached=own.active.attached.filter(x=>!ids.has(x.instanceId));
       own.trash.push(...selected);
     }
+    const failureCoin=attack.effects.some(effect=>effect.type==="COIN_FAIL_IF_TAILS")
+      ?this.coinSequence(next.randomState??1,true):null;
+    if(failureCoin){
+      next.randomState=failureCoin.randomState;
+      if(!failureCoin.heads){
+        next.lastAttack={player:state.turn,attacker:this.card(own.active).name,defender:this.card(opponent.active).name,
+          attack:attack.name,damage:0,before:opponent.active.damage??0,hp:this.effectiveHP(opponent.active),
+          coin:"ワザ失敗判定：ウラ",attackFailed:true};
+        return this.endTurn(next);
+      }
+    }
     const damage = this.calculateAttackDamage(next, action);
     const victim=action.targetInstanceId
       ? this.field(opponent).find(x=>x.instanceId===action.targetInstanceId):opponent.active;
@@ -593,7 +604,7 @@ export class AttackEngine extends AbilityEngine {
                    "DECK_BOTTOM_POKEMON_WITH_ATTACK"].includes(effect.basis)) ||
                  (effect.type==="MODIFY_DAMAGE"&&effect.basis==="TRASH_POKEMON_WITH_ABILITY") ||
                  effect.type==="OPTIONAL_DISCARD_THREE_STEEL_ENERGY_FOR_DAMAGE" ||
-                 effect.type === "IGNORE_DEFENDER_ATTACK_EFFECTS" || effect.type === "IGNORE_WEAKNESS_RESISTANCE" ||
+                 effect.type === "COIN_FAIL_IF_TAILS" || effect.type === "IGNORE_DEFENDER_ATTACK_EFFECTS" || effect.type === "IGNORE_WEAKNESS_RESISTANCE" ||
                  effect.type === "IGNORE_RESISTANCE" || effect.type === "REQUIRE_OWN_BENCH_POKEMON" ||
                  effect.type === "MODIFY_DAMAGE"&&effect.basis==="ATTACHED_ENERGY_EXCEEDS_ATTACK_COST" ||
                  effect.type === "REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN" || effect.type === "DISCARD_HAND_DRAW" ||
