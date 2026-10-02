@@ -6,6 +6,7 @@
     "compile:abilities": "node scripts/compile-abilities.mjs",
     "compile:attacks": "node scripts/compile-attacks.mjs",
     "audit:cards": "node scripts/audit-card-effects.mjs",
-    "analyze:all-effects": "node scripts/analyze-all-effects.mjs"
+    "analyze:all-effects": "node scripts/analyze-all-effects.mjs",
+    "build:ai-review-catalog": "node scripts/build-runtime-ai-review.mjs"
   }
 }
