@@ -597,3 +597,31 @@ test("N Point Up, Care, Mixer, Night Academy and Chain Mochi produce their print
   const equipped=match.applyMatchAction(toolState,equip),[toolAttack]=match.getLegalAttacks(equipped);
   assert.equal(match.calculateAttackDamage(equipped,toolAttack),100); // +40 before weakness
 });
+
+test("attack fails on tails before damage/effects and ends the turn; heads succeeds",()=>{
+  const source=engine.repository.get(49956),raw=structuredClone(source.raw);
+  raw.jp_id=59999;raw.name="コイン失敗テスト";
+  raw.attacks=[{name:"いっぱつげり",cost:["Void"],damage:{amount:30,suffix:""},
+    effect:"コインを1回投げウラなら、このワザは失敗。"}];
+  engine.repository.add({...structuredClone(source),officialCardId:59999,name:"コイン失敗テスト",raw});
+  const attacker=card("coin-attacker",59999),target=card("coin-target",48466);
+  const attacks=engine.attacks(attacker);
+  assert.equal(attacks[0].status,"supported");
+  assert.deepEqual(attacks[0].effects,[{type:"COIN_FAIL_IF_TAILS"}]);
+
+  const tails=state(player(attacker),player(target));tails.randomState=1;
+  const failed=engine.applyAttack(tails,engine.getLegalAttacks(tails)[0]);
+  assert.equal(failed.players[1].active.damage,undefined);
+  assert.equal(failed.lastAttack.attackFailed,true);
+  assert.equal(failed.lastAttack.coin,"ワザ失敗判定：ウラ");
+  assert.equal(failed.turn,1);
+  assert.notEqual(failed.randomState,tails.randomState);
+
+  const heads=state(player(attacker),player(target));heads.randomState=0x12345678;
+  const succeeded=engine.applyAttack(heads,engine.getLegalAttacks(heads)[0]);
+  assert.equal(succeeded.players[1].active.damage,30);
+  assert.equal(succeeded.turn,1);
+
+  assert.deepEqual(parseEffectText("コインを1回投げウラなら、このワザは失敗。このポケモンをねむりにする。"),
+    {recognized:false,effects:[]});
+});
