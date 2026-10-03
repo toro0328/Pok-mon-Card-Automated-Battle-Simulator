@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 3381,
-    "needs_review": 1781
+    "supported": 3408,
+    "needs_review": 1754
   },
   "attacks": {
     "45147": [
@@ -1190,8 +1190,17 @@
           "Dark"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをどくとこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUSES",
+            "target": "DEFENDING_ACTIVE",
+            "statuses": [
+              "どく",
+              "こんらん"
+            ]
+          }
+        ]
       },
       {
         "index": 1,
@@ -1218,8 +1227,24 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくとやけどとこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -5387,8 +5412,24 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくとやけどとこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -6856,8 +6897,19 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをやけどとこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "45588": [
@@ -10391,8 +10443,14 @@
           "Fighting"
         ],
         "text": "このポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "ATTACKING_POKEMON",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -10443,8 +10501,17 @@
           "Colorless"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをどくとマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUSES",
+            "target": "DEFENDING_ACTIVE",
+            "statuses": [
+              "どく",
+              "マヒ"
+            ]
+          }
+        ]
       },
       {
         "index": 1,
@@ -15084,8 +15151,14 @@
           "Colorless"
         ],
         "text": "このポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "ATTACKING_POKEMON",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "46003": [
@@ -21457,8 +21530,14 @@
           "Fighting"
         ],
         "text": "このポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "ATTACKING_POKEMON",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -28423,8 +28502,22 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくとこんらんにする。このポケモンをベンチポケモンと入れ替える。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          },
+          {
+            "type": "SWITCH_SELF"
+          }
+        ]
       }
     ],
     "47018": [
@@ -35327,8 +35420,19 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをやけどとこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -37202,8 +37306,19 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをやけどとこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -50424,8 +50539,19 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンをどくとねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       },
       {
         "index": 1,
@@ -54229,8 +54355,19 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンをどくとねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "48531": [
@@ -57605,8 +57742,19 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをどくとねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "48720": [
@@ -60065,8 +60213,19 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをやけどとこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -69005,8 +69164,17 @@
           "Dark"
         ],
         "text": "コインを1回投げオモテなら、相手のバトルポケモンをどくとこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "COIN_APPLY_STATUSES",
+            "target": "DEFENDING_ACTIVE",
+            "statuses": [
+              "どく",
+              "こんらん"
+            ]
+          }
+        ]
       },
       {
         "index": 1,
@@ -69033,8 +69201,24 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくとやけどとこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       },
       {
         "index": 1,
@@ -75472,8 +75656,22 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをどくとやけどにする。このポケモンをベンチポケモンと入れ替える。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          },
+          {
+            "type": "SWITCH_SELF"
+          }
+        ]
       }
     ],
     "49650": [
@@ -76395,8 +76593,25 @@
           "Dark"
         ],
         "text": "このポケモンにも70ダメージ。相手のバトルポケモンをどくとマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE",
+            "target": "ATTACKING_POKEMON",
+            "amount": 70,
+            "source": "ATTACK_EFFECT"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "49685": [
@@ -76931,8 +77146,19 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンをどくとねむりにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "ねむり"
+          }
+        ]
       }
     ],
     "49956": [
@@ -78890,8 +79116,25 @@
           "Dark"
         ],
         "text": "このポケモンにも70ダメージ。相手のバトルポケモンをどくとマヒにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "DAMAGE",
+            "target": "ATTACKING_POKEMON",
+            "amount": 70,
+            "source": "ATTACK_EFFECT"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "マヒ"
+          }
+        ]
       }
     ],
     "50058": [
@@ -78989,8 +79232,22 @@
           "Fire"
         ],
         "text": "相手のバトルポケモンをどくとやけどにする。このポケモンをベンチポケモンと入れ替える。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          },
+          {
+            "type": "SWITCH_SELF"
+          }
+        ]
       }
     ],
     "50062": [
@@ -79708,8 +79965,14 @@
           "Colorless"
         ],
         "text": "このポケモンをこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "ATTACKING_POKEMON",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "50102": [
@@ -80535,8 +80798,19 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくとこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "50135": [
@@ -81072,8 +81346,19 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンをやけどとこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "50175": [
@@ -81328,8 +81613,19 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンをどくとこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "どく"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "50191": [
@@ -89932,8 +90228,19 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンをやけどとこんらんにする。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "やけど"
+          },
+          {
+            "type": "APPLY_STATUS",
+            "target": "DEFENDING_ACTIVE",
+            "status": "こんらん"
+          }
+        ]
       }
     ],
     "50675": [
