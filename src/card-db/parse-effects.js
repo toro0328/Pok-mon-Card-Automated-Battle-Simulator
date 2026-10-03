@@ -284,7 +284,7 @@ const PATTERNS = [
   {
     expression: /^相手のポケモン1匹に、([1-9][0-9]*)ダメージ。(?:［ベンチは弱点・抵抗力を計算しない。］|ベンチは弱点・抵抗力を計算しない。)?$/,
     convert: match => [{type:"DAMAGE_CHOSEN_OPPONENT",amount:Number(match[1])}]
-  }
+  },
   {
     expression: /^このポケモンについている基本エネルギーの数×([1-9][0-9]*)ダメージ。$/,
     convert: match => [{type:"SET_DAMAGE",basis:"OWN_ACTIVE_BASIC_ENERGY_COUNT",perEnergy:Number(match[1])}]
