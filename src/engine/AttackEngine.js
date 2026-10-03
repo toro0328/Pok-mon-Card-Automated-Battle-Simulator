@@ -534,7 +534,7 @@ export class AttackEngine extends AbilityEngine {
     for (const effect of attack.effects) {
       if(targetEffectProtected&&((effect.type==="REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN"&&effect.target==="DEFENDING_ACTIVE")||
         effect.target!=="ATTACKING_POKEMON"&&["APPLY_STATUS","COIN_APPLY_STATUS","COIN_APPLY_STATUSES","DISCARD_OPPONENT_ENERGY","COIN_DISCARD_ENERGY",
-        "PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN","PLACE_DAMAGE_COUNTERS","SWITCH_OPPONENT_CHOICE"].includes(effect.type))continue;
+        "PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN","PLACE_DAMAGE_COUNTERS","SWITCH_OPPONENT_CHOICE"].includes(effect.type)))continue;
       if (effect.type === "DRAW" && effect.player === "SELF") {
         own.hand.push(...own.deck.splice(0, effect.count));
       } else if(effect.type==="DRAW_UNTIL_HAND_SIZE"&&effect.player==="SELF"){
