@@ -570,6 +570,8 @@ export class AttackEngine extends AbilityEngine {
         for(const pokemon of this.field(own)) pokemon.damage=Math.max(0,(pokemon.damage??0)-effect.amount);
       } else if(effect.type === "HEAL") {
         own.active.damage=Math.max(0,(own.active.damage??0)-effect.amount);
+      } else if(effect.type === "HEAL_DAMAGE_DEALT") {
+        own.active.damage=Math.max(0,(own.active.damage??0)-damage);
       } else if(effect.type === "DISCARD_ATTACHED") {
         const count=effect.count==="ALL"?own.active.attached.length:effect.count;
         if(count)next.pendingAttack={type:"DISCARD_ENERGY",player:state.turn,side:"own",count,sourceInstanceId:own.active.instanceId};
@@ -641,7 +643,7 @@ export class AttackEngine extends AbilityEngine {
                  effect.type === "IGNORE_RESISTANCE" || effect.type === "REQUIRE_OWN_BENCH_POKEMON" ||
                  effect.type === "MODIFY_DAMAGE"&&effect.basis==="ATTACHED_ENERGY_EXCEEDS_ATTACK_COST" ||
                  effect.type === "REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN" || effect.type === "DISCARD_HAND_DRAW" ||
-                 ["DAMAGE_CHOSEN_OPPONENT","DAMAGE_CHOSEN_OPPONENT_BENCH","COIN_BONUS","COIN_DAMAGE","MILL_OPPONENT_DECK","DRAW_UNTIL_HAND_SIZE",
+                 ["DAMAGE_CHOSEN_OPPONENT","DAMAGE_CHOSEN_OPPONENT_BENCH","COIN_BONUS","COIN_DAMAGE","MILL_OPPONENT_DECK","DRAW_UNTIL_HAND_SIZE","HEAL_DAMAGE_DEALT",
                    "PLACE_DAMAGE_COUNTERS","PREVENT_SAME_ATTACK_NEXT_TURN","RESOLVE_DECK_BOTTOM_ATTACK_REVEAL",
                    "REQUIRE_STADIUM_IN_PLAY"].includes(effect.type)) {
         // The bonus was already included in calculateAttackDamage.

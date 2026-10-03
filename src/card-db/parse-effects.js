@@ -234,6 +234,10 @@ const PATTERNS = [
     convert: match => [{type:"HEAL",target:"ATTACKING_POKEMON",amount:Number(match[1])}]
   },
   {
+    expression: /^相手のバトルポケモンに与えたダメージぶん、このポケモンのHPを回復する。$/,
+    convert: () => [{type:"HEAL_DAMAGE_DEALT",target:"ATTACKING_POKEMON"}]
+  },
+  {
     expression: /^このポケモンについているエネルギーを([1-9][0-9]*)個選び、トラッシュする。$/,
     convert: match => [{type:"DISCARD_ATTACHED",target:"ATTACKING_POKEMON",count:Number(match[1])}]
   },

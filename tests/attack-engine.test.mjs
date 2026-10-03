@@ -679,6 +679,22 @@ test("attack fails on tails before damage/effects and ends the turn; heads succe
 });
 
 
+test("attacker heals by the final damage amount and cannot heal above full HP",()=>{
+  const testDb=structuredClone(db),source=testDb.cards.find(x=>x.officialCardId===49956);
+  const defender=testDb.cards.find(x=>x.officialCardId===48466);
+  source.raw.attacks=[{name:"ダメージ回復テスト",cost:["Void"],damage:{amount:20,suffix:""},
+    effect:"相手のバトルポケモンに与えたダメージぶん、このポケモンのHPを回復する。"}];
+  defender.raw.weakness=null;defender.raw.resistance=null;
+  const match=new MatchEngine(new CardRepository(testDb),abilities);
+  const attacker=card("healer",49956),target=card("healed-target",48466);attacker.damage=10;
+  const game=state(player(attacker),player(target));game.turnNo=2;
+  assert.equal(match.attacks(attacker)[0].status,"supported");
+  const attack=match.getLegalAttacks(game)[0];assert.ok(attack);
+  const after=match.applyAttack(game,attack);
+  assert.equal(after.players[1].active.damage,20);
+  assert.equal(after.players[0].active.damage,0);
+});
+
 test("common Active damage-counter bonus and hit-Pokemon damage reduction resolve correctly",()=>{
   const build=(effect)=>{
     const testDb=structuredClone(db),source=testDb.cards.find(x=>x.officialCardId===49956);
