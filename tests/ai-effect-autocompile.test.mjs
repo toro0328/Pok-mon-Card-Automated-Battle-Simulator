@@ -5,7 +5,7 @@ import {loadEffectLibrary,recordDeckLearning,restoreLearnedPrograms} from "../sr
 const memory=()=>{const values=new Map();return {getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,value)};};
 
 test("saved AI steps become an executable attack program on the first deck read",()=>{
-  const storage=memory(),text="未知のワザ効果文。";
+  const storage=memory(),text="3枚引き、ダメカンを2個のせる未知のワザ効果文。";
   const deck={deckCode:"AAAAAA-BBBBBB-CCCCCC",cards:[{officialCardId:201,count:1}]};
   const note={summary:"自分の山札を3枚引き、相手のバトルポケモンにダメカンを2個のせる。",
     steps:["自分の山札を3枚引く。","相手のバトルポケモンに、ダメカンを2個のせる。"],
