@@ -285,6 +285,58 @@ const PATTERNS = [
     expression: /^相手のポケモン1匹に、([1-9][0-9]*)ダメージ。(?:［ベンチは弱点・抵抗力を計算しない。］|ベンチは弱点・抵抗力を計算しない。)?$/,
     convert: match => [{type:"DAMAGE_CHOSEN_OPPONENT",amount:Number(match[1])}]
   }
+  {
+    expression: /^このポケモンについている基本エネルギーの数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{type:"SET_DAMAGE",basis:"OWN_ACTIVE_BASIC_ENERGY_COUNT",perEnergy:Number(match[1])}]
+  },
+  {
+    expression: /^このポケモンについている特殊エネルギーの枚数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{type:"SET_DAMAGE",basis:"OWN_ACTIVE_SPECIAL_ENERGY_COUNT",perEnergy:Number(match[1])}]
+  },
+  {
+    expression: /^自分の手札の枚数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{type:"SET_DAMAGE",basis:"OWN_HAND_COUNT",perCard:Number(match[1])}]
+  },
+  {
+    expression: /^相手の手札の枚数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{type:"SET_DAMAGE",basis:"OPPONENT_HAND_COUNT",perCard:Number(match[1])}]
+  },
+  {
+    expression: /^自分の場のポケモンの数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{type:"SET_DAMAGE",basis:"OWN_FIELD_POKEMON_COUNT",perPokemon:Number(match[1])}]
+  },
+  {
+    expression: /^自分の場のダメカンがのっているポケモンの数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{type:"SET_DAMAGE",basis:"OWN_FIELD_DAMAGED_POKEMON_COUNT",perPokemon:Number(match[1])}]
+  },
+  {
+    expression: /^自分の場の進化ポケモンの数×([1-9][0-9]*)ダメージ追加。$/,
+    convert: match => [{type:"MODIFY_DAMAGE",basis:"OWN_FIELD_EVOLVED_POKEMON_COUNT",perPokemon:Number(match[1])}]
+  },
+  {
+    expression: /^自分のベンチポケモンの数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{type:"SET_DAMAGE",basis:"OWN_BENCH_COUNT",perPokemon:Number(match[1])}]
+  },
+  {
+    expression: /^相手のベンチポケモンの数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{type:"SET_DAMAGE",basis:"OPPONENT_BENCH_COUNT",perPokemon:Number(match[1])}]
+  },
+  {
+    expression: /^相手のバトルポケモンのにげるためのエネルギーの数×([1-9][0-9]*)ダメージ追加。$/,
+    convert: match => [{type:"MODIFY_DAMAGE",basis:"DEFENDER_RETREAT_COST",perEnergy:Number(match[1])}]
+  },
+  {
+    expression: /^相手のバトルポケモンにのっているダメカンの数×([1-9][0-9]*)ダメージ追加。$/,
+    convert: match => [{type:"MODIFY_DAMAGE",basis:"OPPONENT_ACTIVE_DAMAGE_COUNTERS",perCounter:Number(match[1])}]
+  },
+  {
+    expression: /^相手のポケモン全員にのっているダメカンの数×([1-9][0-9]*)ダメージ追加。$/,
+    convert: match => [{type:"MODIFY_DAMAGE",basis:"OPPONENT_FIELD_DAMAGE_COUNTERS",perCounter:Number(match[1])}]
+  },
+  {
+    expression: /^相手のバトルポケモンが受けている特殊状態の数×([1-9][0-9]*)ダメージ。$/,
+    convert: match => [{type:"SET_DAMAGE",basis:"DEFENDER_SPECIAL_CONDITION_COUNT",perCondition:Number(match[1])}]
+  },
 ];
 
 function parseSingle(text) {
@@ -338,7 +390,7 @@ export function inspectAttacks(card) {
     const validDamage=noPrintedDamage||Number.isInteger(damage?.amount)&&damage.amount>=0&&
       (damage.suffix===""||damage.suffix==="＋"&&!!bonus||damage.suffix==="×"&&!!multiplier&&
       (multiplier.type==="COIN_DAMAGE"?multiplier.perCoin===damage.amount:
-        multiplier.perPokemon===damage.amount||multiplier.perEnergy===damage.amount||multiplier.perCounter===damage.amount||
+        multiplier.perPokemon===damage.amount||multiplier.perEnergy===damage.amount||multiplier.perCounter===damage.amount||multiplier.perCard===damage.amount||multiplier.perCondition===damage.amount||
         multiplier.basis==="OPPONENT_PRIZES_TAKEN"&&multiplier.perPrize===damage.amount||
         multiplier.basis==="DECK_BOTTOM_POKEMON_WITH_ATTACK"&&multiplier.perPokemon===damage.amount));
     return {

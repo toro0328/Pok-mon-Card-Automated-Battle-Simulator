@@ -224,6 +224,39 @@ test("meta-deck damage formulas parse and count both Benches",()=>{
   assert.equal(engine.calculateAttackDamage(gameState,action),100);
 });
 
+test("damage formula families read live hand, field, condition, energy and Retreat counts",()=>{
+  const formulaEngine=(text,amount,suffix="×",configureDb=()=>{})=>{
+    const testDb=structuredClone(db),source=testDb.cards.find(x=>x.officialCardId===49956);
+    configureDb(testDb);source.raw.attacks=[{name:"集計ワザ",cost:["Void"],damage:{amount,suffix},effect:text}];
+    return new MatchEngine(new CardRepository(testDb),abilities);
+  };
+  const cases=[
+    {text:"自分の手札の枚数×10ダメージ。",factor:10,count:3,prepare:g=>g.players[0].hand=[card("h1",50745),card("h2",50745),card("h3",50745)]},
+    {text:"相手の手札の枚数×50ダメージ。",factor:50,count:2,prepare:g=>g.players[1].hand=[card("h1",50745),card("h2",50745)]},
+    {text:"自分の場のポケモンの数×30ダメージ。",factor:30,count:2,prepare:g=>g.players[0].bench=[card("b1",45202)]},
+    {text:"自分の場のダメカンがのっているポケモンの数×50ダメージ。",factor:50,count:2,prepare:g=>{
+      g.players[0].active.damage=10;g.players[0].bench=[card("b1",45202),card("b2",45202)];g.players[0].bench[1].damage=20;}},
+    {text:"自分の場の進化ポケモンの数×40ダメージ追加。",factor:40,count:1,suffix:"＋",base:10,
+      configureDb:cards=>{cards.cards.find(x=>x.officialCardId===45202).raw.stage="1 進化";},
+      prepare:g=>g.players[0].bench=[card("b1",45202)]},
+    {text:"自分のベンチポケモンの数×20ダメージ。",factor:20,count:2,prepare:g=>g.players[0].bench=[card("b1",45202),card("b2",45202)]},
+    {text:"相手のベンチポケモンの数×70ダメージ。",factor:70,count:2,prepare:g=>g.players[1].bench=[card("b1",45202),card("b2",45202)]},
+    {text:"相手のバトルポケモンが受けている特殊状態の数×100ダメージ。",factor:100,count:2,prepare:g=>
+      g.players[1].active.statuses=[{name:"どく"},{name:"やけど"}]},
+    {text:"相手のバトルポケモンにのっているダメカンの数×40ダメージ追加。",factor:40,count:3,suffix:"＋",base:10,prepare:g=>g.players[1].active.damage=30},
+    {text:"このポケモンについている基本エネルギーの数×40ダメージ。",factor:40,count:2,prepare:g=>
+      g.players[0].active.attached=[card("e1",50745),card("e2",50745)]},
+    {text:"相手のバトルポケモンのにげるためのエネルギーの数×30ダメージ追加。",factor:30,count:3,suffix:"＋",base:10}
+  ];
+  for(const item of cases){
+    const match=formulaEngine(item.text,item.base??item.factor,item.suffix??"×",item.configureDb),game=state(player(card("attacker",49956)),player(card("target",48466)));
+    item.prepare?.(game);
+    assert.equal(match.attacks(game.players[0].active)[0].status,"supported",item.text);
+    assert.equal(match.calculateAttackDamage(game,{player:0,attackIndex:0}),
+      (item.suffix==="＋"?item.base??10:0)+item.factor*item.count,item.text);
+  }
+});
+
 test("basic-energy and Basic-to-Bench searches parse as distinct destinations",()=>{
   assert.deepEqual(parseEffectText("自分の山札から基本エネルギーを2枚まで選び、相手に見せて、手札に加える。そして山札を切る。").effects,
     [{type:"SEARCH_DECK",max:2,filter:"basicEnergy",destination:"HAND"}]);

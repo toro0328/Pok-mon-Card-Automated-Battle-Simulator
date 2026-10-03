@@ -1,5 +1,5 @@
 import { AbilityEngine } from "./AbilityEngine.js?v=20260929-typed-reduction1";
-import { inspectAttacks } from "../card-db/parse-effects.js?v=20261003-statusbatch1";
+import { inspectAttacks } from "../card-db/parse-effects.js?v=20261003-formulabatch1";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
 // ordinary numeric damage. Ordinary single knockouts use explicit prize and
@@ -163,6 +163,15 @@ export class AttackEngine extends AbilityEngine {
         damage=count*effect.perPokemon;
       } else if (effect.type === "SET_DAMAGE" && effect.basis === "OWN_BENCH_COUNT") {
         damage = state.players[action.player].bench.length * effect.perPokemon;
+      } else if (effect.type === "SET_DAMAGE" && effect.basis === "OWN_FIELD_POKEMON_COUNT") {
+        damage=this.field(state.players[action.player]).length*effect.perPokemon;
+      } else if (effect.type === "SET_DAMAGE" && effect.basis === "OWN_FIELD_DAMAGED_POKEMON_COUNT") {
+        damage=this.field(state.players[action.player]).filter(pokemon=>(pokemon.damage??0)>0).length*effect.perPokemon;
+      } else if (effect.type === "MODIFY_DAMAGE" && effect.basis === "OWN_FIELD_EVOLVED_POKEMON_COUNT") {
+        const evolved=this.field(state.players[action.player]).filter(p=>this.card(p).raw.stage&&this.card(p).raw.stage!=="たね").length;
+        damage+=evolved*effect.perPokemon;
+      } else if (effect.type === "SET_DAMAGE" && effect.basis === "OPPONENT_BENCH_COUNT") {
+        damage=opponent.bench.length*effect.perPokemon;
       } else if (effect.type === "MODIFY_DAMAGE" && effect.basis === "BOTH_BENCH_COUNT") {
         damage += (state.players[action.player].bench.length+opponent.bench.length)*effect.perPokemon;
       } else if (effect.type === "SET_DAMAGE" && effect.basis === "OPPONENT_EX_COUNT") {
@@ -174,11 +183,27 @@ export class AttackEngine extends AbilityEngine {
       } else if(effect.type==="OPTIONAL_DISCARD_THREE_STEEL_ENERGY_FOR_DAMAGE"&&
           action.discardEnergyInstanceIds?.length===3){
         damage+=effect.amount;
+      } else if(effect.type==="SET_DAMAGE"&&effect.basis==="OWN_ACTIVE_BASIC_ENERGY_COUNT"){
+        damage=(source.attached??[]).filter(x=>this.card(x).cardType==="energy"&&this.card(x).energyType==="basic").length*effect.perEnergy;
+      } else if(effect.type==="SET_DAMAGE"&&effect.basis==="OWN_ACTIVE_SPECIAL_ENERGY_COUNT"){
+        damage=(source.attached??[]).filter(x=>this.card(x).cardType==="energy"&&this.card(x).energyType==="special").length*effect.perEnergy;
+      } else if(effect.type==="SET_DAMAGE"&&effect.basis==="OWN_HAND_COUNT"){
+        damage=state.players[action.player].hand.length*effect.perCard;
+      } else if(effect.type==="SET_DAMAGE"&&effect.basis==="OPPONENT_HAND_COUNT"){
+        damage=opponent.hand.length*effect.perCard;
+      } else if(effect.type==="SET_DAMAGE"&&effect.basis==="DEFENDER_SPECIAL_CONDITION_COUNT"){
+        damage=(target.statuses??[]).length*effect.perCondition;
       } else if(effect.type==="SET_DAMAGE"&&effect.basis==="OWN_DAMAGE_COUNTERS"){
         damage=Math.floor((source.damage??0)/10)*effect.perCounter;
       } else if(effect.type==="SET_DAMAGE"&&effect.basis==="OPPONENT_DISCARD_BASIC_ENERGY_COUNT"){
         const basics=opponent.trash.filter(x=>this.card(x).energyType==="basic").length;
         damage=basics*effect.perEnergy;
+      } else if(effect.type==="MODIFY_DAMAGE"&&effect.basis==="OPPONENT_ACTIVE_DAMAGE_COUNTERS"){
+        damage+=Math.floor((opponent.active?.damage??0)/10)*effect.perCounter;
+      } else if(effect.type==="MODIFY_DAMAGE"&&effect.basis==="OPPONENT_FIELD_DAMAGE_COUNTERS"){
+        damage+=this.field(opponent).reduce((sum,p)=>sum+Math.floor((p.damage??0)/10),0)*effect.perCounter;
+      } else if(effect.type==="MODIFY_DAMAGE"&&effect.basis==="DEFENDER_RETREAT_COST"){
+        damage+=this.retreatCost(state,1-action.player,target.instanceId)*effect.perEnergy;
       } else if (effect.type === "MODIFY_DAMAGE" && effect.basis === "DEFENDER_IS_EX") {
         if(defender.tags?.includes("ex"))damage+=effect.amount;
       } else if ((effect.type === "SET_DAMAGE"||effect.type === "MODIFY_DAMAGE") &&
@@ -600,8 +625,8 @@ export class AttackEngine extends AbilityEngine {
         next.pendingAttack={type:"OPTIONAL_RETURN_THREE_ENERGY_FOR_BENCH_DAMAGE",player:state.turn,
           sourceInstanceId:own.active.instanceId};
       } else if ((effect.type === "MODIFY_DAMAGE" && ["BOTH_ACTIVE_ATTACHED_ENERGY_COUNT","BOTH_BENCH_COUNT",
-                   "DEFENDING_ATTACHED_ENERGY_COUNT","COIN_UNTIL_TAILS","DEFENDER_IS_EX","OPPONENT_PRIZES_TAKEN"].includes(effect.basis)) ||
-                 (effect.type === "SET_DAMAGE" && ["OWN_BENCH_COUNT","OWN_FIELD_FIRE_ELECTRIC_ENERGY_COUNT",
+                   "DEFENDING_ATTACHED_ENERGY_COUNT","COIN_UNTIL_TAILS","DEFENDER_IS_EX","OPPONENT_PRIZES_TAKEN","OPPONENT_ACTIVE_DAMAGE_COUNTERS","OPPONENT_FIELD_DAMAGE_COUNTERS","DEFENDER_RETREAT_COST","OWN_FIELD_EVOLVED_POKEMON_COUNT"].includes(effect.basis)) ||
+                 (effect.type === "SET_DAMAGE" && ["OWN_BENCH_COUNT","OPPONENT_BENCH_COUNT","OWN_FIELD_POKEMON_COUNT","OWN_FIELD_DAMAGED_POKEMON_COUNT","OWN_HAND_COUNT","OPPONENT_HAND_COUNT","DEFENDER_SPECIAL_CONDITION_COUNT","OWN_ACTIVE_BASIC_ENERGY_COUNT","OWN_ACTIVE_SPECIAL_ENERGY_COUNT","OWN_FIELD_FIRE_ELECTRIC_ENERGY_COUNT",
                    "OPPONENT_EX_COUNT","OPPONENT_PRIZES_TAKEN","OWN_DAMAGE_COUNTERS","OPPONENT_DISCARD_BASIC_ENERGY_COUNT",
                    "DECK_BOTTOM_POKEMON_WITH_ATTACK"].includes(effect.basis)) ||
                  (effect.type==="MODIFY_DAMAGE"&&effect.basis==="TRASH_POKEMON_WITH_ABILITY") ||
