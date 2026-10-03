@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 3452,
-    "needs_review": 1710
+    "supported": 3481,
+    "needs_review": 1681
   },
   "attacks": {
     "45147": [
@@ -3885,8 +3885,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、100ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 100
+          }
+        ]
       },
       {
         "index": 1,
@@ -12362,8 +12368,14 @@
           "Colorless"
         ],
         "text": "次の相手の番、このワザを受けたポケモンが使うワザのダメージは「-100」される。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE",
+            "amount": 100
+          }
+        ]
       }
     ],
     "45884": [
@@ -14226,8 +14238,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、80ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 80
+          }
+        ]
       }
     ],
     "45966": [
@@ -15911,8 +15929,14 @@
           "Colorless"
         ],
         "text": "次の相手の番、このワザを受けたポケモンが使うワザのダメージは「-100」される。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE",
+            "amount": 100
+          }
+        ]
       }
     ],
     "46044": [
@@ -17711,8 +17735,14 @@
           "Colorless"
         ],
         "text": "次の相手の番、このワザを受けたポケモンが使うワザのダメージは「-100」される。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE",
+            "amount": 100
+          }
+        ]
       },
       {
         "index": 1,
@@ -21535,8 +21565,14 @@
           "Psychic"
         ],
         "text": "次の相手の番、このワザを受けたポケモンが使うワザのダメージは「-30」される。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE",
+            "amount": 30
+          }
+        ]
       }
     ],
     "46400": [
@@ -27292,8 +27328,14 @@
           "Colorless"
         ],
         "text": "次の相手の番、このワザを受けたポケモンが使うワザのダメージは「-100」される。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE",
+            "amount": 100
+          }
+        ]
       },
       {
         "index": 1,
@@ -31053,8 +31095,14 @@
           "Colorless"
         ],
         "text": "次の相手の番、このワザを受けたポケモンが使うワザのダメージは「-100」される。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE",
+            "amount": 100
+          }
+        ]
       },
       {
         "index": 1,
@@ -36689,8 +36737,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、60ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 60
+          }
+        ]
       }
     ],
     "47456": [
@@ -39853,8 +39907,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、60ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 60
+          }
+        ]
       }
     ],
     "47604": [
@@ -46882,8 +46942,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、60ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 60
+          }
+        ]
       }
     ],
     "47973": [
@@ -50376,8 +50442,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、90ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 90
+          }
+        ]
       }
     ],
     "48287": [
@@ -60322,8 +60394,14 @@
           "Colorless"
         ],
         "text": "次の相手の番、このワザを受けたポケモンが使うワザのダメージは「-100」される。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE",
+            "amount": 100
+          }
+        ]
       }
     ],
     "48815": [
@@ -62250,8 +62328,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、200ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 200
+          }
+        ]
       }
     ],
     "48886": [
@@ -65800,8 +65884,14 @@
           "Colorless"
         ],
         "text": "次の相手の番、このワザを受けたポケモンが使うワザのダメージは「-100」される。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE",
+            "amount": 100
+          }
+        ]
       },
       {
         "index": 1,
@@ -65941,8 +66031,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、90ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 90
+          }
+        ]
       }
     ],
     "49021": [
@@ -67257,8 +67353,14 @@
           "Psychic"
         ],
         "text": "次の相手の番、このワザを受けたポケモンが使うワザのダメージは「-30」される。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE",
+            "amount": 30
+          }
+        ]
       }
     ],
     "49071": [
@@ -69543,8 +69645,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、60ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 60
+          }
+        ]
       }
     ],
     "49153": [
@@ -71610,8 +71718,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、60ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 60
+          }
+        ]
       }
     ],
     "49228": [
@@ -72797,8 +72911,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、100ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 100
+          }
+        ]
       },
       {
         "index": 1,
@@ -74227,8 +74347,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、80ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 80
+          }
+        ]
       }
     ],
     "49325": [
@@ -78892,8 +79018,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、200ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 200
+          }
+        ]
       }
     ],
     "50032": [
@@ -80100,8 +80232,14 @@
           "Colorless"
         ],
         "text": "次の相手の番、このワザを受けたポケモンが使うワザのダメージは「-50」される。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE",
+            "amount": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -81956,8 +82094,14 @@
           "Colorless"
         ],
         "text": "次の相手の番、このワザを受けたポケモンが使うワザのダメージは「-50」される。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN",
+            "target": "DEFENDING_ACTIVE",
+            "amount": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -84964,8 +85108,14 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、160ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 160
+          }
+        ]
       },
       {
         "index": 1,
@@ -87695,8 +87845,14 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、160ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 160
+          }
+        ]
       },
       {
         "index": 1,
@@ -87935,8 +88091,14 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、160ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 160
+          }
+        ]
       },
       {
         "index": 1,
@@ -88716,8 +88878,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、140ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 140
+          }
+        ]
       }
     ],
     "50581": [
@@ -89061,8 +89229,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにダメカンがのっているなら、140ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_HAS_DAMAGE_COUNTERS",
+            "amount": 140
+          }
+        ]
       }
     ],
     "50613": [
