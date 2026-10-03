@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 3481,
-    "needs_review": 1681
+    "supported": 3491,
+    "needs_review": 1671
   },
   "attacks": {
     "45147": [
@@ -9015,8 +9015,13 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンに与えたダメージぶん、このポケモンのHPを回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_DAMAGE_DEALT",
+            "target": "ATTACKING_POKEMON"
+          }
+        ]
       },
       {
         "index": 1,
@@ -12391,8 +12396,13 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンに与えたダメージぶん、このポケモンのHPを回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_DAMAGE_DEALT",
+            "target": "ATTACKING_POKEMON"
+          }
+        ]
       },
       {
         "index": 1,
@@ -20380,8 +20390,13 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンに与えたダメージぶん、このポケモンのHPを回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_DAMAGE_DEALT",
+            "target": "ATTACKING_POKEMON"
+          }
+        ]
       },
       {
         "index": 1,
@@ -28519,8 +28534,13 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンに与えたダメージぶん、このポケモンのHPを回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_DAMAGE_DEALT",
+            "target": "ATTACKING_POKEMON"
+          }
+        ]
       }
     ],
     "47013": [
@@ -40411,8 +40431,13 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンに与えたダメージぶん、このポケモンのHPを回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_DAMAGE_DEALT",
+            "target": "ATTACKING_POKEMON"
+          }
+        ]
       },
       {
         "index": 1,
@@ -47787,8 +47812,13 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンに与えたダメージぶん、このポケモンのHPを回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_DAMAGE_DEALT",
+            "target": "ATTACKING_POKEMON"
+          }
+        ]
       },
       {
         "index": 1,
@@ -57979,8 +58009,13 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンに与えたダメージぶん、このポケモンのHPを回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_DAMAGE_DEALT",
+            "target": "ATTACKING_POKEMON"
+          }
+        ]
       }
     ],
     "48721": [
@@ -59261,8 +59296,13 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンに与えたダメージぶん、このポケモンのHPを回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_DAMAGE_DEALT",
+            "target": "ATTACKING_POKEMON"
+          }
+        ]
       },
       {
         "index": 1,
@@ -59321,8 +59361,13 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンに与えたダメージぶん、このポケモンのHPを回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_DAMAGE_DEALT",
+            "target": "ATTACKING_POKEMON"
+          }
+        ]
       },
       {
         "index": 1,
@@ -61051,8 +61096,13 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンに与えたダメージぶん、このポケモンのHPを回復する。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "HEAL_DAMAGE_DEALT",
+            "target": "ATTACKING_POKEMON"
+          }
+        ]
       },
       {
         "index": 1,
