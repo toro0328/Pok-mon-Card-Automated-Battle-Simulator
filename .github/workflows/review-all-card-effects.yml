@@ -37,6 +37,29 @@ jobs:
           path: reports
       - name: Build unresolved effect inventory
         run: npm run audit:cards
+      - name: Add recently audited effects missing from the database snapshot
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from "node:fs";
+          const file="reports/card-effect-audit.json";
+          const audit=JSON.parse(fs.readFileSync(file,"utf8"));
+          const additions=[
+            {kind:"attack",name:"ガードローリング",text:"このポケモンについているエネルギーを2個選び、トラッシュする。次の相手の番、このポケモンが受けるワザのダメージは「-100」される。",officialCardIds:[46405,49082]},
+            {kind:"attack",name:"フルグライト",text:"このポケモンについているエネルギーを、すべてトラッシュする。次の相手の番、相手は手札からグッズを出して使えない。",officialCardIds:[45972,46166,46176,48971]}
+          ];
+          const normalize=text=>String(text??"").replace(/\\s+/gu," ").trim();
+          const keys=new Set((audit.unresolved??[]).map(item=>`${item.kind}:${normalize(item.text)}`));
+          let added=0;
+          for(const effect of additions){
+            const key=`${effect.kind}:${normalize(effect.text)}`;
+            if(keys.has(key))continue;
+            audit.unresolved.push(effect);
+            keys.add(key);
+            added++;
+          }
+          fs.writeFileSync(file,JSON.stringify(audit,null,2)+"\\n");
+          console.log(`Added ${added} missing effects to the AI review queue.`);
+          NODE
       - name: Analyze every unique unresolved effect
         run: npm run analyze:all-effects
       - name: Save review report
