@@ -47,7 +47,7 @@ jobs:
             {kind:"attack",name:"ガードローリング",text:"このポケモンについているエネルギーを2個選び、トラッシュする。次の相手の番、このポケモンが受けるワザのダメージは「-100」される。",officialCardIds:[46405,49082]},
             {kind:"attack",name:"フルグライト",text:"このポケモンについているエネルギーを、すべてトラッシュする。次の相手の番、相手は手札からグッズを出して使えない。",officialCardIds:[45972,46166,46176,48971]}
           ];
-          const normalize=text=>String(text??"").replace(/\\s+/gu," ").trim();
+          const normalize=text=>String(text??"").replace(/\s+/gu," ").trim();
           const keys=new Set((audit.unresolved??[]).map(item=>`${item.kind}:${normalize(item.text)}`));
           let added=0;
           for(const effect of additions){
@@ -57,7 +57,7 @@ jobs:
             keys.add(key);
             added++;
           }
-          fs.writeFileSync(file,JSON.stringify(audit,null,2)+"\\n");
+          fs.writeFileSync(file,JSON.stringify(audit,null,2)+"\n");
           console.log(`Added ${added} missing effects to the AI review queue.`);
           NODE
       - name: Analyze every unique unresolved effect
