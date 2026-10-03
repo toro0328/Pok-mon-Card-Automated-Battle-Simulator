@@ -697,7 +697,8 @@ test("common Active damage-counter bonus and hit-Pokemon damage reduction resolv
 
   const reduction=build("次の相手の番、このワザを受けたポケモンが使うワザのダメージは「-30」される。");
   const source=card("reduction-attacker",49956),victim=card("reduction-target",48466);
-  const game=state(player(source),player(victim));game.turnNo=2;
+  const game=state(player(source,[],[card("attacker-draw",50745)]),
+    player(victim,[],[card("victim-draw",50745)]));game.turnNo=2;
   assert.equal(reduction.attacks(source)[0].status,"supported");
   const after=reduction.applyAttack(game,reduction.getLegalAttacks(game)[0]);
   assert.equal(after.attackProtection.some(entry=>entry.owner===1&&entry.instanceId==="reduction-target"&&entry.reduceDamage===30),true);
