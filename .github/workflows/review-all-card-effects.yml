@@ -1,14 +1,31 @@
 name: Review all unresolved card effects
 
 on:
+  # Card DB sync commits with GITHUB_TOKEN, so their pushes do not start
+  # other workflows. Launch this review when that workflow completes instead.
+  workflow_run:
+    workflows: ["Card DB sync"]
+    types: [completed]
+    branches: [main]
+  push:
+    branches: [main]
+    paths:
+      - "data/cards/cards.json"
+      - "data/cards/ability-effects.json"
+      - "data/cards/attack-effects.json"
   workflow_dispatch:
 
 permissions:
   contents: write
   actions: read
 
+concurrency:
+  group: review-all-card-effects
+  cancel-in-progress: false
+
 jobs:
   review:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 180
     env:
