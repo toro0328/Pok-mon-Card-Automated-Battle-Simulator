@@ -299,6 +299,34 @@ function analyzeCard(officialCardId){
   const roles=roleTags(texts.join(" "));
   return {officialCardId,name:data.name,type:data.cardType,details,roles,supported:checks.every(Boolean),bestDamage:Math.max(0,...engine.attacks(ref).filter(x=>x.status==="supported").map(x=>x.printedDamage?.amount??0))};
 }
+function restoreAndRefreshAiPrograms(compiled,reports,profiles,combined,repository,engine){
+  const restored=restoreLearnedPrograms(compiled,repository,engine);
+  if(!restored.restoredEffects)return restored;
+  const byId=new Map(compiled.map(item=>[item.officialCardId,item]));
+  for(let index=0;index<reports.length;index++){
+    const previous=reports[index],item=byId.get(previous.officialCardId);
+    if(!repository.get(previous.officialCardId)||!item)continue;
+    const refreshed=analyzeCard(previous.officialCardId);
+    for(const detail of refreshed.details){
+      const old=previous.details.find(candidate=>candidate.label===detail.label&&candidate.text===detail.text);
+      if(old?.aiAnalysis)detail.aiAnalysis=old.aiAnalysis;
+    }
+    if(item.unsupported?.length)for(const effect of item.unsupported)
+      if(!refreshed.details.some(detail=>detail.text===effect.text))refreshed.details.push({
+        label:"未対応効果"+(effect.name?"："+effect.name:""),status:"needs_review",text:effect.text||"効果文の実行処理が未接続です。"});
+    refreshed.supported=!!item.supported&&refreshed.details.every(detail=>detail.status==="supported");
+    reports[index]=refreshed;
+  }
+  for(const profile of profiles){profile.attackerIds=[];profile.roles.clear();}
+  for(const report of reports){
+    const copies=combined.get(report.officialCardId)?.counts??[];
+    for(let side=0;side<2;side++)if(copies[side]){
+      for(const role of report.roles)profiles[side].roles.add(role);
+      if(report.type==="pokemon"&&report.bestDamage>0)profiles[side].attackerIds.push({id:report.officialCardId,damage:report.bestDamage});
+    }
+  }
+  return restored;
+}
 function addAnalysisCard(report,counts){
   const node=document.createElement("div");node.className="analysis-card";const title=document.createElement("strong");title.textContent=report.name+"　自分 "+counts[0]+"枚 / 相手 "+counts[1]+"枚";node.append(title);
   const state=document.createElement("span");state.className=report.supported?"supported":"review";state.textContent=report.supported?"効果処理：対応済み":"効果処理：未対応箇所を確認中";node.append(state);
@@ -352,6 +380,9 @@ async function analyzeDecks(decks){
   try{learning=recordDeckLearning(decks,reports,compiled);}catch(error){
     learning={saveError:error?.message??"保存に失敗しました"};
   }
+  const cachedAiRestore=restoreAndRefreshAiPrograms(compiled,reports,profiles,combined,repository,engine);
+  if(cachedAiRestore.restoredEffects&&learning&&!learning.saveError)
+    learning.unresolvedEffectCount=Object.values(loadEffectLibrary().effects).filter(effect=>effect.status!=="supported").length;
   let aiResult={status:"not_configured",analyses:[]};
   const aiSettings=readEffectAiSettings(),effects=new Map(),knownAiAnalyses=loadEffectLibrary().effects;
   for(const report of reports)for(const detail of report.details??[]){
@@ -372,30 +403,7 @@ async function analyzeDecks(decks){
           detail.aiAnalysis=byKey.get(key)??loadEffectLibrary().effects[key]?.aiAnalysis;
         }
         aiResult.saved=saved.saved;
-        const aiRestore=restoreLearnedPrograms(compiled,repository,engine);
-        const refreshed=new Map(compiled.map(item=>[item.officialCardId,item]));
-        for(const report of reports){
-          const card=repository.get(report.officialCardId),program=refreshed.get(report.officialCardId)?.program;
-          if(card?.cardType==="pokemon"&&program){
-            if(refreshed.get(report.officialCardId)?.supported)
-              report.details=report.details.filter(detail=>!detail.label?.startsWith("未対応効果"));
-            for(const detail of report.details){
-              if(detail.label?.startsWith("特性：")){
-                const effect=program.abilities?.find(item=>item.name===detail.label.slice(3));
-                if(effect){detail.status=effect.status;detail.aiDerived=!!effect.aiDerived;}
-              }else if(detail.label?.startsWith("ワザ：")){
-                const name=detail.label.slice(3).split("（")[0],effect=program.attacks?.find(item=>item.name===name);
-                if(effect){detail.status=effect.status;detail.aiDerived=!!effect.aiDerived;}
-              }
-            }
-          }else if(card?.cardType==="trainer"&&program?.trainer){
-            for(const detail of report.details)if(detail.label===card.trainerType){
-              detail.status="supported";detail.aiDerived=!!program.trainer.aiDerived;
-            }
-          }
-          report.supported=!!refreshed.get(report.officialCardId)?.supported&&
-            report.details.every(detail=>detail.status==="supported");
-        }
+        const aiRestore=restoreAndRefreshAiPrograms(compiled,reports,profiles,combined,repository,engine);
         aiResult.applied=aiRestore.restoredEffects;
         if(learning&&!learning.saveError)
           learning.unresolvedEffectCount=Object.values(loadEffectLibrary().effects).filter(effect=>effect.status!=="supported").length;
