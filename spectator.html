@@ -428,7 +428,7 @@ async function analyzeDecks(decks){
     }
   reportLines.push("","### 現在の表示状態",el.status.textContent,"","### 直近の対戦ログ",...entries.slice(0,12).reverse(),
     "","### 何が起きたか","（間違っている処理や期待した動きを記入してください）");
-  lastBugReportText=reportLines.join("\\n").slice(0,7000);el.reportBug.hidden=false;
+  lastBugReportText=reportLines.join("\n").slice(0,7000);el.reportBug.hidden=false;
   for(const profile of profiles)profile.attackerIds.sort((a,b)=>b.damage-a.damage);
   return {profiles,complete,unresolved,unresolvedEffectCount,effectPercent,ruleErrors,missing};
 }
