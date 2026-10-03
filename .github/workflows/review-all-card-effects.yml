@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   actions: read
 
 jobs:
@@ -62,6 +62,23 @@ jobs:
           NODE
       - name: Analyze every unique unresolved effect
         run: npm run analyze:all-effects
+      - name: Build reusable browser catalog
+        run: node scripts/build-runtime-ai-review.mjs
+      - name: Publish updated AI review catalog
+        run: |
+          if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
+            echo "Skipping catalog publish outside main."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/effect-ai-review.json.gz.b64
+          if git diff --cached --quiet; then
+            echo "The reusable catalog is already current."
+          else
+            git commit -m "Update reusable AI effect review notes"
+            git push
+          fi
       - name: Save review report
         if: always()
         uses: actions/upload-artifact@v4
@@ -70,5 +87,6 @@ jobs:
           path: |
             reports/card-effect-audit.json
             reports/effect-ai-review.json
+            data/effect-ai-review.json.gz.b64
           if-no-files-found: warn
           retention-days: 90
