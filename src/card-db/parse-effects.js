@@ -9,6 +9,10 @@ const PATTERNS = [
     expression: /^このポケモンをねむりにする。$/,
     convert: () => [{ type: "APPLY_STATUS", target: "ATTACKING_POKEMON", status: "ねむり" }]
   },
+  {
+    expression: /^このポケモンをこんらんにする。$/,
+    convert: () => [{type:"APPLY_STATUS",target:"ATTACKING_POKEMON",status:"こんらん"}]
+  },
 
   {
     expression: /^自分の山札を([1-9][0-9]*)枚引く。$/,
@@ -19,8 +23,24 @@ const PATTERNS = [
     convert: match => [{type:"COIN_APPLY_STATUS",target:"DEFENDING_ACTIVE",status:match[1]}]
   },
   {
+    expression: /^コインを1回投げオモテなら、相手のバトルポケモンを((?:(?:どく|やけど|ねむり|マヒ|こんらん)と){1,4}(?:どく|やけど|ねむり|マヒ|こんらん))にする。$/,
+    convert: match => {
+      const statuses=match[1].split("と"),recoverable=statuses.filter(status=>["ねむり","マヒ","こんらん"].includes(status));
+      if(new Set(statuses).size!==statuses.length||recoverable.length>1)return null;
+      return [{type:"COIN_APPLY_STATUSES",target:"DEFENDING_ACTIVE",statuses}];
+    }
+  },
+  {
     expression: /^相手のバトルポケモンを(どく|やけど|ねむり|マヒ|こんらん)にする。$/,
     convert: match => [{ type: "APPLY_STATUS", target: "DEFENDING_ACTIVE", status: match[1] }]
+  },
+  {
+    expression: /^相手のバトルポケモンを((?:(?:どく|やけど|ねむり|マヒ|こんらん)と){1,4}(?:どく|やけど|ねむり|マヒ|こんらん))にする。$/,
+    convert: match => {
+      const statuses=match[1].split("と"),recoverable=statuses.filter(status=>["ねむり","マヒ","こんらん"].includes(status));
+      if(new Set(statuses).size!==statuses.length||recoverable.length>1)return null;
+      return statuses.map(status=>({type:"APPLY_STATUS",target:"DEFENDING_ACTIVE",status}));
+    }
   },
   {
     expression: /^このポケモンにも([1-9][0-9]*)ダメージ。$/,
@@ -309,7 +329,7 @@ export function inspectAttacks(card) {
       typeof type === "string" &&
       (type === "Void" ? cost.length === 1 && i === 0 :
         ["Colorless", "Grass", "Fire", "Water", "Electric", "Psychic", "Fighting", "Dark", "Metal", "Steel", "Dragon"].includes(type)));
-    const noDamageTypes=new Set(["SEARCH_DECK","SEARCH_TRASH_TO_HAND","SEARCH_TRASH_TO_BENCH","ATTACH_BASIC_FIGHTING_FROM_TRASH_TO_BENCH","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS","COIN_APPLY_STATUS","HEAL","DRAW","DRAW_UNTIL_HAND_SIZE","DISCARD_HAND_DRAW","DAMAGE","SET_DAMAGE","COIN_FAIL_IF_TAILS","IGNORE_RESISTANCE","RETURN_ATTACHED_ENERGY_TO_HAND","COPY_BENCH_N_ATTACK",
+    const noDamageTypes=new Set(["SEARCH_DECK","SEARCH_TRASH_TO_HAND","SEARCH_TRASH_TO_BENCH","ATTACH_BASIC_FIGHTING_FROM_TRASH_TO_BENCH","DAMAGE_CHOSEN_OPPONENT","APPLY_STATUS","COIN_APPLY_STATUS","COIN_APPLY_STATUSES","HEAL","DRAW","DRAW_UNTIL_HAND_SIZE","DISCARD_HAND_DRAW","DAMAGE","SET_DAMAGE","COIN_FAIL_IF_TAILS","IGNORE_RESISTANCE","RETURN_ATTACHED_ENERGY_TO_HAND","COPY_BENCH_N_ATTACK",
       "DISCARD_ATTACHED","DISCARD_OPPONENT_ENERGY","MILL_OPPONENT_DECK","PLACE_DAMAGE_COUNTERS","SEARCH_BASIC_ENERGY_ATTACH_BENCH","PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN","PREVENT_SAME_ATTACK_NEXT_TURN","SWITCH_SELF","REQUIRE_STADIUM_IN_PLAY"]);
     const noPrintedDamage=damage===null&&parsed.effects.length>0&&parsed.effects.every(x=>noDamageTypes.has(x.type));
     const bonus=parsed.effects.find(x=>x.type==="MODIFY_DAMAGE"||x.type==="COIN_BONUS"||

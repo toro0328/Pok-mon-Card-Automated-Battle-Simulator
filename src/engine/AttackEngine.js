@@ -1,5 +1,5 @@
 import { AbilityEngine } from "./AbilityEngine.js?v=20260929-typed-reduction1";
-import { inspectAttacks } from "../card-db/parse-effects.js?v=20261002-coinfail1";
+import { inspectAttacks } from "../card-db/parse-effects.js?v=20261003-statusbatch1";
 
 // Restricted attack sandbox: only fully parsed attacks, basic energy and
 // ordinary numeric damage. Ordinary single knockouts use explicit prize and
@@ -490,9 +490,9 @@ export class AttackEngine extends AbilityEngine {
     const damage = this.calculateAttackDamage(next, action);
     const victim=action.targetInstanceId
       ? this.field(opponent).find(x=>x.instanceId===action.targetInstanceId):opponent.active;
-    const coinEffect=attack.effects.find(x=>x.basis==="COIN_UNTIL_TAILS"||["COIN_DISCARD_ENERGY","COIN_BONUS","COIN_DAMAGE","COIN_APPLY_STATUS"].includes(x.type));
+    const coinEffect=attack.effects.find(x=>x.basis==="COIN_UNTIL_TAILS"||["COIN_DISCARD_ENERGY","COIN_BONUS","COIN_DAMAGE","COIN_APPLY_STATUS","COIN_APPLY_STATUSES"].includes(x.type));
     const coin=coinEffect?this.coinSequence(next.randomState??1,
-      ["COIN_DISCARD_ENERGY","COIN_BONUS","COIN_APPLY_STATUS"].includes(coinEffect.type),coinEffect.count??null):null;
+      ["COIN_DISCARD_ENERGY","COIN_BONUS","COIN_APPLY_STATUS","COIN_APPLY_STATUSES"].includes(coinEffect.type),coinEffect.count??null):null;
     if(coin)next.randomState=coin.randomState;
     next.lastAttack={player:state.turn,attacker:this.card(own.active).name,
       defender:this.card(victim).name,attack:attack.name,damage,
@@ -505,7 +505,7 @@ export class AttackEngine extends AbilityEngine {
     victim.damage = (victim.damage ?? 0) + damage;
     const targetEffectProtected=this.protectedFromOpponentEffects(next,victim.instanceId,state.turn);
     for (const effect of attack.effects) {
-      if(targetEffectProtected&&effect.target!=="ATTACKING_POKEMON"&&["APPLY_STATUS","COIN_APPLY_STATUS","DISCARD_OPPONENT_ENERGY","COIN_DISCARD_ENERGY",
+      if(targetEffectProtected&&effect.target!=="ATTACKING_POKEMON"&&["APPLY_STATUS","COIN_APPLY_STATUS","COIN_APPLY_STATUSES","DISCARD_OPPONENT_ENERGY","COIN_DISCARD_ENERGY",
         "PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN","PLACE_DAMAGE_COUNTERS","SWITCH_OPPONENT_CHOICE"].includes(effect.type))continue;
       if (effect.type === "DRAW" && effect.player === "SELF") {
         own.hand.push(...own.deck.splice(0, effect.count));
@@ -536,6 +536,8 @@ export class AttackEngine extends AbilityEngine {
         this.applyStatus(next,statusTarget,effect.status,effect.target==="ATTACKING_POKEMON"?state.turn:1-state.turn);
       } else if(effect.type === "COIN_APPLY_STATUS") {
         if(coin?.heads)this.applyStatus(next,victim,effect.status,1-state.turn);
+      } else if(effect.type === "COIN_APPLY_STATUSES") {
+        if(coin?.heads)for(const status of effect.statuses)this.applyStatus(next,victim,status,1-state.turn);
       } else if (effect.type === "HEAL_OWN_FIELD") {
         for(const pokemon of this.field(own)) pokemon.damage=Math.max(0,(pokemon.damage??0)-effect.amount);
       } else if(effect.type === "HEAL") {

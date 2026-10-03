@@ -189,6 +189,25 @@ test("coin-gated status is only applied on Heads",()=>{
   }
 });
 
+test("compatible combined attack statuses resolve, including a Heads-gated group",()=>{
+  const combined="相手のバトルポケモンをどくとやけどとこんらんにする。";
+  assert.deepEqual(parseEffectText(combined).effects.map(effect=>effect.status),["どく","やけど","こんらん"]);
+  assert.equal(parseEffectText("相手のバトルポケモンをねむりとこんらんにする。").recognized,false);
+  const testDb=structuredClone(db),source=testDb.cards.find(x=>x.officialCardId===49956);
+  source.raw.attacks=[{name:"複合状態",cost:["Void"],damage:{amount:0,suffix:""},effect:combined}];
+  const testEngine=new AttackEngine(new CardRepository(testDb),abilities);
+  const game=state(player(card("source",49956)),player(card("target",50339)));
+  const after=testEngine.applyAttack(game,testEngine.getLegalAttacks(game)[0]);
+  assert.deepEqual(after.players[1].active.statuses.map(status=>status.name),["どく","やけど","こんらん"]);
+
+  const coinText="コインを1回投げオモテなら、相手のバトルポケモンをどくとマヒにする。";
+  source.raw.attacks=[{name:"コイン複合状態",cost:["Void"],damage:{amount:0,suffix:""},effect:coinText}];
+  const heads=Array.from({length:10000},(_,i)=>i+1).find(seed=>testEngine.coinSequence(seed,true).heads===1);
+  const coinGame=state(player(card("source",49956)),player(card("target",50339)));coinGame.randomState=heads;
+  const coinAfter=testEngine.applyAttack(coinGame,testEngine.getLegalAttacks(coinGame)[0]);
+  assert.deepEqual(coinAfter.players[1].active.statuses.map(status=>status.name),["どく","マヒ"]);
+});
+
 test("exact status effect phrases parse; added unknown phrases stay unsupported",()=>{
   assert.equal(parseEffectText("相手のバトルポケモンをねむりにする。").recognized,true);
   assert.equal(parseEffectText("相手のバトルポケモンをねむりにする。追加の効果は不明。").recognized,false);
