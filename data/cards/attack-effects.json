@@ -5,8 +5,8 @@
   "cardCount": 5789,
   "attackCount": 5162,
   "counts": {
-    "supported": 3408,
-    "needs_review": 1754
+    "supported": 3452,
+    "needs_review": 1710
   },
   "attacks": {
     "45147": [
@@ -1699,8 +1699,14 @@
           "Colorless"
         ],
         "text": "このポケモンについている特殊エネルギーの枚数×70ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_ACTIVE_SPECIAL_ENERGY_COUNT",
+            "perEnergy": 70
+          }
+        ]
       }
     ],
     "45218": [
@@ -2581,8 +2587,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにのっているダメカンの数×10ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OPPONENT_ACTIVE_DAMAGE_COUNTERS",
+            "perCounter": 10
+          }
+        ]
       }
     ],
     "45250": [
@@ -3813,8 +3825,14 @@
           "Psychic"
         ],
         "text": "自分の場のポケモンの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_FIELD_POKEMON_COUNT",
+            "perPokemon": 20
+          }
+        ]
       }
     ],
     "45351": [
@@ -5564,8 +5582,14 @@
           "Colorless"
         ],
         "text": "このポケモンについている特殊エネルギーの枚数×70ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_ACTIVE_SPECIAL_ENERGY_COUNT",
+            "perEnergy": 70
+          }
+        ]
       }
     ],
     "45527": [
@@ -6757,8 +6781,14 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンのにげるためのエネルギーの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_RETREAT_COST",
+            "perEnergy": 30
+          }
+        ]
       }
     ],
     "45582": [
@@ -9400,8 +9430,14 @@
           "Fire"
         ],
         "text": "相手の手札の枚数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OPPONENT_HAND_COUNT",
+            "perCard": 30
+          }
+        ]
       }
     ],
     "45713": [
@@ -10770,8 +10806,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンにのっているダメカンの数×50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OPPONENT_ACTIVE_DAMAGE_COUNTERS",
+            "perCounter": 50
+          }
+        ]
       }
     ],
     "45763": [
@@ -10880,8 +10922,14 @@
           "Steel"
         ],
         "text": "自分の場のダメカンがのっているポケモンの数×50ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_FIELD_DAMAGED_POKEMON_COUNT",
+            "perPokemon": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -12794,8 +12842,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにのっているダメカンの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OPPONENT_ACTIVE_DAMAGE_COUNTERS",
+            "perCounter": 30
+          }
+        ]
       }
     ],
     "45901": [
@@ -13610,8 +13664,14 @@
           "Grass"
         ],
         "text": "相手のバトルポケモンが受けている特殊状態の数×100ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "DEFENDER_SPECIAL_CONDITION_COUNT",
+            "perCondition": 100
+          }
+        ]
       }
     ],
     "45944": [
@@ -17569,8 +17629,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにのっているダメカンの数×10ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OPPONENT_ACTIVE_DAMAGE_COUNTERS",
+            "perCounter": 10
+          }
+        ]
       },
       {
         "index": 1,
@@ -18986,8 +19052,14 @@
           "Water"
         ],
         "text": "このポケモンについている基本エネルギーの数×40ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_ACTIVE_BASIC_ENERGY_COUNT",
+            "perEnergy": 40
+          }
+        ]
       }
     ],
     "46273": [
@@ -21224,8 +21296,14 @@
           "Colorless"
         ],
         "text": "相手のポケモン全員にのっているダメカンの数×10ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OPPONENT_FIELD_DAMAGE_COUNTERS",
+            "perCounter": 10
+          }
+        ]
       }
     ],
     "46391": [
@@ -27373,8 +27451,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにのっているダメカンの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OPPONENT_ACTIVE_DAMAGE_COUNTERS",
+            "perCounter": 30
+          }
+        ]
       }
     ],
     "46747": [
@@ -29568,8 +29652,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにのっているダメカンの数×40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OPPONENT_ACTIVE_DAMAGE_COUNTERS",
+            "perCounter": 40
+          }
+        ]
       }
     ],
     "47061": [
@@ -31941,8 +32031,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにのっているダメカンの数×40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OPPONENT_ACTIVE_DAMAGE_COUNTERS",
+            "perCounter": 40
+          }
+        ]
       }
     ],
     "47228": [
@@ -36743,8 +36839,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンが受けている特殊状態の数×100ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "DEFENDER_SPECIAL_CONDITION_COUNT",
+            "perCondition": 100
+          }
+        ]
       }
     ],
     "47462": [
@@ -39107,8 +39209,14 @@
           "Colorless"
         ],
         "text": "自分の場の進化ポケモンの数×40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OWN_FIELD_EVOLVED_POKEMON_COUNT",
+            "perPokemon": 40
+          }
+        ]
       }
     ],
     "47579": [
@@ -41562,8 +41670,14 @@
           "Dark"
         ],
         "text": "相手のベンチポケモンの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OPPONENT_BENCH_COUNT",
+            "perPokemon": 30
+          }
+        ]
       },
       {
         "index": 1,
@@ -46177,8 +46291,14 @@
           "Colorless"
         ],
         "text": "自分の場の進化ポケモンの数×40ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OWN_FIELD_EVOLVED_POKEMON_COUNT",
+            "perPokemon": 40
+          }
+        ]
       }
     ],
     "47950": [
@@ -48815,8 +48935,14 @@
           "Dark"
         ],
         "text": "相手のベンチポケモンの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OPPONENT_BENCH_COUNT",
+            "perPokemon": 30
+          }
+        ]
       },
       {
         "index": 1,
@@ -50389,8 +50515,14 @@
           "Psychic"
         ],
         "text": "自分の場のポケモンの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_FIELD_POKEMON_COUNT",
+            "perPokemon": 20
+          }
+        ]
       }
     ],
     "48293": [
@@ -55006,8 +55138,14 @@
           "Water"
         ],
         "text": "相手の手札の枚数×50ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OPPONENT_HAND_COUNT",
+            "perCard": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -64033,8 +64171,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにのっているダメカンの数×10ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OPPONENT_ACTIVE_DAMAGE_COUNTERS",
+            "perCounter": 10
+          }
+        ]
       },
       {
         "index": 1,
@@ -65686,8 +65830,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにのっているダメカンの数×10ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OPPONENT_ACTIVE_DAMAGE_COUNTERS",
+            "perCounter": 10
+          }
+        ]
       }
     ],
     "49017": [
@@ -66070,8 +66220,14 @@
           "Colorless"
         ],
         "text": "相手のポケモン全員にのっているダメカンの数×10ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OPPONENT_FIELD_DAMAGE_COUNTERS",
+            "perCounter": 10
+          }
+        ]
       }
     ],
     "49033": [
@@ -66348,8 +66504,14 @@
           "Psychic"
         ],
         "text": "自分の場のポケモンの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_FIELD_POKEMON_COUNT",
+            "perPokemon": 20
+          }
+        ]
       }
     ],
     "49044": [
@@ -68753,8 +68915,14 @@
           "Colorless"
         ],
         "text": "相手のバトルポケモンにのっているダメカンの数×30ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OPPONENT_ACTIVE_DAMAGE_COUNTERS",
+            "perCounter": 30
+          }
+        ]
       }
     ],
     "49132": [
@@ -70199,8 +70367,14 @@
           "Dark"
         ],
         "text": "相手のベンチポケモンの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OPPONENT_BENCH_COUNT",
+            "perPokemon": 30
+          }
+        ]
       },
       {
         "index": 1,
@@ -70756,8 +70930,14 @@
           "Dark"
         ],
         "text": "相手のバトルポケモンにのっているダメカンの数×50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OPPONENT_ACTIVE_DAMAGE_COUNTERS",
+            "perCounter": 50
+          }
+        ]
       }
     ],
     "49204": [
@@ -75429,8 +75609,14 @@
           "Grass"
         ],
         "text": "自分の場のポケモンの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_FIELD_POKEMON_COUNT",
+            "perPokemon": 20
+          }
+        ]
       },
       {
         "index": 1,
@@ -77579,8 +77765,14 @@
           "Water"
         ],
         "text": "相手の手札の枚数×50ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OPPONENT_HAND_COUNT",
+            "perCard": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -77809,8 +78001,14 @@
           "Water"
         ],
         "text": "相手の手札の枚数×50ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OPPONENT_HAND_COUNT",
+            "perCard": 50
+          }
+        ]
       },
       {
         "index": 1,
@@ -80548,8 +80746,14 @@
           "Psychic"
         ],
         "text": "相手のポケモン全員にのっているダメカンの数×10ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "OPPONENT_FIELD_DAMAGE_COUNTERS",
+            "perCounter": 10
+          }
+        ]
       }
     ],
     "50124": [
@@ -82922,8 +83126,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンのにげるためのエネルギーの数×50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_RETREAT_COST",
+            "perEnergy": 50
+          }
+        ]
       }
     ],
     "50256": [
@@ -84189,8 +84399,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンのにげるためのエネルギーの数×50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_RETREAT_COST",
+            "perEnergy": 50
+          }
+        ]
       }
     ],
     "50318": [
@@ -84362,8 +84578,14 @@
           "Psychic"
         ],
         "text": "相手のバトルポケモンのにげるためのエネルギーの数×50ダメージ追加。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "MODIFY_DAMAGE",
+            "basis": "DEFENDER_RETREAT_COST",
+            "perEnergy": 50
+          }
+        ]
       }
     ],
     "50334": [
@@ -85333,8 +85555,14 @@
           "Psychic"
         ],
         "text": "相手の手札の枚数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OPPONENT_HAND_COUNT",
+            "perCard": 20
+          }
+        ]
       },
       {
         "index": 1,
@@ -85775,8 +86003,14 @@
           "Dark"
         ],
         "text": "相手のベンチポケモンの数×70ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OPPONENT_BENCH_COUNT",
+            "perPokemon": 70
+          }
+        ]
       },
       {
         "index": 1,
@@ -86570,8 +86804,14 @@
           "Dark"
         ],
         "text": "自分の場のポケモンの数×20ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_FIELD_POKEMON_COUNT",
+            "perPokemon": 20
+          }
+        ]
       },
       {
         "index": 1,
@@ -87604,8 +87844,14 @@
           "Dark"
         ],
         "text": "相手のベンチポケモンの数×70ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OPPONENT_BENCH_COUNT",
+            "perPokemon": 70
+          }
+        ]
       },
       {
         "index": 1,
@@ -88381,8 +88627,14 @@
           "Colorless"
         ],
         "text": "自分の場のポケモンの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_FIELD_POKEMON_COUNT",
+            "perPokemon": 30
+          }
+        ]
       }
     ],
     "50578": [
@@ -88786,8 +89038,14 @@
           "Colorless"
         ],
         "text": "自分の場のポケモンの数×30ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_FIELD_POKEMON_COUNT",
+            "perPokemon": 30
+          }
+        ]
       }
     ],
     "50594": [
@@ -90672,8 +90930,14 @@
           "Steel"
         ],
         "text": "自分の手札の枚数×10ダメージ。",
-        "status": "needs_review",
-        "effects": []
+        "status": "supported",
+        "effects": [
+          {
+            "type": "SET_DAMAGE",
+            "basis": "OWN_HAND_COUNT",
+            "perCard": 10
+          }
+        ]
       }
     ],
     "50693": [
