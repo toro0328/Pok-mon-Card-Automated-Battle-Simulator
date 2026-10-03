@@ -103,8 +103,12 @@ export async function runEffectBatch({auditPath=DEFAULT_AUDIT,outputPath=DEFAULT
   const audit=readJson(auditPath,null);
   if(!audit)throw new Error(`Audit report not found: ${auditPath}`);
   const queue=buildEffectQueue(audit),previous=readJson(outputPath,{analyses:[],failures:[]});
-  const saved=new Map((previous.analyses??[]).map(item=>[item.key,item]));
-  const failures=new Map((previous.failures??[]).map(item=>[item.key,item]));
+  const currentKeys=new Set(queue.map(item=>item.key));
+  // Ignore historical checkpoint entries that are no longer unresolved. This
+  // keeps completed totals aligned with the current queue and lets new effects
+  // enter the queue without being hidden by stale notes.
+  const saved=new Map((previous.analyses??[]).filter(item=>currentKeys.has(item.key)).map(item=>[item.key,item]));
+  const failures=new Map((previous.failures??[]).filter(item=>currentKeys.has(item.key)).map(item=>[item.key,item]));
   const pending=queue.filter(item=>!saved.has(item.key));
   const report={schemaVersion:1,generatedAt:new Date().toISOString(),sourceAudit:audit.generatedAt??auditPath,
     totals:{queued:queue.length,completed:saved.size,remaining:pending.length},analyses:[...saved.values()],failures:[...failures.values()]};
