@@ -65,7 +65,7 @@ button:disabled{opacity:.5;cursor:wait}
 <section class="players">
 <div id="player1" class="player opponent"></div><div id="player0" class="player"></div>
 </section>
-<section id="analysis-panel" class="panel" hidden><h2>デッキ解析</h2><p id="analysis-summary" class="help"></p><p id="strategy-summary" class="help"></p><div id="analysis-list" class="analysis-list"></div></section>
+<section id="analysis-panel" class="panel" hidden><h2>デッキ解析</h2><p id="analysis-summary" class="help"></p><p id="strategy-summary" class="help"></p><div id="analysis-list" class="analysis-list"></div><button id="report-bug" type="button" hidden>この結果を不具合として報告</button></section>
 <section class="panel"><h2>直近の行動</h2><div id="log" class="log"><div>対戦ログはここに表示されます。</div></div></section>
 </main>
 <script type="module">
@@ -82,11 +82,11 @@ const el={
   pause:document.getElementById("pause"),status:document.getElementById("status"),
   aiEndpoint:document.getElementById("ai-endpoint"),aiToken:document.getElementById("ai-token"),aiSave:document.getElementById("ai-save"),aiSettingsStatus:document.getElementById("ai-settings-status"),
   progress:document.getElementById("load-progress"),progressBar:document.getElementById("progress-bar"),progressLabel:document.getElementById("progress-label"),elapsed:document.getElementById("elapsed"),
-  analysisPanel:document.getElementById("analysis-panel"),analysisSummary:document.getElementById("analysis-summary"),strategySummary:document.getElementById("strategy-summary"),analysisList:document.getElementById("analysis-list"),turn:document.getElementById("turn"),
+  analysisPanel:document.getElementById("analysis-panel"),analysisSummary:document.getElementById("analysis-summary"),strategySummary:document.getElementById("strategy-summary"),analysisList:document.getElementById("analysis-list"),reportBug:document.getElementById("report-bug"),turn:document.getElementById("turn"),
   seed:document.getElementById("seed"),p0:document.getElementById("player0"),
   p1:document.getElementById("player1"),log:document.getElementById("log")
 };
-let repository,engine,game,names=["自分側","相手側"],timer=null,running=false,moveCount=0,entries=[],analysisByPlayer=[],analysisAllowsMatch=false,loadStarted=0,loadClock=null,aiReviewCatalog=null;
+let repository,engine,game,names=["自分側","相手側"],timer=null,running=false,moveCount=0,entries=[],analysisByPlayer=[],analysisAllowsMatch=false,loadStarted=0,loadClock=null,aiReviewCatalog=null,lastBugReportText="";
 const delay=()=>1000+Math.floor(Math.random()*501);
 function setStatus(message,kind=""){el.status.textContent=message;el.status.className=kind;}
 async function loadBundledAiReviewCatalog(){
@@ -416,6 +416,19 @@ async function analyzeDecks(decks){
   el.strategySummary.textContent=(ruleErrors.length?`構築ルール違反：${ruleErrors.length}件`:"構築ルール：合法")+
     ` ／ 効果対応：${effectPercent}%・未対応${unresolvedEffectCount}件`+
     (missing.length?` ／ カードDB未登録：${missing.length}件`:"");
+  const reportLines=["## ポケカ自動解析・対戦の不具合報告","",`日時: ${new Date().toISOString()}`,
+    `AI変換で実行接続した効果: ${reports.flatMap(report=>report.details??[]).filter(detail=>detail.aiDerived).length}件`,"",
+    "### 対象カード・効果"];
+  for(const report of reports)for(const detail of report.details??[])
+    if(detail.aiDerived||detail.status!=="supported"){
+      reportLines.push(`- ${report.name}（カードID ${report.officialCardId}）／${detail.label}`,
+        `  効果文: ${detail.text??""}`);
+      if(detail.aiAnalysis?.summary)reportLines.push(`  AIの読み取り: ${detail.aiAnalysis.summary}`);
+      if(detail.aiAnalysis?.questions?.length)reportLines.push(`  AIの確認事項: ${detail.aiAnalysis.questions.join("、")}`);
+    }
+  reportLines.push("","### 現在の表示状態",el.status.textContent,"","### 直近の対戦ログ",...entries.slice(0,12).reverse(),
+    "","### 何が起きたか","（間違っている処理や期待した動きを記入してください）");
+  lastBugReportText=reportLines.join("\\n").slice(0,7000);el.reportBug.hidden=false;
   for(const profile of profiles)profile.attackerIds.sort((a,b)=>b.damage-a.damage);
   return {profiles,complete,unresolved,unresolvedEffectCount,effectPercent,ruleErrors,missing};
 }
@@ -495,6 +508,12 @@ el.load.onclick=async()=>{
   finally{clearInterval(loadClock);loadClock=null;}
 };
 el.start.onclick=start;el.pause.onclick=pause;
+el.reportBug.onclick=()=>{
+  if(!lastBugReportText)return;
+  const url="https://github.com/toro0328/Pok-mon-Card-Automated-Battle-Simulator/issues/new?"+
+    new URLSearchParams({title:"自動解析・対戦の不具合報告",body:lastBugReportText}).toString();
+  window.open(url,"_blank","noopener,noreferrer");
+};
 for(const [input,slot] of [[el.codeA,"self"],[el.codeB,"opponent"]]){
   try{const saved=JSON.parse(localStorage.getItem(`pokemon-card-simulator-deck-${slot}`)||"null");if(saved?.deckCode)input.value=saved.deckCode;}catch{}
 }
