@@ -45,7 +45,7 @@ function executableTextFromSteps(kind,original,analysis){
   if(!Array.isArray(analysis?.steps)||!analysis.steps.length)return null;
   const clauses=[];
   for(const raw of analysis.steps){
-    const step=String(raw??"").replace(/^\\s*[0-9]+[.)、]\\s*/u,"").replace(/\\s+/gu," ").trim();
+    const step=String(raw??"").replace(/^\s*[0-9]+[.)、]\s*/u,"").replace(/\s+/gu," ").trim();
     let match;
     if(kind==="attack"){
       if((match=step.match(/^(?:自分の)?山札を?([1-9][0-9]*)枚引く。?$/u)))clauses.push(`自分の山札を${match[1]}枚引く。`);
