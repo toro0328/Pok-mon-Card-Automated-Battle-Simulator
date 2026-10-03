@@ -40,6 +40,25 @@ function safeAiTrainerText(original,candidate){
   const printed=String(original??"").replace(/[「」『』]/gu,"");
   return target.length>0&&printed.includes(target);
 }
+function executableTextFromSteps(kind,original,analysis){
+  if(typeof analysis?.executableText==="string")return analysis.executableText;
+  if(!Array.isArray(analysis?.steps)||!analysis.steps.length)return null;
+  const clauses=[];
+  for(const raw of analysis.steps){
+    const step=String(raw??"").replace(/^\\s*[0-9]+[.)、]\\s*/u,"").replace(/\\s+/gu," ").trim();
+    let match;
+    if(kind==="attack"){
+      if((match=step.match(/^(?:自分の)?山札を?([1-9][0-9]*)枚引く。?$/u)))clauses.push(`自分の山札を${match[1]}枚引く。`);
+      else if((match=step.match(/^相手のバトルポケモンを(どく|やけど|ねむり|マヒ|こんらん)にする。?$/u)))clauses.push(`相手のバトルポケモンを${match[1]}にする。`);
+      else if((match=step.match(/^相手のバトルポケモンに、?ダメカンを([1-9][0-9]*)個のせる。?$/u)))clauses.push(`相手のバトルポケモンに、ダメカンを${match[1]}個のせる。`);
+      else if((match=step.match(/^このポケモンにも([1-9][0-9]*)ダメージ。?$/u)))clauses.push(`このポケモンにも${match[1]}ダメージ。`);
+      else if((match=step.match(/^このポケモンのHPを「?([1-9][0-9]*)」?回復する。?$/u)))clauses.push(`このポケモンのHPを「${match[1]}」回復する。`);
+      else return null;
+    }else return null;
+  }
+  const candidate=clauses.join("");
+  return samePrintedNumbers(original,candidate)?candidate:null;
+}
 function kindFor(label=""){
   if(label.startsWith("特性："))return "ability";
   if(label.startsWith("ワザ："))return "attack";
@@ -85,10 +104,10 @@ export function restoreLearnedPrograms(compiled,repository,engine,storage=global
       if(current.status==="supported")return current;
       const learned=library.effects[`ability:${normalize(current.text)}`];
       if(learned?.status!=="supported"||!learned.program){
-        const candidate=learned?.aiAnalysis;
+        const candidate=learned?.aiAnalysis,executableText=executableTextFromSteps("ability",current.text,candidate);
         if(candidate?.confidence!=="high"||candidate.questions?.length||
-          !safeAiAbilityText(current.text,candidate.executableText))return current;
-        const parsed=parseAbility(current.name,candidate.executableText);
+          !safeAiAbilityText(current.text,executableText))return current;
+        const parsed=parseAbility(current.name,executableText);
         if(parsed.status!=="supported")return current;
         changed=true;restoredEffects++;
         const learnedProgram={...parsed,name:current.name,index:current.index,text:current.text,
@@ -103,11 +122,11 @@ export function restoreLearnedPrograms(compiled,repository,engine,storage=global
       if(current.status==="supported")return current;
       const learned=library.effects[`attack:${normalize(current.text)}`];
       if(learned?.status!=="supported"||!learned.program){
-        const candidate=learned?.aiAnalysis;
+        const candidate=learned?.aiAnalysis,executableText=executableTextFromSteps("attack",current.text,candidate);
         if(candidate?.confidence!=="high"||candidate.questions?.length||
-          !safeAiAttackText(current.text,candidate.executableText))return current;
+          !safeAiAttackText(current.text,executableText))return current;
         const cardWithCandidate={...card,raw:{...card.raw,attacks:(card.raw.attacks??[]).map((attack,index)=>
-          index===current.index?{...attack,effect:candidate.executableText}:attack)}};
+          index===current.index?{...attack,effect:executableText}:attack)}};
         const parsed=inspectAttacks(cardWithCandidate)[current.index];
         if(parsed?.status!=="supported"||parsed.name!==current.name||
           JSON.stringify(parsed.cost)!==JSON.stringify(current.cost)||
@@ -124,10 +143,10 @@ export function restoreLearnedPrograms(compiled,repository,engine,storage=global
       const learned=library.effects[`${card.trainerType}:${normalize(card.raw.effect)}`];
       if(learned?.status==="supported"&&learned.program){program.trainer=learned.program;changed=true;restoredEffects++;}
       else if(["item","supporter"].includes(card.trainerType)){
-        const candidate=learned?.aiAnalysis;
+        const candidate=learned?.aiAnalysis,executableText=executableTextFromSteps(card.trainerType,card.raw.effect,candidate);
         if(candidate?.confidence==="high"&&!candidate.questions?.length&&
-          safeAiTrainerText(card.raw.effect,candidate.executableText)){
-          const parsed=parseTrainerText({...card,raw:{...card.raw,effect:candidate.executableText}});
+          safeAiTrainerText(card.raw.effect,executableText)){
+          const parsed=parseTrainerText({...card,raw:{...card.raw,effect:executableText}});
           if(parsed){program.trainer={...parsed,text:card.raw.effect,aiDerived:true,officialRulesVerified:false};
             if(learned){learned.status="supported";learned.program=program.trainer;}
             changed=true;restoredEffects++;}
