@@ -99,6 +99,10 @@ const PATTERNS = [
     convert: match => [{type:"REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN",amount:Number(match[1])}]
   },
   {
+    expression: /^次の相手の番、このワザを受けたポケモンが使うワザのダメージは「[－-]([1-9][0-9]*)」される。$/,
+    convert: match => [{type:"REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN",target:"DEFENDING_ACTIVE",amount:Number(match[1])}]
+  },
+  {
     expression: /^次の自分の番、このポケモンは「([^」]+)」が使えない。$/,
     convert: match => [{type:"PREVENT_SAME_ATTACK_NEXT_TURN",attackName:match[1]}]
   },
@@ -324,6 +328,10 @@ const PATTERNS = [
   {
     expression: /^相手のバトルポケモンのにげるためのエネルギーの数×([1-9][0-9]*)ダメージ追加。$/,
     convert: match => [{type:"MODIFY_DAMAGE",basis:"DEFENDER_RETREAT_COST",perEnergy:Number(match[1])}]
+  },
+  {
+    expression: /^相手のバトルポケモンにダメカンがのっているなら、([1-9][0-9]*)ダメージ追加。$/,
+    convert: match => [{type:"MODIFY_DAMAGE",basis:"DEFENDER_HAS_DAMAGE_COUNTERS",amount:Number(match[1])}]
   },
   {
     expression: /^相手のバトルポケモンにのっているダメカンの数×([1-9][0-9]*)ダメージ追加。$/,

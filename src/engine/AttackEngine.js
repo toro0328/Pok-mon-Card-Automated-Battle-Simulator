@@ -200,6 +200,8 @@ export class AttackEngine extends AbilityEngine {
         damage=basics*effect.perEnergy;
       } else if(effect.type==="MODIFY_DAMAGE"&&effect.basis==="OPPONENT_ACTIVE_DAMAGE_COUNTERS"){
         damage+=Math.floor((opponent.active?.damage??0)/10)*effect.perCounter;
+      } else if(effect.type==="MODIFY_DAMAGE"&&effect.basis==="DEFENDER_HAS_DAMAGE_COUNTERS"){
+        if((target.damage??0)>0)damage+=effect.amount;
       } else if(effect.type==="MODIFY_DAMAGE"&&effect.basis==="OPPONENT_FIELD_DAMAGE_COUNTERS"){
         damage+=this.field(opponent).reduce((sum,p)=>sum+Math.floor((p.damage??0)/10),0)*effect.perCounter;
       } else if(effect.type==="MODIFY_DAMAGE"&&effect.basis==="DEFENDER_RETREAT_COST"){
@@ -280,7 +282,7 @@ export class AttackEngine extends AbilityEngine {
     next.itemLocks[next.turn] = false;
     // Keep a protection effect through the opponent'\''s turn, then expire it
     // when that opponent ends their turn.
-    next.attackProtection=(next.attackProtection??[]).filter(x=>x.owner===state.turn);
+    next.attackProtection=(next.attackProtection??[]).filter(x=>(x.expiresAtEndOfTurn??x.owner)===state.turn);
     next.turn = 1 - next.turn;
     next.usedAbilities = { instances: [], names: [] };
     next.previousOpponentTurnKnockout = [false, false];
@@ -530,7 +532,8 @@ export class AttackEngine extends AbilityEngine {
     victim.damage = (victim.damage ?? 0) + damage;
     const targetEffectProtected=this.protectedFromOpponentEffects(next,victim.instanceId,state.turn);
     for (const effect of attack.effects) {
-      if(targetEffectProtected&&effect.target!=="ATTACKING_POKEMON"&&["APPLY_STATUS","COIN_APPLY_STATUS","COIN_APPLY_STATUSES","DISCARD_OPPONENT_ENERGY","COIN_DISCARD_ENERGY",
+      if(targetEffectProtected&&((effect.type==="REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN"&&effect.target==="DEFENDING_ACTIVE")||
+        effect.target!=="ATTACKING_POKEMON"&&["APPLY_STATUS","COIN_APPLY_STATUS","COIN_APPLY_STATUSES","DISCARD_OPPONENT_ENERGY","COIN_DISCARD_ENERGY",
         "PREVENT_RETREAT_NEXT_TURN","PREVENT_ATTACK_NEXT_TURN","PLACE_DAMAGE_COUNTERS","SWITCH_OPPONENT_CHOICE"].includes(effect.type))continue;
       if (effect.type === "DRAW" && effect.player === "SELF") {
         own.hand.push(...own.deck.splice(0, effect.count));
@@ -591,7 +594,10 @@ export class AttackEngine extends AbilityEngine {
           attackName:effect.attackName,turnsTakenAt:state.turnsTaken?.[state.turn]??0});
       } else if(effect.type==="REDUCE_INCOMING_ATTACK_DAMAGE_NEXT_TURN"){
         next.attackProtection??=[];
-        next.attackProtection.push({owner:state.turn,instanceId:own.active.instanceId,reduceDamage:effect.amount});
+        const protectedPokemon=effect.target==="DEFENDING_ACTIVE"?opponent.active:own.active;
+        const protectedOwner=effect.target==="DEFENDING_ACTIVE"?1-state.turn:state.turn;
+        if(protectedPokemon)next.attackProtection.push({owner:protectedOwner,
+          expiresAtEndOfTurn:state.turn,instanceId:protectedPokemon.instanceId,reduceDamage:effect.amount});
       } else if (effect.type === "RETURN_SELF_TO_HAND") {
         const {attached=[],stack=[],...face}=own.active;
         own.hand.push(face,...attached,...stack);
@@ -625,7 +631,7 @@ export class AttackEngine extends AbilityEngine {
         next.pendingAttack={type:"OPTIONAL_RETURN_THREE_ENERGY_FOR_BENCH_DAMAGE",player:state.turn,
           sourceInstanceId:own.active.instanceId};
       } else if ((effect.type === "MODIFY_DAMAGE" && ["BOTH_ACTIVE_ATTACHED_ENERGY_COUNT","BOTH_BENCH_COUNT",
-                   "DEFENDING_ATTACHED_ENERGY_COUNT","COIN_UNTIL_TAILS","DEFENDER_IS_EX","OPPONENT_PRIZES_TAKEN","OPPONENT_ACTIVE_DAMAGE_COUNTERS","OPPONENT_FIELD_DAMAGE_COUNTERS","DEFENDER_RETREAT_COST","OWN_FIELD_EVOLVED_POKEMON_COUNT"].includes(effect.basis)) ||
+                   "DEFENDING_ATTACHED_ENERGY_COUNT","COIN_UNTIL_TAILS","DEFENDER_IS_EX","OPPONENT_PRIZES_TAKEN","OPPONENT_ACTIVE_DAMAGE_COUNTERS","OPPONENT_FIELD_DAMAGE_COUNTERS","DEFENDER_RETREAT_COST","DEFENDER_HAS_DAMAGE_COUNTERS","OWN_FIELD_EVOLVED_POKEMON_COUNT"].includes(effect.basis)) ||
                  (effect.type === "SET_DAMAGE" && ["OWN_BENCH_COUNT","OPPONENT_BENCH_COUNT","OWN_FIELD_POKEMON_COUNT","OWN_FIELD_DAMAGED_POKEMON_COUNT","OWN_HAND_COUNT","OPPONENT_HAND_COUNT","DEFENDER_SPECIAL_CONDITION_COUNT","OWN_ACTIVE_BASIC_ENERGY_COUNT","OWN_ACTIVE_SPECIAL_ENERGY_COUNT","OWN_FIELD_FIRE_ELECTRIC_ENERGY_COUNT",
                    "OPPONENT_EX_COUNT","OPPONENT_PRIZES_TAKEN","OWN_DAMAGE_COUNTERS","OPPONENT_DISCARD_BASIC_ENERGY_COUNT",
                    "DECK_BOTTOM_POKEMON_WITH_ATTACK"].includes(effect.basis)) ||

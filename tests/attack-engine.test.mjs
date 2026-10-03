@@ -677,3 +677,31 @@ test("attack fails on tails before damage/effects and ends the turn; heads succe
   assert.deepEqual(parseEffectText("コインを1回投げウラなら、このワザは失敗。このポケモンをねむりにする。"),
     {recognized:false,effects:[]});
 });
+
+
+test("common Active damage-counter bonus and hit-Pokemon damage reduction resolve correctly",()=>{
+  const build=(effect)=>{
+    const testDb=structuredClone(db),source=testDb.cards.find(x=>x.officialCardId===49956);
+    const defender=testDb.cards.find(x=>x.officialCardId===48466);
+    source.raw.attacks=[{name:"効果回帰テスト",cost:["Void"],damage:{amount:0,suffix:""},effect}];
+    defender.raw.weakness=null;defender.raw.resistance=null;
+    return new MatchEngine(new CardRepository(testDb),abilities);
+  };
+  const conditional=build("相手のバトルポケモンにダメカンがのっているなら、20ダメージ追加。");
+  const attacker=card("conditional-attacker",49956),target=card("conditional-target",48466);
+  const conditionalState=state(player(attacker),player(target));conditionalState.turnNo=2;
+  assert.equal(conditional.attacks(attacker)[0].status,"supported");
+  assert.equal(conditional.calculateAttackDamage(conditionalState,{player:0,attackIndex:0}),0);
+  target.damage=10;
+  assert.equal(conditional.calculateAttackDamage(conditionalState,{player:0,attackIndex:0}),20);
+
+  const reduction=build("次の相手の番、このワザを受けたポケモンが使うワザのダメージは「-30」される。");
+  const source=card("reduction-attacker",49956),victim=card("reduction-target",48466);
+  const game=state(player(source),player(victim));game.turnNo=2;
+  assert.equal(reduction.attacks(source)[0].status,"supported");
+  const after=reduction.applyAttack(game,reduction.getLegalAttacks(game)[0]);
+  assert.equal(after.attackProtection.some(entry=>entry.owner===1&&entry.instanceId==="reduction-target"&&entry.reduceDamage===30),true);
+  assert.equal(reduction.incomingAttackDamage(after,"reduction-target",50,card("next-attacker",49956)),20);
+  const expired=reduction.endTurn(after);
+  assert.equal(reduction.incomingAttackDamage(expired,"reduction-target",50,card("later-attacker",49956)),50);
+});
