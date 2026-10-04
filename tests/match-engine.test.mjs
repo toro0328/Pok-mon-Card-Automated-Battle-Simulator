@@ -217,6 +217,50 @@ test("empty deck at turn start loses, not when drawing the final card", () => {
   assert.deepEqual(engine.getMatchActions(game),[]);
 });
 
+test("Fighting Gong search resolves from its printed clause, not its card identity",()=>{
+  const testDb=structuredClone(db),gong=structuredClone(coinSearch);
+  gong.officialCardId=60030;gong.name="ファイトゴング";gong.raw.jp_id=60030;gong.raw.name=gong.name;
+  gong.raw.effect="自分の山札からFightingタイプのたねポケモンまたは「基本Fightingエネルギー」を1枚選び、相手に見せて、手札に加える。そして山札を切る。";
+  const fighter=structuredClone(testDb.cards.find(item=>item.cardType==="pokemon"));
+  fighter.officialCardId=60031;fighter.name="試験用たね闘ポケモン";fighter.raw.jp_id=60031;fighter.raw.name=fighter.name;
+  fighter.raw.stage="たね";fighter.raw.types=["Fighting"];
+  const evolved=structuredClone(fighter);evolved.officialCardId=60032;evolved.raw.jp_id=60032;
+  evolved.name="試験用進化闘ポケモン";evolved.raw.name=evolved.name;evolved.raw.stage="1 進化";
+  const other=structuredClone(fighter);other.officialCardId=60033;other.raw.jp_id=60033;other.raw.types=["Grass"];
+  const energy=structuredClone(testDb.cards.find(item=>item.energyType==="basic"));
+  energy.officialCardId=60034;energy.name="基本闘エネルギー";energy.raw.jp_id=60034;energy.raw.name=energy.name;
+  energy.energyType="basic";
+  testDb.cards.push(gong,fighter,evolved,other,energy);
+  const testCatalog=structuredClone(catalog);testCatalog.cardCount=testDb.cards.length;
+  const testEngine=new MatchEngine(new CardRepository(testDb),testCatalog);
+  let game=state(player(card("active",49956),[card("gong",60030)],
+    [card("evolved",60032),card("other",60033),card("energy",60034),card("fighter",60031)]),
+    player(card("target",50339)),2);
+  game=testEngine.applyMatchAction(game,testEngine.getMatchActions(game).find(x=>x.type==="PLAY_TRAINER"&&x.sourceInstanceId==="gong"));
+  const choices=testEngine.getMatchActions(game).filter(x=>x.type==="TRAINER_SELECT");
+  assert.deepEqual(choices.map(x=>x.choiceInstanceId),["energy","fighter"]);
+  game=testEngine.applyMatchAction(game,choices.find(x=>x.choiceInstanceId==="fighter"));
+  assert.equal(game.pendingTrainer,undefined);
+  assert.ok(game.players[0].hand.some(x=>x.instanceId==="fighter"));
+});
+test("bounded arbitrary-card search respects the printed maximum",()=>{
+  const testDb=structuredClone(db),searcher=structuredClone(coinSearch);
+  searcher.officialCardId=60039;searcher.name="試験用自由検索";searcher.raw.jp_id=60039;searcher.raw.name=searcher.name;
+  searcher.raw.effect="のぞむなら、自分の山札から好きなカードを3枚まで選び、手札に加える。そして山札を切る。";
+  testDb.cards.push(searcher);
+  const testCatalog=structuredClone(catalog);testCatalog.cardCount=testDb.cards.length;
+  const testEngine=new MatchEngine(new CardRepository(testDb),testCatalog);
+  let game=state(player(card("active",49956),[card("searcher",60039)],
+    [card("a",50742),card("b",50745),card("c",50339),card("d",49956)]),player(card("target",50339)),2);
+  game=testEngine.applyMatchAction(game,testEngine.getMatchActions(game).find(x=>x.type==="PLAY_TRAINER"&&x.sourceInstanceId==="searcher"));
+  for(const id of ["a","b","c"]){
+    const choice=testEngine.getMatchActions(game).find(x=>x.type==="TRAINER_SELECT"&&x.choiceInstanceId===id);
+    assert.ok(choice);game=testEngine.applyMatchAction(game,choice);
+  }
+  assert.equal(game.pendingTrainer,undefined);
+  assert.deepEqual(new Set(game.players[0].hand.map(x=>x.instanceId)),new Set(["a","b","c"]));
+  assert.deepEqual(game.players[0].deck.map(x=>x.instanceId),["d"]);
+});
 test("Mushitori Set searches only the top seven for up to two Grass Pokémon or Basic Grass Energy",()=>{
   const own=player(card("active",49956),[card("mushi",45785)],
     [card("grass-pokemon",50339),...Array.from({length:5},(_,i)=>card(`other-${i}`,50742)),

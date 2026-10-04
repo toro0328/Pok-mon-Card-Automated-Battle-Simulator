@@ -315,6 +315,12 @@ export class MatchEngine extends AttackEngine {
       return !wanted||card.name.endsWith(({Grass:"草",Fire:"炎",Water:"水",Electric:"雷",Psychic:"超",Fighting:"闘",Dark:"悪",Metal:"鋼"})[wanted]+"エネルギー");
     }
     if(spec.filter==="energy")return card.cardType==="energy";
+    if(spec.filter==="fightingBasicPokemonOrEnergy")return (
+      card.energyType==="basic"&&card.name==="基本闘エネルギー"||
+      card.cardType==="pokemon"&&card.raw.stage===BASIC&&card.raw.types?.includes("Fighting"));
+    if(spec.filter.startsWith?.("supporterNameIncludes:"))return card.trainerType==="supporter"&&
+      card.name.includes(spec.filter.slice("supporterNameIncludes:".length));
+    if(spec.filter==="energy")return card.cardType==="energy";
     if(spec.filter==="trainer")return !!card.trainerType;
     if(spec.filter.startsWith?.("namePrefix:"))return card.name.startsWith(spec.filter.slice(11));
     if(spec.filter.startsWith?.("name:"))return card.name===spec.filter.slice(5);

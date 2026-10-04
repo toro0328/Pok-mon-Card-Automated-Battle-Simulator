@@ -142,3 +142,19 @@ test("compiles Pokémon Switch and Energy Search wording variants into their exi
 test("does not guess unsupported compound Trainer wording",()=>{
   assert.equal(parseTrainerText({trainerType:"item",raw:{effect:"自分のポケモンを回復し、山札を切る。"}}),null);
 });
+
+test("compiles three useful printed search templates without using card names",()=>{
+  const cases=[
+    ["自分の山札からFightingタイプのたねポケモンまたは「基本Fightingエネルギー」を1枚選び、相手に見せて、手札に加える。そして山札を切る。",
+      "fightingBasicPokemonOrEnergy",false],
+    ["自分の山札から、名前に「ロケット団」とつくサポートを1枚選び、相手に見せて、手札に加える。そして山札を切る。",
+      "supporterNameIncludes:ロケット団",false],
+    ["のぞむなら、自分の山札から好きなカードを3枚まで選び、手札に加える。そして山札を切る。",
+      "any",true]
+  ];
+  for(const [effect,filter,optional] of cases){
+    const parsed=parseTrainerText({trainerType:"item",raw:{effect}});
+    assert.equal(parsed?.filter,filter,effect);
+    assert.equal(parsed?.optional??false,optional,effect);
+  }
+});

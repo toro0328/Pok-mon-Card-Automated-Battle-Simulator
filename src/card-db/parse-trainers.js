@@ -33,6 +33,13 @@ export function parseTrainerText(card) {
   if(raw==="コインを1回投げオモテなら、相手のベンチポケモンを1匹選び、バトルポケモンと入れ替える。")
     return {type:card.trainerType,effect:"coinBoss",text:raw,compiledFromText:true};
   if(card.trainerType==="item"){
+    const normalized=raw.replace(/\s+/gu," ").trim();
+    const anySearch=normalized.match(/^(?:のぞむなら、)?自分の山札から好きなカードを([1-9][0-9]*)枚まで選び、手札に加える。そして山札を切る。$/u);
+    if(anySearch)return {type:"item",effect:"search",max:Number(anySearch[1]),optional:true,zone:"hand",filter:"any",text:raw,compiledFromText:true};
+    if(/^自分の山札から(?:Fighting|闘)タイプのたねポケモンまたは「基本(?:Fighting|闘)エネルギー」を1枚選び、相手に見せて、手札に加える。そして山札を切る。$/u.test(normalized))
+      return {type:"item",effect:"search",max:1,zone:"hand",filter:"fightingBasicPokemonOrEnergy",text:raw,compiledFromText:true};
+    const namedSupporter=normalized.match(/^自分の山札から、?名前に「([^」]+)」とつくサポートを1枚選び、相手に見せて、手札に加える。そして山札を切る。$/u);
+    if(namedSupporter)return {type:"item",effect:"search",max:1,zone:"hand",filter:`supporterNameIncludes:${namedSupporter[1]}`,text:raw,compiledFromText:true};
     const energyRecoveryVariants=new Set([
       "自分のトラッシュから基本エネルギーを2枚まで選び、相手に見せて、手札に加える。",
       "自分のトラッシュから基本エネルギーを2枚選び、相手に見せてから、手札に加える。",
